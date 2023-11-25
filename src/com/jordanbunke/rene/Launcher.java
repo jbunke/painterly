@@ -1,8 +1,15 @@
 package com.jordanbunke.rene;
 
 import com.jordanbunke.clink.Clink;
+import com.jordanbunke.delta_time.debug.GameDebugger;
+import com.jordanbunke.delta_time.game.Game;
+import com.jordanbunke.delta_time.game.GameManager;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.GameImageIO;
+import com.jordanbunke.delta_time.window.GameWindow;
+import com.jordanbunke.rene.constants.Constants;
+import com.jordanbunke.rene.constants.PermLoaded;
+import com.jordanbunke.rene.painter.Painter;
 import com.jordanbunke.rene.settings.Settings;
 
 import java.nio.file.Path;
@@ -18,7 +25,20 @@ public class Launcher {
         final GameImage reference = retrieveReference(args);
         final Settings settings = initializeSettings();
 
-        // TODO: launch window, start painter, command cycle
+        // launch painter and window
+        final int[] dims = calculateDims(reference);
+        final GameWindow window = new GameWindow(
+                Constants.PROGRAM_NAME + " | " + settings.getProjectName(),
+                dims[Constants.WIDTH], dims[Constants.HEIGHT], PermLoaded.ICON,
+                true, false, false
+        );
+
+        final Painter painter = new Painter(reference, settings, dims);
+        final GameManager manager = new GameManager(0, painter);
+        final Game g = new Game(window, manager);
+        g.getDebugger().muteChannel(GameDebugger.FRAME_RATE);
+
+        // command cycle
     }
 
     private static void welcome() {
@@ -53,5 +73,19 @@ public class Launcher {
         // TODO - more mutable settings
 
         return settings;
+    }
+
+    private static int[] calculateDims(final GameImage r) {
+        final double ratio = r.getWidth() / (double) r.getHeight(), STANDARD = 16 / 9.;
+
+        if (ratio <= STANDARD)
+            return new int[] {
+                    (int) Math.max(1., Constants.DIM_MAX_Y * ratio),
+                    Constants.DIM_MAX_Y };
+
+        return new int[] {
+                (int) (Constants.DIM_MAX_Y * STANDARD),
+                (int) (Constants.DIM_MAX_Y * (STANDARD / ratio))
+        };
     }
 }
