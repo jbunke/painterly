@@ -10,10 +10,13 @@ import com.jordanbunke.delta_time.window.GameWindow;
 import com.jordanbunke.rene.constants.Constants;
 import com.jordanbunke.rene.constants.PermLoaded;
 import com.jordanbunke.rene.painter.Painter;
+import com.jordanbunke.rene.settings.FocusBox;
+import com.jordanbunke.rene.settings.Palette;
 import com.jordanbunke.rene.settings.Settings;
 
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Set;
 
 public class Launcher {
 
@@ -26,26 +29,25 @@ public class Launcher {
         final Settings settings = initializeSettings();
 
         // launch painter and window
-        final int[] dims = calculateDims(reference);
+        final int[] displayDims = calculateDisplayDims(reference);
         final GameWindow window = new GameWindow(
                 Constants.PROGRAM_NAME + " | " + settings.getProjectName(),
-                dims[Constants.WIDTH], dims[Constants.HEIGHT], PermLoaded.ICON,
+                displayDims[Constants.WIDTH], displayDims[Constants.HEIGHT], PermLoaded.ICON,
                 true, false, false
         );
 
-        final Painter painter = new Painter(reference, settings, dims);
+        final Painter painter = new Painter(reference, settings, displayDims);
         final GameManager manager = new GameManager(0, painter);
-        final Game g = new Game(window, manager);
+        final Game g = new Game(window, manager, Constants.HZ, Constants.FPS);
         g.getDebugger().muteChannel(GameDebugger.FRAME_RATE);
 
-        // command cycle
+        // TODO: command cycle
     }
 
     private static void welcome() {
-        Clink.write(Clink.CLI_TEXT_GREEN_BOLD + "Welcome to " +
-                Clink.CLI_TEXT_YELLOW_BOLD + "René Sansartiste" +
-                Clink.CLI_TEXT_GREEN_BOLD + ", an unguided painting program by Jordan Bunke." +
-                Clink.CLI_TEXT_RESET, true);
+        Clink.writeUpdate("Welcome to " +
+                Clink.highlight(Constants.PROGRAM_NAME, Clink.Mode.UPDATE) +
+                ", a guided painting program by Jordan Bunke.");
     }
 
     private static GameImage retrieveReference(final String[] args) {
@@ -70,12 +72,33 @@ public class Launcher {
         settings.setSampleProb(Clink.promptForDoubleOrDefault(
                 "Sample colour from reference probability?",
                 Settings.DEFAULT_SAMPLE_PROB));
-        // TODO - more mutable settings
+        settings.setPalette(Clink.promptForInt(
+                "Color palettization intensity index? (from " +
+                        Clink.highlight(String.valueOf(0), Clink.Mode.PROMPT) +
+                        " for no palettization to " +
+                        Clink.highlight(String.valueOf(Palette.values().length - 1), Clink.Mode.PROMPT) +
+                        " for maximum palettization)"));
+        settings.getFocusBox().setMode(
+                FocusBox.Mode.valueOf(
+                        Clink.promptForOptionOrDefault(
+                                "Focus box mode? (" +
+                                        Clink.highlight(FocusBox.Mode.ITINERANT.name(), Clink.Mode.PROMPT) +
+                                        ", " + Clink.highlight(FocusBox.Mode.WORST.name(), Clink.Mode.PROMPT) +
+                                        ", or " + Clink.highlight(FocusBox.Mode.FREE.name(), Clink.Mode.PROMPT) +
+                                        ")",
+                                Set.of(
+                                        FocusBox.Mode.ITINERANT.name(),
+                                        FocusBox.Mode.WORST.name(),
+                                        FocusBox.Mode.FREE.name()
+                                ), FocusBox.Mode.FREE.name(), s -> s.toUpperCase().trim())));
+        settings.getFocusBox().setDivisions(Clink.promptForIntOrDefault(
+                "# of rows and columns for focus areas?", FocusBox.UNIVERSAL));
+        // TODO: more mutable settings
 
         return settings;
     }
 
-    private static int[] calculateDims(final GameImage r) {
+    private static int[] calculateDisplayDims(final GameImage r) {
         final double ratio = r.getWidth() / (double) r.getHeight(), STANDARD = 16 / 9.;
 
         if (ratio <= STANDARD)
