@@ -10,6 +10,7 @@ import com.jordanbunke.delta_time.window.GameWindow;
 import com.jordanbunke.rene.constants.Constants;
 import com.jordanbunke.rene.constants.PermLoaded;
 import com.jordanbunke.rene.painter.Painter;
+import com.jordanbunke.rene.settings.CommandParser;
 import com.jordanbunke.rene.settings.FocusBox;
 import com.jordanbunke.rene.settings.Palette;
 import com.jordanbunke.rene.settings.Settings;
@@ -41,7 +42,16 @@ public class Launcher {
         final Game g = new Game(window, manager, Constants.HZ, Constants.FPS);
         g.getDebugger().muteChannel(GameDebugger.FRAME_RATE);
 
-        // TODO: command cycle
+        commandCycle(settings);
+    }
+
+    private static void commandCycle(final Settings settings) {
+        boolean quit = false;
+
+        while (!quit) {
+            final String command = Clink.promptForString("").trim().toLowerCase();
+            quit = CommandParser.parse(command, settings);
+        }
     }
 
     private static void welcome() {

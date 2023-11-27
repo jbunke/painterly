@@ -85,6 +85,18 @@ public class FocusBox {
         return bounds;
     }
 
+    public Mode getMode() {
+        return mode;
+    }
+
+    public int getDivisions() {
+        return divisions;
+    }
+
+    public int getStrokesPerUpdate() {
+        return strokesPerUpdate;
+    }
+
     public void setMode(final Mode mode) {
         this.mode = mode;
     }

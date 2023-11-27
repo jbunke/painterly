@@ -7,6 +7,8 @@ import com.jordanbunke.delta_time.events.GameKeyEvent;
 import com.jordanbunke.delta_time.events.Key;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.image.ImageProcessing;
+import com.jordanbunke.delta_time.io.FileIO;
+import com.jordanbunke.delta_time.io.GameImageIO;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.utility.RNG;
 import com.jordanbunke.rene.constants.Constants;
@@ -15,10 +17,12 @@ import com.jordanbunke.rene.math.RSMath;
 import com.jordanbunke.rene.settings.Settings;
 
 import java.awt.*;
+import java.nio.file.Path;
 
 public class Painter implements ProgramContext {
 
     // immutable
+    private final Path projectFolder;
     private final GameImage reference;
     private final Settings settings;
     private final int width, height, displayWidth, displayHeight;
@@ -32,6 +36,9 @@ public class Painter implements ProgramContext {
     private double similarity;
 
     public Painter(final GameImage reference, final Settings settings, final int[] displayDims) {
+        projectFolder = Constants.OUTPUT_FOLDER.resolve(settings.getProjectName());
+        FileIO.safeMakeDirectory(projectFolder);
+
         this.reference = ImageProcessing.scale(reference, settings.getScaleUp());
         this.settings = settings;
 
@@ -145,9 +152,12 @@ public class Painter implements ProgramContext {
     }
 
     private void savePainting() {
-        // TODO
+        final String project = settings.getProjectName();
 
-        Clink.writeUpdate("Saved painting \"" + settings.getProjectName() + "\"");
+        GameImageIO.writeImage(projectFolder.resolve(project + " painting.png"), painting);
+        GameImageIO.writeImage(projectFolder.resolve(project + " reference.png"), reference);
+
+        Clink.writeUpdate("Saved project \"" + project + "\"");
     }
 
     @Override
