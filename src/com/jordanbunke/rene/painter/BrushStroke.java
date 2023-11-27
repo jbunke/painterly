@@ -3,6 +3,7 @@ package com.jordanbunke.rene.painter;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.RNG;
 import com.jordanbunke.rene.constants.Constants;
+import com.jordanbunke.rene.math.RSMath;
 
 import java.awt.*;
 
@@ -60,7 +61,7 @@ public class BrushStroke {
                     last[Constants.X], last[Constants.Y], i);
 
         canvas.free();
-        return normalizeBounds(bounds, canvas);
+        return RSMath.normalizeBounds(bounds, canvas);
     }
 
     private double getDirectionForIndex(final int i) {
@@ -111,14 +112,5 @@ public class BrushStroke {
         bounds[Constants.BOUND_Y1] = Math.min(minY, bounds[Constants.BOUND_Y1]);
         bounds[Constants.BOUND_X2] = Math.max(maxX, bounds[Constants.BOUND_X2]);
         bounds[Constants.BOUND_Y2] = Math.max(maxY, bounds[Constants.BOUND_Y2]);
-    }
-
-    private int[] normalizeBounds(final int[] bounds, final GameImage reference) {
-        return new int[] {
-                Math.max(0, bounds[Constants.BOUND_X1]),
-                Math.max(0, bounds[Constants.BOUND_Y1]),
-                Math.min(reference.getWidth() - 1, bounds[Constants.BOUND_X2]),
-                Math.min(reference.getHeight() - 1, bounds[Constants.BOUND_Y2])
-        };
     }
 }

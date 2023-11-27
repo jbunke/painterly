@@ -74,4 +74,17 @@ public class RSMath {
                 strokePos[Constants.X], strokePos[Constants.Y], similarity,
                 Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
     }
+
+    public static int[] normalizeBounds(final int[] bounds, final GameImage reference) {
+        bounds[Constants.BOUND_X1] = Math.max(0,
+                Math.min(bounds[Constants.BOUND_X1], reference.getWidth() - 1));
+        bounds[Constants.BOUND_Y1] = Math.max(0,
+                Math.min(bounds[Constants.BOUND_Y1], reference.getHeight() - 1));
+        bounds[Constants.BOUND_X2] = Math.max(0,
+                Math.min(bounds[Constants.BOUND_X2], reference.getWidth() - 1));
+        bounds[Constants.BOUND_Y2] = Math.max(0,
+                Math.min(bounds[Constants.BOUND_Y2], reference.getHeight() - 1));
+
+        return bounds;
+    }
 }

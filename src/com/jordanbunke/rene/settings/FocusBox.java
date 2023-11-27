@@ -7,7 +7,7 @@ import com.jordanbunke.rene.math.RSMath;
 
 public class FocusBox {
     public enum Mode {
-        ITINERANT, WORST, FREE
+        ITINERANT, WORST, FREE, CUSTOM
     }
 
     public static final int UNIVERSAL = 1, DEFAULT_STROKES_PER_UPDATE = 250;
@@ -15,6 +15,8 @@ public class FocusBox {
     private int divisions, strokesPerUpdate;
     private int x, y;
     private Mode mode;
+
+    private final int[] customBounds;
 
     public FocusBox() {
         divisions = UNIVERSAL;
@@ -24,6 +26,8 @@ public class FocusBox {
 
         x = 0;
         y = 0;
+
+        customBounds = new int[] { 0, 0, 1, 1 };
     }
 
     public void tryMode(final int strokeCount, final GameImage reference, final GameImage painting) {
@@ -75,6 +79,9 @@ public class FocusBox {
     }
 
     private int[] bounds(final int x, final int y, final int width, final int height) {
+        if (mode == Mode.CUSTOM)
+            return customBounds;
+
         final int[] bounds = new int[4];
 
         bounds[Constants.BOUND_X1] = (int)((x / (double) divisions) * width);
@@ -95,6 +102,21 @@ public class FocusBox {
 
     public int getStrokesPerUpdate() {
         return strokesPerUpdate;
+    }
+
+    public void setCustomBounds(
+            final int mouseDownX, final int mouseDownY,
+            final int mouseUpX, final int mouseUpY,
+            final GameImage reference
+    ) {
+        mode = Mode.CUSTOM;
+
+        customBounds[Constants.BOUND_X1] = Math.min(mouseDownX, mouseUpX);
+        customBounds[Constants.BOUND_X2] = Math.max(mouseDownX, mouseUpX);
+        customBounds[Constants.BOUND_Y1] = Math.min(mouseDownY, mouseUpY);
+        customBounds[Constants.BOUND_Y2] = Math.max(mouseDownY, mouseUpY);
+
+        RSMath.normalizeBounds(customBounds, reference);
     }
 
     public void setMode(final Mode mode) {

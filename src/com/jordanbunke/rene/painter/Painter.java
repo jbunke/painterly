@@ -3,21 +3,26 @@ package com.jordanbunke.rene.painter;
 import com.jordanbunke.clink.Clink;
 import com.jordanbunke.delta_time.contexts.ProgramContext;
 import com.jordanbunke.delta_time.debug.GameDebugger;
+import com.jordanbunke.delta_time.events.GameEvent;
 import com.jordanbunke.delta_time.events.GameKeyEvent;
+import com.jordanbunke.delta_time.events.GameMouseEvent;
 import com.jordanbunke.delta_time.events.Key;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.image.ImageProcessing;
 import com.jordanbunke.delta_time.io.FileIO;
 import com.jordanbunke.delta_time.io.GameImageIO;
 import com.jordanbunke.delta_time.io.InputEventLogger;
+import com.jordanbunke.delta_time.utility.Coord2D;
 import com.jordanbunke.delta_time.utility.RNG;
 import com.jordanbunke.rene.constants.Constants;
 import com.jordanbunke.rene.math.RSColors;
 import com.jordanbunke.rene.math.RSMath;
+import com.jordanbunke.rene.settings.FocusBox;
 import com.jordanbunke.rene.settings.Settings;
 
 import java.awt.*;
 import java.nio.file.Path;
+import java.util.List;
 
 public class Painter implements ProgramContext {
 
@@ -35,6 +40,8 @@ public class Painter implements ProgramContext {
     private int strokeCount;
     private double similarity;
 
+    private int mouseDownX, mouseDownY;
+
     public Painter(final GameImage reference, final Settings settings, final int[] displayDims) {
         projectFolder = Constants.OUTPUT_FOLDER.resolve(settings.getProjectName());
         FileIO.safeMakeDirectory(projectFolder);
@@ -49,6 +56,9 @@ public class Painter implements ProgramContext {
         displayHeight = displayDims[Constants.HEIGHT];
 
         showingReference = false;
+
+        mouseDownX = 0;
+        mouseDownY = 0;
 
         strokeCount = 0;
         similarity = 0.;
@@ -69,6 +79,33 @@ public class Painter implements ProgramContext {
 
     @Override
     public void process(final InputEventLogger eventLogger) {
+        final List<GameEvent> unprocessed = eventLogger.getUnprocessedEvents();
+
+        for (GameEvent e : unprocessed) {
+            if (e instanceof GameMouseEvent mouseEvent) {
+                final Coord2D mp = mouseEvent.mousePosition;
+
+                if (mouseEvent.action == GameMouseEvent.Action.DOWN) {
+                    mouseDownX = mp.x;
+                    mouseDownY = mp.y;
+
+                    mouseEvent.markAsProcessed();
+                } else if (mouseEvent.action == GameMouseEvent.Action.UP) {
+                    if (mp.x == mouseDownX && mp.y == mouseDownY &&
+                            settings.getFocusBox().getMode() == FocusBox.Mode.CUSTOM)
+                        settings.getFocusBox().setMode(FocusBox.Mode.FREE);
+                    else {
+                        final double sc = width / (double) displayWidth;
+                        settings.getFocusBox().setCustomBounds(
+                                (int)(mouseDownX * sc), (int)(mouseDownY * sc),
+                                (int)(mp.x * sc), (int)(mp.y * sc), reference);
+                    }
+
+                    mouseEvent.markAsProcessed();
+                }
+            }
+        }
+
         // activate / deactivate
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.SPACE, GameKeyEvent.Action.PRESS),
@@ -172,18 +209,16 @@ public class Painter implements ProgramContext {
 
     @Override
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {
-        if (!showingReference) {
-            final int[] bounds = settings.getFocusBox().bounds(reference);
+        final int[] bounds = settings.getFocusBox().bounds(reference);
 
-            final GameImage focusBoxImage = new GameImage(width, height);
-            focusBoxImage.setColor(RSColors.DEBUG);
-            focusBoxImage.drawRectangle(10,
-                    bounds[Constants.BOUND_X1], bounds[Constants.BOUND_Y1],
-                    bounds[Constants.BOUND_X2] - bounds[Constants.BOUND_X1],
-                    bounds[Constants.BOUND_Y2] - bounds[Constants.BOUND_Y1]);
+        final GameImage focusBoxImage = new GameImage(width, height);
+        focusBoxImage.setColor(RSColors.DEBUG);
+        focusBoxImage.drawRectangle(10,
+                bounds[Constants.BOUND_X1], bounds[Constants.BOUND_Y1],
+                bounds[Constants.BOUND_X2] - bounds[Constants.BOUND_X1],
+                bounds[Constants.BOUND_Y2] - bounds[Constants.BOUND_Y1]);
 
-            canvas.draw(focusBoxImage.submit(), 0, 0, displayWidth, displayHeight);
-        }
+        canvas.draw(focusBoxImage.submit(), 0, 0, displayWidth, displayHeight);
     }
 
     private void toggleShowingReference() {
