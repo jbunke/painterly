@@ -42,8 +42,8 @@ public class Painter implements ProgramContext {
         this.reference = ImageProcessing.scale(reference, settings.getScaleUp());
         this.settings = settings;
 
-        width = reference.getWidth();
-        height = reference.getHeight();
+        width = this.reference.getWidth();
+        height = this.reference.getHeight();
 
         displayWidth = displayDims[Constants.WIDTH];
         displayHeight = displayDims[Constants.HEIGHT];

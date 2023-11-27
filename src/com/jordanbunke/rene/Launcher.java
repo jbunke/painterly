@@ -52,6 +52,8 @@ public class Launcher {
             final String command = Clink.promptForString("").trim().toLowerCase();
             quit = CommandParser.parse(command, settings);
         }
+
+        System.exit(200);
     }
 
     private static void welcome() {
