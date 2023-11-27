@@ -42,15 +42,15 @@ public class Launcher {
         final Game g = new Game(window, manager, Constants.HZ, Constants.FPS);
         g.getDebugger().muteChannel(GameDebugger.FRAME_RATE);
 
-        commandCycle(settings);
+        commandCycle(painter);
     }
 
-    private static void commandCycle(final Settings settings) {
+    private static void commandCycle(final Painter painter) {
         boolean quit = false;
 
         while (!quit) {
             final String command = Clink.promptForString("").trim().toLowerCase();
-            quit = CommandParser.parse(command, settings);
+            quit = CommandParser.parse(command, painter);
         }
 
         System.exit(200);

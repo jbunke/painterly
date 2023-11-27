@@ -60,7 +60,11 @@ public class Painter implements ProgramContext {
         painting.fillRectangle(RSColors.WHITE, 0, 0, width, height);
         painting.free();
 
-        calculateSimilarity();
+        calculateStats();
+    }
+
+    public void overridePainting(final GameImage painting) {
+        this.painting = painting;
     }
 
     @Override
@@ -135,7 +139,7 @@ public class Painter implements ProgramContext {
             strokeCount++;
 
             if (strokeCount % settings.getStrokesToCalculateSimilarity() == 0)
-                calculateSimilarity();
+                calculateStats();
 
             if (strokeCount % settings.getStrokesToSavePainting() == 0)
                 savePainting();
@@ -144,14 +148,14 @@ public class Painter implements ProgramContext {
         }
     }
 
-    private void calculateSimilarity() {
+    public void calculateStats() {
         similarity = RSMath.similarity(reference, painting, 0, 0, width, height);
 
         Clink.writeUpdate("Stroke count: " + Clink.highlight(String.valueOf(strokeCount), Clink.Mode.UPDATE));
         Clink.writeUpdate("Similarity: " + Clink.highlight((similarity * 100) + "%", Clink.Mode.UPDATE));
     }
 
-    private void savePainting() {
+    public void savePainting() {
         final String project = settings.getProjectName();
 
         GameImageIO.writeImage(projectFolder.resolve(project + " painting.png"), painting);
@@ -184,5 +188,9 @@ public class Painter implements ProgramContext {
 
     private void toggleShowingReference() {
         showingReference = !showingReference;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 }

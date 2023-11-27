@@ -1,10 +1,17 @@
 package com.jordanbunke.rene.settings;
 
 import com.jordanbunke.clink.Clink;
+import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.delta_time.io.GameImageIO;
+import com.jordanbunke.rene.painter.Painter;
+
+import java.nio.file.Path;
 
 public class CommandParser {
-    public static boolean parse(final String command, final Settings s) {
-        final String SET = "set ",
+    public static boolean parse(final String command, final Painter painter) {
+        final Settings s = painter.getSettings();
+
+        final String LOAD = "load ", SET = "set ",
                 STROKES_PER_STATS = "strokes_per_stats",
                 STROKES_PER_SAVE = "strokes_per_save",
                 STROKES_PER_BOX_UPDATE = "strokes_per_box_update",
@@ -20,10 +27,16 @@ public class CommandParser {
             case "pause" -> s.deactivate();
             case "resume" -> s.activate();
             case "help" -> Clink.writeUpdate("Valid commands..." + Clink.NEW_LINE +
-                            "help" + Clink.NEW_LINE + "pause" + Clink.NEW_LINE +
-                            "quit" + Clink.NEW_LINE + "resume" + Clink.NEW_LINE +
-                            SET + "[setting_id] [value]" + Clink.NEW_LINE +
-                            "settings");
+                    "help" + Clink.NEW_LINE +
+                    LOAD + "[filepath]" + Clink.NEW_LINE +
+                    "pause" + Clink.NEW_LINE +
+                    "quit" + Clink.NEW_LINE +
+                    "resume" + Clink.NEW_LINE +
+                    "save" + Clink.NEW_LINE +
+                    SET + "[setting_id] [value]" + Clink.NEW_LINE +
+                    "settings" + Clink.NEW_LINE +
+                    "stats");
+            case "save" -> painter.savePainting();
             case "settings" -> Clink.writeUpdate(
                     "Settings..." + Clink.NEW_LINE +
                             STROKES_PER_STATS + " : " + Clink.highlight(String.valueOf(
@@ -40,6 +53,7 @@ public class CommandParser {
                                     s.getFocusBox().getMode().name(), Clink.Mode.UPDATE) + Clink.NEW_LINE +
                             BOX_DIVISIONS + " : " + Clink.highlight(String.valueOf(
                                     s.getFocusBox().getDivisions()), Clink.Mode.UPDATE));
+            case "stats" -> painter.calculateStats();
             default -> {
                 if (command.startsWith(SET)) {
                     final String subcommand = command.substring(SET.length());
@@ -65,6 +79,15 @@ public class CommandParser {
                                 Clink.highlight(setting, Clink.Mode.ERROR) +
                                 " was not recognized");
                     }
+                } else if (command.startsWith(LOAD)) {
+                    final String filepath = command.substring(LOAD.length());
+
+                    final GameImage painting = GameImageIO.readImage(Path.of(filepath));
+                    painter.overridePainting(painting);
+
+                    Clink.writeUpdate("Wrote image at " +
+                            Clink.highlight(filepath, Clink.Mode.UPDATE) +
+                            " into program as in-progress painting");
                 }
             }
         }

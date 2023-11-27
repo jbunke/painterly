@@ -44,12 +44,6 @@ public class FocusBox {
                                     bounds[Constants.BOUND_Y2]
                             );
 
-                            Clink.writeUpdate(
-                                    "Subsection similarity (" + Clink.highlight(String.valueOf(x), Clink.Mode.UPDATE) +
-                                            ", " + Clink.highlight(String.valueOf(y), Clink.Mode.UPDATE) + "): " +
-                                            Clink.highlight((similarity * 100) + "%", Clink.Mode.UPDATE)
-                            );
-
                             if (similarity < minSimilarity) {
                                 minSimilarity = similarity;
                                 minDims[Constants.X] = x;
@@ -57,6 +51,12 @@ public class FocusBox {
                             }
                         }
                     }
+
+                    Clink.writeUpdate(
+                            "Lowest similarity (" + Clink.highlight(String.valueOf(minDims[Constants.X]), Clink.Mode.UPDATE) +
+                                    ", " + Clink.highlight(String.valueOf(minDims[Constants.Y]), Clink.Mode.UPDATE) + "): " +
+                                    Clink.highlight((minSimilarity * 100) + "%", Clink.Mode.UPDATE)
+                    );
 
                     setCoordinates(minDims[Constants.X], minDims[Constants.Y]);
                 }
