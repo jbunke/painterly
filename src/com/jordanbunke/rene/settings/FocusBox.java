@@ -2,27 +2,34 @@ package com.jordanbunke.rene.settings;
 
 import com.jordanbunke.clink.Clink;
 import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.delta_time.utility.RNG;
 import com.jordanbunke.rene.constants.Constants;
 import com.jordanbunke.rene.math.RSMath;
 
 public class FocusBox {
     public enum Mode {
-        ITINERANT, WORST, FREE, CUSTOM
+        ITERATE, WORST, FREE, RANDOM, CUSTOM
     }
 
-    public static final int UNIVERSAL = 1, DEFAULT_STROKES_PER_UPDATE = 250;
+    public enum TickMode {
+        STROKE, ATTEMPT
+    }
 
-    private int divisions, strokesPerUpdate;
+    public static final int UNIVERSAL = 1, DEFAULT_BOX_TICK = 250;
+
+    private int divisions, boxTick;
     private int x, y;
     private Mode mode;
+    private TickMode tickMode;
 
     private final int[] customBounds;
 
     public FocusBox() {
         divisions = UNIVERSAL;
-        strokesPerUpdate = DEFAULT_STROKES_PER_UPDATE;
+        boxTick = DEFAULT_BOX_TICK;
 
         mode = Mode.FREE;
+        tickMode = TickMode.STROKE;
 
         x = 0;
         y = 0;
@@ -30,8 +37,14 @@ public class FocusBox {
         customBounds = new int[] { 0, 0, 1, 1 };
     }
 
-    public void tryMode(final int strokeCount, final GameImage reference, final GameImage painting) {
-        if (strokeCount % strokesPerUpdate == 0) {
+    public void tryMode(
+            final int strokeCount, final int attemptCount,
+            final GameImage reference, final GameImage painting
+    ) {
+        final int tick = tickMode == TickMode.STROKE
+                ? strokeCount : attemptCount;
+
+        if (tick % boxTick == 0) {
             switch (mode) {
                 case WORST -> {
                     final int[] minDims = new int[2];
@@ -64,12 +77,14 @@ public class FocusBox {
 
                     setCoordinates(minDims[Constants.X], minDims[Constants.Y]);
                 }
-                case ITINERANT -> {
+                case ITERATE -> {
                     final int boxNumber = (y * divisions) + x,
                             nextBoxNumber = (boxNumber + 1) % (divisions * divisions);
 
                     setCoordinates(nextBoxNumber % divisions, nextBoxNumber / divisions);
                 }
+                case RANDOM -> setCoordinates(RNG.randomInRange(0, divisions),
+                        RNG.randomInRange(0, divisions));
             }
         }
     }
@@ -96,12 +111,16 @@ public class FocusBox {
         return mode;
     }
 
+    public TickMode getTickMode() {
+        return tickMode;
+    }
+
     public int getDivisions() {
         return divisions;
     }
 
-    public int getStrokesPerUpdate() {
-        return strokesPerUpdate;
+    public int getBoxTick() {
+        return boxTick;
     }
 
     public void setCustomBounds(
@@ -123,14 +142,18 @@ public class FocusBox {
         this.mode = mode;
     }
 
+    public void setTickMode(final TickMode tickMode) {
+        this.tickMode = tickMode;
+    }
+
     public void setDivisions(final int divisions) {
         this.divisions = Math.max(UNIVERSAL, divisions);
 
         normalizeCoordinates();
     }
 
-    public void setStrokesPerUpdate(final int strokesPerUpdate) {
-        this.strokesPerUpdate = Math.max(1, strokesPerUpdate);
+    public void setBoxTick(final int boxTick) {
+        this.boxTick = Math.max(1, boxTick);
     }
 
     public void setCoordinates(final int x, final int y) {
@@ -141,8 +164,10 @@ public class FocusBox {
     }
 
     public void adjustCoordinates(final int deltaX, final int deltaY) {
-        if (mode != Mode.FREE)
+        if (mode == Mode.CUSTOM) {
+            setMode(Mode.FREE);
             return;
+        }
 
         this.x += deltaX;
         this.y += deltaY;

@@ -37,7 +37,7 @@ public class Painter implements ProgramContext {
 
     // updated
     private GameImage painting;
-    private int strokeCount;
+    private int strokeCount, attemptCount;
     private double similarity;
 
     private int mouseDownX, mouseDownY;
@@ -116,6 +116,23 @@ public class Painter implements ProgramContext {
                 GameKeyEvent.newKeyStroke(Key.M, GameKeyEvent.Action.PRESS),
                 this::toggleShowingReference
         );
+        // set focus box modes
+        eventLogger.checkForMatchingKeyStroke(
+                GameKeyEvent.newKeyStroke(Key.W, GameKeyEvent.Action.PRESS),
+                () -> settings.getFocusBox().setMode(FocusBox.Mode.WORST)
+        );
+        eventLogger.checkForMatchingKeyStroke(
+                GameKeyEvent.newKeyStroke(Key.F, GameKeyEvent.Action.PRESS),
+                () -> settings.getFocusBox().setMode(FocusBox.Mode.FREE)
+        );
+        eventLogger.checkForMatchingKeyStroke(
+                GameKeyEvent.newKeyStroke(Key.I, GameKeyEvent.Action.PRESS),
+                () -> settings.getFocusBox().setMode(FocusBox.Mode.ITERATE)
+        );
+        eventLogger.checkForMatchingKeyStroke(
+                GameKeyEvent.newKeyStroke(Key.R, GameKeyEvent.Action.PRESS),
+                () -> settings.getFocusBox().setMode(FocusBox.Mode.RANDOM)
+        );
         // arrow keys for free focus box manipulation
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.DOWN_ARROW, GameKeyEvent.Action.PRESS),
@@ -147,6 +164,11 @@ public class Painter implements ProgramContext {
     }
 
     private void attemptStroke() {
+        attemptCount++;
+
+        if (attemptCount >= Constants.MAX_ATTEMPTS)
+            attemptCount = 0;
+
         final int[] bounds = settings.getFocusBox().bounds(reference);
 
         // 1: drawing position
@@ -175,14 +197,14 @@ public class Painter implements ProgramContext {
             painting = modified;
             strokeCount++;
 
-            if (strokeCount % settings.getStrokesToCalculateSimilarity() == 0)
+            if (strokeCount % settings.getStatsTick() == 0)
                 calculateStats();
 
-            if (strokeCount % settings.getStrokesToSavePainting() == 0)
+            if (strokeCount % settings.getSaveTick() == 0)
                 savePainting();
-
-            settings.getFocusBox().tryMode(strokeCount, reference, painting);
         }
+
+        settings.getFocusBox().tryMode(strokeCount, attemptCount, reference, painting);
     }
 
     public void calculateStats() {

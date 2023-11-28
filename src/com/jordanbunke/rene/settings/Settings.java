@@ -6,7 +6,7 @@ public class Settings {
     // DEFAULTS
     private static final double MIN_PROB = 0.0, MAX_PROB = 1.0;
     public static final double DEFAULT_SAMPLE_PROB = 0.5;
-    public static final int DEFAULT_STROKES_TO_CALC_SIM = 250, DEFAULT_STROKES_TO_SAVE = 1000;
+    public static final int DEFAULT_STATS_TICK = 250, DEFAULT_SAVE_TICK = 1000;
 
     // IMMUTABLE
     private final int scaleUp;
@@ -15,7 +15,7 @@ public class Settings {
     // MUTABLE
     private boolean active;
     private double sampleProb;
-    private int strokesToCalculateSimilarity, strokesToSavePainting;
+    private int statsTick, saveTick;
     private Palette palette;
 
     // FOCUS BOX
@@ -27,8 +27,8 @@ public class Settings {
 
         active = true;
 
-        setStrokesToCalculateSimilarity(DEFAULT_STROKES_TO_CALC_SIM);
-        setStrokesToSavePainting(DEFAULT_STROKES_TO_SAVE);
+        setStatsTick(DEFAULT_STATS_TICK);
+        setSaveTick(DEFAULT_SAVE_TICK);
 
         setSampleProb(DEFAULT_SAMPLE_PROB);
 
@@ -46,12 +46,12 @@ public class Settings {
         this.sampleProb = normalizeProbability(sampleProb);
     }
 
-    public void setStrokesToCalculateSimilarity(final int strokesToCalculateSimilarity) {
-        this.strokesToCalculateSimilarity = strokesToCalculateSimilarity;
+    public void setStatsTick(final int statsTick) {
+        this.statsTick = statsTick;
     }
 
-    public void setStrokesToSavePainting(final int strokesToSavePainting) {
-        this.strokesToSavePainting = strokesToSavePainting;
+    public void setSaveTick(final int saveTick) {
+        this.saveTick = saveTick;
     }
 
     public void setPalette(final int paletteIndex) {
@@ -67,11 +67,17 @@ public class Settings {
     }
 
     public void activate() {
+        if (active)
+            return;
+
         active = true;
         Clink.writeUpdate("Activated painter");
     }
 
     public void deactivate() {
+        if (!active)
+            return;
+
         active = false;
         Clink.writeUpdate("Deactivated painter");
     }
@@ -89,12 +95,12 @@ public class Settings {
         return active;
     }
 
-    public int getStrokesToCalculateSimilarity() {
-        return strokesToCalculateSimilarity;
+    public int getStatsTick() {
+        return statsTick;
     }
 
-    public int getStrokesToSavePainting() {
-        return strokesToSavePainting;
+    public int getSaveTick() {
+        return saveTick;
     }
 
     public double getSampleProb() {

@@ -94,12 +94,14 @@ public class Launcher {
                 FocusBox.Mode.valueOf(
                         Clink.promptForOptionOrDefault(
                                 "Focus box mode? (" +
-                                        Clink.highlight(FocusBox.Mode.ITINERANT.name(), Clink.Mode.PROMPT) +
+                                        Clink.highlight(FocusBox.Mode.ITERATE.name(), Clink.Mode.PROMPT) +
+                                        ", " + Clink.highlight(FocusBox.Mode.RANDOM.name(), Clink.Mode.PROMPT) +
                                         ", " + Clink.highlight(FocusBox.Mode.WORST.name(), Clink.Mode.PROMPT) +
                                         ", or " + Clink.highlight(FocusBox.Mode.FREE.name(), Clink.Mode.PROMPT) +
                                         ")",
                                 Set.of(
-                                        FocusBox.Mode.ITINERANT.name(),
+                                        FocusBox.Mode.ITERATE.name(),
+                                        FocusBox.Mode.RANDOM.name(),
                                         FocusBox.Mode.WORST.name(),
                                         FocusBox.Mode.FREE.name()
                                 ), FocusBox.Mode.FREE.name(), s -> s.toUpperCase().trim())));
