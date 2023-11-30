@@ -182,7 +182,7 @@ public class Painter implements ProgramContext {
         final Color sample = ImageProcessing.colorAtPixel(
                 reference, colorCoordinates[Constants.X], colorCoordinates[Constants.Y]
         );
-        final Color c = settings.getPalette().palettize(
+        final Color c = settings.getPalette().quantize(
                 RNG.prob(settings.getSampleProb()) ? sample : RSColors.random());
 
         final GameImage modified = new GameImage(painting);

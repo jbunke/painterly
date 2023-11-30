@@ -16,7 +16,7 @@ public enum Palette {
         this.factor = factor;
     }
 
-    public Color palettize(final Color c) {
+    public Color quantize(final Color c) {
         if (this == ALL)
             return c;
 

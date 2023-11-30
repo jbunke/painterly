@@ -11,7 +11,7 @@ public class CommandParser {
     public static boolean parse(final String command, final Painter painter) {
         final Settings s = painter.getSettings();
 
-        final String BEHAVIOUR = "behaviour ",
+        final String PRESET = "preset ",
                 LOAD = "load ", SET = "set ",
                 STATS_TICK = "stats_tick",
                 SAVE_TICK = "save_tick",
@@ -34,7 +34,7 @@ public class CommandParser {
             case "pause" -> s.deactivate();
             case "resume" -> s.activate();
             case "help" -> Clink.writeUpdate("Valid commands..." + Clink.NEW_LINE +
-                    BEHAVIOUR + "[behaviour_id]" + Clink.NEW_LINE +
+                    PRESET + "[preset_id]" + Clink.NEW_LINE +
                     "help" + Clink.NEW_LINE +
                     LOAD + "[filepath]" + Clink.NEW_LINE +
                     "pause" + Clink.NEW_LINE +
@@ -99,10 +99,10 @@ public class CommandParser {
                     Clink.writeUpdate("Wrote image at " +
                             Clink.highlight(filepath, Clink.Mode.UPDATE) +
                             " into program as in-progress painting");
-                } else if (command.startsWith(BEHAVIOUR)) {
-                    final String behaviourID = command.substring(BEHAVIOUR.length());
+                } else if (command.startsWith(PRESET)) {
+                    final String presetID = command.substring(PRESET.length());
 
-                    switch (behaviourID) {
+                    switch (presetID) {
                         case WHOLE -> {
                             s.getFocusBox().setBoxTick(1000);
                             s.getFocusBox().setMode(FocusBox.Mode.FREE);
@@ -139,8 +139,8 @@ public class CommandParser {
                             s.getFocusBox().setDivisions(40);
                             s.activate();
                         }
-                        default -> Clink.writeError("Behaviour ID " +
-                                Clink.highlight(behaviourID, Clink.Mode.ERROR) +
+                        default -> Clink.writeError("Preset ID " +
+                                Clink.highlight(presetID, Clink.Mode.ERROR) +
                                 " was not recognized");
                     }
                 }

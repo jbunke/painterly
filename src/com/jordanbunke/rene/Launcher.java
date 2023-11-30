@@ -85,11 +85,11 @@ public class Launcher {
                 "Sample colour from reference probability?",
                 Settings.DEFAULT_SAMPLE_PROB));
         settings.setPalette(Clink.promptForInt(
-                "Color palettization intensity index? (from " +
+                "Color quantization intensity index? (from " +
                         Clink.highlight(String.valueOf(0), Clink.Mode.PROMPT) +
-                        " for no palettization to " +
+                        " for no quantization to " +
                         Clink.highlight(String.valueOf(Palette.values().length - 1), Clink.Mode.PROMPT) +
-                        " for maximum palettization)"));
+                        " for maximum quantization)"));
         settings.getFocusBox().setMode(
                 FocusBox.Mode.valueOf(
                         Clink.promptForOptionOrDefault(
