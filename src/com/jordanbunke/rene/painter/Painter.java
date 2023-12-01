@@ -235,7 +235,7 @@ public class Painter implements ProgramContext {
 
         final GameImage focusBoxImage = new GameImage(width, height);
         focusBoxImage.setColor(RSColors.DEBUG);
-        focusBoxImage.drawRectangle(10,
+        focusBoxImage.drawRectangle(3,
                 bounds[Constants.BOUND_X1], bounds[Constants.BOUND_Y1],
                 bounds[Constants.BOUND_X2] - bounds[Constants.BOUND_X1],
                 bounds[Constants.BOUND_Y2] - bounds[Constants.BOUND_Y1]);

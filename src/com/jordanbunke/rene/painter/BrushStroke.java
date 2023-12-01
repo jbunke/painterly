@@ -54,53 +54,61 @@ public class BrushStroke {
     public int[] draw(final GameImage canvas, final Color c) {
         final int[] bounds = new int[] { x, y, x + 1, y + 1 };
 
-        double[] last = new double[] { (double) x, (double) y };
-
-        for (int i = 0; i < length; i++)
-            last = nextStrokePoint(canvas, c, bounds,
-                    last[Constants.X], last[Constants.Y], i);
+        double[] p = new double[] { (double) x, (double) y };
+        strokePoint(canvas, c, initialDirection, bounds, p, 0);
 
         canvas.free();
         return RSMath.normalizeBounds(bounds, canvas);
     }
 
-    private double getDirectionForIndex(final int i) {
-        double direction = initialDirection + (i * directionChange);
+    private void strokePoint(
+            final GameImage canvas, final Color c,
+            final double direction,
+            final int[] bounds, final double[] p,
+            final int i
+    ) {
+        if (i >= length)
+            return;
 
-        while (direction < 0d)
-            direction += CIRCLE;
+        final double breadth = getBreadthForIndex(i);
 
-        while (direction >= CIRCLE)
-            direction -= CIRCLE;
+        final double[] np = new double[] {
+                p[Constants.X] + Math.cos(direction),
+                p[Constants.Y] - Math.sin(direction)
+        };
 
-        return direction;
+        canvas.drawLine(c, (int) breadth,
+                (int) p[Constants.X], (int) p[Constants.Y],
+                (int) np[Constants.X], (int) np[Constants.Y]);
+
+        updateBounds(bounds,
+                Math.max((int)(p[Constants.X] + (breadth / 2)) + 2,
+                        (int)(np[Constants.X] + (breadth / 2)) + 2),
+                Math.max((int)(p[Constants.X] - (breadth / 2)) - 1,
+                        (int)(np[Constants.X] - (breadth / 2)) - 1),
+                Math.max((int)(p[Constants.Y] + (breadth / 2)) + 2,
+                        (int)(np[Constants.Y] + (breadth / 2)) + 2),
+                Math.max((int)(p[Constants.Y] - (breadth / 2)) - 1,
+                        (int)(np[Constants.Y] - (breadth / 2)) - 1));
+
+        strokePoint(canvas, c,
+                normalizeDirection(direction + directionChange),
+                bounds, np, i + 1);
+    }
+
+    private double normalizeDirection(double d) {
+        while (d < 0d)
+            d += CIRCLE;
+
+        while (d >= CIRCLE)
+            d -= CIRCLE;
+
+        return d;
     }
 
     private double getBreadthForIndex(final int i) {
         return initialBreadth +
                 ((i / (double) length) * (finalBreadth - initialBreadth));
-    }
-
-    private double[] nextStrokePoint(
-            final GameImage canvas, final Color c, final int[] bounds,
-            final double lastTrueX, final double lastTrueY, final int i
-    ) {
-        final double breadth = getBreadthForIndex(i);
-        final double direction = getDirectionForIndex(i);
-
-        final double trueX = lastTrueX + Math.cos(direction),
-                trueY = lastTrueY - Math.sin(direction);
-
-        canvas.drawLine(c, (int) breadth, (int) lastTrueX,
-                (int) lastTrueY, (int) trueX, (int) trueY);
-
-        updateBounds(bounds,
-                Math.max((int)(lastTrueX + (breadth / 2)) + 2, (int)(trueX + (breadth / 2)) + 2),
-                Math.max((int)(lastTrueX - (breadth / 2)) - 1, (int)(trueX - (breadth / 2)) - 1),
-                Math.max((int)(lastTrueY + (breadth / 2)) + 2, (int)(trueY + (breadth / 2)) + 2),
-                Math.max((int)(lastTrueY - (breadth / 2)) - 1, (int)(trueY - (breadth / 2)) - 1));
-
-        return new double[] { trueX, trueY };
     }
 
     private void updateBounds(

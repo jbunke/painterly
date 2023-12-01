@@ -16,17 +16,15 @@ import com.jordanbunke.rene.settings.Palette;
 import com.jordanbunke.rene.settings.Settings;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Set;
 
 public class Launcher {
 
-    private static final String EMPTY = "";
-
     public static void main(final String[] args) {
+        processArgs(args);
         welcome();
 
-        final GameImage reference = retrieveReference(args);
+        final GameImage reference = retrieveReference();
         final Settings settings = initializeSettings();
 
         // launch painter and window
@@ -62,16 +60,18 @@ public class Launcher {
                 ", a guided painting program by Jordan Bunke.");
     }
 
-    private static GameImage retrieveReference(final String[] args) {
-        final String concatenated = Arrays.stream(args).
-                reduce((a, b) -> a + " " + b).orElse(EMPTY);
+    private static void processArgs(final String[] args) {
+        for (String arg : args)
+            switch (arg.toLowerCase()) {
+                case Constants.DISABLE_ANSI -> Clink.disableANSI();
+                case Constants.ENABLE_ANSI -> Clink.enableANSI();
+                case Constants.AUTO_ASSIGN -> Clink.autoAssignANSIEnabled();
+            }
+    }
 
-        if (concatenated.equals(EMPTY)) {
-            final Path filepath = Path.of(Clink.promptForString("Filepath for reference image?"));
-            return GameImageIO.readImage(filepath);
-        }
-
-        return GameImageIO.readImage(Path.of(concatenated));
+    private static GameImage retrieveReference() {
+        final Path filepath = Path.of(Clink.promptForString("Filepath for reference image?"));
+        return GameImageIO.readImage(filepath);
     }
 
     private static Settings initializeSettings() {
