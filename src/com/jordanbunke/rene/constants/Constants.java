@@ -13,7 +13,7 @@ public class Constants {
 
     public static final int MAX_ATTEMPTS = 1000000;
 
-    public static final double MAX_SIMILARITY = 1d, SIM_DAMP_EXPONENT = 6d, HZ = 50d, FPS = 10d;
+    public static final double MAX_SIMILARITY = 1d, SIM_DAMP_EXPONENT = 6d, HZ = 30d, FPS = 10d;
 
     public static final Path OUTPUT_FOLDER = Path.of("rs_output");
 }
