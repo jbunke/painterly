@@ -22,6 +22,8 @@ import com.jordanbunke.rene.settings.Settings;
 
 import java.awt.*;
 import java.nio.file.Path;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Painter implements ProgramContext {
@@ -37,7 +39,7 @@ public class Painter implements ProgramContext {
 
     // updated
     private GameImage painting;
-    private int strokeCount, attemptCount;
+    private int strokeCount, attemptCount, strokesInSlice, failedAttemptsInSlice;
     private double similarity;
 
     private int mouseDownX, mouseDownY;
@@ -61,6 +63,11 @@ public class Painter implements ProgramContext {
         mouseDownY = 0;
 
         strokeCount = 0;
+        attemptCount = 0;
+
+        strokesInSlice = 0;
+        failedAttemptsInSlice = 0;
+
         similarity = 0.;
         painting = new GameImage(width, height);
         init();
@@ -196,12 +203,18 @@ public class Painter implements ProgramContext {
         if (newSim > oldSim) {
             painting = modified;
             strokeCount++;
+            strokesInSlice++;
 
-            if (strokeCount % settings.getStatsTick() == 0)
+            if (strokeCount % settings.getStatsTick() == 0) {
                 calculateStats();
+                strokesInSlice = 0;
+                failedAttemptsInSlice = 0;
+            }
 
             if (strokeCount % settings.getSaveTick() == 0)
                 savePainting();
+        } else {
+            failedAttemptsInSlice++;
         }
 
         settings.getFocusBox().tryMode(strokeCount, attemptCount, reference, painting);
@@ -212,6 +225,11 @@ public class Painter implements ProgramContext {
 
         Clink.writeUpdate("Stroke count: " + Clink.highlight(String.valueOf(strokeCount), Clink.Mode.UPDATE));
         Clink.writeUpdate("Similarity: " + Clink.highlight((similarity * 100) + "%", Clink.Mode.UPDATE));
+        final double attemptsInSlice = strokesInSlice + failedAttemptsInSlice;
+        final double successRate = attemptsInSlice == 0d ? 0d : (100 * strokesInSlice) / attemptsInSlice;
+        Clink.writeUpdate("Stroke success rate: " + Clink.highlight(successRate + "%", Clink.Mode.UPDATE));
+        final String t = LocalTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME);
+        Clink.writeUpdate("Time: " + Clink.highlight(t.substring(0, t.indexOf(".")), Clink.Mode.UPDATE));
     }
 
     public void savePainting() {
