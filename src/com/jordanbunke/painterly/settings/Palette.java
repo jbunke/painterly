@@ -1,4 +1,4 @@
-package com.jordanbunke.rene.settings;
+package com.jordanbunke.painterly.settings;
 
 import java.awt.*;
 

@@ -1,7 +1,7 @@
-package com.jordanbunke.rene.painter;
+package com.jordanbunke.painterly.painter;
 
 import com.jordanbunke.clink.Clink;
-import com.jordanbunke.delta_time.contexts.ProgramContext;
+import com.jordanbunke.delta_time._core.ProgramContext;
 import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.events.GameEvent;
 import com.jordanbunke.delta_time.events.GameKeyEvent;
@@ -12,13 +12,13 @@ import com.jordanbunke.delta_time.image.ImageProcessing;
 import com.jordanbunke.delta_time.io.FileIO;
 import com.jordanbunke.delta_time.io.GameImageIO;
 import com.jordanbunke.delta_time.io.InputEventLogger;
-import com.jordanbunke.delta_time.utility.Coord2D;
-import com.jordanbunke.delta_time.utility.RNG;
-import com.jordanbunke.rene.constants.Constants;
-import com.jordanbunke.rene.math.RSColors;
-import com.jordanbunke.rene.math.RSMath;
-import com.jordanbunke.rene.settings.FocusBox;
-import com.jordanbunke.rene.settings.Settings;
+import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.delta_time.utility.math.RNG;
+import com.jordanbunke.painterly.constants.Constants;
+import com.jordanbunke.painterly.math.RSColors;
+import com.jordanbunke.painterly.math.RSMath;
+import com.jordanbunke.painterly.settings.FocusBox;
+import com.jordanbunke.painterly.settings.Settings;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -186,9 +186,8 @@ public class Painter implements ProgramContext {
 
         // 3: color
         final int[] colorCoordinates = RSMath.getPixelInBounds(bounds);
-        final Color sample = ImageProcessing.colorAtPixel(
-                reference, colorCoordinates[Constants.X], colorCoordinates[Constants.Y]
-        );
+        final Color sample = reference.getColorAt(
+                colorCoordinates[Constants.X], colorCoordinates[Constants.Y]);
         final Color c = settings.getPalette().quantize(
                 RNG.prob(settings.getSampleProb()) ? sample : RSColors.random());
 

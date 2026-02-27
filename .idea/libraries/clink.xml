@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="clink">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../clink/out/artifacts/clink/clink.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

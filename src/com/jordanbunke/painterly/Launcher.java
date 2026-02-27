@@ -1,19 +1,19 @@
-package com.jordanbunke.rene;
+package com.jordanbunke.painterly;
 
 import com.jordanbunke.clink.Clink;
 import com.jordanbunke.delta_time.debug.GameDebugger;
-import com.jordanbunke.delta_time.game.Game;
-import com.jordanbunke.delta_time.game.GameManager;
+import com.jordanbunke.delta_time._core.GameManager;
+import com.jordanbunke.delta_time._core.Program;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.GameImageIO;
 import com.jordanbunke.delta_time.window.GameWindow;
-import com.jordanbunke.rene.constants.Constants;
-import com.jordanbunke.rene.constants.PermLoaded;
-import com.jordanbunke.rene.painter.Painter;
-import com.jordanbunke.rene.settings.CommandParser;
-import com.jordanbunke.rene.settings.FocusBox;
-import com.jordanbunke.rene.settings.Palette;
-import com.jordanbunke.rene.settings.Settings;
+import com.jordanbunke.painterly.constants.Constants;
+import com.jordanbunke.painterly.constants.PermLoaded;
+import com.jordanbunke.painterly.painter.Painter;
+import com.jordanbunke.painterly.settings.CommandParser;
+import com.jordanbunke.painterly.settings.FocusBox;
+import com.jordanbunke.painterly.settings.Palette;
+import com.jordanbunke.painterly.settings.Settings;
 
 import java.nio.file.Path;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class Launcher {
 
         final Painter painter = new Painter(reference, settings, displayDims);
         final GameManager manager = new GameManager(0, painter);
-        final Game g = new Game(window, manager, Constants.HZ, Constants.FPS);
+        final Program g = new Program(window, manager, Constants.HZ, Constants.FPS);
         g.getDebugger().muteChannel(GameDebugger.FRAME_RATE);
 
         commandCycle(painter);

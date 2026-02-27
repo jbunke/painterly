@@ -1,4 +1,4 @@
-package com.jordanbunke.rene.constants;
+package com.jordanbunke.painterly.constants;
 
 import java.awt.*;
 import java.nio.file.Path;

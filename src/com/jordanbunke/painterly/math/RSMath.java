@@ -1,10 +1,9 @@
-package com.jordanbunke.rene.math;
+package com.jordanbunke.painterly.math;
 
 import com.jordanbunke.delta_time.image.GameImage;
-import com.jordanbunke.delta_time.image.ImageProcessing;
-import com.jordanbunke.delta_time.utility.RNG;
-import com.jordanbunke.rene.constants.Constants;
-import com.jordanbunke.rene.painter.BrushStroke;
+import com.jordanbunke.delta_time.utility.math.RNG;
+import com.jordanbunke.painterly.constants.Constants;
+import com.jordanbunke.painterly.painter.BrushStroke;
 
 import java.awt.*;
 
@@ -20,8 +19,7 @@ public class RSMath {
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++) {
                 cumulativeSimilarity += colorSimilarity(
-                        ImageProcessing.colorAtPixel(reference, x, y),
-                        ImageProcessing.colorAtPixel(painting, x, y));
+                        reference.getColorAt(x, y), painting.getColorAt(x, y));
             }
         }
 

@@ -1,4 +1,4 @@
-package com.jordanbunke.rene.constants;
+package com.jordanbunke.painterly.constants;
 
 import com.jordanbunke.delta_time.image.GameImage;
 

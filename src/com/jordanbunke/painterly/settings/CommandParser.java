@@ -1,9 +1,9 @@
-package com.jordanbunke.rene.settings;
+package com.jordanbunke.painterly.settings;
 
 import com.jordanbunke.clink.Clink;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.GameImageIO;
-import com.jordanbunke.rene.painter.Painter;
+import com.jordanbunke.painterly.painter.Painter;
 
 import java.nio.file.Path;
 

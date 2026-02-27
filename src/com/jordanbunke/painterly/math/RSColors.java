@@ -1,6 +1,6 @@
-package com.jordanbunke.rene.math;
+package com.jordanbunke.painterly.math;
 
-import com.jordanbunke.delta_time.utility.RNG;
+import com.jordanbunke.delta_time.utility.math.RNG;
 
 import java.awt.*;
 

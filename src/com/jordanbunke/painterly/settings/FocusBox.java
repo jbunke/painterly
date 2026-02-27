@@ -1,10 +1,10 @@
-package com.jordanbunke.rene.settings;
+package com.jordanbunke.painterly.settings;
 
 import com.jordanbunke.clink.Clink;
 import com.jordanbunke.delta_time.image.GameImage;
-import com.jordanbunke.delta_time.utility.RNG;
-import com.jordanbunke.rene.constants.Constants;
-import com.jordanbunke.rene.math.RSMath;
+import com.jordanbunke.delta_time.utility.math.RNG;
+import com.jordanbunke.painterly.constants.Constants;
+import com.jordanbunke.painterly.math.RSMath;
 
 public class FocusBox {
     public enum Mode {
