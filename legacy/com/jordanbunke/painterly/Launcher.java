@@ -13,7 +13,7 @@ import com.jordanbunke.painterly.painter.Painter;
 import com.jordanbunke.painterly.settings.CommandParser;
 import com.jordanbunke.painterly.settings.FocusBox;
 import com.jordanbunke.painterly.settings.Palette;
-import com.jordanbunke.painterly.settings.Settings;
+import com.jordanbunke.painterly.settings.ProjectSettings;
 
 import java.nio.file.Path;
 import java.util.Set;
@@ -25,17 +25,17 @@ public class Launcher {
         welcome();
 
         final GameImage reference = retrieveReference();
-        final Settings settings = initializeSettings();
+        final ProjectSettings projectSettings = initializeSettings();
 
         // launch painter and window
         final int[] displayDims = calculateDisplayDims(reference);
         final GameWindow window = new GameWindow(
-                Constants.PROGRAM_NAME + " | " + settings.getProjectName(),
+                Constants.PROGRAM_NAME + " | " + projectSettings.getProjectName(),
                 displayDims[Constants.WIDTH], displayDims[Constants.HEIGHT], PermLoaded.ICON,
                 true, false, false
         );
 
-        final Painter painter = new Painter(reference, settings, displayDims);
+        final Painter painter = new Painter(reference, projectSettings, displayDims);
         final GameManager manager = new GameManager(0, painter);
         final Program g = new Program(window, manager, Constants.HZ, Constants.FPS);
         g.getDebugger().muteChannel(GameDebugger.FRAME_RATE);
@@ -74,23 +74,23 @@ public class Launcher {
         return GameImageIO.readImage(filepath);
     }
 
-    private static Settings initializeSettings() {
+    private static ProjectSettings initializeSettings() {
         final String projectName = Clink.promptForString("Project name?");
         final int scaleUp = Clink.promptForIntOrDefault(
                 "Scale factor for painting resolution?", 1);
 
-        final Settings settings = new Settings(projectName, scaleUp);
+        final ProjectSettings projectSettings = new ProjectSettings(projectName, scaleUp);
 
-        settings.setSampleProb(Clink.promptForDoubleOrDefault(
+        projectSettings.setSampleProb(Clink.promptForDoubleOrDefault(
                 "Sample colour from reference probability?",
-                Settings.DEFAULT_SAMPLE_PROB));
-        settings.setPalette(Clink.promptForInt(
+                ProjectSettings.DEFAULT_SAMPLE_PROB));
+        projectSettings.setPalette(Clink.promptForInt(
                 "Color quantization intensity index? (from " +
                         Clink.highlight(String.valueOf(0), Clink.Mode.PROMPT) +
                         " for no quantization to " +
                         Clink.highlight(String.valueOf(Palette.values().length - 1), Clink.Mode.PROMPT) +
                         " for maximum quantization)"));
-        settings.getFocusBox().setMode(
+        projectSettings.getFocusBox().setMode(
                 FocusBox.Mode.valueOf(
                         Clink.promptForOptionOrDefault(
                                 "Focus box mode? (" +
@@ -105,11 +105,11 @@ public class Launcher {
                                         FocusBox.Mode.WORST.name(),
                                         FocusBox.Mode.FREE.name()
                                 ), FocusBox.Mode.FREE.name(), s -> s.toUpperCase().trim())));
-        settings.getFocusBox().setDivisions(Clink.promptForIntOrDefault(
+        projectSettings.getFocusBox().setDivisions(Clink.promptForIntOrDefault(
                 "# of rows and columns for focus areas?", FocusBox.UNIVERSAL));
         // TODO: more mutable settings
 
-        return settings;
+        return projectSettings;
     }
 
     private static int[] calculateDisplayDims(final GameImage r) {

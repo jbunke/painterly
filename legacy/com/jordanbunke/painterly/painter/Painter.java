@@ -18,7 +18,7 @@ import com.jordanbunke.painterly.constants.Constants;
 import com.jordanbunke.painterly.math.RSColors;
 import com.jordanbunke.painterly.math.RSMath;
 import com.jordanbunke.painterly.settings.FocusBox;
-import com.jordanbunke.painterly.settings.Settings;
+import com.jordanbunke.painterly.settings.ProjectSettings;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -31,7 +31,7 @@ public class Painter implements ProgramContext {
     // immutable
     private final Path projectFolder;
     private final GameImage reference;
-    private final Settings settings;
+    private final ProjectSettings projectSettings;
     private final int width, height, displayWidth, displayHeight;
 
     // mutable
@@ -44,12 +44,12 @@ public class Painter implements ProgramContext {
 
     private int mouseDownX, mouseDownY;
 
-    public Painter(final GameImage reference, final Settings settings, final int[] displayDims) {
-        projectFolder = Constants.OUTPUT_FOLDER.resolve(settings.getProjectName());
+    public Painter(final GameImage reference, final ProjectSettings projectSettings, final int[] displayDims) {
+        projectFolder = Constants.OUTPUT_FOLDER.resolve(projectSettings.getProjectName());
         FileIO.safeMakeDirectory(projectFolder);
 
-        this.reference = ImageProcessing.scale(reference, settings.getScaleUp());
-        this.settings = settings;
+        this.reference = ImageProcessing.scale(reference, projectSettings.getScaleUp());
+        this.projectSettings = projectSettings;
 
         width = this.reference.getWidth();
         height = this.reference.getHeight();
@@ -99,11 +99,11 @@ public class Painter implements ProgramContext {
                     mouseEvent.markAsProcessed();
                 } else if (mouseEvent.action == GameMouseEvent.Action.UP) {
                     if (mp.x == mouseDownX && mp.y == mouseDownY &&
-                            settings.getFocusBox().getMode() == FocusBox.Mode.CUSTOM)
-                        settings.getFocusBox().setMode(FocusBox.Mode.FREE);
+                            projectSettings.getFocusBox().getMode() == FocusBox.Mode.CUSTOM)
+                        projectSettings.getFocusBox().setMode(FocusBox.Mode.FREE);
                     else {
                         final double sc = width / (double) displayWidth;
-                        settings.getFocusBox().setCustomBounds(
+                        projectSettings.getFocusBox().setCustomBounds(
                                 (int)(mouseDownX * sc), (int)(mouseDownY * sc),
                                 (int)(mp.x * sc), (int)(mp.y * sc), reference);
                     }
@@ -116,7 +116,7 @@ public class Painter implements ProgramContext {
         // activate / deactivate
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.SPACE, GameKeyEvent.Action.PRESS),
-                settings::toggleActive
+                projectSettings::toggleActive
         );
         // show reference
         eventLogger.checkForMatchingKeyStroke(
@@ -126,36 +126,36 @@ public class Painter implements ProgramContext {
         // set focus box modes
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.W, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().setMode(FocusBox.Mode.WORST)
+                () -> projectSettings.getFocusBox().setMode(FocusBox.Mode.WORST)
         );
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.F, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().setMode(FocusBox.Mode.FREE)
+                () -> projectSettings.getFocusBox().setMode(FocusBox.Mode.FREE)
         );
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.I, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().setMode(FocusBox.Mode.ITERATE)
+                () -> projectSettings.getFocusBox().setMode(FocusBox.Mode.ITERATE)
         );
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.R, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().setMode(FocusBox.Mode.RANDOM)
+                () -> projectSettings.getFocusBox().setMode(FocusBox.Mode.RANDOM)
         );
         // arrow keys for free focus box manipulation
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.DOWN_ARROW, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().adjustCoordinates(0, 1)
+                () -> projectSettings.getFocusBox().adjustCoordinates(0, 1)
         );
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.UP_ARROW, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().adjustCoordinates(0, -1)
+                () -> projectSettings.getFocusBox().adjustCoordinates(0, -1)
         );
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.RIGHT_ARROW, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().adjustCoordinates(1, 0)
+                () -> projectSettings.getFocusBox().adjustCoordinates(1, 0)
         );
         eventLogger.checkForMatchingKeyStroke(
                 GameKeyEvent.newKeyStroke(Key.LEFT_ARROW, GameKeyEvent.Action.PRESS),
-                () -> settings.getFocusBox().adjustCoordinates(-1, 0)
+                () -> projectSettings.getFocusBox().adjustCoordinates(-1, 0)
         );
         // save
         eventLogger.checkForMatchingKeyStroke(
@@ -166,7 +166,7 @@ public class Painter implements ProgramContext {
 
     @Override
     public void update(final double deltaTime) {
-        if (settings.isActive())
+        if (projectSettings.isActive())
             attemptStroke();
     }
 
@@ -176,7 +176,7 @@ public class Painter implements ProgramContext {
         if (attemptCount >= Constants.MAX_ATTEMPTS)
             attemptCount = 0;
 
-        final int[] bounds = settings.getFocusBox().bounds(reference);
+        final int[] bounds = projectSettings.getFocusBox().bounds(reference);
 
         // 1: drawing position
         final int[] strokePos = RSMath.getPixelInBounds(bounds);
@@ -188,8 +188,8 @@ public class Painter implements ProgramContext {
         final int[] colorCoordinates = RSMath.getPixelInBounds(bounds);
         final Color sample = reference.getColorAt(
                 colorCoordinates[Constants.X], colorCoordinates[Constants.Y]);
-        final Color c = settings.getPalette().quantize(
-                RNG.prob(settings.getSampleProb()) ? sample : RSColors.random());
+        final Color c = projectSettings.getPalette().quantize(
+                RNG.prob(projectSettings.getSampleProb()) ? sample : RSColors.random());
 
         final GameImage modified = new GameImage(painting);
         final int[] strokeBounds = stroke.draw(modified, c);
@@ -204,19 +204,19 @@ public class Painter implements ProgramContext {
             strokeCount++;
             strokesInSlice++;
 
-            if (strokeCount % settings.getStatsTick() == 0) {
+            if (strokeCount % projectSettings.getStatsTick() == 0) {
                 calculateStats();
                 strokesInSlice = 0;
                 failedAttemptsInSlice = 0;
             }
 
-            if (strokeCount % settings.getSaveTick() == 0)
+            if (strokeCount % projectSettings.getSaveTick() == 0)
                 savePainting();
         } else {
             failedAttemptsInSlice++;
         }
 
-        settings.getFocusBox().tryMode(strokeCount, attemptCount, reference, painting);
+        projectSettings.getFocusBox().tryMode(strokeCount, attemptCount, reference, painting);
     }
 
     public void calculateStats() {
@@ -232,7 +232,7 @@ public class Painter implements ProgramContext {
     }
 
     public void savePainting() {
-        final String project = settings.getProjectName();
+        final String project = projectSettings.getProjectName();
 
         GameImageIO.writeImage(projectFolder.resolve(project + " painting.png"), painting);
         GameImageIO.writeImage(projectFolder.resolve(project + " reference.png"), reference);
@@ -248,7 +248,7 @@ public class Painter implements ProgramContext {
 
     @Override
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {
-        final int[] bounds = settings.getFocusBox().bounds(reference);
+        final int[] bounds = projectSettings.getFocusBox().bounds(reference);
 
         final GameImage focusBoxImage = new GameImage(width, height);
         focusBoxImage.setColor(RSColors.DEBUG);
@@ -264,7 +264,7 @@ public class Painter implements ProgramContext {
         showingReference = !showingReference;
     }
 
-    public Settings getSettings() {
-        return settings;
+    public ProjectSettings getSettings() {
+        return projectSettings;
     }
 }

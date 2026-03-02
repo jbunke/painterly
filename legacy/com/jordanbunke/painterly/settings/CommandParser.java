@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 public class CommandParser {
     public static boolean parse(final String command, final Painter painter) {
-        final Settings s = painter.getSettings();
+        final ProjectSettings s = painter.getSettings();
 
         final String PRESET = "preset ",
                 LOAD = "load ", SET = "set ",
