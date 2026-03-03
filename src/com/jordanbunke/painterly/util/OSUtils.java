@@ -1,6 +1,6 @@
 package com.jordanbunke.painterly.util;
 
-public class OSUtils {
+public final class OSUtils {
     private static final String NAME;
 
     static {

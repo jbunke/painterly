@@ -5,7 +5,7 @@ import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.delta_time.utility.Version;
 import com.jordanbunke.json.*;
 import com.jordanbunke.painterly.util.Constants;
-import com.jordanbunke.painterly.util.RuntimeSettings;
+import com.jordanbunke.painterly.settings.RuntimeSettings;
 
 import java.nio.file.Path;
 

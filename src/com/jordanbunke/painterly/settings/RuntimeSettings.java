@@ -1,4 +1,4 @@
-package com.jordanbunke.painterly.util;
+package com.jordanbunke.painterly.settings;
 
 public final class RuntimeSettings {
     private enum BoolSettings {

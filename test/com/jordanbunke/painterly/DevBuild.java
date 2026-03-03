@@ -1,6 +1,6 @@
 package com.jordanbunke.painterly;
 
-import com.jordanbunke.painterly.util.RuntimeSettings;
+import com.jordanbunke.painterly.settings.RuntimeSettings;
 
 public final class DevBuild {
     private static final String

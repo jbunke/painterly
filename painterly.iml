@@ -14,5 +14,6 @@
     <orderEntry type="library" name="delta-time-core" level="project" />
     <orderEntry type="library" name="json" level="project" />
     <orderEntry type="library" name="delta-time-script" level="project" />
+    <orderEntry type="library" name="delta-time-fonts" level="project" />
   </component>
 </module>

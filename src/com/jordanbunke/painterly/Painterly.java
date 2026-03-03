@@ -5,9 +5,11 @@ import com.jordanbunke.delta_time._core.GameManager;
 import com.jordanbunke.delta_time._core.Program;
 import com.jordanbunke.delta_time._core.ProgramContext;
 import com.jordanbunke.delta_time.debug.GameDebugger;
+import com.jordanbunke.delta_time.events.Key;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.window.GameWindow;
+import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.settings.update.VersionHandler;
 import com.jordanbunke.painterly.util.Constants;
@@ -31,6 +33,7 @@ public final class Painterly implements ProgramContext {
 
     public static void main(final String[] args) {
         OnStartup.run();
+        Key.setCtrlCommandMatch(true);
         Settings.read();
         ProgramInfo.readProgramFile();
         VersionHandler.startup();
@@ -40,17 +43,17 @@ public final class Painterly implements ProgramContext {
 
     @Override
     public void process(final InputEventLogger eventLogger) {
-
+        ProgramState.get().process(eventLogger);
     }
 
     @Override
     public void update(final double deltaTime) {
-
+        ProgramState.get().update(deltaTime);
     }
 
     @Override
     public void render(final GameImage canvas) {
-
+        ProgramState.get().render(canvas);
     }
 
     @Override
@@ -62,7 +65,7 @@ public final class Painterly implements ProgramContext {
                 Layout.width(), Layout.height(), /* TODO */ GameImage.dummy(),
                 true, /* TODO - assess */ true, Layout.isFullscreen()
         );
-        // TODO - window.hideCursor(); // once cursor graphics implemented
+        window.hideCursor();
 
         return window;
     }
