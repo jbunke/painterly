@@ -7,6 +7,10 @@ public enum Cursor {
     MAIN, POINTER, RETICLE, TEXT,
     VERT_SCROLL, HORZ_SCROLL, HAND_OPEN, HAND_GRAB, NONE;
 
+    public String id() {
+        return name().toLowerCase();
+    }
+
     private static Cursor cursor;
     private static Coord2D mousePos;
 

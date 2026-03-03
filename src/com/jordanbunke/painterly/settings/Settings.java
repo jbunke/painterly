@@ -7,7 +7,9 @@ import com.jordanbunke.json.JSONBuilder;
 import com.jordanbunke.json.JSONPair;
 import com.jordanbunke.json.JSONReader;
 import com.jordanbunke.painterly.ProgramInfo;
+import com.jordanbunke.painterly.resources.lang.Language;
 import com.jordanbunke.painterly.util.Constants;
+import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.OSUtils;
 
 import java.io.IOException;
@@ -19,15 +21,29 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static com.jordanbunke.painterly.settings.Settings.SettingID.*;
+
 public final class Settings {
     private static final Path SETTINGS_FILE;
 
     private static final Map<String, Setting<?>> settingsMap;
 
-    public static final String
-            SET_ID_VERSION = "last-opened-version",
-            SET_ID_FULLSCREEN = "fullscreen";
-    // TODO - additional settings
+    public enum SettingID {
+        SET_ID_VERSION,
+        SET_ID_FULLSCREEN,
+        SET_ID_LANGUAGE
+        // TODO - additional settings
+        ;
+
+        private static final String prefix = "SET_ID_";
+
+        public String get() {
+            if (this == SET_ID_VERSION)
+                return "last-opened-version";
+
+            return EnumUtils.formattedNameNoPrefix(this, prefix);
+        }
+    }
 
     static {
         SETTINGS_FILE = determineSettingsFile();
@@ -64,10 +80,12 @@ public final class Settings {
     }
 
     private static void initialize() {
-        addSetting(new Setting<>(Version.class, SET_ID_VERSION,
+        addSetting(new Setting<>(Version.class, SET_ID_VERSION.get(),
                 Version::parse, new Version(1, 0, 0)));
-        addSetting(new Setting<>(Boolean.class, SET_ID_FULLSCREEN,
+        addSetting(new Setting<>(Boolean.class, SET_ID_FULLSCREEN.get(),
                 Boolean::parseBoolean, false));
+        addSetting(new Setting<>(Language.class, SET_ID_LANGUAGE.get(),
+                Language::fromCode, Language.ENGLISH));
         // TODO - initialize additional settings
     }
 

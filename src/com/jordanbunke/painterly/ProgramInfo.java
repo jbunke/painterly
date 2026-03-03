@@ -1,9 +1,9 @@
 package com.jordanbunke.painterly;
 
 import com.jordanbunke.delta_time.io.FileIO;
-import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.delta_time.utility.Version;
 import com.jordanbunke.json.*;
+import com.jordanbunke.painterly.resources.ResourceReader;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.settings.RuntimeSettings;
 
@@ -15,8 +15,7 @@ public final class ProgramInfo {
     private static boolean IS_DEVBUILD = false;
 
     static void readProgramFile() {
-        final String programFile = FileIO.readResource(ResourceLoader
-                .loadResource(Constants.PROGRAM_FILE), "prg");
+        final String programFile = ResourceReader.read(Constants.PROGRAM_FILE);
 
         final JSONPair[] pairs = JSONReader.readObject(programFile);
 

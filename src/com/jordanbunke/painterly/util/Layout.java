@@ -5,6 +5,8 @@ import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.settings.Settings;
 
+import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_FULLSCREEN;
+
 import java.awt.*;
 
 public final class Layout {
@@ -70,7 +72,7 @@ public final class Layout {
     }
 
     public static boolean isFullscreen() {
-        final Boolean unboxed = Settings.get(Settings.SET_ID_FULLSCREEN, Boolean.class);
+        final Boolean unboxed = Settings.get(SET_ID_FULLSCREEN.get(), Boolean.class);
 
         return unboxed != null && unboxed;
     }
