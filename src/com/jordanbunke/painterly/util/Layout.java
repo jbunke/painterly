@@ -75,7 +75,7 @@ public final class Layout {
     }
 
     public static boolean isFullscreen() {
-        final Boolean unboxed = Settings.get(SET_ID_FULLSCREEN.get(), Boolean.class);
+        final Boolean unboxed = Settings.get(SET_ID_FULLSCREEN, Boolean.class);
 
         return unboxed != null && unboxed;
     }

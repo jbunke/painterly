@@ -26,7 +26,7 @@ import static com.jordanbunke.painterly.settings.Settings.SettingID.*;
 public final class Settings {
     private static final Path SETTINGS_FILE;
 
-    private static final Map<String, Setting<?>> settingsMap;
+    private static final Map<SettingID, Setting<?>> settingsMap;
 
     public enum SettingID {
         SET_ID_VERSION,
@@ -36,6 +36,12 @@ public final class Settings {
         ;
 
         private static final String prefix = "SET_ID_";
+
+        static SettingID fromString(final String key) {
+            return EnumUtils.stream(SettingID.class)
+                    .filter(s -> s.get().equals(key))
+                    .findAny().orElse(null);
+        }
 
         public String get() {
             if (this == SET_ID_VERSION)
@@ -80,11 +86,11 @@ public final class Settings {
     }
 
     private static void initialize() {
-        addSetting(new Setting<>(Version.class, SET_ID_VERSION.get(),
+        addSetting(new Setting<>(Version.class, SET_ID_VERSION,
                 Version::parse, new Version(1, 0, 0)));
-        addSetting(new Setting<>(Boolean.class, SET_ID_FULLSCREEN.get(),
+        addSetting(new Setting<>(Boolean.class, SET_ID_FULLSCREEN,
                 Boolean::parseBoolean, false));
-        addSetting(new Setting<>(Language.class, SET_ID_LANGUAGE.get(),
+        addSetting(new Setting<>(Language.class, SET_ID_LANGUAGE,
                 Language::fromCode, Language.ENGLISH));
         // TODO - initialize additional settings
     }
@@ -105,7 +111,8 @@ public final class Settings {
             return;
 
         for (JSONPair pair : pairs) {
-            final String id = pair.key();
+            final String key = pair.key();
+            final SettingID id = SettingID.fromString(key);
 
             if (settingsMap.containsKey(id)) {
                 final String valueString = String.valueOf(pair.value());
@@ -139,12 +146,13 @@ public final class Settings {
         settingsMap.keySet().stream().sorted()
                 .filter(id -> settingsMap.get(id).value != null)
                 .map(id -> {
+                    final String key = id.get();
                     final Object value = settingsMap.get(id).value;
 
                     if (validJSONDataType(value))
-                        return new JSONPair(id, value);
+                        return new JSONPair(key, value);
 
-                    return new JSONPair(id, String.valueOf(value));
+                    return new JSONPair(key, String.valueOf(value));
                 }).forEach(jb::add);
 
         FileIO.writeFile(SETTINGS_FILE, jb.write());
@@ -155,17 +163,17 @@ public final class Settings {
                 value instanceof Integer || value instanceof Boolean;
     }
 
-    public static void reset(final String id) {
+    public static void reset(final SettingID id) {
         if (settingsMap.containsKey(id))
             settingsMap.get(id).reset();
     }
 
-    public static void set(final String id, final Object value) {
+    public static void set(final SettingID id, final Object value) {
         if (settingsMap.containsKey(id))
             settingsMap.get(id).set(value);
     }
 
-    public static <T> T get(final String id, final Class<T> type) {
+    public static <T> T get(final SettingID id, final Class<T> type) {
         if (!settingsMap.containsKey(id))
             return null;
 
@@ -179,14 +187,14 @@ public final class Settings {
 
     private static class Setting<T> {
         private final Class<T> type;
-        private final String id;
+        private final SettingID id;
         private final Function<String, T> parser;
         private final Predicate<T> validator;
         private final T defaultValue;
         private T value;
 
         Setting(
-                final Class<T> type, final String id,
+                final Class<T> type, final SettingID id,
                 final Function<String, T> parser,
                 final Predicate<T> validator, final T defaultValue
         ) {
@@ -200,7 +208,7 @@ public final class Settings {
         }
 
         Setting(
-                final Class<T> type, final String id,
+                final Class<T> type, final SettingID id,
                 final Function<String, T> parser, final T defaultValue
         ) {
             this(type, id, parser, Objects::nonNull, defaultValue);

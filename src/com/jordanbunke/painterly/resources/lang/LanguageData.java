@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_LANGUAGE;
+
 public final class LanguageData {
     private static final Path TEXT_FOLDER = Path.of("text");
     private static final Map<Language, LanguageData> languageDataMap;
@@ -48,7 +50,7 @@ public final class LanguageData {
     }
 
     private static Language getCurrentLanguage() {
-        return Settings.get(Settings.SettingID.SET_ID_LANGUAGE.get(), Language.class);
+        return Settings.get(SET_ID_LANGUAGE, Language.class);
     }
 
     private final Language language;

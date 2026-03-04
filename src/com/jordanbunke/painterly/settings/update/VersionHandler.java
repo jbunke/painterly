@@ -14,6 +14,6 @@ public final class VersionHandler {
         ProgramState.set(ProgramState.MENU, MenuAssembly.mainMenu());
 
         // Update last opened version to current version
-        Settings.set(SET_ID_VERSION.get(), ProgramInfo.getVersion());
+        Settings.set(SET_ID_VERSION, ProgramInfo.getVersion());
     }
 }

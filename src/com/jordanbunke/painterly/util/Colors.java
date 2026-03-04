@@ -17,7 +17,7 @@ public final class Colors {
         MID_LIGHT(LIGHT_GREY),
         LIGHT(WHITE);
 
-        Color defaultColor;
+        final Color defaultColor;
 
         SystemColor(final Color defaultColor) {
             this.defaultColor = defaultColor;
@@ -27,7 +27,7 @@ public final class Colors {
     public enum Theme {
         DEFAULT(/* TODO */);
 
-        private Color[] systemColors;
+        private final Color[] systemColors;
 
         Theme(final Color... colors) {
             final SystemColor[] sc = SystemColor.values();
