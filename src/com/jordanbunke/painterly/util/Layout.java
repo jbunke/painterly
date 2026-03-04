@@ -8,13 +8,16 @@ import com.jordanbunke.painterly.settings.Settings;
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_FULLSCREEN;
 
 import java.awt.*;
+import java.util.function.Supplier;
 
 public final class Layout {
     // layout constants
 
     public static final int
             TOOLTIP_OFFSET_LEFT = -7,
-            TOOLTIP_OFFSET_RIGHT = 5;
+            TOOLTIP_OFFSET_RIGHT = 5,
+            MENU_BAR_HEIGHT = 20,
+            CONTEXT_BAR_HEIGHT = 20;
 
     // constant processing functions
 
@@ -75,5 +78,50 @@ public final class Layout {
         final Boolean unboxed = Settings.get(SET_ID_FULLSCREEN.get(), Boolean.class);
 
         return unboxed != null && unboxed;
+    }
+
+    // screen boxes
+
+    public enum ScreenBox {
+        SCREEN(() -> 0, () -> 0, Layout::width, Layout::height),
+        MENU_BAR(() -> 0, () -> 0, Layout::width, () -> MENU_BAR_HEIGHT),
+        CONTEXT_BAR(() -> 0, () -> Layout.height() - CONTEXT_BAR_HEIGHT,
+                Layout::width, () -> CONTEXT_BAR_HEIGHT),
+        ;
+
+        public final Supplier<Integer> x, y, width, height;
+
+        ScreenBox(
+                final Supplier<Integer> x, final Supplier<Integer> y,
+                final Supplier<Integer> width,
+                final Supplier<Integer> height
+        ) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        public Coord2D pos() {
+            return new Coord2D(x.get(), y.get());
+        }
+
+        public Bounds2D dims() {
+            return new Bounds2D(width.get(), height.get());
+        }
+
+        public Coord2D at(
+                final double percX, final double percY
+        ) {
+            return new Coord2D(atX(percX), atY(percY));
+        }
+
+        public int atX(final double percentage) {
+            return x.get() + (int)(percentage * width.get());
+        }
+
+        public int atY(final double percentage) {
+            return y.get() + (int)(percentage * height.get());
+        }
     }
 }

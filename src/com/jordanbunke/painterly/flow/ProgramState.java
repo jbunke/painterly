@@ -80,8 +80,9 @@ public enum ProgramState implements ProgramContext {
         switch (state) {
             case WORKSPACE -> Workspace.get().render(canvas);
             case MENU -> {
-                menu.render(canvas);
                 // TODO - render common element (if necessary)
+                // e.g. screen box border
+                menu.render(canvas);
             }
         }
 

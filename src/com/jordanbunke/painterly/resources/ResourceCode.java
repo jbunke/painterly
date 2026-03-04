@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.resources;
 import com.jordanbunke.painterly.util.EnumUtils;
 
 public enum ResourceCode {
+    RC_TEMP, // TODO - temporary
     RC_NO_TOOLTIP;
 
     private final static String prefix = "RC_";
