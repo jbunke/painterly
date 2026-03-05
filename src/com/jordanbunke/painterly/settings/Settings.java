@@ -8,6 +8,7 @@ import com.jordanbunke.json.JSONPair;
 import com.jordanbunke.json.JSONReader;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.resources.lang.Language;
+import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.OSUtils;
@@ -15,6 +16,7 @@ import com.jordanbunke.painterly.util.OSUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,7 +33,8 @@ public final class Settings {
     public enum SettingID {
         SET_ID_VERSION,
         SET_ID_FULLSCREEN,
-        SET_ID_LANGUAGE
+        SET_ID_LANGUAGE,
+        SET_ID_THEME
         // TODO - additional settings
         ;
 
@@ -91,7 +94,11 @@ public final class Settings {
         addSetting(new Setting<>(Boolean.class, SET_ID_FULLSCREEN,
                 Boolean::parseBoolean, false));
         addSetting(new Setting<>(Language.class, SET_ID_LANGUAGE,
-                Language::fromCode, Language.ENGLISH));
+                Language::fromCode, Objects::nonNull,
+                Language::code, Language.ENGLISH));
+        addSetting(new Setting<>(Colors.Theme.class, SET_ID_THEME,
+                Colors.Theme::fromID, Objects::nonNull,
+                Colors.Theme::id, Colors.Theme.DEFAULT));
         // TODO - initialize additional settings
     }
 
@@ -143,16 +150,18 @@ public final class Settings {
 
         final JSONBuilder jb = new JSONBuilder();
 
-        settingsMap.keySet().stream().sorted()
+        settingsMap.keySet().stream()
+                .sorted(Comparator.comparing(SettingID::get))
                 .filter(id -> settingsMap.get(id).value != null)
                 .map(id -> {
                     final String key = id.get();
-                    final Object value = settingsMap.get(id).value;
+                    final Setting<?> setting = settingsMap.get(id);
+                    final Object value = setting.value;
 
                     if (validJSONDataType(value))
                         return new JSONPair(key, value);
 
-                    return new JSONPair(key, String.valueOf(value));
+                    return new JSONPair(key, setting.writer.apply(value));
                 }).forEach(jb::add);
 
         FileIO.writeFile(SETTINGS_FILE, jb.write());
@@ -185,23 +194,64 @@ public final class Settings {
         return null;
     }
 
+    public static <T> T getDefaultValue(final SettingID id, final Class<T> type) {
+        if (!settingsMap.containsKey(id))
+            return null;
+
+        final Setting<?> setting = settingsMap.get(id);
+
+        if (type.isAssignableFrom(setting.type))
+            return type.cast(setting.getDefaultValue());
+
+        return null;
+    }
+
+//    private static <T> T retrieveValue(
+//            final SettingID id,
+//            final Class<T> type,
+//            final Function<Setting<T>, T> getter
+//    ) {
+//        if (!settingsMap.containsKey(id))
+//            return null;
+//
+//        final Setting<?> setting = settingsMap.get(id);
+//
+//        if (type.isAssignableFrom(setting.type)) {
+//            final Setting<T> typedSetting = type.cast(setting);
+//            return getter.apply(typedSetting);
+//        }
+//
+//        return null;
+//    }
+
     private static class Setting<T> {
         private final Class<T> type;
         private final SettingID id;
         private final Function<String, T> parser;
         private final Predicate<T> validator;
+        private final Function<Object, String> writer;
         private final T defaultValue;
         private T value;
 
         Setting(
                 final Class<T> type, final SettingID id,
                 final Function<String, T> parser,
-                final Predicate<T> validator, final T defaultValue
+                final Predicate<T> validator,
+                final Function<T, String> writer,
+                final T defaultValue
         ) {
             this.type = type;
             this.id = id;
             this.parser = parser;
             this.validator = validator;
+            this.writer = o -> {
+                if (this.type.isInstance(o)) {
+                    final T cast = this.type.cast(o);
+                    return writer.apply(cast);
+                }
+
+                return String.valueOf(o);
+            };
             this.defaultValue = defaultValue;
 
             value = defaultValue;
@@ -211,7 +261,7 @@ public final class Settings {
                 final Class<T> type, final SettingID id,
                 final Function<String, T> parser, final T defaultValue
         ) {
-            this(type, id, parser, Objects::nonNull, defaultValue);
+            this(type, id, parser, Objects::nonNull, String::valueOf, defaultValue);
         }
 
         private void read(final String valueString) {
@@ -235,9 +285,13 @@ public final class Settings {
             return value;
         }
 
+        private T getDefaultValue() {
+            return defaultValue;
+        }
+
         @Override
         public String toString() {
-            return type.getSimpleName() + " " + id + " = " + value;
+            return type.getSimpleName() + " " + id + " = " + writer.apply(value);
         }
     }
 }

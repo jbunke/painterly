@@ -2,11 +2,27 @@ package com.jordanbunke.painterly.menu;
 
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.menu.MenuBuilder;
+import com.jordanbunke.delta_time.text.Text;
+import com.jordanbunke.delta_time.text.TextBuilder;
+import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
+import com.jordanbunke.painterly.ProgramInfo;
+import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.icon_button.IconButton;
+import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
+import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
+import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
+import com.jordanbunke.painterly.resources.lang.LanguageData;
+
+import java.awt.*;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static com.jordanbunke.delta_time.menu.menu_elements.MenuElement.Anchor.*;
+import static com.jordanbunke.painterly.menu.elements.text_button.Alignment.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.*;
 
 public final class MenuAssembly {
@@ -17,15 +33,70 @@ public final class MenuAssembly {
     public static Menu mainMenu() {
         final MenuBuilder mb = new MenuBuilder();
 
-        // TODO - temporary
+        // TODO - background element
 
-        final IconButton test = IconButton.init(
-                RC_TEMP, SCREEN.at(0.5, 0.5), Painterly::quitProgram
-        ).setAnchor(CENTRAL).build();
-        mb.add(test);
+        final int MARGIN = 20;
 
-        // TODO
+        // navigation
+        addMenuElements(mb, (i, builder) ->
+                // common
+                builder.setAlignment(CENTER).setAnchor(LEFT_CENTRAL)
+                        .setButtonType(ButtonType.STANDARD)
+                        .setWidth(SCREEN.ofWidth(0.2))
+                        .setPosition(new Coord2D(
+                                SCREEN.offsetX(MARGIN),
+                                SCREEN.atY(0.5) +
+                                        (i * (builder.getHeight() + TEXT_BUTTON_INTERVAL_S_Y))
+                        )),
+                // elements
+                SimpleTextButton.init(RC_START, new Coord2D(), () -> {}),
+                SimpleTextButton.init(RC_ABOUT, new Coord2D(), () -> {})
+                        .setTooltipCode(RC_ABOUT),
+                SimpleTextButton.init(RC_QUIT, new Coord2D(), Painterly::quitProgram));
+
+        // TODO - logo
+
+        // version and credits
+        final SimpleLabel programLabel = SimpleLabel.init(
+                new Coord2D(MARGIN, SCREEN.offsetY(SCREEN.height.get() - MARGIN)),
+                        ProgramInfo.formatVersion())
+                .setAnchor(LEFT_BOTTOM)
+                .setOrientation(Text.Orientation.LEFT)
+                .addInstruction(tb -> tb.addLineBreak()
+                        .addText(LanguageData.retrieveUIText(RC_COPYRIGHT)))
+                .build();
+        mb.add(programLabel);
 
         return mb.build();
+    }
+
+    // HELPER
+
+    @SafeVarargs
+    private static <B extends MenuElementBuilder<?>> void addMenuElements(
+            final MenuBuilder mb,
+            final BiConsumer<Integer, B> forEvery,
+            final B... builders
+    ) {
+        for (int i = 0; i < builders.length; i++) {
+            final B builder = builders[i];
+            forEvery.accept(i, builder);
+            mb.add(builder.build());
+        }
+    }
+
+    private static <B extends MenuElementBuilder<?>> void addMenuElements(
+            final MenuBuilder mb, final int amount,
+            final BiConsumer<Integer, B> forEvery,
+            final Function<Integer, B> initialization
+    ) {
+        if (amount <= 0)
+            return;
+
+        IntStream.range(0, amount).forEach(i -> {
+            final B builder = initialization.apply(i);
+            forEvery.accept(i, builder);
+            mb.add(builder.build());
+        });
     }
 }

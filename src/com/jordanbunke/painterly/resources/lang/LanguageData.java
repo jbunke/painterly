@@ -37,16 +37,36 @@ public final class LanguageData {
         return retrieve(resourceCode, ResourceCategory.TOOLTIP);
     }
 
+    public static String retrieveUIText(final ResourceCode resourceCode) {
+        return retrieve(resourceCode, ResourceCategory.UI_TEXT);
+    }
+
     public static String retrieve(
             final ResourceCode resourceCode,
             final ResourceCategory resourceCategory
     ) {
         final Language l = getCurrentLanguage();
+        return retrieveFromLanguage(l, resourceCode, resourceCategory);
+    }
+
+    private static String retrieveFromLanguage(
+            final Language l, final ResourceCode resourceCode,
+            final ResourceCategory resourceCategory
+    ) {
         final LanguageData dataset = languageDataMap.get(l);
         final Map<String, String> map = dataset.mapFromCategory(resourceCategory);
+        final String resourceID = resourceCode.id();
 
-        // TODO - error case
-        return map.get(resourceCode.id());
+        if (map.containsKey(resourceID))
+            return map.get(resourceCode.id());
+        else {
+            // attempt English retrieval
+//            if (!Language.ENGLISH.equals(l))
+//                here();
+
+            // TODO - error case
+            return null;
+        }
     }
 
     private static Language getCurrentLanguage() {
@@ -79,7 +99,7 @@ public final class LanguageData {
                 map.put(pair.key(), pair.value().toString());
         } catch (Exception e) {
             GameError.send("Unable to read the " + language.formattedName() +
-                    " " + category.name().toLowerCase() + " file");
+                    " " + category.formattedName() + " file");
         }
     }
 

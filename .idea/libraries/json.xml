@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/../json/out/artifacts/json/json.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../json/src" />
+    </SOURCES>
   </library>
 </component>

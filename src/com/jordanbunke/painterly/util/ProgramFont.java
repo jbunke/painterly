@@ -9,7 +9,7 @@ import java.awt.*;
 import java.nio.file.Path;
 
 public enum ProgramFont {
-    DEFAULT("deltan", 0.5, 0.4);
+    DEFAULT("deltan", 0.6, 0.4);
 
     private final Font font;
     private final double lineSpacing;

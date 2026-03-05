@@ -2,6 +2,10 @@ package com.jordanbunke.painterly.util;
 
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.resources.lang.LanguageData;
+
+import static com.jordanbunke.painterly.resources.ResourceCode.RC_NO_TOOLTIP;
 
 public final class Tooltip {
     private static final Tooltip INSTANCE;
@@ -28,6 +32,11 @@ public final class Tooltip {
 
     public static Tooltip get() {
         return INSTANCE;
+    }
+
+    public static String resolve(final ResourceCode code) {
+        return code.equals(RC_NO_TOOLTIP) ? NONE
+                : LanguageData.retrieveTooltip(code);
     }
 
     public void ping(

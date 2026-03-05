@@ -1,6 +1,10 @@
 package com.jordanbunke.painterly.util;
 
+import com.jordanbunke.painterly.settings.Settings;
+
 import java.awt.*;
+
+import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_THEME;
 
 public final class Colors {
     private static final Color
@@ -40,9 +44,27 @@ public final class Colors {
                         ? colors[i] : sc[i].defaultColor;
             }
         }
+
+        public String id() {
+            return name().toLowerCase();
+        }
+
+        public static Theme fromID(final String id) {
+            try {
+                return Theme.valueOf(id.toUpperCase());
+            } catch (IllegalArgumentException iae) {
+                return null;
+            }
+        }
     }
 
-    // TODO - theme determination and system color retrieval
+    private static Theme getTheme() {
+        return Settings.get(SET_ID_THEME, Theme.class);
+    }
+
+    public static Color systemColor(final SystemColor systemColor) {
+        return getTheme().systemColors[systemColor.ordinal()];
+    }
 
     public static Color bg() {
         return WHITE; // TODO

@@ -14,10 +14,18 @@ public final class Layout {
     // layout constants
 
     public static final int
-            TOOLTIP_OFFSET_LEFT = -7,
-            TOOLTIP_OFFSET_RIGHT = 5,
+            TOOLTIP_OFFSET_LEFT = -12,
+            TOOLTIP_OFFSET_RIGHT = 8,
             MENU_BAR_HEIGHT = 20,
-            CONTEXT_BAR_HEIGHT = 20;
+            CONTEXT_BAR_HEIGHT = 20,
+            TEXT_BUTTON_DEF_HEIGHT = 32,
+            TEXT_BUTTON_PADDING_X = 20,
+            TEXT_BUTTON_INTERVAL_L_Y = 32,
+            TEXT_BUTTON_INTERVAL_S_Y = 16,
+            TEXT_BUTTON_MARGIN_X = 6,
+            TOOLTIP_LINE_INC_Y = 24,
+            TOOLTIP_PADDING_X = 8,
+            TOOLTIP_INITIAL_OFFSET_Y = 2;
 
     // constant processing functions
 
@@ -122,6 +130,28 @@ public final class Layout {
 
         public int atY(final double percentage) {
             return y.get() + (int)(percentage * height.get());
+        }
+
+        public Coord2D offset(
+                final int offsetX, final int offsetY
+        ) {
+            return new Coord2D(offsetX(offsetX), offsetY(offsetY));
+        }
+
+        public int offsetX(final int offset) {
+            return x.get() + offset;
+        }
+
+        public int offsetY(final int offset) {
+            return y.get() + offset;
+        }
+
+        public int ofWidth(final double percentage) {
+            return (int)(percentage * width.get());
+        }
+
+        public int ofHeight(final double percentage) {
+            return (int)(percentage * height.get());
         }
     }
 }

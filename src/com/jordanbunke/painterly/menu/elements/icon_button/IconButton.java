@@ -7,6 +7,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.invisible.ThinkingMenuEleme
 import com.jordanbunke.delta_time.menu.menu_elements.visual.StaticMenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.*;
@@ -47,7 +48,7 @@ public final class IconButton extends SimpleMenuButton {
         }
     }
 
-    public static class Builder {
+    public static class Builder implements MenuElementBuilder<IconButton> {
         private final ResourceCode code;
         private final Coord2D position;
         private final Runnable behaviour;
@@ -77,6 +78,7 @@ public final class IconButton extends SimpleMenuButton {
             return this;
         }
 
+        @Override
         public IconButton build() {
             final GameImage iconImage = Graphics.readIcon(code);
 

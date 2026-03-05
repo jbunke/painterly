@@ -2,11 +2,19 @@ package com.jordanbunke.painterly.util;
 
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
+import com.jordanbunke.delta_time.text.Text;
+import com.jordanbunke.delta_time.text.TextBuilder;
+import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 
 import java.awt.*;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.function.Function;
+
+import static com.jordanbunke.painterly.util.Colors.*;
+import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
+import static com.jordanbunke.painterly.util.Layout.*;
 
 public final class Graphics {
     private static final Path ICONS_FOLDER = Path.of("icons"),
@@ -29,14 +37,95 @@ public final class Graphics {
 
     // TEXT & TEXT UI
 
+    public static TextBuilder uiText(final Color color, final double textSize) {
+        return ProgramFont.DEFAULT.getBuilder(textSize, Text.Orientation.CENTER, color);
+    }
+
+    public static TextBuilder bigUIText(final Color color) {
+        return uiText(color, 2.0);
+    }
+
+    public static TextBuilder uiText(final Color color) {
+        return uiText(color, 1.0);
+    }
+
     // TODO
 
-    // ADDITIONAL
+    // UI ELEMENTS
+
+    public static int naiveButtonWidth(final String label) {
+        final GameImage textImage = uiText(systemColor(DARK))
+                .addText(label).build().draw();
+
+        return textImage.getWidth() + TEXT_BUTTON_PADDING_X;
+    }
+
+    public static GameImage drawTextButton(final TextButton tb) {
+        // TODO - temp implementation
+
+        // final ButtonType type = tb.getButtonType();
+        final boolean highlight = tb.isHighlighted();
+
+        final Color textColor, bgColor, accentColor;
+
+        bgColor = systemColor(highlight ? MID_DARK : DARK);
+        accentColor = systemColor(highlight ? MID_LIGHT : MID);
+        textColor = systemColor(LIGHT);
+
+        final GameImage textImage = uiText(textColor)
+                .addText(tb.getLabel()).build().draw();
+        final GameImage button = new GameImage(tb.getWidth(), tb.getHeight());
+
+        final int w = button.getWidth(), h = button.getHeight();
+
+        // background
+        button.fill(bgColor);
+
+        // draw text
+        final int x = switch (tb.getAlignment()) {
+            case LEFT -> TEXT_BUTTON_MARGIN_X;
+            case CENTER -> (w - textImage.getWidth()) / 2;
+            case RIGHT -> w - (TEXT_BUTTON_MARGIN_X + textImage.getWidth());
+        };
+        final int y = (h - textImage.getHeight()) / 2;
+
+        button.draw(textImage, x, y);
+
+        // border
+        button.drawRectangle(accentColor, 4f, 0, 0, w, h);
+
+        return button.submit();
+    }
+
+    // TODO
+
+    // ADDITIONAL UI
 
     public static GameImage drawTooltip(final String text) {
-        // TODO
+        final Color textColor = systemColor(DARK);
+        final String[] lines = text.split("\n");
+        final GameImage[] lineImages = Arrays.stream(lines)
+                .map(l -> uiText(textColor).addText(l).build().draw())
+                .toArray(GameImage[]::new);
+        final int ls = lines.length,
+                w = Arrays.stream(lineImages)
+                        .map(GameImage::getWidth)
+                        .reduce(1, Math::max) + TOOLTIP_PADDING_X,
+                h = TOOLTIP_LINE_INC_Y * ls;
 
-        return GameImage.dummy();
+        final GameImage tooltip = new GameImage(w, h);
+
+        // background
+        tooltip.fill(systemColor(MID_LIGHT));
+
+        for (int l = 0; l < ls; l++) {
+            final GameImage line = lineImages[l];
+            final int x = (w - line.getWidth()) / 2,
+                    y = TOOLTIP_INITIAL_OFFSET_Y + (l * TOOLTIP_LINE_INC_Y);
+            tooltip.draw(line, x, y);
+        }
+
+        return tooltip.submit();
     }
 
     // ALGORITHMS
