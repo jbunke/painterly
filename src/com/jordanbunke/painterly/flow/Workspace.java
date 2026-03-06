@@ -27,7 +27,13 @@ public final class Workspace implements ProgramContext {
     public void process(final InputEventLogger eventLogger) {
         // TODO
         // global processing
+        processGlobalActions(eventLogger);
+
         // active project processing
+    }
+
+    private void processGlobalActions(final InputEventLogger eventLogger) {
+        // TODO - return if typing
     }
 
     @Override

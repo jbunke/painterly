@@ -6,6 +6,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.menu.dialog.DialogManager;
 import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Tooltip;
@@ -24,7 +25,15 @@ public enum ProgramState implements ProgramContext {
         return state;
     }
 
-    public static void set(final ProgramState state, final Menu menu) {
+    public static void setWorkspace() {
+        set(WORKSPACE, null);
+    }
+
+    public static void setMenu(final Menu menu) {
+        set(MENU, menu);
+    }
+
+    private static void set(final ProgramState state, final Menu menu) {
         loading = false;
         ProgramState.state = state;
 
@@ -53,16 +62,24 @@ public enum ProgramState implements ProgramContext {
 
     @Override
     public void process(final InputEventLogger eventLogger) {
-        final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
-        Tooltip.get().ping(Tooltip.NONE, mousePos);
-        Cursor.reset(mousePos);
+        resetMouseData(eventLogger);
 
-        switch (state) {
-            case WORKSPACE -> Workspace.get().process(eventLogger);
-            case MENU -> menu.process(eventLogger);
+        if (DialogManager.has()) {
+            DialogManager.get().process(eventLogger);
+        } else {
+            switch (state) {
+                case WORKSPACE -> Workspace.get().process(eventLogger);
+                case MENU -> menu.process(eventLogger);
+            }
         }
 
         Tooltip.get().check();
+    }
+
+    private void resetMouseData(final InputEventLogger eventLogger) {
+        final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
+        Tooltip.get().ping(Tooltip.NONE, mousePos);
+        Cursor.reset(mousePos);
     }
 
     @Override

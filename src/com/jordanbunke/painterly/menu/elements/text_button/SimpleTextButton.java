@@ -113,7 +113,7 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
 
             width = DEF_WIDTH;
             height = Layout.TEXT_BUTTON_DEF_HEIGHT;
-            tooltipCode = RC_NO_TOOLTIP;
+            tooltipCode = RC_NA;
             anchor = Anchor.LEFT_TOP;
             alignment = Alignment.CENTER;
             buttonType = ButtonType.STANDARD;

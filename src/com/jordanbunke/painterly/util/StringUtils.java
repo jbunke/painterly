@@ -12,7 +12,7 @@ public final class StringUtils {
                 .orElse(capitalizeFirstLetter(id));
     }
 
-    private static String capitalizeFirstLetter(final String word) {
+    public static String capitalizeFirstLetter(final String word) {
         return String.valueOf(word.charAt(0)).toUpperCase() +
                 word.substring(1).toLowerCase();
     }

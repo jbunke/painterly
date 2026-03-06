@@ -9,12 +9,9 @@ import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.resources.ResourceCode;
-import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.*;
 
 import java.util.function.Supplier;
-
-import static com.jordanbunke.painterly.resources.ResourceCode.RC_NO_TOOLTIP;
 
 public final class IconButton extends SimpleMenuButton {
     private final String tooltip;
@@ -82,8 +79,7 @@ public final class IconButton extends SimpleMenuButton {
         public IconButton build() {
             final GameImage iconImage = Graphics.readIcon(code);
 
-            final String tooltip = tooltipCode.equals(RC_NO_TOOLTIP)
-                    ? Tooltip.NONE : LanguageData.retrieveTooltip(tooltipCode);
+            final String tooltip = Tooltip.resolve(tooltipCode);
 
             return new IconButton(position, anchor, behaviour, iconImage, tooltip);
         }

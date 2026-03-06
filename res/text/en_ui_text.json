@@ -1,6 +1,7 @@
 {
     "about" : "About",
     "copyright" : "(c) 2026 Jordan Bunke",
+    "program_settings" : "Program Settings",
     "quit" : "Quit",
     "start" : "Start painting"
 }

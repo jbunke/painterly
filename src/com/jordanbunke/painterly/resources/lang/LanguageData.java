@@ -58,15 +58,20 @@ public final class LanguageData {
         final String resourceID = resourceCode.id();
 
         if (map.containsKey(resourceID))
-            return map.get(resourceCode.id());
+            return map.get(resourceID);
         else {
-            // attempt English retrieval
-//            if (!Language.ENGLISH.equals(l))
-//                here();
+            final Language defaultLanguage = getDefaultLanguage();
+            if (!l.equals(defaultLanguage))
+                return retrieveFromLanguage(defaultLanguage,
+                        resourceCode, resourceCategory);
 
             // TODO - error case
             return null;
         }
+    }
+
+    private static Language getDefaultLanguage() {
+        return Settings.getDefaultValue(SET_ID_LANGUAGE, Language.class);
     }
 
     private static Language getCurrentLanguage() {

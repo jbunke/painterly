@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,8 +25,6 @@ import static com.jordanbunke.painterly.settings.Settings.SettingID.*;
 
 public final class Settings {
     private static final Path SETTINGS_FILE;
-
-    private static final Map<SettingID, Setting<?>> settingsMap;
 
     public enum SettingID {
         SET_ID_VERSION,
@@ -40,13 +36,15 @@ public final class Settings {
 
         private static final String prefix = "SET_ID_";
 
+        Setting<?> setting;
+
         static SettingID fromString(final String key) {
             return EnumUtils.stream(SettingID.class)
-                    .filter(s -> s.get().equals(key))
+                    .filter(s -> s.code().equals(key))
                     .findAny().orElse(null);
         }
 
-        public String get() {
+        public String code() {
             if (this == SET_ID_VERSION)
                 return "last-opened-version";
 
@@ -57,7 +55,6 @@ public final class Settings {
     static {
         SETTINGS_FILE = determineSettingsFile();
 
-        settingsMap = new HashMap<>();
         initialize();
 
         Runtime.getRuntime().addShutdownHook(new Thread(Settings::write));
@@ -103,7 +100,7 @@ public final class Settings {
     }
 
     private static <T> void addSetting(final Setting<T> setting) {
-        settingsMap.put(setting.id, setting);
+        setting.id.setting = setting;
     }
 
     public static void read() {
@@ -121,11 +118,9 @@ public final class Settings {
             final String key = pair.key();
             final SettingID id = SettingID.fromString(key);
 
-            if (settingsMap.containsKey(id)) {
+            if (id != null) {
                 final String valueString = String.valueOf(pair.value());
-                final Setting<?> setting = settingsMap.get(id);
-
-                setting.read(valueString);
+                id.setting.read(valueString);
             }
         }
     }
@@ -150,12 +145,12 @@ public final class Settings {
 
         final JSONBuilder jb = new JSONBuilder();
 
-        settingsMap.keySet().stream()
-                .sorted(Comparator.comparing(SettingID::get))
-                .filter(id -> settingsMap.get(id).value != null)
+        EnumUtils.stream(SettingID.class)
+                .sorted(Comparator.comparing(SettingID::code))
+                .filter(id -> id.setting.value != null)
                 .map(id -> {
-                    final String key = id.get();
-                    final Setting<?> setting = settingsMap.get(id);
+                    final Setting<?> setting = id.setting;
+                    final String key = id.code();
                     final Object value = setting.value;
 
                     if (validJSONDataType(value))
@@ -173,56 +168,36 @@ public final class Settings {
     }
 
     public static void reset(final SettingID id) {
-        if (settingsMap.containsKey(id))
-            settingsMap.get(id).reset();
+        if (id != null)
+            id.setting.reset();
     }
 
     public static void set(final SettingID id, final Object value) {
-        if (settingsMap.containsKey(id))
-            settingsMap.get(id).set(value);
+        if (id != null)
+            id.setting.set(value);
     }
 
     public static <T> T get(final SettingID id, final Class<T> type) {
-        if (!settingsMap.containsKey(id))
-            return null;
-
-        final Setting<?> setting = settingsMap.get(id);
-
-        if (type.isAssignableFrom(setting.type))
-            return type.cast(setting.get());
-
-        return null;
+        return retrieveValue(id, type, Setting::get);
     }
 
     public static <T> T getDefaultValue(final SettingID id, final Class<T> type) {
-        if (!settingsMap.containsKey(id))
-            return null;
+        return retrieveValue(id, type, Setting::getDefaultValue);
+    }
 
-        final Setting<?> setting = settingsMap.get(id);
+    @SuppressWarnings("unchecked")
+    private static <T> T retrieveValue(
+            final SettingID id,
+            final Class<T> type,
+            final Function<Setting<T>, T> getter
+    ) {
+        final Setting<?> setting = id.setting;
 
         if (type.isAssignableFrom(setting.type))
-            return type.cast(setting.getDefaultValue());
+            return type.cast(getter.apply((Setting<T>) setting));
 
         return null;
     }
-
-//    private static <T> T retrieveValue(
-//            final SettingID id,
-//            final Class<T> type,
-//            final Function<Setting<T>, T> getter
-//    ) {
-//        if (!settingsMap.containsKey(id))
-//            return null;
-//
-//        final Setting<?> setting = settingsMap.get(id);
-//
-//        if (type.isAssignableFrom(setting.type)) {
-//            final Setting<T> typedSetting = type.cast(setting);
-//            return getter.apply(typedSetting);
-//        }
-//
-//        return null;
-//    }
 
     private static class Setting<T> {
         private final Class<T> type;

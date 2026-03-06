@@ -52,6 +52,8 @@ public final class MenuAssembly {
                 SimpleTextButton.init(RC_START, new Coord2D(), () -> {}),
                 SimpleTextButton.init(RC_ABOUT, new Coord2D(), () -> {})
                         .setTooltipCode(RC_ABOUT),
+                SimpleTextButton.init(RC_PROGRAM_SETTINGS, new Coord2D(), () -> {})
+                        .setTooltipCode(RC_PROGRAM_SETTINGS),
                 SimpleTextButton.init(RC_QUIT, new Coord2D(), Painterly::quitProgram));
 
         // TODO - logo

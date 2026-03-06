@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.delta_time.text.Text;
 import com.jordanbunke.delta_time.text.TextBuilder;
+import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 
@@ -95,6 +96,20 @@ public final class Graphics {
         button.drawRectangle(accentColor, 4f, 0, 0, w, h);
 
         return button.submit();
+    }
+
+    public static GameImage drawKeyboardShortcut(final KeyboardShortcut shortcut) {
+        final String[] stringArray = shortcut.asStringArray();
+
+        // TODO
+
+        return GameImage.dummy();
+    }
+
+    public static GameImage drawKey(final String keyAsString) {
+        // TODO
+
+        return GameImage.dummy();
     }
 
     // TODO
