@@ -2,11 +2,10 @@ package com.jordanbunke.painterly.util;
 
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
-import com.jordanbunke.delta_time.text.Text;
-import com.jordanbunke.delta_time.text.TextBuilder;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.util.ProgramFont.FontFormatter;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -16,6 +15,7 @@ import java.util.function.Function;
 import static com.jordanbunke.painterly.util.Colors.*;
 import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
+import static com.jordanbunke.painterly.util.ProgramFont.*;
 
 public final class Graphics {
     private static final Path ICONS_FOLDER = Path.of("icons"),
@@ -36,26 +36,11 @@ public final class Graphics {
         return ResourceLoader.loadImageResource(cursorFile);
     }
 
-    // TEXT & TEXT UI
-
-    public static TextBuilder uiText(final Color color, final double textSize) {
-        return ProgramFont.DEFAULT.getBuilder(textSize, Text.Orientation.CENTER, color);
-    }
-
-    public static TextBuilder bigUIText(final Color color) {
-        return uiText(color, 2.0);
-    }
-
-    public static TextBuilder uiText(final Color color) {
-        return uiText(color, 1.0);
-    }
-
-    // TODO
-
     // UI ELEMENTS
 
     public static int naiveButtonWidth(final String label) {
-        final GameImage textImage = uiText(systemColor(DARK))
+        final GameImage textImage = new FontFormatter(FONT_DEF)
+                .setColor(systemColor(DARK)).realize()
                 .addText(label).build().draw();
 
         return textImage.getWidth() + TEXT_BUTTON_PADDING_X;
@@ -73,8 +58,8 @@ public final class Graphics {
         accentColor = systemColor(highlight ? MID_LIGHT : MID);
         textColor = systemColor(LIGHT);
 
-        final GameImage textImage = uiText(textColor)
-                .addText(tb.getLabel()).build().draw();
+        final GameImage textImage = new FontFormatter(FONT_DEF).realize()
+                .setColor(textColor).addText(tb.getLabel()).build().draw();
         final GameImage button = new GameImage(tb.getWidth(), tb.getHeight());
 
         final int w = button.getWidth(), h = button.getHeight();
@@ -101,15 +86,86 @@ public final class Graphics {
     public static GameImage drawKeyboardShortcut(final KeyboardShortcut shortcut) {
         final String[] stringArray = shortcut.asStringArray();
 
-        // TODO
+        return Arrays.stream(stringArray).map(Graphics::drawKey)
+                .reduce((a, b) -> {
+                    // here
+                    final int bX = a.getWidth() + KEY_SHORTCUT_INTERVAL_X,
+                            w = bX + b.getWidth(), h = a.getHeight();
 
-        return GameImage.dummy();
+                    final GameImage combined = new GameImage(w, h);
+                    combined.draw(a);
+                    combined.draw(b, bX, 0);
+
+                    return combined.submit();
+                }).orElse(GameImage.dummy());
     }
 
     public static GameImage drawKey(final String keyAsString) {
-        // TODO
+        // TODO - temp implementation
 
-        return GameImage.dummy();
+        final Color textColor = systemColor(LIGHT),
+                backgroundColor = systemColor(DARK),
+                accentColor = systemColor(MID_DARK);
+
+        final GameImage textImage = new FontFormatter(FONT_DEF)
+                .setTextSize(1.0)
+                .setColor(textColor).realize().addText(keyAsString)
+                .build().draw();
+
+        final int w = textImage.getWidth() + (2 * KEY_SHORTCUT_TEXT_MARGIN_X),
+                h = textImage.getHeight() + KEY_SHORTCUT_DROP_SHADOW;
+        final GameImage key = new GameImage(w, h);
+
+        key.fill(backgroundColor);
+
+        int shadowY = h - KEY_SHORTCUT_DROP_SHADOW;
+        key.fillRectangle(accentColor, 0, shadowY, w, KEY_SHORTCUT_DROP_SHADOW);
+
+        // round out drop shadow
+        keyShadowCurve(key, accentColor);
+
+        // clear corners
+        clearKeyCorners(key);
+
+        key.draw(textImage, KEY_SHORTCUT_TEXT_MARGIN_X, 0);
+
+        return key.submit();
+    }
+
+    private static void keyShadowCurve(
+            final GameImage key, final Color accentColor
+    ) {
+        final int w = key.getWidth(), h = key.getHeight(),
+                margin = KEY_SHORTCUT_SHADOW_MARGIN_X;
+
+        for (int x = 0; x < margin; x++) {
+            final int extraH = (int)(Math.pow((margin - x) / (double)margin, 3.) * KEY_SHORTCUT_DROP_SHADOW_EXTRA),
+                    y = h - (KEY_SHORTCUT_DROP_SHADOW + extraH),
+                    x2 = w - (x + 1);
+
+            key.fillRectangle(accentColor, x, y, 1, extraH);
+            key.fillRectangle(x2, y, 1, extraH);
+        }
+    }
+
+    private static void clearKeyCorners(final GameImage key) {
+        final int w = key.getWidth(), h = key.getHeight(),
+                margin = KEY_SHORTCUT_CORNER_MARGIN_X;
+
+        for (int x = 0; x < margin; x++) {
+            final int ys = (int)(Math.pow((margin - x) / (double)margin, 3.) * KEY_SHORTCUT_MAX_CLEARED),
+                    x2 = w - (x + 1);
+
+            final int transparent = transparent().getRGB();
+            for (int y = 0; y < ys; y++) {
+                final int y2 = h - (y + 1);
+
+                key.setRGB(x, y, transparent);
+                key.setRGB(x2, y, transparent);
+                key.setRGB(x, y2, transparent);
+                key.setRGB(x2, y2, transparent);
+            }
+        }
     }
 
     // TODO
@@ -120,7 +176,8 @@ public final class Graphics {
         final Color textColor = systemColor(DARK);
         final String[] lines = text.split("\n");
         final GameImage[] lineImages = Arrays.stream(lines)
-                .map(l -> uiText(textColor).addText(l).build().draw())
+                .map(l -> new FontFormatter(FONT_DEF).realize()
+                        .setColor(textColor).addText(l).build().draw())
                 .toArray(GameImage[]::new);
         final int ls = lines.length,
                 w = Arrays.stream(lineImages)

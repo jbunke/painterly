@@ -13,6 +13,7 @@ public enum GlobalAction
         implements IAction</* TODO - evaluate whether more suitable type exists */ Runnable> {
     CLOSE_DIALOG(KeyboardShortcut.single(ESCAPE), /* TODO */ () -> {}),
     TOGGLE_FULLSCREEN(KeyboardShortcut.single(ESCAPE), /* TODO */ () -> {}),
+    SAVE_AS(new KeyboardShortcut(true, true, S), /* TODO */ () -> {}),
     ;
 
     static {

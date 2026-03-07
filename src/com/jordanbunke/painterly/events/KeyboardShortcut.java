@@ -11,8 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.jordanbunke.delta_time.events.GameKeyEvent.*;
-import static com.jordanbunke.delta_time.events.Key.CTRL;
-import static com.jordanbunke.delta_time.events.Key.SHIFT;
+import static com.jordanbunke.delta_time.events.Key.*;
 
 public final class KeyboardShortcut {
     public final boolean ctrl, shift;
@@ -35,7 +34,7 @@ public final class KeyboardShortcut {
             final boolean ctrl, final boolean shift,
             final InputEventLogger eventLogger
     ) {
-        return ctrl == eventLogger.isPressed(CTRL) &&
+        return ctrl == eventLogger.isPressed(CTRL_OR_COMMAND) &&
                 shift == eventLogger.isPressed(SHIFT);
     }
 
@@ -59,7 +58,7 @@ public final class KeyboardShortcut {
     public String[] asStringArray() {
         final List<Key> keyList = new LinkedList<>();
 
-        if (ctrl) keyList.add(CTRL);
+        if (ctrl) keyList.add(CTRL_OR_COMMAND);
         if (shift) keyList.add(SHIFT);
 
         keyList.add(keyStroke.key);

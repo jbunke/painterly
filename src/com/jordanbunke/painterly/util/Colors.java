@@ -8,6 +8,7 @@ import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_THEME
 
 public final class Colors {
     private static final Color
+            TRANSPARENT = new Color(0, 0, 0, 0),
             BLACK = new Color(0x000000),
             WHITE = new Color(0xffffff),
             LIGHT_GREY = new Color(0xc0c0c0),
@@ -64,6 +65,10 @@ public final class Colors {
 
     public static Color systemColor(final SystemColor systemColor) {
         return getTheme().systemColors[systemColor.ordinal()];
+    }
+
+    public static Color transparent() {
+        return TRANSPARENT;
     }
 
     public static Color bg() {

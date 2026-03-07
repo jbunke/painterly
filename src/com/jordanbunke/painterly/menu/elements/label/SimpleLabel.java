@@ -47,7 +47,7 @@ public final class SimpleLabel extends StaticMenuElement {
             anchor = Anchor.LEFT_TOP;
             color = Colors.systemColor(Colors.SystemColor.DARK);
             textSize = 1.0;
-            font = ProgramFont.DEFAULT;
+            font = ProgramFont.FONT_DEF;
             orientation = Text.Orientation.CENTER;
         }
 

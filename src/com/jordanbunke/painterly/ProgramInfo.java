@@ -1,6 +1,7 @@
 package com.jordanbunke.painterly;
 
 import com.jordanbunke.delta_time.io.FileIO;
+import com.jordanbunke.delta_time.utility.DeltaTimeGlobal;
 import com.jordanbunke.delta_time.utility.Version;
 import com.jordanbunke.json.*;
 import com.jordanbunke.painterly.resources.ResourceReader;
@@ -45,6 +46,8 @@ public final class ProgramInfo {
                 updated.add(new JSONPair(Constants.IS_DEVBUILD_CODE, IS_DEVBUILD));
 
                 FileIO.writeFile(toSave, updated.write());
+                DeltaTimeGlobal.print("Incremented " + PROGRAM_NAME +
+                        " version to " + formatVersion());
             }
 
             final Path versionFile = RES_ROOT.resolve(Constants.VERSION_FILE);
