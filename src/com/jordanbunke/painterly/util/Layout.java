@@ -1,8 +1,10 @@
 package com.jordanbunke.painterly.util;
 
 import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.settings.Settings;
 
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_FULLSCREEN;
@@ -16,8 +18,8 @@ public final class Layout {
     public static final int
             TOOLTIP_OFFSET_LEFT = -12,
             TOOLTIP_OFFSET_RIGHT = 8,
-            MENU_BAR_HEIGHT = 20,
-            CONTEXT_BAR_HEIGHT = 20,
+            MENU_BAR_HEIGHT = 36,
+            CONTEXT_BAR_HEIGHT = 36,
             KEY_SHORTCUT_INTERVAL_X = 4,
             KEY_SHORTCUT_TEXT_MARGIN_X = 6,
             KEY_SHORTCUT_SHADOW_MARGIN_X = 10,
@@ -99,22 +101,40 @@ public final class Layout {
 
     public enum ScreenBox {
         SCREEN(() -> 0, () -> 0, Layout::width, Layout::height),
-        MENU_BAR(() -> 0, () -> 0, Layout::width, () -> MENU_BAR_HEIGHT),
+        PROJECT_WINDOW(() -> 0, () -> 0, Layout::width,
+                () -> Layout.height() - (MENU_BAR_HEIGHT + CONTEXT_BAR_HEIGHT)),
+        MENU_BAR(() -> 0, () -> 0, Layout::width, () -> MENU_BAR_HEIGHT,
+                MenuAssembly::menuBar),
         CONTEXT_BAR(() -> 0, () -> Layout.height() - CONTEXT_BAR_HEIGHT,
-                Layout::width, () -> CONTEXT_BAR_HEIGHT),
+                Layout::width, () -> CONTEXT_BAR_HEIGHT,
+                MenuAssembly::contextBar),
         ;
 
         public final Supplier<Integer> x, y, width, height;
+        private final Supplier<Menu> menuBuilder;
+        private Menu menu;
 
         ScreenBox(
                 final Supplier<Integer> x, final Supplier<Integer> y,
                 final Supplier<Integer> width,
                 final Supplier<Integer> height
         ) {
+            this(x, y, width, height, Menu::new);
+        }
+
+        ScreenBox(
+                final Supplier<Integer> x, final Supplier<Integer> y,
+                final Supplier<Integer> width,
+                final Supplier<Integer> height,
+                final Supplier<Menu> menuBuilder
+        ) {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+
+            this.menuBuilder = menuBuilder;
+            menu = menuBuilder.get();
         }
 
         public Coord2D pos() {
@@ -159,6 +179,19 @@ public final class Layout {
 
         public int ofHeight(final double percentage) {
             return (int)(percentage * height.get());
+        }
+
+        public Menu menu() {
+            return menu;
+        }
+
+        public Menu regenMenu() {
+            menu = menuBuilder.get();
+            return menu;
+        }
+
+        public static boolean isRendered(final ScreenBox screenBox) {
+            return screenBox != SCREEN;
         }
     }
 }

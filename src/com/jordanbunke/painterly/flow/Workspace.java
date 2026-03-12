@@ -4,12 +4,13 @@ import com.jordanbunke.delta_time._core.ProgramContext;
 import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
-import com.jordanbunke.delta_time.menu.Menu;
-import com.jordanbunke.painterly.menu.MenuAssembly;
+
+import java.util.Arrays;
+
+import static com.jordanbunke.painterly.util.Layout.ScreenBox;
 
 public final class Workspace implements ProgramContext {
     private static final Workspace INSTANCE;
-    // private Menu menu;
 
     static {
         INSTANCE = new Workspace();
@@ -44,8 +45,10 @@ public final class Workspace implements ProgramContext {
     @Override
     public void render(final GameImage canvas) {
         // TODO
-        // global rendering
-        // active project rendering
+
+        Arrays.stream(ScreenBox.values())
+                .filter(ScreenBox::isRendered)
+                .forEach(sc -> sc.menu().render(canvas));
     }
 
     @Override

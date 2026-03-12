@@ -6,6 +6,7 @@ import com.jordanbunke.json.JSONReader;
 import com.jordanbunke.painterly.resources.ResourceCategory;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.ResourceReader;
+import com.jordanbunke.painterly.resources.ResourceVariables;
 import com.jordanbunke.painterly.settings.Settings;
 
 import java.nio.file.Path;
@@ -34,19 +35,26 @@ public final class LanguageData {
     }
 
     public static String retrieveTooltip(final ResourceCode resourceCode) {
-        return retrieve(resourceCode, ResourceCategory.TOOLTIP);
+        return retrieve(resourceCode, ResourceCategory.TOOLTIP, true);
     }
 
     public static String retrieveUIText(final ResourceCode resourceCode) {
-        return retrieve(resourceCode, ResourceCategory.UI_TEXT);
+        return retrieve(resourceCode, ResourceCategory.UI_TEXT, true);
+    }
+
+    public static String retrieveValue(final ResourceCode resourceCode) {
+        return retrieve(resourceCode, ResourceCategory.VALUE, false);
     }
 
     public static String retrieve(
             final ResourceCode resourceCode,
-            final ResourceCategory resourceCategory
+            final ResourceCategory resourceCategory,
+            final boolean requiresParsing
     ) {
         final Language l = getCurrentLanguage();
-        return retrieveFromLanguage(l, resourceCode, resourceCategory);
+        final String unparsed = retrieveFromLanguage(l, resourceCode, resourceCategory);
+        return requiresParsing
+                ? ResourceVariables.parse(unparsed) : unparsed;
     }
 
     private static String retrieveFromLanguage(

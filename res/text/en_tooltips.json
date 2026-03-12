@@ -1,4 +1,5 @@
 {
     "about" : "Help, Info & Additional Resources\n---\nRead the change log, roadmap, and license",
+    "interval_progress" : "Interval progress (measuring $accepted_or_attempted)",
     "program_settings" : "Program config settings like\nlanguage and visual theming"
 }

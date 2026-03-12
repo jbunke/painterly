@@ -9,7 +9,7 @@ public enum ResourceCode {
     // TODO
 
     // Tooltips
-    RC_TEMP, // TODO - temporary
+    RC_INTERVAL_PROGRESS, // TODO - temporary
 
     // UI text
     RC_ABOUT, // also: tooltip
@@ -17,6 +17,12 @@ public enum ResourceCode {
     RC_PROGRAM_SETTINGS, // also: tooltip
     RC_QUIT,
     RC_START,
+
+    // Values
+    // TODO - variable output possibilities - make language-dependent _values json files
+    RC_MEASURING_ACCEPTED,
+    RC_MEASURING_ATTEMPTED,
+    RC_UNKNOWN,
     ;
 
     private final static String prefix = "RC_";

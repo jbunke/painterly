@@ -1,7 +1,7 @@
 package com.jordanbunke.painterly.resources;
 
 public enum ResourceCategory {
-    TOOLTIP, UI_TEXT;
+    TOOLTIP, UI_TEXT, VALUE;
     // TODO - add categories
 
     private static final String[] SAME_PLURAL_ENDINGS;

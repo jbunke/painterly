@@ -7,6 +7,7 @@ import com.jordanbunke.delta_time.text.TextBuilder;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.ProgramInfo;
+import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.icon_button.IconButton;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
@@ -49,7 +50,7 @@ public final class MenuAssembly {
                                         (i * (builder.getHeight() + TEXT_BUTTON_INTERVAL_S_Y))
                         )),
                 // elements
-                SimpleTextButton.init(RC_START, new Coord2D(), () -> {}),
+                SimpleTextButton.init(RC_START, new Coord2D(), ProgramState::setWorkspace),
                 SimpleTextButton.init(RC_ABOUT, new Coord2D(), () -> {})
                         .setTooltipCode(RC_ABOUT),
                 SimpleTextButton.init(RC_PROGRAM_SETTINGS, new Coord2D(), () -> {})
@@ -68,6 +69,22 @@ public final class MenuAssembly {
                         .addText(LanguageData.retrieveUIText(RC_COPYRIGHT)))
                 .build();
         mb.add(programLabel);
+
+        return mb.build();
+    }
+
+    public static Menu contextBar() {
+        final MenuBuilder mb = new MenuBuilder();
+
+        // TODO
+
+        return mb.build();
+    }
+
+    public static Menu menuBar() {
+        final MenuBuilder mb = new MenuBuilder();
+
+        // TODO
 
         return mb.build();
     }

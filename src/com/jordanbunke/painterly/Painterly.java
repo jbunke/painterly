@@ -19,6 +19,18 @@ public final class Painterly implements ProgramContext {
     public final Program program;
     public GameWindow window;
 
+    private static final Painterly INSTANCE;
+
+    static {
+        OnStartup.run();
+        Key.setCtrlCommandMatch(true);
+        Settings.read();
+        ProgramInfo.readProgramFile();
+        VersionHandler.startup();
+
+        INSTANCE = new Painterly();
+    }
+
     private Painterly() {
         window = makeWindow();
 
@@ -31,14 +43,12 @@ public final class Painterly implements ProgramContext {
         program.getDebugger().muteChannel(GameDebugger.FRAME_RATE);
     }
 
-    public static void main(final String[] args) {
-        OnStartup.run();
-        Key.setCtrlCommandMatch(true);
-        Settings.read();
-        ProgramInfo.readProgramFile();
-        VersionHandler.startup();
+    public static Painterly get() {
+        return INSTANCE;
+    }
 
-        new Painterly();
+    public static void main(final String[] args) {
+        // triggers static initializer
     }
 
     @Override
