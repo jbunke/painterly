@@ -9,6 +9,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.dialog.DialogManager;
 import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.Cursor;
+import com.jordanbunke.painterly.util.Locks;
 import com.jordanbunke.painterly.util.Tooltip;
 
 import static com.jordanbunke.painterly.util.Layout.*;
@@ -80,6 +81,7 @@ public enum ProgramState implements ProgramContext {
         final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
         Tooltip.get().ping(Tooltip.NONE, mousePos);
         Cursor.reset(mousePos);
+        Locks.resetHover();
     }
 
     @Override

@@ -2,7 +2,8 @@ package com.jordanbunke.painterly.settings;
 
 public final class RuntimeSettings {
     private enum BoolSettings {
-        OVERWRITE_PROGRAM_FILE(false);
+        OVERWRITE_PROGRAM_FILE(false),
+        WRITE_FPS(true);
 
         private boolean enabled;
 
@@ -23,5 +24,13 @@ public final class RuntimeSettings {
 
     public static void setOverwrite(final boolean value) {
         BoolSettings.OVERWRITE_PROGRAM_FILE.set(value);
+    }
+
+    public static boolean isFPS() {
+        return BoolSettings.WRITE_FPS.enabled;
+    }
+
+    public static void setFPS(final boolean value) {
+        BoolSettings.WRITE_FPS.set(value);
     }
 }

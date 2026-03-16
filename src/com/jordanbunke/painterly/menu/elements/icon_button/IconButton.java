@@ -45,6 +45,15 @@ public final class IconButton extends SimpleMenuButton {
         }
     }
 
+    @Override
+    public void setHighlighted(final boolean highlighted) {
+        final boolean hover = highlighted && Locks.canHover();
+        super.setHighlighted(hover);
+
+        if (hover)
+            Locks.hover();
+    }
+
     public static class Builder implements MenuElementBuilder<IconButton> {
         private final ResourceCode code;
         private final Coord2D position;

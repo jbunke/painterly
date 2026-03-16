@@ -4,7 +4,8 @@ import com.jordanbunke.painterly.settings.RuntimeSettings;
 
 public final class DevBuild {
     private static final String
-            FLAG_OVERWRITE = "-o";
+            FLAG_OVERWRITE = "-o",
+            FLAG_FPS = "-fps";
 
     public static void main(String[] args) {
         processArgs(args);
@@ -15,6 +16,7 @@ public final class DevBuild {
         for (String arg : args)
             switch (arg) {
                 case FLAG_OVERWRITE -> RuntimeSettings.setOverwrite(true);
+                case FLAG_FPS -> RuntimeSettings.setFPS(true);
                 // TODO - additional cases
             }
     }

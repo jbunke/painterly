@@ -16,6 +16,7 @@ public final class Layout {
     // layout constants
 
     public static final int
+            DEBUG_EDGE_MARGIN = 10,
             TOOLTIP_OFFSET_LEFT = -12,
             TOOLTIP_OFFSET_RIGHT = 8,
             MENU_BAR_HEIGHT = 36,

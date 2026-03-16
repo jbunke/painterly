@@ -9,10 +9,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
-import com.jordanbunke.painterly.util.Cursor;
-import com.jordanbunke.painterly.util.Graphics;
-import com.jordanbunke.painterly.util.Layout;
-import com.jordanbunke.painterly.util.Tooltip;
+import com.jordanbunke.painterly.util.*;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
@@ -65,6 +62,15 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
             Tooltip.get().ping(tooltip, mousePos);
             Cursor.ping(Cursor.POINTER);
         }
+    }
+
+    @Override
+    public void setHighlighted(final boolean highlighted) {
+        final boolean hover = highlighted && Locks.canHover();
+        super.setHighlighted(hover);
+
+        if (hover)
+            Locks.hover();
     }
 
     @Override

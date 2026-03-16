@@ -8,6 +8,7 @@ import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_THEME
 
 public final class Colors {
     private static final Color
+            DEBUG = new Color(0x00ff00),
             TRANSPARENT = new Color(0, 0, 0, 0),
             BLACK = new Color(0x000000),
             WHITE = new Color(0xffffff),
@@ -73,5 +74,9 @@ public final class Colors {
 
     public static Color bg() {
         return WHITE; // TODO
+    }
+
+    public static Color debug() {
+        return DEBUG;
     }
 }

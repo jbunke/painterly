@@ -4,6 +4,8 @@ import com.jordanbunke.delta_time._core.ProgramContext;
 import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
+import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.core.ProjectManager;
 
 import java.util.Arrays;
 
@@ -44,11 +46,29 @@ public final class Workspace implements ProgramContext {
 
     @Override
     public void render(final GameImage canvas) {
-        // TODO
+        renderProjectButtons(canvas);
 
+        // render project
+        final Project p = ProjectManager.get().getProject();
+
+        if (p != null)
+            p.render(canvas);
+        else {
+            renderInPlaceOfProject(canvas);
+        }
+
+        // render screen box menus
         Arrays.stream(ScreenBox.values())
                 .filter(ScreenBox::isRendered)
                 .forEach(sc -> sc.menu().render(canvas));
+    }
+
+    private void renderProjectButtons(final GameImage canvas) {
+        // TODO - render project buttons
+    }
+
+    private void renderInPlaceOfProject(final GameImage canvas) {
+        // TODO
     }
 
     @Override

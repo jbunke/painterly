@@ -14,6 +14,7 @@ import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.settings.update.VersionHandler;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.Layout;
+import com.jordanbunke.painterly.util.debug.DebugRenderer;
 
 public final class Painterly implements ProgramContext {
     public final Program program;
@@ -67,7 +68,9 @@ public final class Painterly implements ProgramContext {
     }
 
     @Override
-    public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
+    public void debugRender(final GameImage canvas, final GameDebugger debugger) {
+        DebugRenderer.debugRender(canvas, debugger);
+    }
 
     private GameWindow makeWindow() {
         final GameWindow window = new GameWindow(

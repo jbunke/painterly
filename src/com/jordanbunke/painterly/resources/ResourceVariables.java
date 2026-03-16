@@ -1,5 +1,7 @@
 package com.jordanbunke.painterly.resources;
 
+import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.EnumUtils;
 
@@ -9,10 +11,12 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public enum ResourceVariables {
     RV_ACCEPTED_OR_ATTEMPTED(() -> {
-        if (/* TODO - has project */ true) {
-            return /* TODO - tick mode is attempted */ true
+        final Project p = ProjectManager.get().getProject();
+
+        if (p != null)
+            return p.isTickMode()
                     ? RC_MEASURING_ATTEMPTED : RC_MEASURING_ACCEPTED;
-        }
+
         return RC_UNKNOWN;
     }),
     ;
