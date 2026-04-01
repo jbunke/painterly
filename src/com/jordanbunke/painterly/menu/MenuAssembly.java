@@ -1,7 +1,9 @@
 package com.jordanbunke.painterly.menu;
 
+import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.menu.MenuBuilder;
+import com.jordanbunke.delta_time.menu.menu_elements.visual.StaticMenuElement;
 import com.jordanbunke.delta_time.text.Text;
 import com.jordanbunke.delta_time.text.TextBuilder;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
@@ -14,6 +16,7 @@ import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.util.Colors;
 
 import java.awt.*;
 import java.util.function.BiConsumer;
@@ -75,18 +78,47 @@ public final class MenuAssembly {
 
     public static Menu contextBar() {
         final MenuBuilder mb = new MenuBuilder();
+        final ScreenBox sb = CONTEXT_BAR;
+
+        final int x = sb.x.get(), y = sb.y.get(),
+                w = sb.width.get(), h = sb.height.get();
 
         // TODO
+
+        // TODO - temp
+        addTempScreenBoxSpan(mb, sb);
 
         return mb.build();
     }
 
     public static Menu menuBar() {
         final MenuBuilder mb = new MenuBuilder();
+        final ScreenBox sb = MENU_BAR;
+
+        final int x = sb.x.get(), y = sb.y.get(),
+                w = sb.width.get(), h = sb.height.get();
 
         // TODO
 
+        // TODO - temp
+        addTempScreenBoxSpan(mb, sb);
+
         return mb.build();
+    }
+
+    // TODO - temporary; for removal
+    @Deprecated
+    private static void addTempScreenBoxSpan(
+            final MenuBuilder mb, final ScreenBox sb
+    ) {
+        final int x = sb.x.get(), y = sb.y.get(),
+                w = sb.width.get(), h = sb.height.get();
+
+        final GameImage img = new GameImage(w, h);
+        img.fill(Colors.systemColor(Colors.SystemColor.DARK));
+        final StaticMenuElement tempBackground = new StaticMenuElement(
+                new Coord2D(x, y), LEFT_TOP, img);
+        mb.add(tempBackground);
     }
 
     // HELPER

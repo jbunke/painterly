@@ -115,6 +115,11 @@ public final class Layout {
         private final Supplier<Menu> menuBuilder;
         private Menu menu;
 
+        static {
+            for (ScreenBox sb : ScreenBox.values())
+                sb.menu = sb.menuBuilder.get();
+        }
+
         ScreenBox(
                 final Supplier<Integer> x, final Supplier<Integer> y,
                 final Supplier<Integer> width,
@@ -135,7 +140,7 @@ public final class Layout {
             this.height = height;
 
             this.menuBuilder = menuBuilder;
-            menu = menuBuilder.get();
+            // menu = menuBuilder.get();
         }
 
         public Coord2D pos() {
