@@ -5,20 +5,17 @@ import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.menu.MenuBuilder;
 import com.jordanbunke.delta_time.menu.menu_elements.visual.StaticMenuElement;
 import com.jordanbunke.delta_time.text.Text;
-import com.jordanbunke.delta_time.text.TextBuilder;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
-import com.jordanbunke.painterly.menu.elements.icon_button.IconButton;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.Colors;
 
-import java.awt.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -102,6 +99,37 @@ public final class MenuAssembly {
 
         // TODO - temp
         addTempScreenBoxSpan(mb, sb);
+
+        return mb.build();
+    }
+
+    public static Menu noProjectsOpenMenu() {
+        final MenuBuilder mb = new MenuBuilder();
+        final ScreenBox sb = PROJECT_WINDOW;
+
+        // TODO
+        final SimpleLabel noProjectsOpenLabel = SimpleLabel.init(
+                sb.at(0.5, 0.5),
+                LanguageData.retrieveUIText(RC_NO_PROJECTS_OPEN)
+        ).setAnchor(CENTRAL_BOTTOM).build();
+        mb.add(noProjectsOpenLabel);
+
+        final int MARGIN = 10;
+
+        addMenuElements(mb, (i, builder) ->
+                        builder.setAlignment(CENTER)
+                                .setButtonType(ButtonType.STANDARD)
+                                .setWidth(SCREEN.ofWidth(0.15))
+                                .setPosition(sb.at(0.5, 0.5)
+                                        .displaceY(MARGIN)
+                                        .displaceX(MARGIN * (i == 0 ? -1 : 1))),
+                // buttons
+                SimpleTextButton.init(RC_NEW_PROJECT, new Coord2D(), () -> {})
+                        .setTooltipCode(RC_NEW_PROJECT)
+                        .setAnchor(RIGHT_TOP),
+                SimpleTextButton.init(RC_OPEN_PROJECT, new Coord2D(), () -> {})
+                        .setTooltipCode(RC_OPEN_PROJECT)
+                        .setAnchor(LEFT_TOP));
 
         return mb.build();
     }

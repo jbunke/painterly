@@ -14,6 +14,9 @@ public enum ResourceCode {
     // UI text
     RC_ABOUT, // also: tooltip
     RC_COPYRIGHT,
+    RC_NEW_PROJECT, // also: tooltip
+    RC_NO_PROJECTS_OPEN,
+    RC_OPEN_PROJECT, // also: tooltip
     RC_PROGRAM_SETTINGS, // also: tooltip
     RC_QUIT,
     RC_START,
@@ -29,6 +32,10 @@ public enum ResourceCode {
 
     public String id() {
         return EnumUtils.formattedNameNoPrefix(this, prefix);
+    }
+
+    public ResourceValue asValue() {
+        return ResourceValue.ofRC(this);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.jordanbunke.painterly.resources;
 
+import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
-import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.EnumUtils;
 
 import java.util.function.Supplier;
@@ -14,18 +14,17 @@ public enum ResourceVariables {
         final Project p = ProjectManager.get().getProject();
 
         if (p != null)
-            return p.isTickMode()
-                    ? RC_MEASURING_ATTEMPTED : RC_MEASURING_ACCEPTED;
+            return (p.getStrokeManager().isTickMode()
+                    ? RC_MEASURING_ATTEMPTED : RC_MEASURING_ACCEPTED).asValue();
 
-        return RC_UNKNOWN;
+        return RC_UNKNOWN.asValue();
     }),
+    RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     ;
 
-    final Supplier<ResourceCode> valueGetter;
+    final Supplier<ResourceValue> valueGetter;
 
-    ResourceVariables(
-            final Supplier<ResourceCode> valueGetter
-    ) {
+    ResourceVariables(final Supplier<ResourceValue> valueGetter) {
         this.valueGetter = valueGetter;
     }
 
@@ -49,7 +48,7 @@ public enum ResourceVariables {
                     break;
 
                 parsing = parsing.replace(rv.id(),
-                        LanguageData.retrieveValue(rv.valueGetter.get()));
+                        rv.valueGetter.get().retrieve());
             }
         }
 

@@ -1,6 +1,9 @@
 {
     "about" : "About",
     "copyright" : "(c) 2026 Jordan Bunke",
+    "new_project" : "New project",
+    "no_projects_open" : "Please open a project or create a new project to begin.",
+    "open_project" : "Open project",
     "program_settings" : "Program Settings",
     "quit" : "Quit",
     "start" : "Start painting"

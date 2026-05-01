@@ -54,6 +54,10 @@ public final class Project implements ProgramContext {
             focusManager.tryUpdateBox();
     }
 
+    public StrokeManager getStrokeManager() {
+        return strokeManager;
+    }
+
     @Override
     public void process(final InputEventLogger eventLogger) {
         // TODO

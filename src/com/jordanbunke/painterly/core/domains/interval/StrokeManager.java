@@ -40,4 +40,8 @@ public final class StrokeManager {
 
         return false;
     }
+
+    public boolean isTickMode() {
+        return tickMode;
+    }
 }

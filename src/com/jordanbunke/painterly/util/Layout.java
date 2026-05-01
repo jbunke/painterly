@@ -102,7 +102,7 @@ public final class Layout {
 
     public enum ScreenBox {
         SCREEN(() -> 0, () -> 0, Layout::width, Layout::height),
-        PROJECT_WINDOW(() -> 0, () -> 0, Layout::width,
+        PROJECT_WINDOW(() -> 0, () -> MENU_BAR_HEIGHT, Layout::width,
                 () -> Layout.height() - (MENU_BAR_HEIGHT + CONTEXT_BAR_HEIGHT)),
         MENU_BAR(() -> 0, () -> 0, Layout::width, () -> MENU_BAR_HEIGHT,
                 MenuAssembly::menuBar),
