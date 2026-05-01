@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.util;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
+import com.jordanbunke.painterly.menu.elements.Button;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.ProgramFont.FontFormatter;
@@ -81,6 +82,30 @@ public final class Graphics {
         button.drawRectangle(accentColor, 4f, 0, 0, w, h);
 
         return button.submit();
+    }
+
+    public static GameImage drawVertScrollBar(
+            final int w, final int h, final int barH,
+            final int barY, final Button b
+    ) {
+        // TODO - copied from TDSM -- review
+
+        final GameImage scrollSpace = new GameImage(w, h),
+                scrollBar = new GameImage(w, barH);
+
+        final Color c = b.outcomes(systemColor(LIGHT),
+                systemColor(MID_LIGHT), systemColor(MID_DARK)),
+                accent = b.outcomes(systemColor(MID_LIGHT),
+                        systemColor(MID_DARK), systemColor(DARK));
+
+        scrollBar.fill(c);
+        scrollBar.drawLine(accent, 1f, 0, barH - 2, w, barH - 2);
+        scrollBar.drawRectangle(systemColor(DARK), 1f, 0, 0, w - 1, barH - 1);
+        // TODO - clearCorners(scrollBar);
+
+        scrollSpace.draw(scrollBar, 0, barY);
+
+        return scrollSpace.submit();
     }
 
     public static GameImage drawKeyboardShortcut(final KeyboardShortcut shortcut) {

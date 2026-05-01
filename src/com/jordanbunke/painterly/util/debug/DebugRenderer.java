@@ -31,7 +31,7 @@ public final class DebugRenderer {
         if (fps != lastFps || w != lastW || fpsLabel == null) {
             final int x = w - DEBUG_EDGE_MARGIN;
 
-            fpsLabel = SimpleLabel.init(
+            fpsLabel = SimpleLabel.initLiteral(
                     new Coord2D(x, DEBUG_EDGE_MARGIN), String.valueOf(fps))
                     .setColor(Colors.debug())
                     .setAnchor(MenuElement.Anchor.RIGHT_TOP).build();

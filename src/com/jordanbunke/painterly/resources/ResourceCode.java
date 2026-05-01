@@ -14,9 +14,13 @@ public enum ResourceCode {
     // UI text
     RC_ABOUT, // also: tooltip
     RC_COPYRIGHT,
+    RC_DIALOG_CANCEL,
+    RC_DIALOG_CLOSE,
+    RC_DIALOG_DEFAULT_OK,
     RC_NEW_PROJECT, // also: tooltip
     RC_NO_PROJECTS_OPEN,
     RC_OPEN_PROJECT, // also: tooltip
+    RC_PROJECT_NAME,
     RC_PROGRAM_SETTINGS, // also: tooltip
     RC_QUIT,
     RC_START,

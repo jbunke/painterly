@@ -9,6 +9,8 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.flow.ProgramState;
+import com.jordanbunke.painterly.menu.dialog.DialogAssembly;
+import com.jordanbunke.painterly.menu.dialog.DialogManager;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
@@ -60,7 +62,7 @@ public final class MenuAssembly {
         // TODO - logo
 
         // version and credits
-        final SimpleLabel programLabel = SimpleLabel.init(
+        final SimpleLabel programLabel = SimpleLabel.initLiteral(
                 new Coord2D(MARGIN, SCREEN.offsetY(SCREEN.height.get() - MARGIN)),
                         ProgramInfo.formatVersion())
                 .setAnchor(LEFT_BOTTOM)
@@ -109,9 +111,8 @@ public final class MenuAssembly {
 
         // TODO
         final SimpleLabel noProjectsOpenLabel = SimpleLabel.init(
-                sb.at(0.5, 0.5),
-                LanguageData.retrieveUIText(RC_NO_PROJECTS_OPEN)
-        ).setAnchor(CENTRAL_BOTTOM).build();
+                sb.at(0.5, 0.5), RC_NO_PROJECTS_OPEN)
+                .setAnchor(CENTRAL_BOTTOM).build();
         mb.add(noProjectsOpenLabel);
 
         final int MARGIN = 10;
@@ -124,7 +125,8 @@ public final class MenuAssembly {
                                         .displaceY(MARGIN)
                                         .displaceX(MARGIN * (i == 0 ? -1 : 1))),
                 // buttons
-                SimpleTextButton.init(RC_NEW_PROJECT, new Coord2D(), () -> {})
+                SimpleTextButton.init(RC_NEW_PROJECT, new Coord2D(),
+                                () -> DialogManager.set(DialogAssembly.newProject()))
                         .setTooltipCode(RC_NEW_PROJECT)
                         .setAnchor(RIGHT_TOP),
                 SimpleTextButton.init(RC_OPEN_PROJECT, new Coord2D(), () -> {})

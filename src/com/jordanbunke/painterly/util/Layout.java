@@ -17,6 +17,9 @@ public final class Layout {
 
     public static final int
             DEBUG_EDGE_MARGIN = 10,
+            DIALOG_MARGIN_X = 10,
+            DIALOG_RESOLUTION_BUTTON_WIDTH = 120, // TODO - test
+            DIALOG_ROW_INCREMENT = 30, // TODO - test
             TOOLTIP_OFFSET_LEFT = -12,
             TOOLTIP_OFFSET_RIGHT = 8,
             MENU_BAR_HEIGHT = 36,
@@ -96,6 +99,16 @@ public final class Layout {
         final Boolean unboxed = Settings.get(SET_ID_FULLSCREEN, Boolean.class);
 
         return unboxed != null && unboxed;
+    }
+
+    // dialog boxes
+
+    public static int defaultDialogWidth() {
+        return width() / 2;
+    }
+
+    public static int defaultDialogHeight() {
+        return height() / 2;
     }
 
     // screen boxes

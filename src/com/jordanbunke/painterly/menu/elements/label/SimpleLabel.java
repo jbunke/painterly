@@ -6,6 +6,8 @@ import com.jordanbunke.delta_time.text.Text;
 import com.jordanbunke.delta_time.text.TextBuilder;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
+import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.ProgramFont;
 
@@ -23,8 +25,12 @@ public final class SimpleLabel extends StaticMenuElement {
         super(position, anchor, image);
     }
 
-    public static Builder init(final Coord2D position, final String text) {
+    public static Builder initLiteral(final Coord2D position, final String text) {
         return new Builder(position, text);
+    }
+
+    public static Builder init(final Coord2D position, final ResourceCode code) {
+        return new Builder(position, LanguageData.retrieveUIText(code));
     }
 
     public static class Builder implements MenuElementBuilder<SimpleLabel> {

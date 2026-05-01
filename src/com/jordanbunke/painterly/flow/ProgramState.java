@@ -86,9 +86,13 @@ public enum ProgramState implements ProgramContext {
 
     @Override
     public void update(final double deltaTime) {
-        switch (state) {
-            case WORKSPACE -> Workspace.get().update(deltaTime);
-            case MENU -> menu.update(deltaTime);
+        if (DialogManager.has()) {
+            DialogManager.get().update(deltaTime);
+        } else {
+            switch (state) {
+                case WORKSPACE -> Workspace.get().update(deltaTime);
+                case MENU -> menu.update(deltaTime);
+            }
         }
     }
 
@@ -104,6 +108,9 @@ public enum ProgramState implements ProgramContext {
                 menu.render(canvas);
             }
         }
+
+        if (DialogManager.has())
+            DialogManager.get().render(canvas);
 
         Tooltip.get().render(canvas);
         Cursor.render(canvas);

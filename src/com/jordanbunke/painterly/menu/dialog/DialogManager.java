@@ -8,6 +8,14 @@ public final class DialogManager {
         DIALOG = null;
     }
 
+    public static void set(final PopUpDialog dialog) {
+        DIALOG = dialog;
+    }
+
+    public static void close() {
+        DIALOG = null;
+    }
+
     public static PopUpDialog get() {
         return DIALOG;
     }
