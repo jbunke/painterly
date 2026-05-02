@@ -1,7 +1,7 @@
 {
     "about" : "Help, Info & Additional Resources\n---\nRead the change log, roadmap, and license",
     "interval_progress" : "Interval progress (measuring $accepted_or_attempted)",
-    "new_project" : "Create a new $program_name project from a reference image file",
+    "new_project" : "Create a new $program_name project, using an\nimage file as a reference for the painting",
     "open_project" : "Open a $program_name project",
     "program_settings" : "Program config settings like\nlanguage and visual theming"
 }

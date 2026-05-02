@@ -4,11 +4,17 @@
     "dialog_cancel" : "Cancel",
     "dialog_close" : "Close",
     "dialog_default_ok" : "Confirm",
+    "dialog_variable_cannot_be_null" : "Cannot be empty/undefined",
     "new_project" : "New project",
     "no_projects_open" : "Please open a project or create a new project to begin.",
+    "npd_choose_folder" : "Choose",
+    "npd_folder" : "Folder: ",
+    "npd_project_name" : "Project name: ",
+    "npd_reference_image" : "Original image: ",
+    "npd_scale_factor" : "Scale factor: ",
     "open_project" : "Open project",
-    "project_name" : "Project name: ",
     "program_settings" : "Program Settings",
     "quit" : "Quit",
-    "start" : "Start painting"
+    "start" : "Start painting",
+    "upload" : "Upload"
 }

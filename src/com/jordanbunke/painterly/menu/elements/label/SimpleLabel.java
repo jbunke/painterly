@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
+import static com.jordanbunke.painterly.util.Layout.*;
+
 public final class SimpleLabel extends StaticMenuElement {
     private SimpleLabel(
             final Coord2D position,
@@ -25,11 +27,15 @@ public final class SimpleLabel extends StaticMenuElement {
         super(position, anchor, image);
     }
 
-    public static Builder initLiteral(final Coord2D position, final String text) {
+    public static Builder initLiteral(
+            final String text, final Coord2D position
+    ) {
         return new Builder(position, text);
     }
 
-    public static Builder init(final Coord2D position, final ResourceCode code) {
+    public static Builder init(
+            final ResourceCode code, final Coord2D position
+    ) {
         return new Builder(position, LanguageData.retrieveUIText(code));
     }
 
@@ -110,5 +116,16 @@ public final class SimpleLabel extends StaticMenuElement {
 
             return new SimpleLabel(position, anchor, image);
         }
+    }
+
+    /**
+     * Calculate render position of following textbox or text button
+     */
+    public Coord2D followTB(final int buffer) {
+        return rightOf().displace(buffer, TEXT_BUTTON_AFTER_LABEL_OFFSET_Y);
+    }
+
+    public Coord2D followTB() {
+        return followTB(STANDARD_FOLLOW_X);
     }
 }

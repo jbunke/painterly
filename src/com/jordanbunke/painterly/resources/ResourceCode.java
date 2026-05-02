@@ -17,13 +17,19 @@ public enum ResourceCode {
     RC_DIALOG_CANCEL,
     RC_DIALOG_CLOSE,
     RC_DIALOG_DEFAULT_OK,
+    RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
+    RC_NPD_CHOOSE_FOLDER,
+    RC_NPD_FOLDER,
+    RC_NPD_PROJECT_NAME,
+    RC_NPD_REFERENCE_IMAGE,
+    RC_NPD_SCALE_FACTOR,
     RC_NEW_PROJECT, // also: tooltip
     RC_NO_PROJECTS_OPEN,
-    RC_OPEN_PROJECT, // also: tooltip
-    RC_PROJECT_NAME,
+    RC_OPEN_PROJECT, // also: tooltip,
     RC_PROGRAM_SETTINGS, // also: tooltip
     RC_QUIT,
     RC_START,
+    RC_UPLOAD,
 
     // Values
     // TODO - variable output possibilities - make language-dependent _values json files

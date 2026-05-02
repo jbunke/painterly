@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.Button;
+import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.ProgramFont.FontFormatter;
@@ -39,6 +40,29 @@ public final class Graphics {
 
     // UI ELEMENTS
 
+    public static GameImage drawDialogBackground(
+            final int width, final int height
+    ) {
+        // TODO - temp implementation
+
+        final GameImage image = new GameImage(width, height);
+        final Color bgColor = systemColor(LIGHT),
+                topBarColor = systemColor(MID),
+                borderColor = systemColor(MID_DARK);
+
+        // background
+        image.fill(bgColor);
+
+        // top bar
+        image.fillRectangle(topBarColor, 0, 0, width,
+                DIALOG_CONTENT_TOP_OFFSET_Y - DIALOG_MARGIN);
+
+        // border
+        image.drawRectangle(borderColor, 4f, 0, 0, width, height);
+
+        return image.submit();
+    }
+
     public static int naiveButtonWidth(final String label) {
         final GameImage textImage = new FontFormatter(FONT_DEF)
                 .setColor(systemColor(DARK)).realize()
@@ -50,14 +74,23 @@ public final class Graphics {
     public static GameImage drawTextButton(final TextButton tb) {
         // TODO - temp implementation
 
-        // final ButtonType type = tb.getButtonType();
+        final ButtonType type = tb.getButtonType();
         final boolean highlight = tb.isHighlighted();
 
         final Color textColor, bgColor, accentColor;
 
-        bgColor = systemColor(highlight ? MID_DARK : DARK);
-        accentColor = systemColor(highlight ? MID_LIGHT : MID);
-        textColor = systemColor(LIGHT);
+        switch (type) {
+            case STUB -> {
+                bgColor = transparent();
+                accentColor = systemColor(MID_DARK);
+                textColor = systemColor(MID_DARK);
+            }
+            default -> {
+                bgColor = systemColor(highlight ? MID_DARK : DARK);
+                accentColor = systemColor(highlight ? MID_LIGHT : MID);
+                textColor = systemColor(LIGHT);
+            }
+        }
 
         final GameImage textImage = new FontFormatter(FONT_DEF).realize()
                 .setColor(textColor).addText(tb.getLabel()).build().draw();

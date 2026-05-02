@@ -17,7 +17,10 @@ public final class Layout {
 
     public static final int
             DEBUG_EDGE_MARGIN = 10,
-            DIALOG_MARGIN_X = 10,
+            DIALOG_MARGIN = 10,
+            DIALOG_CONTENT_MIN_HEIGHT = 30, // TODO - test
+            DIALOG_CONTENT_TOP_OFFSET_Y = 50, // TODO - test
+            DIALOG_MIN_SCREEN_HEIGHT_DIFF = 200, // TODO - test
             DIALOG_RESOLUTION_BUTTON_WIDTH = 120, // TODO - test
             DIALOG_ROW_INCREMENT = 30, // TODO - test
             TOOLTIP_OFFSET_LEFT = -12,
@@ -31,6 +34,8 @@ public final class Layout {
             KEY_SHORTCUT_DROP_SHADOW = 4,
             KEY_SHORTCUT_DROP_SHADOW_EXTRA = 8,
             KEY_SHORTCUT_MAX_CLEARED = 4,
+            STANDARD_FOLLOW_X = 10, // TODO - test
+            TEXT_BUTTON_AFTER_LABEL_OFFSET_Y = -5,
             TEXT_BUTTON_DEF_HEIGHT = 32,
             TEXT_BUTTON_PADDING_X = 20,
             TEXT_BUTTON_INTERVAL_L_Y = 32,
@@ -109,6 +114,14 @@ public final class Layout {
 
     public static int defaultDialogHeight() {
         return height() / 2;
+    }
+
+    public static int maxDialogHeight() {
+        return height() - DIALOG_MIN_SCREEN_HEIGHT_DIFF;
+    }
+
+    public static int dialogBottomHeight() {
+        return TEXT_BUTTON_DEF_HEIGHT + (int)(2.5 * DIALOG_MARGIN);
     }
 
     // screen boxes

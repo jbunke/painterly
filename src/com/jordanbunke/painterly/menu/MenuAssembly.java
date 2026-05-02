@@ -9,8 +9,8 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.flow.ProgramState;
-import com.jordanbunke.painterly.menu.dialog.DialogAssembly;
-import com.jordanbunke.painterly.menu.dialog.DialogManager;
+import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
+import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
@@ -63,8 +63,8 @@ public final class MenuAssembly {
 
         // version and credits
         final SimpleLabel programLabel = SimpleLabel.initLiteral(
-                new Coord2D(MARGIN, SCREEN.offsetY(SCREEN.height.get() - MARGIN)),
-                        ProgramInfo.formatVersion())
+                ProgramInfo.formatVersion(),
+                        new Coord2D(MARGIN, SCREEN.offsetY(SCREEN.height.get() - MARGIN)))
                 .setAnchor(LEFT_BOTTOM)
                 .setOrientation(Text.Orientation.LEFT)
                 .addInstruction(tb -> tb.addLineBreak()
@@ -111,7 +111,7 @@ public final class MenuAssembly {
 
         // TODO
         final SimpleLabel noProjectsOpenLabel = SimpleLabel.init(
-                sb.at(0.5, 0.5), RC_NO_PROJECTS_OPEN)
+                RC_NO_PROJECTS_OPEN, sb.at(0.5, 0.5))
                 .setAnchor(CENTRAL_BOTTOM).build();
         mb.add(noProjectsOpenLabel);
 

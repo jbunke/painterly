@@ -1,4 +1,4 @@
-package com.jordanbunke.painterly.menu.dialog;
+package com.jordanbunke.painterly.dialog.visual;
 
 public final class DialogManager {
     // TODO

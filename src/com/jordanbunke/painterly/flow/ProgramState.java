@@ -6,7 +6,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
-import com.jordanbunke.painterly.menu.dialog.DialogManager;
+import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Locks;

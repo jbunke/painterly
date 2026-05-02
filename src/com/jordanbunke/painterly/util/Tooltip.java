@@ -35,7 +35,7 @@ public final class Tooltip {
     }
 
     public static String resolve(final ResourceCode code) {
-        return code.equals(RC_NA) ? NONE
+        return code == RC_NA ? NONE
                 : LanguageData.retrieveTooltip(code);
     }
 

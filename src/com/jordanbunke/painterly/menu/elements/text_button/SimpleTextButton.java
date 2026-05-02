@@ -4,12 +4,16 @@ import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.menu_elements.button.MenuButton;
+import com.jordanbunke.delta_time.menu.menu_elements.visual.StaticMenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
+import com.jordanbunke.painterly.menu.elements.complex.logic.EnumMenuElement;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.*;
+
+import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
@@ -88,14 +92,21 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
             final ResourceCode code, final Coord2D position,
             final Runnable behaviour
     ) {
-        return new Builder(code, position, behaviour);
+        return initLiteral(LanguageData.retrieveUIText(code), position, behaviour);
+    }
+
+    public static Builder initLiteral(
+            final String label, final Coord2D position,
+            final Runnable behaviour
+    ) {
+        return new Builder(label, position, behaviour);
     }
 
     public static class Builder implements MenuElementBuilder<SimpleTextButton> {
         private static final int DEF_WIDTH = 0;
 
         // explicit def necessary, final
-        private final ResourceCode code;
+        private final String label;
         private final Runnable behaviour;
 
         // explicit def necessary
@@ -110,10 +121,10 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
         private ButtonType buttonType;
 
         Builder(
-                final ResourceCode code, final Coord2D position,
+                final String label, final Coord2D position,
                 final Runnable behaviour
         ) {
-            this.code = code;
+            this.label = label;
             this.position = position;
             this.behaviour = behaviour;
 
@@ -166,8 +177,7 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
 
         @Override
         public SimpleTextButton build() {
-            final String label = LanguageData.retrieveUIText(code),
-                    tooltip = Tooltip.resolve(tooltipCode);
+            final String tooltip = Tooltip.resolve(tooltipCode);
             final int width = this.width == DEF_WIDTH
                     ? Graphics.naiveButtonWidth(label)
                     : this.width;
@@ -175,6 +185,21 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
             return new SimpleTextButton(label, tooltip,
                     position, new Bounds2D(width, height),
                     anchor, alignment, buttonType, behaviour);
+        }
+
+        public EnumMenuElement buildConditional(
+                final Supplier<Boolean> precondition
+        ) {
+            final SimpleTextButton button = build();
+            final StaticMenuElement stub = new StaticMenuElement(
+                    position, button.getDimensions(), anchor,
+                    Graphics.drawTextButton(
+                            TextButton.of(button.label,
+                                    button.getWidth(), button.getHeight(),
+                                    button.alignment, ButtonType.STUB)));
+
+            return new EnumMenuElement(
+                    () -> precondition.get() ? button : stub, button, stub);
         }
     }
 }

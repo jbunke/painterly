@@ -1,4 +1,4 @@
-package com.jordanbunke.painterly.menu.dialog;
+package com.jordanbunke.painterly.dialog.visual;
 
 import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
@@ -10,6 +10,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.ext.scroll.Scrollable;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
+import com.jordanbunke.painterly.menu.elements.complex.logic.EnumMenuElement;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.scroll.VertScrollBox;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
@@ -23,10 +24,13 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.util.Colors.*;
+import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.SCREEN;
 
 public final class PopUpDialog extends MenuElementContainer {
+    private final GameImage background;
     private final MenuElement title, contents, resolutionButtons;
 
     private PopUpDialog(
@@ -40,9 +44,9 @@ public final class PopUpDialog extends MenuElementContainer {
         this.title = title;
         this.contents = contents;
         this.resolutionButtons = resolutionButtons;
-    }
 
-    // TODO
+        background = Graphics.drawDialogBackground(width, height);
+    }
 
     public static Builder init(
             final ResourceCode titleCode
@@ -80,6 +84,12 @@ public final class PopUpDialog extends MenuElementContainer {
 
     @Override
     public void render(final GameImage canvas) {
+        // background
+        canvas.fill(dialogVeil());
+        final Coord2D rp = getRenderPosition();
+        canvas.draw(background, rp.x, rp.y);
+
+        // contents
         contents.render(canvas);
         title.render(canvas);
         resolutionButtons.render(canvas);
@@ -92,7 +102,7 @@ public final class PopUpDialog extends MenuElementContainer {
         private final String title;
         private final List<DialogElement> elements;
 
-        private boolean widthFromContents;
+        private boolean widthFromContents, heightFromContents;
         private int width, height, contentBottom;
 
         /**
@@ -102,6 +112,7 @@ public final class PopUpDialog extends MenuElementContainer {
         private boolean onlyInformation;
         private String okText;
         private Supplier<Boolean> precondition;
+        private Runnable onOK;
 
         Builder(
                 final ResourceCode titleCode
@@ -110,6 +121,7 @@ public final class PopUpDialog extends MenuElementContainer {
             elements = new LinkedList<>();
 
             widthFromContents = false;
+            heightFromContents = false;
             width = defaultDialogWidth();
             height = defaultDialogHeight();
             contentBottom = 0;
@@ -117,6 +129,7 @@ public final class PopUpDialog extends MenuElementContainer {
             onlyInformation = false;
             okText = LanguageData.retrieveUIText(RC_DIALOG_DEFAULT_OK);
             precondition = () -> true;
+            onOK = () -> {};
         }
 
         // elements
@@ -134,10 +147,20 @@ public final class PopUpDialog extends MenuElementContainer {
 
             contentBottom = Math.max(contentBottom, element.below(0).y);
 
+            if (heightFromContents)
+                calculateHeightFromContents();
+
             return this;
         }
 
         // layout
+
+        public Builder setSizeFromContents() {
+            setWidthFromContents();
+            setHeightFromContents();
+
+            return this;
+        }
 
         /**
          * To be invoked after {@link #setAsOnlyInformation()} but before
@@ -161,14 +184,10 @@ public final class PopUpDialog extends MenuElementContainer {
             return setWidth((int)(percW * width()));
         }
         
-        /** 
-         * To be invoked after all calls to {@link #addElement(DialogElement)}
-         * */
         public Builder setHeightFromContents() {
-            // TODO - maximum of screen height - some margin
-            // TODO - add margin for title and resolution buttons
-            
-            height = contentBottom;
+            heightFromContents = true;
+
+            calculateHeightFromContents();
             
             return this;
         }
@@ -185,11 +204,11 @@ public final class PopUpDialog extends MenuElementContainer {
         // layout calculators
 
         public int elementX(final int columnIndex, final int columns) {
-            final int nonMarginWidth = width - ((columns + 1) * DIALOG_MARGIN_X),
+            final int nonMarginWidth = width - ((columns + 1) * DIALOG_MARGIN),
                     columnWidth = nonMarginWidth / columns;
 
             return (columnWidth * columnIndex) +
-                    (DIALOG_MARGIN_X * (columnIndex + 1));
+                    (DIALOG_MARGIN * (columnIndex + 1));
         }
 
         public int elementY(final double row) {
@@ -212,32 +231,58 @@ public final class PopUpDialog extends MenuElementContainer {
             return this;
         }
 
+        public Builder setPrecondition(final Supplier<Boolean> precondition) {
+            this.precondition = precondition;
+            return this;
+        }
+
+        public Builder setOnOK(final Runnable onOK) {
+            this.onOK = onOK;
+            return this;
+        }
+
         @Override
         public PopUpDialog build() {
             final Coord2D screenMiddle = SCREEN.at(0.5, 0.5),
                     renderPos = screenMiddle.displace(
                             new Coord2D(-width / 2, -height / 2)),
-                    scrollBoxPos = renderPos.displace(1, /* TODO - magic number */ 30),
-                    elementOffset = renderPos.displaceY(/* TODO - magic number */ 30),
+                    scrollBoxPos = renderPos.displace(1, DIALOG_CONTENT_TOP_OFFSET_Y),
+                    elementOffset = renderPos.displaceY(DIALOG_CONTENT_TOP_OFFSET_Y),
                     bottomRight = screenMiddle.displace(
-                            (width / 2) - DIALOG_MARGIN_X,
-                            (height / 2) - DIALOG_MARGIN_X);
+                            (width / 2) - DIALOG_MARGIN,
+                            (height / 2) - DIALOG_MARGIN);
 
+            // title
             final SimpleLabel titleLabel = SimpleLabel.initLiteral(
-                    renderPos.displace(DIALOG_MARGIN_X, /* TODO - magic number */ 5), title)
+                            title, renderPos.displace(DIALOG_MARGIN, DIALOG_MARGIN))
+                    .setColor(systemColor(MID_DARK))
                     .setAnchor(Anchor.LEFT_TOP).build();
 
+            // resolution buttons (cancel/close and OK?)
             final List<MenuElement> resolutionButtons = new LinkedList<>();
+
             final SimpleTextButton cancelCloseButton = SimpleTextButton.init(
                     onlyInformation ? RC_DIALOG_CLOSE : RC_DIALOG_CANCEL,
                     bottomRight, DialogManager::close)
-                    .setWidth(DIALOG_RESOLUTION_BUTTON_WIDTH).build();
+                    .setWidth(DIALOG_RESOLUTION_BUTTON_WIDTH)
+                    .setAnchor(Anchor.RIGHT_BOTTOM)
+                    .build();
             resolutionButtons.add(cancelCloseButton);
-            // TODO - ok button as thinking menu element
-            final MenuElement okButton = null;
 
+            if (!onlyInformation) {
+                final EnumMenuElement okButton = SimpleTextButton.initLiteral(
+                        okText, cancelCloseButton.getRenderPosition()
+                                        .displaceX(-DIALOG_MARGIN), onOK)
+                        .setWidth(DIALOG_RESOLUTION_BUTTON_WIDTH)
+                        .setAnchor(Anchor.RIGHT_TOP)
+                        .buildConditional(precondition);
+                resolutionButtons.add(okButton);
+            }
+
+            // scroll box
+            final int buffer = DIALOG_CONTENT_TOP_OFFSET_Y + dialogBottomHeight();
             final VertScrollBox scrollBox = new VertScrollBox(
-                    scrollBoxPos, new Bounds2D(width - 2, height - /* TODO - magic number */ 60),
+                    scrollBoxPos, new Bounds2D(width - 2, height - buffer),
                     elements.stream()
                             .map(de -> de.element)
                             .peek(me -> {
@@ -245,9 +290,8 @@ public final class PopUpDialog extends MenuElementContainer {
                                 me.incrementY(elementOffset.y);
                             })
                             .map(Scrollable::new).toArray(Scrollable[]::new),
-                    contentBottom + elementOffset.y + 1, 0);
+                    contentBottom + elementOffset.y, 0);
 
-            // TODO - extract menu elements, offset, and package in scroll box
             return new PopUpDialog(width, height, titleLabel, scrollBox,
                     new MenuElementGrouping(resolutionButtons.toArray(MenuElement[]::new)));
         }
@@ -255,7 +299,7 @@ public final class PopUpDialog extends MenuElementContainer {
         // helper
 
         private int augmentWidthIfElementExceeds(final DialogElement element) {
-            final int room = width - (2 * DIALOG_MARGIN_X),
+            final int room = width - (2 * DIALOG_MARGIN),
                     augmentation = element.rightOf(0).x - room;
 
             return Math.max(augmentation, 0);
@@ -263,12 +307,21 @@ public final class PopUpDialog extends MenuElementContainer {
 
         private void setAsMinimumWidthAccountingForTitle() {
             final int buttonAllotment = DIALOG_RESOLUTION_BUTTON_WIDTH +
+                    (4 * DIALOG_MARGIN) +
                     (onlyInformation ? 0 : DIALOG_RESOLUTION_BUTTON_WIDTH +
-                            DIALOG_MARGIN_X),
+                            DIALOG_MARGIN),
                     titleAllotment = Graphics.naiveButtonWidth(title);
 
             width = Math.max(buttonAllotment, titleAllotment) +
-                    (2 * DIALOG_MARGIN_X);
+                    (2 * DIALOG_MARGIN);
+        }
+
+        private void calculateHeightFromContents() {
+            final int buffer = DIALOG_CONTENT_TOP_OFFSET_Y + dialogBottomHeight(),
+                    prospectiveHeight = Math.max(contentBottom, DIALOG_CONTENT_MIN_HEIGHT) + buffer,
+                    maxHeight = maxDialogHeight();
+
+            height = Math.min(prospectiveHeight, maxHeight);
         }
     }
 }

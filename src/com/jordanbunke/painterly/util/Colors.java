@@ -10,6 +10,7 @@ public final class Colors {
     private static final Color
             DEBUG = new Color(0x00ff00),
             TRANSPARENT = new Color(0, 0, 0, 0),
+            VEIL = new Color(0xc0c0c0c0, true),
             BLACK = new Color(0x000000),
             WHITE = new Color(0xffffff),
             LIGHT_GREY = new Color(0xc0c0c0),
@@ -66,6 +67,10 @@ public final class Colors {
 
     public static Color systemColor(final SystemColor systemColor) {
         return getTheme().systemColors[systemColor.ordinal()];
+    }
+
+    public static Color dialogVeil() {
+        return VEIL;
     }
 
     public static Color transparent() {
