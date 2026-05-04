@@ -18,4 +18,8 @@ public final class Constants {
             TOOLTIP_TICKS = 24;
 
     public static final long MAX_CANVAS_PIXELS = 10000L * 10000L;
+
+    public static final String PNG = "png", JPEG = "jpg";
+
+    public static final String[] RASTER_FORMATS = new String[] { PNG, JPEG };
 }

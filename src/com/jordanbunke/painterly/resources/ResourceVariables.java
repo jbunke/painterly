@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.resources;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.util.EnumUtils;
 
 import java.util.function.Supplier;
@@ -20,6 +21,18 @@ public enum ResourceVariables {
         return RC_UNKNOWN.asValue();
     }),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
+    RV_NPD_FOLDER(() ->
+            ResourceValue.ofString(NewProject.get().prospectiveFolder())),
+    RV_NPD_REF_NAME(() ->
+            ResourceValue.ofString(NewProject.get().prospectiveRefName())),
+    RV_NPD_REF_W(() ->
+            ResourceValue.ofString(NewProject.get().prospectiveRefWidth())),
+    RV_NPD_REF_H(() ->
+            ResourceValue.ofString(NewProject.get().prospectiveRefHeight())),
+    RV_NPD_W(() ->
+            ResourceValue.ofString(NewProject.get().prospectiveWidth())),
+    RV_NPD_H(() ->
+            ResourceValue.ofString(NewProject.get().prospectiveHeight())),
     ;
 
     final Supplier<ResourceValue> valueGetter;

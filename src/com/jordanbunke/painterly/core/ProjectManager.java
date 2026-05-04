@@ -45,4 +45,11 @@ public final class ProjectManager {
     }
 
     // TODO - close project, shift remaining, update index if necessary
+
+    public void addProject(final Project project, final boolean setActive) {
+        projects.add(project);
+
+        if (setActive)
+            index = projects.size() - 1;
+    }
 }

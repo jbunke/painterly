@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
+import com.jordanbunke.painterly.dialog.data.menus.DialogVariableSet;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.menu.elements.label.DynamicLabel;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
@@ -21,6 +22,7 @@ public final class DialogAssembly {
     public static PopUpDialog newProject() {
         final PopUpDialog.Builder db = PopUpDialog.init(RC_NEW_PROJECT)
                 .setHeightFromContents();
+        final NewProject np = NewProject.get();
 
         // lead label menu elements
         final SimpleLabel
@@ -46,45 +48,47 @@ public final class DialogAssembly {
         final DialogElement
                 projectNameTextbox = forDialog(
                         Textbox.init(projectNameLabel.followTB())
-                                .setDialogVariableEndpoint(
-                                        NewProject.get().name, s -> s)
+                                .setDialogVariableEndpoint(np.name, s -> s)
                                 .build()),
                 projectNameFeedback = feedbackUnderLeadLabel(
-                        projectNameLabelDE, NewProject.get().name),
+                        projectNameLabelDE, np.name),
                 folderButton = forDialog(
                         SimpleTextButton.init(RC_NPD_CHOOSE_FOLDER,
                                 folderLabel.followTB(),
-                                () -> {} /* TODO */).build()),
+                                np::chooseFolder).build()),
                 folderFeedback = feedbackUnderLeadLabel(
-                        folderLabelDE, NewProject.get().folder),
+                        folderLabelDE, np.folder),
                 uploadImageButton = forDialog(
                         SimpleTextButton.init(RC_UPLOAD,
                                 refImageLabel.followTB(),
-                                () -> {} /* TODO */).build()),
+                                np::uploadRefImage).build()),
                 uploadImageFeedback = feedbackUnderLeadLabel(
-                        refImageLabelDE, NewProject.get().ref),
+                        refImageLabelDE, np.ref),
                 scaleFactorTextbox = forDialog(
                         Textbox.init(scaleFactorLabel.followTB())
-                                .setDialogVariableEndpoint(
-                                        NewProject.get().scaleFactor,
+                                .setDialogVariableEndpoint(np.scaleFactor,
                                         Validator::nullableParseInt)
                                 .setWidthRelative(0.4)
                                 .build()),
                 scaleFactorFeedback = feedbackUnderLeadLabel(
-                        scaleFactorLabelDE, NewProject.get().scaleFactor);
+                        scaleFactorLabelDE, np.scaleFactor);
 
         db.addElements(projectNameTextbox, projectNameFeedback,
                 folderButton, folderFeedback,
                 uploadImageButton, uploadImageFeedback,
                 scaleFactorTextbox, scaleFactorFeedback);
 
-        // TODO
-
-        return db.setPrecondition(NewProject.get()::validate)
-                .setOnOK(() -> {} /* TODO */).build();
+        return buildDialogForVariableSet(db, np);
     }
 
     // helper
+
+    private static PopUpDialog buildDialogForVariableSet(
+            final PopUpDialog.Builder db, final DialogVariableSet vars
+    ) {
+        return db.setPrecondition(vars::validate)
+                .setOnOK(vars::ok).build();
+    }
 
     private static DialogElement leadLabelForDialog(
             final PopUpDialog.Builder db, final MenuElement label,
