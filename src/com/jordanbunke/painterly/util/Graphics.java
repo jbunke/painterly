@@ -2,6 +2,8 @@ package com.jordanbunke.painterly.util;
 
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
+import com.jordanbunke.delta_time.utility.math.Bounds2D;
+import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.Button;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
@@ -54,8 +56,7 @@ public final class Graphics {
         image.fill(bgColor);
 
         // top bar
-        image.fillRectangle(topBarColor, 0, 0, width,
-                DIALOG_CONTENT_TOP_OFFSET_Y - DIALOG_MARGIN);
+        image.fillRectangle(topBarColor, 0, 0, width, dialogTitleStripeHeight());
 
         // border
         image.drawRectangle(borderColor, 4f, 0, 0, width, height);
@@ -103,18 +104,117 @@ public final class Graphics {
 
         // draw text
         final int x = switch (tb.getAlignment()) {
-            case LEFT -> TEXT_BUTTON_MARGIN_X;
+            case LEFT -> TEXT_BUTTON_TEXT_OFFSET_X;
             case CENTER -> (w - textImage.getWidth()) / 2;
-            case RIGHT -> w - (TEXT_BUTTON_MARGIN_X + textImage.getWidth());
+            case RIGHT -> w - (TEXT_BUTTON_TEXT_OFFSET_X + textImage.getWidth());
         };
-        final int y = (h - textImage.getHeight()) / 2;
 
-        button.draw(textImage, x, y);
+        button.draw(textImage, x, TEXT_BUTTON_TEXT_OFFSET_Y);
 
         // border
         button.drawRectangle(accentColor, 4f, 0, 0, w, h);
 
         return button.submit();
+    }
+
+    public static GameImage drawTextbox(
+            final Bounds2D dims,
+            final String prefix, final String text, final String suffix,
+            final int cursorIndex, final int selectionIndex,
+            final boolean valid, final boolean highlighted, final boolean typing
+    ) {
+        // TODO - temp implementation; copied from TDSM
+
+        // pre-processing
+        final int left = Math.min(cursorIndex, selectionIndex),
+                right = Math.max(cursorIndex, selectionIndex),
+                INC = TEXTBOX_SEG_INC;
+
+        final boolean hasSelection = left != right,
+                cursorAtRight = cursorIndex == right;
+
+        // setup
+        final Color
+                mainColor = valid ? systemColor(DARK) : invalidText(),
+                backgroundColor = valid ? systemColor(LIGHT) : invalidTextBG(),
+                outlineColor = typing ? highlightOverlay() :
+                        (highlighted ? systemColor(LIGHT) : mainColor),
+                affixColor = shiftRGB(mainColor, 0x40),
+                highlightOverlay = highlightOverlay();
+
+        // text and cursor
+
+        final String preSel = text.substring(0, left),
+                sel = text.substring(left, right),
+                postSel = text.substring(right);
+
+        final FontFormatter formatter = new FontFormatter(FONT_DEF);
+
+        final GameImage prefixImage = formatter.realize()
+                .setColor(affixColor).addText(prefix).build().draw(),
+                suffixImage = formatter.realize()
+                        .setColor(affixColor)
+                        .addText(suffix).build().draw(),
+                preSelImage = formatter.realize()
+                        .setColor(mainColor)
+                        .addText(preSel).build().draw(),
+                selImage = formatter.realize()
+                        .setColor(mainColor)
+                        .addText(sel).build().draw(),
+                postSelImage = formatter.realize()
+                        .setColor(mainColor)
+                        .addText(postSel).build().draw();
+
+        final GameImage box = new GameImage(dims.width(), dims.height());
+
+        // background
+        box.fill(backgroundColor);
+
+        Coord2D textPos = new Coord2D(TEXT_BUTTON_TEXT_OFFSET_X,
+                TEXT_BUTTON_TEXT_OFFSET_Y);
+
+        // possible prefix
+        box.draw(prefixImage, textPos.x, textPos.y);
+        if (!prefix.isEmpty())
+            textPos = textPos.displace(prefixImage.getWidth() + INC, 0);
+
+        // main text prior to possible selection
+        box.draw(preSelImage, textPos.x, textPos.y);
+        if (!preSel.isEmpty())
+            textPos = textPos.displace(preSelImage.getWidth() + INC, 0);
+
+        // possible selection text
+        if (hasSelection) {
+            if (!cursorAtRight)
+                textPos = textPos.displace(2 * INC, 0);
+
+            box.draw(selImage, textPos.x, textPos.y);
+            box.fillRectangle(highlightOverlay, textPos.x - INC, 0,
+                    selImage.getWidth() + (2 * INC), box.getHeight());
+            textPos = textPos.displace(selImage.getWidth() + INC, 0);
+        }
+
+        // cursor
+        box.fillRectangle(mainColor,
+                textPos.x - (cursorAtRight ? 0
+                        : selImage.getWidth() + (3 * INC)),
+                0, INC, box.getHeight());
+        if (cursorAtRight)
+            textPos = textPos.displace(2 * INC, 0);
+
+        // main text following possible selection
+        box.draw(postSelImage, textPos.x, textPos.y);
+        if (!postSel.isEmpty())
+            textPos = textPos.displace(postSelImage.getWidth() + INC, 0);
+
+        // possible suffix
+        box.draw(suffixImage, textPos.x, textPos.y);
+
+        // outline
+        box.drawRectangle(outlineColor, 2f, 0, 0,
+                box.getWidth(), box.getHeight());
+
+        return box.submit();
     }
 
     public static GameImage drawVertScrollBar(
@@ -314,5 +414,19 @@ public final class Graphics {
     public static Color greyscale(final Color in) {
         final int avg = (in.getRed() + in.getGreen() + in.getBlue()) / 3;
         return new Color(avg, avg, avg, in.getAlpha());
+    }
+
+    private static Color shiftRGB(final Color base, final int shift) {
+        return new Color(
+                shiftChannel(base.getRed(), Math.abs(shift)),
+                shiftChannel(base.getGreen(), Math.abs(shift)),
+                shiftChannel(base.getBlue(), Math.abs(shift)));
+    }
+
+    private static int shiftChannel(final int c, final int shift) {
+        final int MIDDLE = 0x80;
+        final boolean increase = Math.signum((double) (MIDDLE - c)) >= 0.0;
+
+        return c + (increase ? shift : -shift);
     }
 }

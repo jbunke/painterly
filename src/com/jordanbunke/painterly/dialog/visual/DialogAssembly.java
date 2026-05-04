@@ -2,11 +2,17 @@ package com.jordanbunke.painterly.dialog.visual;
 
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.dialog.data.DialogVariable;
+import com.jordanbunke.painterly.dialog.data.Validator;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
+import com.jordanbunke.painterly.menu.elements.label.DynamicLabel;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
+import com.jordanbunke.painterly.menu.elements.textbox.Textbox;
 import com.jordanbunke.painterly.resources.ResourceCode;
 
+import static com.jordanbunke.painterly.util.Colors.*;
+import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
@@ -39,18 +45,38 @@ public final class DialogAssembly {
         // dependent dialog elements, directly realized
         final DialogElement
                 projectNameTextbox = forDialog(
-                        SimpleLabel.initLiteral("[Textbox here]",
-                                projectNameLabelDE.rightOf(DIALOG_MARGIN)).build()),
+                        Textbox.init(projectNameLabel.followTB())
+                                .setDialogVariableEndpoint(
+                                        NewProject.get().name, s -> s)
+                                .build()),
+                projectNameFeedback = feedbackUnderLeadLabel(
+                        projectNameLabelDE, NewProject.get().name),
                 folderButton = forDialog(
                         SimpleTextButton.init(RC_NPD_CHOOSE_FOLDER,
                                 folderLabel.followTB(),
                                 () -> {} /* TODO */).build()),
+                folderFeedback = feedbackUnderLeadLabel(
+                        folderLabelDE, NewProject.get().folder),
                 uploadImageButton = forDialog(
                         SimpleTextButton.init(RC_UPLOAD,
                                 refImageLabel.followTB(),
-                                () -> {} /* TODO */).build());
+                                () -> {} /* TODO */).build()),
+                uploadImageFeedback = feedbackUnderLeadLabel(
+                        refImageLabelDE, NewProject.get().ref),
+                scaleFactorTextbox = forDialog(
+                        Textbox.init(scaleFactorLabel.followTB())
+                                .setDialogVariableEndpoint(
+                                        NewProject.get().scaleFactor,
+                                        Validator::nullableParseInt)
+                                .setWidthRelative(0.4)
+                                .build()),
+                scaleFactorFeedback = feedbackUnderLeadLabel(
+                        scaleFactorLabelDE, NewProject.get().scaleFactor);
 
-        db.addElements(projectNameTextbox, folderButton, uploadImageButton);
+        db.addElements(projectNameTextbox, projectNameFeedback,
+                folderButton, folderFeedback,
+                uploadImageButton, uploadImageFeedback,
+                scaleFactorTextbox, scaleFactorFeedback);
 
         // TODO
 
@@ -70,6 +96,16 @@ public final class DialogAssembly {
             instruction.transform(deb);
 
         return deb.autoAlignX(db).autoAlignY(db).build();
+    }
+
+    private static DialogElement feedbackUnderLeadLabel(
+            final DialogElement leadLabelDE, final DialogVariable<?> variable
+    ) {
+        return forDialog(
+                DynamicLabel.init(leadLabelDE.below(DIALOG_MARGIN),
+                                variable::feedback)
+                        .setColor(systemColor(MID))
+                        .build());
     }
 
     private static DialogElement forDialog(final MenuElement element) {

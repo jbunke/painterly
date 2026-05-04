@@ -20,4 +20,12 @@ public interface Validator<T> {
     static Pair<Boolean, ResourceCode> never() {
         return new Pair<>(false, RC_NA);
     }
+
+    static Integer nullableParseInt(final String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
+    }
 }

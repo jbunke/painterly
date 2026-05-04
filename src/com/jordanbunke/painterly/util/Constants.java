@@ -13,5 +13,9 @@ public final class Constants {
 
     public static final double TICK_HZ = 60d, FPS = 60d;
 
-    public static final int TOOLTIP_TICKS = 24;
+    public static final int
+            TEXTBOX_DEF_MAX_LENGTH = 20,
+            TOOLTIP_TICKS = 24;
+
+    public static final long MAX_CANVAS_PIXELS = 10000L * 10000L;
 }

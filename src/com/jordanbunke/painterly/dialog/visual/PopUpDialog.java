@@ -246,7 +246,7 @@ public final class PopUpDialog extends MenuElementContainer {
             final Coord2D screenMiddle = SCREEN.at(0.5, 0.5),
                     renderPos = screenMiddle.displace(
                             new Coord2D(-width / 2, -height / 2)),
-                    scrollBoxPos = renderPos.displace(1, DIALOG_CONTENT_TOP_OFFSET_Y),
+                    scrollBoxPos = renderPos.displace(1, dialogTitleStripeHeight()),
                     elementOffset = renderPos.displaceY(DIALOG_CONTENT_TOP_OFFSET_Y),
                     bottomRight = screenMiddle.displace(
                             (width / 2) - DIALOG_MARGIN,
@@ -280,9 +280,9 @@ public final class PopUpDialog extends MenuElementContainer {
             }
 
             // scroll box
-            final int buffer = DIALOG_CONTENT_TOP_OFFSET_Y + dialogBottomHeight();
+            final int boxMargin = dialogTitleStripeHeight() + dialogBottomHeight();
             final VertScrollBox scrollBox = new VertScrollBox(
-                    scrollBoxPos, new Bounds2D(width - 2, height - buffer),
+                    scrollBoxPos, new Bounds2D(width - 2, height - boxMargin),
                     elements.stream()
                             .map(de -> de.element)
                             .peek(me -> {

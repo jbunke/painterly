@@ -35,12 +35,15 @@ public final class Layout {
             KEY_SHORTCUT_DROP_SHADOW_EXTRA = 8,
             KEY_SHORTCUT_MAX_CLEARED = 4,
             STANDARD_FOLLOW_X = 10, // TODO - test
+            TEXTBOX_DEF_WIDTH = 200,
+            TEXTBOX_SEG_INC = 1, // TODO - test; copied from TDSM
             TEXT_BUTTON_AFTER_LABEL_OFFSET_Y = -5,
             TEXT_BUTTON_DEF_HEIGHT = 32,
             TEXT_BUTTON_PADDING_X = 20,
             TEXT_BUTTON_INTERVAL_L_Y = 32,
             TEXT_BUTTON_INTERVAL_S_Y = 16,
-            TEXT_BUTTON_MARGIN_X = 6,
+            TEXT_BUTTON_TEXT_OFFSET_X = 6,
+            TEXT_BUTTON_TEXT_OFFSET_Y = 5,
             TOOLTIP_LINE_INC_Y = 24,
             TOOLTIP_PADDING_X = 8,
             TOOLTIP_INITIAL_OFFSET_Y = 2;
@@ -122,6 +125,10 @@ public final class Layout {
 
     public static int dialogBottomHeight() {
         return TEXT_BUTTON_DEF_HEIGHT + (int)(2.5 * DIALOG_MARGIN);
+    }
+
+    public static int dialogTitleStripeHeight() {
+        return DIALOG_CONTENT_TOP_OFFSET_Y - DIALOG_MARGIN;
     }
 
     // screen boxes

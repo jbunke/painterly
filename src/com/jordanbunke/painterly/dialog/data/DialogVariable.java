@@ -6,15 +6,13 @@ import com.jordanbunke.painterly.resources.lang.LanguageData;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public final class DialogVariable<T> {
-    private final T defaultValue;
-    private final Validator<T> validator;
+    public final Validator<T> validator;
     private T value;
 
     public DialogVariable(
             final T defaultValue,
             final Validator<T> validator
     ) {
-        this.defaultValue = defaultValue;
         this.validator = validator;
         value = defaultValue;
     }
