@@ -23,7 +23,7 @@ public final class NewProject extends DialogVariableSet {
 
     public final DialogVariable<String> name;
     public final DialogVariable<Path> folder;
-    public final DialogVariable<GameImage> ref;
+    public final DialogVariable<GameImage> sourceImage;
     public final DialogVariable<Integer> scaleFactor;
 
     private String refImageFilename;
@@ -35,7 +35,7 @@ public final class NewProject extends DialogVariableSet {
     private NewProject() {
         name = new DialogVariable<>("", this::validName);
         folder = new DialogVariable<>(null, this::validFolder);
-        ref = new DialogVariable<>(null, this::validRefImage);
+        sourceImage = new DialogVariable<>(null, this::validSourceImage);
         scaleFactor = new DialogVariable<>(10, this::validScaleFactor);
     }
 
@@ -46,14 +46,14 @@ public final class NewProject extends DialogVariableSet {
     @Override
     DialogVariable<?>[] getAllVariables() {
         return new DialogVariable[] {
-                name, folder, ref, scaleFactor
+                name, folder, sourceImage, scaleFactor
         };
     }
 
     @Override
     void whenReady() {
         final Project project = new Project(name.get(),
-                folder.get(), ref.get(), scaleFactor.get());
+                folder.get(), sourceImage.get(), scaleFactor.get());
         ProjectManager.get().addProject(project, true);
     }
 
@@ -69,7 +69,7 @@ public final class NewProject extends DialogVariableSet {
         folder.set(opened.get().toPath());
     }
 
-    public void uploadRefImage() {
+    public void uploadSourceImage() {
         FileIO.setDialogToFilesOnly();
 
         final String fileTypeDescription =
@@ -77,12 +77,12 @@ public final class NewProject extends DialogVariableSet {
         FileIO.openFileFromSystem(
                 new String[] { fileTypeDescription },
                 new String[][] { Constants.RASTER_FORMATS }
-        ).ifPresent(this::processRefImageFile);
+        ).ifPresent(this::processSourceImageFile);
     }
 
-    private void processRefImageFile(final File file) {
+    private void processSourceImageFile(final File file) {
         final GameImage image = GameImageIO.readImage(file.toPath());
-        ref.set(image);
+        sourceImage.set(image);
         refImageFilename = file.getName();
     }
 
@@ -110,13 +110,13 @@ public final class NewProject extends DialogVariableSet {
         return new Pair<>(true, RC_NPD_VALIDATED_FOLDER);
     }
 
-    private Pair<Boolean, ResourceCode> validRefImage(
-            final GameImage refImage
+    private Pair<Boolean, ResourceCode> validSourceImage(
+            final GameImage sourceImage
     ) {
-        if (refImage == null)
+        if (sourceImage == null)
             return new Pair<>(false, RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
 
-        return new Pair<>(true, RC_NPD_VALIDATED_REF_IMAGE);
+        return new Pair<>(true, RC_NPD_VALIDATED_SRC_IMAGE);
     }
 
     private Pair<Boolean, ResourceCode> validScaleFactor(
@@ -126,11 +126,11 @@ public final class NewProject extends DialogVariableSet {
             return new Pair<>(false, RC_DIALOG_CANNOT_READ_INT);
         else if (scaleFactor < 1)
             return new Pair<>(false, RC_DIALOG_MUST_BE_POSITIVE);
-        else if (!ref.passing())
+        else if (!sourceImage.passing())
             return new Pair<>(false,
                     RC_DIALOG_CANNOT_VALIDATE_SCALE_FACTOR_WITHOUT_IMAGE);
         else {
-            final GameImage refImage = ref.get();
+            final GameImage refImage = sourceImage.get();
             final long pixels = (long) refImage.getWidth() *
                     refImage.getHeight() * scaleFactor * scaleFactor;
 
@@ -143,28 +143,28 @@ public final class NewProject extends DialogVariableSet {
 
     // resource variable accessors
 
-    public String prospectiveFolder() {
+    public String raFolder() {
         return String.valueOf(folder.get());
     }
 
-    public String prospectiveRefName() {
+    public String raSourceImageName() {
         return refImageFilename;
     }
 
-    public String prospectiveRefWidth() {
-        return String.valueOf(ref.get().getWidth());
+    public String raSourceImageWidth() {
+        return String.valueOf(sourceImage.get().getWidth());
     }
 
-    public String prospectiveRefHeight() {
-        return String.valueOf(ref.get().getHeight());
+    public String raSourceImageHeight() {
+        return String.valueOf(sourceImage.get().getHeight());
     }
 
-    public String prospectiveWidth() {
-        return String.valueOf(ref.get().getWidth() * scaleFactor.get());
+    public String raWidth() {
+        return String.valueOf(sourceImage.get().getWidth() * scaleFactor.get());
     }
 
-    public String prospectiveHeight() {
-        return String.valueOf(ref.get().getHeight() * scaleFactor.get());
+    public String raHeight() {
+        return String.valueOf(sourceImage.get().getHeight() * scaleFactor.get());
     }
 
     // helper

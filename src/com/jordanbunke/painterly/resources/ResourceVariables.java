@@ -22,17 +22,17 @@ public enum ResourceVariables {
     }),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_NPD_FOLDER(() ->
-            ResourceValue.ofString(NewProject.get().prospectiveFolder())),
-    RV_NPD_REF_NAME(() ->
-            ResourceValue.ofString(NewProject.get().prospectiveRefName())),
-    RV_NPD_REF_W(() ->
-            ResourceValue.ofString(NewProject.get().prospectiveRefWidth())),
-    RV_NPD_REF_H(() ->
-            ResourceValue.ofString(NewProject.get().prospectiveRefHeight())),
+            ResourceValue.ofString(NewProject.get().raFolder())),
+    RV_NPD_SRC_NAME(() ->
+            ResourceValue.ofString(NewProject.get().raSourceImageName())),
+    RV_NPD_SRC_W(() ->
+            ResourceValue.ofString(NewProject.get().raSourceImageWidth())),
+    RV_NPD_SRC_H(() ->
+            ResourceValue.ofString(NewProject.get().raSourceImageHeight())),
     RV_NPD_W(() ->
-            ResourceValue.ofString(NewProject.get().prospectiveWidth())),
+            ResourceValue.ofString(NewProject.get().raWidth())),
     RV_NPD_H(() ->
-            ResourceValue.ofString(NewProject.get().prospectiveHeight())),
+            ResourceValue.ofString(NewProject.get().raHeight())),
     ;
 
     final Supplier<ResourceValue> valueGetter;

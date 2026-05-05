@@ -16,7 +16,7 @@ public final class Project implements ProgramContext {
     private final StrokeManager strokeManager;
     private final FocusManager focusManager;
 
-    private final GameImage reference;
+    private final GameImage sourceImage;
     private final Canvas canvas;
 
     private String name;
@@ -26,16 +26,16 @@ public final class Project implements ProgramContext {
 
     public Project(
             final String name, final Path folder,
-            final GameImage reference, final int scaleFactor
+            final GameImage sourceImage, final int scaleFactor
     ) {
         this.name = name;
         this.folder = folder;
-        this.reference = reference;
+        this.sourceImage = sourceImage;
 
         // TODO - throw exception if invalid
         this.scaleFactor = scaleFactor;
-        this.width = reference.getWidth() * scaleFactor;
-        this.height = reference.getHeight() * scaleFactor;
+        this.width = sourceImage.getWidth() * scaleFactor;
+        this.height = sourceImage.getHeight() * scaleFactor;
 
         canvas = new Canvas(this);
         strokeManager = new StrokeManager(this);
@@ -76,7 +76,7 @@ public final class Project implements ProgramContext {
     @Override
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
 
-    public GameImage getReference() {
-        return reference;
+    public GameImage getSourceImage() {
+        return sourceImage;
     }
 }

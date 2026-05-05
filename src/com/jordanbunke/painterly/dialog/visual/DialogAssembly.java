@@ -61,9 +61,9 @@ public final class DialogAssembly {
                 uploadImageButton = forDialog(
                         SimpleTextButton.init(RC_UPLOAD,
                                 refImageLabel.followTB(),
-                                np::uploadRefImage).build()),
+                                np::uploadSourceImage).build()),
                 uploadImageFeedback = feedbackUnderLeadLabel(
-                        refImageLabelDE, np.ref),
+                        refImageLabelDE, np.sourceImage),
                 scaleFactorTextbox = forDialog(
                         Textbox.init(scaleFactorLabel.followTB())
                                 .setDialogVariableEndpoint(np.scaleFactor,

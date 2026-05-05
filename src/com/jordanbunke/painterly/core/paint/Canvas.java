@@ -11,7 +11,7 @@ public final class Canvas {
     private GameImage accepted;
 
     public Canvas(final Project project) {
-        reference = project.getReference();
+        reference = project.getSourceImage();
         scaleFactor = project.scaleFactor;
 
         accepted = new GameImage(project.width, project.height);
