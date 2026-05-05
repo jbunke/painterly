@@ -4,14 +4,14 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
 
 public final class Canvas {
-    private final GameImage reference;
+    private final GameImage sourceImage;
     private final int scaleFactor;
 
     // TODO
     private GameImage accepted;
 
     public Canvas(final Project project) {
-        reference = project.getSourceImage();
+        sourceImage = project.getSourceImage();
         scaleFactor = project.scaleFactor;
 
         accepted = new GameImage(project.width, project.height);

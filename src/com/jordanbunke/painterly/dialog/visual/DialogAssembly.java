@@ -28,7 +28,7 @@ public final class DialogAssembly {
         final SimpleLabel
                 projectNameLabel = leadLabel(RC_NPD_PROJECT_NAME),
                 folderLabel = leadLabel(RC_NPD_FOLDER),
-                refImageLabel = leadLabel(RC_NPD_REFERENCE_IMAGE),
+                refImageLabel = leadLabel(RC_NPD_SOURCE_IMAGE),
                 scaleFactorLabel = leadLabel(RC_NPD_SCALE_FACTOR);
 
         // dialog realization
