@@ -24,7 +24,11 @@ public interface IAction<T> {
             if (event == null)
                 return false;
 
-            return tryExecute(t);
+            final boolean success = tryExecute(t);
+            if (success)
+                event.markAsProcessed();
+
+            return success;
         }
 
         return false;

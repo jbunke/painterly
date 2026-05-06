@@ -22,4 +22,6 @@ public final class Constants {
     public static final String PNG = "png", JPEG = "jpg";
 
     public static final String[] RASTER_FORMATS = new String[] { PNG, JPEG };
+
+    public static final String TYPING_CODE = "typing";
 }

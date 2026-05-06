@@ -11,6 +11,7 @@ import static com.jordanbunke.delta_time.events.Key.*;
 
 public enum ProjectAction implements IAction<Project> {
     SET_FB_MODE_ITERATE(KeyboardShortcut.single(S), /* TODO */ p -> {}),
+    SAVE_AS(new KeyboardShortcut(true, true, S), /* TODO */ p -> {}),
     ;
 
     static {

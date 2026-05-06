@@ -1,5 +1,7 @@
 package com.jordanbunke.painterly.events.actions;
 
+import com.jordanbunke.delta_time.io.InputEventLogger;
+import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.resources.ResourceCode;
 
@@ -11,9 +13,10 @@ import static com.jordanbunke.delta_time.events.Key.*;
 
 public enum GlobalAction
         implements IAction</* TODO - evaluate whether more suitable type exists */ Runnable> {
-    CLOSE_DIALOG(KeyboardShortcut.single(ESCAPE), /* TODO */ () -> {}),
+    DIALOG_CLOSE(KeyboardShortcut.single(ESCAPE), DialogManager::close),
+    DIALOG_OK(KeyboardShortcut.single(ENTER),
+            () -> DialogManager.get().variableSet.ok()),
     TOGGLE_FULLSCREEN(KeyboardShortcut.single(ESCAPE), /* TODO */ () -> {}),
-    SAVE_AS(new KeyboardShortcut(true, true, S), /* TODO */ () -> {}),
     ;
 
     static {
@@ -21,6 +24,10 @@ public enum GlobalAction
         // TODO
 
         // Populate preconditions
+        DIALOG_CLOSE.precondition = DialogManager::has;
+        DIALOG_OK.precondition = () -> DialogManager.has() &&
+                DialogManager.get().variableSet.validate();
+        TOGGLE_FULLSCREEN.precondition = () -> !DialogManager.has();
         // TODO
     }
 
@@ -39,6 +46,10 @@ public enum GlobalAction
 
         iconCode = ResourceCode.RC_NA;
         precondition = null;
+    }
+
+    public boolean tryForMatchingKeyStroke(final InputEventLogger eventLogger) {
+        return IAction.super.tryForMatchingKeyStroke(eventLogger, null);
     }
 
     @Override

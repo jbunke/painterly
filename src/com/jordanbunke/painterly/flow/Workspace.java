@@ -7,6 +7,7 @@ import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.events.actions.GlobalAction;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 
 import java.util.Arrays;
@@ -47,7 +48,11 @@ public final class Workspace implements ProgramContext {
     }
 
     private void processGlobalActions(final InputEventLogger eventLogger) {
-        // TODO - return if typing
+        if (ProgramState.isTyping())
+            return;
+
+        for (GlobalAction ga : GlobalAction.values())
+            ga.tryForMatchingKeyStroke(eventLogger);
     }
 
     @Override

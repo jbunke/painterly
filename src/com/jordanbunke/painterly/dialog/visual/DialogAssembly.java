@@ -20,9 +20,9 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 public final class DialogAssembly {
     // TODO
     public static PopUpDialog newProject() {
-        final PopUpDialog.Builder db = PopUpDialog.init(RC_NEW_PROJECT)
-                .setHeightFromContents();
         final NewProject np = NewProject.get();
+        final PopUpDialog.Builder db = PopUpDialog.init(RC_NEW_PROJECT, np)
+                .setHeightFromContents();
 
         // lead label menu elements
         final SimpleLabel

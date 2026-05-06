@@ -21,6 +21,10 @@ import static com.jordanbunke.painterly.util.Layout.*;
 public class Textbox extends AbstractTextbox {
     private final boolean unconditionalSender;
 
+    static {
+        setTypingCode(Constants.TYPING_CODE);
+    }
+
     Textbox(
             final Coord2D position, final int width, final Anchor anchor,
             final String prefix, final String initialText, final String suffix,

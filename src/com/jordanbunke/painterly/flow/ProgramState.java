@@ -7,11 +7,9 @@ import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
-import com.jordanbunke.painterly.util.Colors;
-import com.jordanbunke.painterly.util.Cursor;
-import com.jordanbunke.painterly.util.Locks;
-import com.jordanbunke.painterly.util.Tooltip;
+import com.jordanbunke.painterly.util.*;
 
+import static com.jordanbunke.delta_time.utility.DeltaTimeGlobal.getStatusOf;
 import static com.jordanbunke.painterly.util.Layout.*;
 
 public enum ProgramState implements ProgramContext {
@@ -59,6 +57,11 @@ public enum ProgramState implements ProgramContext {
             return;
 
         ProgramState.menu = menu;
+    }
+
+    public static boolean isTyping() {
+        return getStatusOf(Constants.TYPING_CODE)
+                .orElse(false) instanceof Boolean b && b;
     }
 
     @Override
