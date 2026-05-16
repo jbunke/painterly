@@ -129,7 +129,7 @@ public final class MenuAssembly {
                                 () -> DialogManager.set(DialogAssembly.newProject()))
                         .setTooltipCode(RC_NEW_PROJECT)
                         .setAnchor(RIGHT_TOP),
-                SimpleTextButton.init(RC_OPEN_PROJECT, new Coord2D(), () -> {})
+                SimpleTextButton.init(RC_OPEN_PROJECT, new Coord2D(), () -> {} /* TODO */)
                         .setTooltipCode(RC_OPEN_PROJECT)
                         .setAnchor(LEFT_TOP));
 

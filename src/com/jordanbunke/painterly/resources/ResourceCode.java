@@ -24,6 +24,15 @@ public enum ResourceCode {
     RC_DIALOG_DEFAULT_OK,
     RC_DIALOG_MUST_BE_POSITIVE,
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
+    // Navigation
+    RC_NAV_PROGRAM,
+    RC_NAV_MAIN_MENU,
+    RC_NAV_QUIT_PROGRAM,
+    RC_NAV_PROJECT,
+    RC_NAV_SAVE_AS,
+    RC_NAV_VIEW,
+    /* TODO */
+    // End navigation
     RC_NEW_PROJECT, // also: tooltip,
     RC_NO_PROJECTS_OPEN,
     RC_NPD_CHOOSE_FOLDER,
@@ -40,11 +49,14 @@ public enum ResourceCode {
     RC_QUIT,
     RC_START,
     RC_UPLOAD,
+    RC_TOGGLE_FULLSCREEN,
 
     // Values
     // TODO - variable output possibilities - make language-dependent _values json files
     RC_MEASURING_ACCEPTED,
     RC_MEASURING_ATTEMPTED,
+    RC_EXIT_FULLSCREEN,
+    RC_FULLSCREEN,
     RC_UNKNOWN,
     ;
 

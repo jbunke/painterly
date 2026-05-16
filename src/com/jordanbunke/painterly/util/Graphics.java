@@ -5,6 +5,7 @@ import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
+import com.jordanbunke.painterly.events.actions.IAction;
 import com.jordanbunke.painterly.menu.elements.Button;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
@@ -70,6 +71,74 @@ public final class Graphics {
                 .addText(label).build().draw();
 
         return textImage.getWidth() + TEXT_BUTTON_PADDING_X;
+    }
+
+    public static GameImage drawSubMenuHeader(final TextButton tb) {
+        final int w = tb.getWidth(), h = tb.getHeight();
+        final GameImage button = new GameImage(w, h);
+
+        drawSubMenuButton(button, tb, false);
+
+        final GameImage expanderImage = new FontFormatter(FONT_DEF)
+                .realize().setColor(systemColor(LIGHT))
+                .addText(Constants.NESTED_MENU_BAR_EXPANDER).build().draw();
+
+        final int textX = tb.getWidth() -
+                (MENU_BAR_PADDING_X + expanderImage.getWidth());
+        button.draw(expanderImage, textX, TEXT_BUTTON_TEXT_OFFSET_Y);
+
+        return button.submit();
+    }
+
+    public static <T> GameImage drawActionMenuButton(
+            final TextButton tb, final boolean stub,
+            final IAction<T> action
+    ) {
+        final KeyboardShortcut shortcut = action.getShortcut();
+
+        final int w = tb.getWidth(), h = tb.getHeight();
+        final GameImage button = new GameImage(w, h);
+
+        drawSubMenuButton(button, tb, stub);
+
+        // TODO - icon
+
+        if (shortcut != null) {
+            final GameImage shortcutImage = drawKeyboardShortcut(shortcut);
+            final int shortcutX = button.getWidth() -
+                    (MENU_BAR_PADDING_X + shortcutImage.getWidth()),
+                    shortcutY = (button.getHeight() - shortcutImage.getHeight()) / 2;
+            button.draw(shortcutImage, shortcutX, shortcutY);
+        }
+
+        return button.submit();
+    }
+
+    /**
+     * For common elements in sub-menu expanders and action buttons
+     * */
+    private static void drawSubMenuButton(
+            final GameImage button, final TextButton tb,
+            final boolean stub
+    ) {
+        // TODO - temp
+
+        final boolean highlight = tb.isHighlighted();
+
+        final Color textColor, bgColor;
+
+        textColor = stub ? systemColor(MID_LIGHT) : systemColor(LIGHT);
+        bgColor = highlight ? systemColor(MID) : systemColor(DARK);
+
+        button.fill(bgColor);
+
+        final GameImage textImage = new FontFormatter(FONT_DEF).realize()
+                .setColor(textColor).addText(tb.getLabel()).build().draw();
+
+        final int textX = MENU_BAR_PADDING_X + ICON_DIM + MENU_BAR_PADDING_X;
+        button.draw(textImage, textX, TEXT_BUTTON_TEXT_OFFSET_Y);
+
+        // TODO - highlight underline?
     }
 
     public static GameImage drawTextButton(final TextButton tb) {
@@ -356,6 +425,18 @@ public final class Graphics {
         }
 
         return tooltip.submit();
+    }
+
+    public static GameImage drawMenuBarSeparator(final int width) {
+        final GameImage sepImage =
+                new GameImage(width, MENU_BAR_SEPARATOR_HEIGHT);
+        sepImage.fill(systemColor(LIGHT));
+        return sepImage.submit();
+    }
+
+    public static int standardTextWidth(final String text) {
+        return new FontFormatter(FONT_DEF).realize().addText(text)
+                .build().draw().getWidth();
     }
 
     // ALGORITHMS

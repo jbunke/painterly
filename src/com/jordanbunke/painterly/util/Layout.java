@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.settings.Settings;
 
@@ -23,9 +24,13 @@ public final class Layout {
             DIALOG_MIN_SCREEN_HEIGHT_DIFF = 200, // TODO - test
             DIALOG_RESOLUTION_BUTTON_WIDTH = 120, // TODO - test
             DIALOG_ROW_INCREMENT = 30, // TODO - test
+            ICON_DIM = 24, // TODO - test
             TOOLTIP_OFFSET_LEFT = -12,
             TOOLTIP_OFFSET_RIGHT = 8,
-            MENU_BAR_HEIGHT = 36,
+            MENU_BAR_DIVIDER_WIDTH = 50, // TODO - test
+            MENU_BAR_HEIGHT = 32,
+            MENU_BAR_PADDING_X = 10, // TODO - test
+            MENU_BAR_SEPARATOR_HEIGHT = 1,
             CONTEXT_BAR_HEIGHT = 36,
             KEY_SHORTCUT_INTERVAL_X = 4,
             KEY_SHORTCUT_TEXT_MARGIN_X = 6,
@@ -38,7 +43,7 @@ public final class Layout {
             TEXTBOX_DEF_WIDTH = 200,
             TEXTBOX_SEG_INC = 1, // TODO - test; copied from TDSM
             TEXT_BUTTON_AFTER_LABEL_OFFSET_Y = -5,
-            TEXT_BUTTON_DEF_HEIGHT = 32,
+            TEXT_BUTTON_DEF_HEIGHT = 32, // TODO - better encapsulation
             TEXT_BUTTON_PADDING_X = 20,
             TEXT_BUTTON_INTERVAL_L_Y = 32,
             TEXT_BUTTON_INTERVAL_S_Y = 16,
@@ -107,6 +112,13 @@ public final class Layout {
         final Boolean unboxed = Settings.get(SET_ID_FULLSCREEN, Boolean.class);
 
         return unboxed != null && unboxed;
+    }
+
+    public static void toggleFullscreen() {
+        Settings.set(SET_ID_FULLSCREEN, !isFullscreen());
+
+        determineSize();
+        Painterly.get().remakeWindow();
     }
 
     // dialog boxes

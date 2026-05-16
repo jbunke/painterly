@@ -9,6 +9,8 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.events.actions.GlobalAction;
 import com.jordanbunke.painterly.menu.MenuAssembly;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBar;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBarManager;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -38,13 +40,24 @@ public final class Workspace implements ProgramContext {
 
     @Override
     public void process(final InputEventLogger eventLogger) {
+        // menu bar status processing
+        menuBarStatus(eventLogger);
+
         // TODO
+        // menu bar
+        MenuBar.get().process(eventLogger);
+
         // global processing
         processGlobalActions(eventLogger);
 
         // active project processing
         doIfProjectOrNot(p -> p.process(eventLogger),
                 () -> noProjectsOpenMenu.process(eventLogger));
+    }
+
+    private void menuBarStatus(final InputEventLogger eventLogger) {
+        MenuBarManager.reset();
+        MenuBarManager.checkForLoggedClick(eventLogger);
     }
 
     private void processGlobalActions(final InputEventLogger eventLogger) {
@@ -57,6 +70,10 @@ public final class Workspace implements ProgramContext {
 
     @Override
     public void update(final double deltaTime) {
+        // update menu bar
+        MenuBar.get().update(deltaTime);
+
+        // update project
         doIfProjectOrNot(p -> p.update(deltaTime),
                 () -> noProjectsOpenMenu.update(deltaTime));
     }
@@ -73,6 +90,9 @@ public final class Workspace implements ProgramContext {
         Arrays.stream(ScreenBox.values())
                 .filter(ScreenBox::isRendered)
                 .forEach(sc -> sc.menu().render(canvas));
+
+        // render menu bar
+        MenuBar.get().render(canvas);
     }
 
     private void doIfProjectOrNot(

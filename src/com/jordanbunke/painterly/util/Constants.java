@@ -23,5 +23,7 @@ public final class Constants {
 
     public static final String[] RASTER_FORMATS = new String[] { PNG, JPEG };
 
-    public static final String TYPING_CODE = "typing";
+    public static final String
+            NESTED_MENU_BAR_EXPANDER = ">",
+            TYPING_CODE = "typing";
 }

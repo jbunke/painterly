@@ -83,7 +83,6 @@ public final class Painterly implements ProgramContext {
         return window;
     }
 
-    // TODO - assess need
     public void remakeWindow() {
         window = makeWindow();
         program.setCanvasSize(Layout.width(), Layout.height());

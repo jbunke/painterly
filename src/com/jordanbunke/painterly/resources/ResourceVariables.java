@@ -5,6 +5,7 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.util.EnumUtils;
+import com.jordanbunke.painterly.util.Layout;
 
 import java.util.function.Supplier;
 
@@ -20,6 +21,8 @@ public enum ResourceVariables {
 
         return RC_UNKNOWN.asValue();
     }),
+    RV_FULLSCREEN_ACTION(() -> (Layout.isFullscreen()
+            ? RC_EXIT_FULLSCREEN : RC_FULLSCREEN).asValue()),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_NPD_FOLDER(() ->
             ResourceValue.ofString(NewProject.get().raFolder())),
