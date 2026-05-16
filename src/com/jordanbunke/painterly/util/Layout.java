@@ -5,6 +5,9 @@ import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
+import com.jordanbunke.painterly.dialog.visual.DialogManager;
+import com.jordanbunke.painterly.flow.ProgramState;
+import com.jordanbunke.painterly.flow.Workspace;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.settings.Settings;
 
@@ -117,8 +120,17 @@ public final class Layout {
     public static void toggleFullscreen() {
         Settings.set(SET_ID_FULLSCREEN, !isFullscreen());
 
+        onResize();
+    }
+
+    private static void onResize() {
         determineSize();
         Painterly.get().remakeWindow();
+
+        DialogManager.regen();
+        ProgramState.regen();
+        Workspace.get().regen();
+        EnumUtils.stream(ScreenBox.class).forEach(ScreenBox::regenMenu);
     }
 
     // dialog boxes
@@ -236,9 +248,8 @@ public final class Layout {
             return menu;
         }
 
-        public Menu regenMenu() {
+        public void regenMenu() {
             menu = menuBuilder.get();
-            return menu;
         }
 
         public static boolean isRendered(final ScreenBox screenBox) {

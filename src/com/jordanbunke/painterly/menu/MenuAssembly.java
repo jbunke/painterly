@@ -126,7 +126,7 @@ public final class MenuAssembly {
                                         .displaceX(MARGIN * (i == 0 ? -1 : 1))),
                 // buttons
                 SimpleTextButton.init(RC_NEW_PROJECT, new Coord2D(),
-                                () -> DialogManager.set(DialogAssembly.newProject()))
+                                () -> DialogManager.set(DialogAssembly::newProject))
                         .setTooltipCode(RC_NEW_PROJECT)
                         .setAnchor(RIGHT_TOP),
                 SimpleTextButton.init(RC_OPEN_PROJECT, new Coord2D(), () -> {} /* TODO */)

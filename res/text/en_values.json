@@ -1,7 +1,7 @@
 {
     "measuring_accepted" : "accepted strokes",
     "measuring_attempted" : "stroke attempts",
-    "exit_fullscreen" : "Exit fullscreen",
+    "exit_fullscreen" : "Windowed",
     "fullscreen" : "Fullscreen",
     "unknown" : "???"
 }

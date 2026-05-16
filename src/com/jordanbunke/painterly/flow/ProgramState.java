@@ -9,6 +9,8 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.util.*;
 
+import java.util.function.Supplier;
+
 import static com.jordanbunke.delta_time.utility.DeltaTimeGlobal.getStatusOf;
 import static com.jordanbunke.painterly.util.Layout.*;
 
@@ -17,6 +19,7 @@ public enum ProgramState implements ProgramContext {
 
     private static ProgramState state;
     private static Menu menu;
+    private static Supplier<Menu> lastSource;
 
     private static boolean loading;
 
@@ -28,35 +31,44 @@ public enum ProgramState implements ProgramContext {
         set(WORKSPACE, null);
     }
 
-    public static void setMenu(final Menu menu) {
-        set(MENU, menu);
+    public static void setMenu(final Supplier<Menu> source) {
+        set(MENU, source);
     }
 
-    private static void set(final ProgramState state, final Menu menu) {
+    private static void set(final ProgramState state, final Supplier<Menu> source) {
         loading = false;
         ProgramState.state = state;
 
-        if (state == MENU)
-            ProgramState.menu = menu;
+        if (state == MENU) {
+            lastSource = source;
+            menu = source.get();
+        }
     }
 
     public static boolean isLoading() {
         return loading;
     }
 
-    public static void setLoading(final Menu menu) {
+    public static void setLoading(final Supplier<Menu> source) {
         state = MENU;
-        ProgramState.menu = menu;
+        lastSource = source;
+        menu = source.get();
         loading = true;
     }
 
-    public static void to(final Menu menu) {
+    public static void to(final Supplier<Menu> source) {
         loading = false;
 
         if (state != MENU)
             return;
 
-        ProgramState.menu = menu;
+        lastSource = source;
+        menu = source.get();
+    }
+
+    public static void regen() {
+        if (state == MENU)
+            menu = lastSource.get();
     }
 
     public static boolean isTyping() {

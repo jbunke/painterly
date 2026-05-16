@@ -27,15 +27,16 @@ public final class Workspace implements ProgramContext {
     }
 
     private Workspace() {
-        resetNoProjectsOpenMenu();
+        regen();
     }
 
     public static Workspace get() {
         return INSTANCE;
     }
 
-    private void resetNoProjectsOpenMenu() {
+    public void regen() {
         noProjectsOpenMenu = MenuAssembly.noProjectsOpenMenu();
+        // TODO - additional menus
     }
 
     @Override

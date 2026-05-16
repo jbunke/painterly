@@ -1,26 +1,34 @@
 package com.jordanbunke.painterly.dialog.visual;
 
+import java.util.function.Supplier;
+
 public final class DialogManager {
-    // TODO
-    private static PopUpDialog DIALOG;
+    private static PopUpDialog dialog;
+    private static Supplier<PopUpDialog> lastSource;
 
     static {
-        DIALOG = null;
+        dialog = null;
     }
 
-    public static void set(final PopUpDialog dialog) {
-        DIALOG = dialog;
+    public static void set(final Supplier<PopUpDialog> source) {
+        lastSource = source;
+        dialog = source.get();
     }
 
     public static void close() {
-        DIALOG = null;
+        dialog = null;
     }
 
     public static PopUpDialog get() {
-        return DIALOG;
+        return dialog;
     }
 
     public static boolean has() {
-        return DIALOG != null;
+        return dialog != null;
+    }
+
+    public static void regen() {
+        if (has())
+            dialog = lastSource.get();
     }
 }

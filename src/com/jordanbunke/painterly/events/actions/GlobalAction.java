@@ -21,7 +21,7 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 public enum GlobalAction
         implements IAction</* TODO - evaluate whether more suitable type exists */ Runnable>, ISubMenuEntry {
     MAIN_MENU(RC_NAV_MAIN_MENU, null,
-            () -> ProgramState.setMenu(MenuAssembly.mainMenu())),
+            () -> ProgramState.setMenu(MenuAssembly::mainMenu)),
     QUIT_PROGRAM(RC_NAV_QUIT_PROGRAM, null, Painterly::quitProgram),
     DIALOG_CLOSE(KeyboardShortcut.single(ESCAPE), DialogManager::close),
     DIALOG_OK(KeyboardShortcut.single(ENTER),
@@ -29,7 +29,7 @@ public enum GlobalAction
     TOGGLE_FULLSCREEN(RC_TOGGLE_FULLSCREEN, KeyboardShortcut.single(ESCAPE),
             Layout::toggleFullscreen),
     NEW_PROJECT(RC_NEW_PROJECT, new KeyboardShortcut(true, false, N),
-            () -> DialogManager.set(DialogAssembly.newProject())),
+            () -> DialogManager.set(DialogAssembly::newProject)),
     OPEN_PROJECT(RC_OPEN_PROJECT, new KeyboardShortcut(true, false, O),
             () -> {} /* TODO */)
     ;

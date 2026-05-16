@@ -11,7 +11,7 @@ public final class VersionHandler {
     public static void startup() {
         // TODO - determine startup messages based on last opened version
 
-        ProgramState.setMenu(MenuAssembly.mainMenu());
+        ProgramState.setMenu(MenuAssembly::mainMenu);
 
         // Update last opened version to current version
         Settings.set(SET_ID_VERSION, ProgramInfo.getVersion());
