@@ -1,15 +1,20 @@
 package com.jordanbunke.painterly.util;
 
+import com.jordanbunke.delta_time._core.ProgramContext;
+import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
+import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.flow.Workspace;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.settings.Settings;
+import com.jordanbunke.painterly.viewport.Viewport;
 
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_FULLSCREEN;
 
@@ -55,6 +60,9 @@ public final class Layout {
             TOOLTIP_LINE_INC_Y = 24,
             TOOLTIP_PADDING_X = 8,
             TOOLTIP_INITIAL_OFFSET_Y = 2;
+
+    public static final double
+            FIT_TO_SCREEN_RATIO = 0.8;
 
     // constant processing functions
 
@@ -130,6 +138,7 @@ public final class Layout {
         DialogManager.regen();
         ProgramState.regen();
         Workspace.get().regen();
+        Viewport.get().regen();
         EnumUtils.stream(ScreenBox.class).forEach(ScreenBox::regenMenu);
     }
 
@@ -157,9 +166,9 @@ public final class Layout {
 
     // screen boxes
 
-    public enum ScreenBox {
+    public enum ScreenBox implements ProgramContext {
         SCREEN(() -> 0, () -> 0, Layout::width, Layout::height),
-        PROJECT_WINDOW(() -> 0, () -> MENU_BAR_HEIGHT, Layout::width,
+        PROJECT_VIEWPORT(() -> 0, () -> MENU_BAR_HEIGHT, Layout::width,
                 () -> Layout.height() - (MENU_BAR_HEIGHT + CONTEXT_BAR_HEIGHT)),
         MENU_BAR(() -> 0, () -> 0, Layout::width, () -> MENU_BAR_HEIGHT,
                 MenuAssembly::menuBar),
@@ -255,5 +264,32 @@ public final class Layout {
         public static boolean isRendered(final ScreenBox screenBox) {
             return screenBox != SCREEN;
         }
+
+        @Override
+        public void process(final InputEventLogger eventLogger) {
+            menu.process(eventLogger);
+
+            if (this == PROJECT_VIEWPORT && ProjectManager.get().hasProject())
+                Viewport.get().process(eventLogger);
+        }
+
+        @Override
+        public void update(final double deltaTime) {
+            menu.update(deltaTime);
+
+            if (this == PROJECT_VIEWPORT && ProjectManager.get().hasProject())
+                Viewport.get().update(deltaTime);
+        }
+
+        @Override
+        public void render(final GameImage canvas) {
+            menu.render(canvas);
+
+            if (this == PROJECT_VIEWPORT && ProjectManager.get().hasProject())
+                Viewport.get().render(canvas);
+        }
+
+        @Override
+        public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
     }
 }

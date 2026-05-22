@@ -8,12 +8,12 @@ import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.events.actions.GlobalAction;
+import com.jordanbunke.painterly.events.actions.ProjectAction;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBarManager;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 import static com.jordanbunke.painterly.util.Layout.ScreenBox;
 
@@ -52,8 +52,16 @@ public final class Workspace implements ProgramContext {
         processGlobalActions(eventLogger);
 
         // active project processing
-        doIfProjectOrNot(p -> p.process(eventLogger),
-                () -> noProjectsOpenMenu.process(eventLogger));
+        final Project p = ProjectManager.get().getProject();
+
+        if (p == null)
+            noProjectsOpenMenu.process(eventLogger);
+        else
+            processProjectActions(eventLogger, p);
+
+        // process screen boxes
+        for (ScreenBox sc : ScreenBox.values())
+            sc.process(eventLogger);
     }
 
     private void menuBarStatus(final InputEventLogger eventLogger) {
@@ -69,14 +77,28 @@ public final class Workspace implements ProgramContext {
             ga.tryForMatchingKeyStroke(eventLogger);
     }
 
+    private void processProjectActions(
+            final InputEventLogger eventLogger, final Project p
+    ) {
+        if (ProgramState.isTyping())
+            return;
+
+        for (ProjectAction pa : ProjectAction.values())
+            pa.tryForMatchingKeyStroke(eventLogger, p);
+    }
+
     @Override
     public void update(final double deltaTime) {
         // update menu bar
         MenuBar.get().update(deltaTime);
 
         // update project
-        doIfProjectOrNot(p -> p.update(deltaTime),
-                () -> noProjectsOpenMenu.update(deltaTime));
+        if (!ProjectManager.get().hasProject())
+            noProjectsOpenMenu.update(deltaTime);
+
+        // update screen boxes
+        for (ScreenBox sc : ScreenBox.values())
+            sc.update(deltaTime);
     }
 
     @Override
@@ -84,27 +106,16 @@ public final class Workspace implements ProgramContext {
         renderProjectButtons(canvas);
 
         // render project
-        doIfProjectOrNot(p -> p.render(canvas),
-                () -> noProjectsOpenMenu.render(canvas));
+        if (!ProjectManager.get().hasProject())
+            noProjectsOpenMenu.render(canvas);
 
-        // render screen box menus
+        // render screen boxes
         Arrays.stream(ScreenBox.values())
                 .filter(ScreenBox::isRendered)
-                .forEach(sc -> sc.menu().render(canvas));
+                .forEach(sc -> sc.render(canvas));
 
         // render menu bar
         MenuBar.get().render(canvas);
-    }
-
-    private void doIfProjectOrNot(
-            final Consumer<Project> ifProject, final Runnable not
-    ) {
-        final Project p = ProjectManager.get().getProject();
-
-        if (p != null)
-            ifProject.accept(p);
-        else
-            not.run();
     }
 
     private void renderProjectButtons(final GameImage canvas) {

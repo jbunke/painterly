@@ -107,7 +107,7 @@ public final class MenuAssembly {
 
     public static Menu noProjectsOpenMenu() {
         final MenuBuilder mb = new MenuBuilder();
-        final ScreenBox sb = PROJECT_WINDOW;
+        final ScreenBox sb = PROJECT_VIEWPORT;
 
         // TODO
         final SimpleLabel noProjectsOpenLabel = SimpleLabel.init(
