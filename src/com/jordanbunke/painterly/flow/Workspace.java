@@ -10,6 +10,7 @@ import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.events.actions.GlobalAction;
 import com.jordanbunke.painterly.events.actions.ProjectAction;
 import com.jordanbunke.painterly.menu.MenuAssembly;
+import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBarManager;
 
@@ -47,6 +48,9 @@ public final class Workspace implements ProgramContext {
         // TODO
         // menu bar
         MenuBar.get().process(eventLogger);
+
+        // context bar
+        ContextBar.get().process(eventLogger);
 
         // global processing
         processGlobalActions(eventLogger);
@@ -92,6 +96,9 @@ public final class Workspace implements ProgramContext {
         // update menu bar
         MenuBar.get().update(deltaTime);
 
+        // update context bar
+        ContextBar.get().update(deltaTime);
+
         // update project
         if (!ProjectManager.get().hasProject())
             noProjectsOpenMenu.update(deltaTime);
@@ -113,6 +120,9 @@ public final class Workspace implements ProgramContext {
         Arrays.stream(ScreenBox.values())
                 .filter(ScreenBox::isRendered)
                 .forEach(sc -> sc.render(canvas));
+
+        // render context bar
+        ContextBar.get().render(canvas);
 
         // render menu bar
         MenuBar.get().render(canvas);

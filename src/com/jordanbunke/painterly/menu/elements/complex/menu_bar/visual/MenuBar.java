@@ -16,8 +16,7 @@ import static com.jordanbunke.painterly.events.actions.ProjectAction.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public final class MenuBar extends MenuElement {
-    // TODO - assess final status
-    private static final MenuBar INSTANCE;
+    private static MenuBar INSTANCE;
 
     private final SubMenu[] subMenus;
 
@@ -65,6 +64,10 @@ public final class MenuBar extends MenuElement {
                         .build());
 
         return b.build();
+    }
+
+    public static void regen() {
+        INSTANCE = build();
     }
 
     public void collapseAll() {

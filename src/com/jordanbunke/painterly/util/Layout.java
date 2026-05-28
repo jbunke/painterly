@@ -13,6 +13,8 @@ import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.flow.Workspace;
 import com.jordanbunke.painterly.menu.MenuAssembly;
+import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBar;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.viewport.Viewport;
 
@@ -135,11 +137,17 @@ public final class Layout {
         determineSize();
         Painterly.get().remakeWindow();
 
+        regenAll();
+    }
+
+    private static void regenAll() {
+        MenuBar.regen();
+        ContextBar.regen();
         DialogManager.regen();
         ProgramState.regen();
         Workspace.get().regen();
         Viewport.get().regen();
-        EnumUtils.stream(ScreenBox.class).forEach(ScreenBox::regenMenu);
+        EnumUtils.stream(ScreenBox.class).forEach(ScreenBox::regenBackground);
     }
 
     // dialog boxes
@@ -178,12 +186,12 @@ public final class Layout {
         ;
 
         public final Supplier<Integer> x, y, width, height;
-        private final Supplier<Menu> menuBuilder;
-        private Menu menu;
+        private final Supplier<Menu> bgBuilder;
+        private Menu background;
 
         static {
             for (ScreenBox sb : ScreenBox.values())
-                sb.menu = sb.menuBuilder.get();
+                sb.background = sb.bgBuilder.get();
         }
 
         ScreenBox(
@@ -198,14 +206,14 @@ public final class Layout {
                 final Supplier<Integer> x, final Supplier<Integer> y,
                 final Supplier<Integer> width,
                 final Supplier<Integer> height,
-                final Supplier<Menu> menuBuilder
+                final Supplier<Menu> bgBuilder
         ) {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
 
-            this.menuBuilder = menuBuilder;
+            this.bgBuilder = bgBuilder;
             // menu = menuBuilder.get();
         }
 
@@ -254,11 +262,11 @@ public final class Layout {
         }
 
         public Menu menu() {
-            return menu;
+            return background;
         }
 
-        public void regenMenu() {
-            menu = menuBuilder.get();
+        public void regenBackground() {
+            background = bgBuilder.get();
         }
 
         public static boolean isRendered(final ScreenBox screenBox) {
@@ -267,23 +275,19 @@ public final class Layout {
 
         @Override
         public void process(final InputEventLogger eventLogger) {
-            menu.process(eventLogger);
-
             if (this == PROJECT_VIEWPORT && ProjectManager.get().hasProject())
                 Viewport.get().process(eventLogger);
         }
 
         @Override
         public void update(final double deltaTime) {
-            menu.update(deltaTime);
-
             if (this == PROJECT_VIEWPORT && ProjectManager.get().hasProject())
                 Viewport.get().update(deltaTime);
         }
 
         @Override
         public void render(final GameImage canvas) {
-            menu.render(canvas);
+            background.render(canvas);
 
             if (this == PROJECT_VIEWPORT && ProjectManager.get().hasProject())
                 Viewport.get().render(canvas);
