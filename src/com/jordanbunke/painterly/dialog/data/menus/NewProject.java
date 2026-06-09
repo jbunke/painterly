@@ -7,6 +7,7 @@ import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
+import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.Constants;
@@ -48,6 +49,11 @@ public final class NewProject extends DialogVariableSet {
         return new DialogVariable[] {
                 name, folder, sourceImage, scaleFactor
         };
+    }
+
+    @Override
+    protected void executionApparatus(final Runnable whenReady) {
+        ProgramState.load(whenReady, RC_LOAD_INIT_PROJECT);
     }
 
     @Override

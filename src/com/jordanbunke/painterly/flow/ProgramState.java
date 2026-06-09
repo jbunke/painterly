@@ -7,6 +7,8 @@ import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
+import com.jordanbunke.painterly.menu.MenuAssembly;
+import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.*;
 
 import java.util.function.Supplier;
@@ -45,15 +47,33 @@ public enum ProgramState implements ProgramContext {
         }
     }
 
-    public static boolean isLoading() {
-        return loading;
-    }
-
-    public static void setLoading(final Supplier<Menu> source) {
+    private static void setLoading(final Supplier<Menu> source) {
         state = MENU;
         lastSource = source;
         menu = source.get();
         loading = true;
+    }
+
+    public static void load(
+            final Runnable task, final ResourceCode code,
+            final Runnable yieldTo
+    ) {
+        setLoading(() -> MenuAssembly.loading(code));
+
+        final Thread taskThread = new Thread(() -> {
+            task.run();
+            if (loading)
+                yieldTo.run();
+        }, "Loading task");
+        taskThread.start();
+    }
+
+    /**
+     * Shorthand for {@link ProgramState#load(Runnable, ResourceCode, Runnable)}
+     * for when the task yields to the project workspace
+     * */
+    public static void load(final Runnable task, final ResourceCode code) {
+        load(task, code, ProgramState::setWorkspace);
     }
 
     public static void to(final Supplier<Menu> source) {

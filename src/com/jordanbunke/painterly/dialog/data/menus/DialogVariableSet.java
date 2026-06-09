@@ -14,10 +14,14 @@ public abstract class DialogVariableSet {
 
     abstract DialogVariable<?>[] getAllVariables();
 
+    protected void executionApparatus(final Runnable whenReady) {
+        whenReady.run();
+    }
+
     abstract void whenReady();
 
     public void ok() {
-        whenReady();
+        executionApparatus(this::whenReady);
         DialogManager.close();
     }
 }

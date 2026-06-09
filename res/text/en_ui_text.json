@@ -11,6 +11,7 @@
     "dialog_default_ok" : "Confirm",
     "dialog_must_be_positive" : "Must be positive",
     "dialog_variable_cannot_be_null" : "Undefined",
+    "load_init_project" : "Initializing project",
     "nav_program" : "$program_name",
     "nav_main_menu" : "Return to main menu",
     "nav_quit_program" : "Quit $program_name",

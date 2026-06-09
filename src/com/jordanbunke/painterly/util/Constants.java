@@ -14,6 +14,7 @@ public final class Constants {
     public static final double TICK_HZ = 60d, FPS = 60d;
 
     public static final int
+            LOADING_LABEL_TICKS = 20,
             TEXTBOX_DEF_MAX_LENGTH = 20,
             TOOLTIP_TICKS = 24;
 

@@ -12,9 +12,11 @@ import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
+import com.jordanbunke.painterly.menu.elements.label.LoadingLabel;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
+import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.Colors;
 
@@ -132,6 +134,16 @@ public final class MenuAssembly {
                 SimpleTextButton.init(RC_OPEN_PROJECT, new Coord2D(), () -> {} /* TODO */)
                         .setTooltipCode(RC_OPEN_PROJECT)
                         .setAnchor(LEFT_TOP));
+
+        return mb.build();
+    }
+
+    public static Menu loading(final ResourceCode code) {
+        final MenuBuilder mb = new MenuBuilder();
+
+        // TODO - potential background elements
+
+        mb.add(new LoadingLabel(code));
 
         return mb.build();
     }

@@ -24,6 +24,8 @@ public enum ResourceCode {
     RC_DIALOG_DEFAULT_OK,
     RC_DIALOG_MUST_BE_POSITIVE,
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
+    // Loading messages
+    RC_LOAD_INIT_PROJECT,
     // Navigation
     RC_NAV_PROGRAM,
     RC_NAV_MAIN_MENU,
