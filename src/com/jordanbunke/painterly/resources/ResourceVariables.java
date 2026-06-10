@@ -23,6 +23,15 @@ public enum ResourceVariables {
     }),
     RV_FULLSCREEN_ACTION(() -> (Layout.isFullscreen()
             ? RC_EXIT_FULLSCREEN : RC_FULLSCREEN).asValue()),
+    RV_TOGGLE_SRC_ACTION(() -> {
+        final Project p = ProjectManager.get().getProject();
+
+        if (p != null)
+            return (p.canvas.isShowSource()
+                    ? RC_SHOW_CANVAS : RC_SHOW_SOURCE).asValue();
+
+        return RC_SHOW_SOURCE.asValue();
+    }),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_NPD_FOLDER(() ->
             ResourceValue.ofString(NewProject.get().raFolder())),
@@ -62,6 +71,8 @@ public enum ResourceVariables {
             for (ResourceVariables rv : ResourceVariables.values()) {
                 if (!parsing.contains(ID_PREFIX))
                     break;
+                if (!parsing.contains(rv.id()))
+                    continue;
 
                 parsing = parsing.replace(rv.id(),
                         rv.valueGetter.get().retrieve());

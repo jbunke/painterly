@@ -2,10 +2,17 @@ package com.jordanbunke.painterly.viewport;
 
 import com.jordanbunke.delta_time._core.ProgramContext;
 import com.jordanbunke.delta_time.debug.GameDebugger;
+import com.jordanbunke.delta_time.events.GameEvent;
+import com.jordanbunke.delta_time.events.GameMouseEvent;
+import com.jordanbunke.delta_time.events.GameMouseScrollEvent;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
+import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.tool.ToolManager;
+
+import java.util.List;
 
 import static com.jordanbunke.painterly.util.Colors.systemColor;
 import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
@@ -53,7 +60,54 @@ public final class Viewport implements ProgramContext {
         if (p == null)
             return;
 
-        // TODO - check if mouse position in bounds and ping cursor based on tool
+        final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
+        final boolean mouseInBounds =
+                mousePos.x >= x && mousePos.x < x + width &&
+                        mousePos.y >= y && mousePos.y < y + height;
+
+        // non-tool misc. mouse actions
+        processMouseActions(eventLogger, p, mousePos, mouseInBounds);
+
+        // process tool
+        ToolManager.getCurrentTool().process(mousePos, p);
+
+        // tool considerations for cursor ping or force
+        ToolManager.getCurrentTool().updateCursor(mouseInBounds);
+    }
+
+    // Note:    Project actions driven by key inputs are processed in the
+    //          Workspace class
+    private void processMouseActions(
+            final InputEventLogger eventLogger, final Project p,
+            final Coord2D mousePos, final boolean mouseInBounds
+    ) {
+        final List<GameEvent> events = eventLogger.getUnprocessedEvents();
+
+        for (GameEvent event : events) {
+            if (event instanceof GameMouseEvent me) {
+                switch (me.action) {
+                    case DOWN -> {
+                        if (mouseInBounds) {
+                            ToolManager.getCurrentTool().onMouseDown(me, p);
+                            me.markAsProcessed();
+                        }
+                    }
+                    case CLICK -> {
+                        if (mouseInBounds) {
+                            ToolManager.getCurrentTool().onMouseClick(me, p);
+                            me.markAsProcessed();
+                        }
+                    }
+                    case UP -> ToolManager.getCurrentTool().onMouseUp(me, p);
+                }
+            }
+            else if (event instanceof GameMouseScrollEvent mse) {
+                // zoom
+                mse.markAsProcessed();
+
+                positioning.scrollZoom(mse.clicksScrolled < 0 /* TODO - account for inverse scroll zoom setting */);
+            }
+        }
     }
 
     @Override
@@ -91,4 +145,8 @@ public final class Viewport implements ProgramContext {
 
     @Override
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
+
+    public Positioning getPositioning() {
+        return positioning;
+    }
 }

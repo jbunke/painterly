@@ -52,6 +52,7 @@ public enum ResourceCode {
     RC_START,
     RC_UPLOAD,
     RC_TOGGLE_FULLSCREEN,
+    RC_TOGGLE_SOURCE,
 
     // Values
     // TODO - variable output possibilities - make language-dependent _values json files
@@ -59,6 +60,8 @@ public enum ResourceCode {
     RC_MEASURING_ATTEMPTED,
     RC_EXIT_FULLSCREEN,
     RC_FULLSCREEN,
+    RC_SHOW_CANVAS,
+    RC_SHOW_SOURCE,
     RC_UNKNOWN,
     ;
 

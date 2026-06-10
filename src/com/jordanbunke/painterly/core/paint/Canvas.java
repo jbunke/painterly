@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.core.paint;
 import algo.ImageScaling;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.util.Colors;
 
 public final class Canvas {
     private final GameImage sourceImage, scaledSource;
@@ -21,6 +22,8 @@ public final class Canvas {
                 : ImageScaling.bicubic(sourceImage, scaleFactor);
 
         accepted = new GameImage(project.width, project.height);
+        accepted.fill(Colors.white());
+        // TODO - canvas texture?
 
         showSource = false;
     }
@@ -31,6 +34,14 @@ public final class Canvas {
     }
 
     public GameImage getImageForViewport() {
-        return scaledSource; // TODO - showSource ? scaledSource : accepted;
+        return showSource ? scaledSource : accepted;
+    }
+
+    public void toggleShowSource() {
+        showSource = !showSource;
+    }
+
+    public boolean isShowSource() {
+        return showSource;
     }
 }

@@ -15,6 +15,8 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     // SET_FB_MODE_ITERATE(, KeyboardShortcut.single(S), /* TODO */ p -> {}),
     SAVE_AS(RC_NAV_SAVE_AS, new KeyboardShortcut(true, true, S), /* TODO */ p -> {}),
+    TOGGLE_SOURCE(RC_TOGGLE_SOURCE, KeyboardShortcut.single(ENTER),
+            p -> p.canvas.toggleShowSource())
     ;
 
     static {

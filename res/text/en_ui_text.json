@@ -34,5 +34,6 @@
     "quit" : "Quit",
     "start" : "Start painting",
     "upload" : "Upload",
-    "toggle_fullscreen" : "$fullscreen_action"
+    "toggle_fullscreen" : "$fullscreen_action",
+    "toggle_source" : "$toggle_src_action"
 }

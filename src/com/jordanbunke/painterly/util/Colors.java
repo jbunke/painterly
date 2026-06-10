@@ -84,6 +84,10 @@ public final class Colors {
         return WHITE; // TODO
     }
 
+    public static Color white() {
+        return WHITE;
+    }
+
     public static Color invalidText() {
         return INVALID_TEXT;
     }
