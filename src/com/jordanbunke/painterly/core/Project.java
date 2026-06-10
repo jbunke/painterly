@@ -1,16 +1,13 @@
 package com.jordanbunke.painterly.core;
 
-import com.jordanbunke.delta_time._core.ProgramContext;
-import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
-import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.painterly.core.domains.focus.FocusManager;
 import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
 import com.jordanbunke.painterly.core.paint.Canvas;
 
 import java.nio.file.Path;
 
-public final class Project implements ProgramContext {
+public final class Project {
     public final int scaleFactor, width, height;
 
     private String name;
@@ -57,24 +54,6 @@ public final class Project implements ProgramContext {
     public StrokeManager getStrokeManager() {
         return strokeManager;
     }
-
-    @Override
-    public void process(final InputEventLogger eventLogger) {
-        // TODO
-    }
-
-    @Override
-    public void update(final double deltaTime) {
-        // TODO
-    }
-
-    @Override
-    public void render(final GameImage canvas) {
-        // TODO
-    }
-
-    @Override
-    public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
 
     public GameImage getSourceImage() {
         return sourceImage;

@@ -6,8 +6,8 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.util.Colors;
 
 public final class Canvas {
-    private final GameImage sourceImage, scaledSource;
-    private final int scaleFactor;
+    private final Project project;
+    private final GameImage scaledSource;
 
     // TODO
     private GameImage accepted;
@@ -15,17 +15,23 @@ public final class Canvas {
     private boolean showSource;
 
     public Canvas(final Project project) {
-        sourceImage = project.getSourceImage();
-        scaleFactor = project.scaleFactor;
-        scaledSource = scaleFactor == 1
-                ? new GameImage(sourceImage)
-                : ImageScaling.bicubic(sourceImage, scaleFactor);
+        this.project = project;
+        scaledSource = project.scaleFactor == 1
+                ? new GameImage(project.getSourceImage())
+                : ImageScaling.bicubic(project.getSourceImage(), project.scaleFactor);
 
-        accepted = new GameImage(project.width, project.height);
-        accepted.fill(Colors.white());
-        // TODO - canvas texture?
+        accepted = initializeCanvas();
 
         showSource = false;
+    }
+
+    private GameImage initializeCanvas() {
+        final GameImage canvas = new GameImage(project.width, project.height);
+        canvas.fill(Colors.white());
+
+        // TODO - texture?
+
+        return canvas.submit();
     }
 
     public boolean attemptStroke() {
