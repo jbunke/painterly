@@ -32,8 +32,9 @@
     "open_project" : "Open project",
     "program_settings" : "Program Settings",
     "quit" : "Quit",
+    "reset_pos" : "Fit to screen",
     "start" : "Start painting",
     "upload" : "Upload",
     "toggle_fullscreen" : "$fullscreen_action",
-    "toggle_source" : "$toggle_src_action"
+    "toggle_source" : "Toggle canvas/source image"
 }

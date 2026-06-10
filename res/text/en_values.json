@@ -3,7 +3,5 @@
     "measuring_attempted" : "stroke attempts",
     "exit_fullscreen" : "Windowed",
     "fullscreen" : "Fullscreen",
-    "show_canvas" : "Show canvas",
-    "show_source" : "Show source",
     "unknown" : "???"
 }

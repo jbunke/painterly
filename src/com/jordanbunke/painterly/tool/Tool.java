@@ -22,6 +22,11 @@ public abstract class Tool {
 
     }
 
+    /**
+     * @param mouseEvent    Should be marked as processed by implementing
+     *                      methods iff mouse up event captures meaningful
+     *                      tool behaviour.
+     * */
     public void onMouseUp(final GameMouseEvent mouseEvent, final Project p) {
 
     }

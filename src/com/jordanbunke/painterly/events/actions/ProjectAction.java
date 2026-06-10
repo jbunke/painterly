@@ -5,6 +5,7 @@ import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.viewport.Viewport;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -16,7 +17,9 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     // SET_FB_MODE_ITERATE(, KeyboardShortcut.single(S), /* TODO */ p -> {}),
     SAVE_AS(RC_NAV_SAVE_AS, new KeyboardShortcut(true, true, S), /* TODO */ p -> {}),
     TOGGLE_SOURCE(RC_TOGGLE_SOURCE, KeyboardShortcut.single(ENTER),
-            p -> p.canvas.toggleShowSource())
+            p -> p.canvas.toggleShowSource()),
+    RESET_POSITIONING(RC_RESET_POS, new KeyboardShortcut(true, false, ENTER),
+            p -> Viewport.get().getPositioning().reset()),
     ;
 
     static {

@@ -49,6 +49,7 @@ public enum ResourceCode {
     RC_OPEN_PROJECT, // also: tooltip,
     RC_PROGRAM_SETTINGS, // also: tooltip
     RC_QUIT,
+    RC_RESET_POS,
     RC_START,
     RC_UPLOAD,
     RC_TOGGLE_FULLSCREEN,
@@ -60,8 +61,6 @@ public enum ResourceCode {
     RC_MEASURING_ATTEMPTED,
     RC_EXIT_FULLSCREEN,
     RC_FULLSCREEN,
-    RC_SHOW_CANVAS,
-    RC_SHOW_SOURCE,
     RC_UNKNOWN,
     ;
 

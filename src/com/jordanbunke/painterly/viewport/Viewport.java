@@ -24,7 +24,6 @@ public final class Viewport implements ProgramContext {
     // viewport screen coordinates and dimensions
     private int x, y, width, height;
 
-    private int anchorX, anchorY;
     private Project lastProject;
     private Positioning positioning;
 
@@ -98,6 +97,8 @@ public final class Viewport implements ProgramContext {
                             me.markAsProcessed();
                         }
                     }
+                    // Invocation not dependent on mouse being in bounds, and
+                    // mouse event not necessarily marked as processed.
                     case UP -> ToolManager.getCurrentTool().onMouseUp(me, p);
                 }
             }
@@ -148,5 +149,13 @@ public final class Viewport implements ProgramContext {
 
     public Positioning getPositioning() {
         return positioning;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

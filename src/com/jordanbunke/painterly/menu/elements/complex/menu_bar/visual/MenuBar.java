@@ -62,6 +62,7 @@ public final class MenuBar extends MenuElement {
                 .addSubMenu(SubMenuData.init(RC_NAV_VIEW)
                         .addGlobalAction(TOGGLE_FULLSCREEN)
                         .addProjectAction(TOGGLE_SOURCE)
+                        .addProjectAction(RESET_POSITIONING)
                         .build());
 
         return b.build();
