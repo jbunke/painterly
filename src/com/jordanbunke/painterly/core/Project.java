@@ -13,14 +13,14 @@ import java.nio.file.Path;
 public final class Project implements ProgramContext {
     public final int scaleFactor, width, height;
 
-    private final StrokeManager strokeManager;
-    private final FocusManager focusManager;
-
-    private final GameImage sourceImage;
-    private final Canvas canvas;
-
     private String name;
     private Path folder;
+
+    private final GameImage sourceImage;
+
+    public final StrokeManager strokeManager;
+    public final FocusManager focusManager;
+    public final Canvas canvas;
 
     private boolean painting;
 

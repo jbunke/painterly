@@ -14,10 +14,12 @@ import static com.jordanbunke.painterly.util.Layout.ScreenBox.PROJECT_VIEWPORT;
 public final class Viewport implements ProgramContext {
     private static final Viewport INSTANCE;
 
+    // viewport screen coordinates and dimensions
     private int x, y, width, height;
+
     private int anchorX, anchorY;
     private Project lastProject;
-    private Zoom zoom;
+    private Positioning positioning;
 
     static {
         INSTANCE = new Viewport();
@@ -25,6 +27,9 @@ public final class Viewport implements ProgramContext {
 
     private Viewport() {
         setDimensions();
+
+        lastProject = null;
+        positioning = new Positioning();
     }
 
     public static Viewport get() {
@@ -57,6 +62,10 @@ public final class Viewport implements ProgramContext {
         if (p == null)
             return;
 
+        if (!p.equals(lastProject)) {
+            lastProject = p;
+            positioning = new Positioning();
+        }
         // TODO
     }
 
@@ -74,7 +83,8 @@ public final class Viewport implements ProgramContext {
 
         viewport.fill(systemColor(MID));
 
-        // TODO
+        final GameImage projectImage = p.canvas.getImageForViewport();
+        positioning.draw(viewport, projectImage);
 
         return viewport.submit();
     }

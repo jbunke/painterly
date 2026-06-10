@@ -11,6 +11,8 @@ public final class Canvas {
     // TODO
     private GameImage accepted;
 
+    private boolean showSource;
+
     public Canvas(final Project project) {
         sourceImage = project.getSourceImage();
         scaleFactor = project.scaleFactor;
@@ -19,10 +21,16 @@ public final class Canvas {
                 : ImageScaling.bicubic(sourceImage, scaleFactor);
 
         accepted = new GameImage(project.width, project.height);
+
+        showSource = false;
     }
 
     public boolean attemptStroke() {
         // TODO
         return false;
+    }
+
+    public GameImage getImageForViewport() {
+        return scaledSource; // TODO - showSource ? scaledSource : accepted;
     }
 }
