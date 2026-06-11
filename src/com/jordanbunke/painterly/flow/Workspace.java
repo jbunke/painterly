@@ -99,9 +99,13 @@ public final class Workspace implements ProgramContext {
         // update context bar
         ContextBar.get().update(deltaTime);
 
-        // update project
-        if (!ProjectManager.get().hasProject())
+        // active project processing
+        final Project p = ProjectManager.get().getProject();
+
+        if (p == null)
             noProjectsOpenMenu.update(deltaTime);
+        else
+            p.update();
 
         // update screen boxes
         for (ScreenBox sc : ScreenBox.values())

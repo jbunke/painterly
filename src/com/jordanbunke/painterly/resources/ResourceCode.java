@@ -26,6 +26,7 @@ public enum ResourceCode {
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
     // Loading messages
     RC_LOAD_INIT_PROJECT,
+    RC_LOAD_UPDATE_STATS,
     // Navigation
     RC_NAV_PROGRAM,
     RC_NAV_MAIN_MENU,
@@ -53,6 +54,7 @@ public enum ResourceCode {
     RC_START,
     RC_UPLOAD,
     RC_TOGGLE_FULLSCREEN,
+    RC_TOGGLE_SIM, // TODO - UI text
     RC_TOGGLE_SOURCE,
 
     // Values

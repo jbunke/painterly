@@ -2,6 +2,7 @@ package com.jordanbunke.painterly.core.domains.interval;
 
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.settings.Settings;
+import com.jordanbunke.painterly.util.Constants;
 
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_DEFAULT_INTERVAL_TARGET;
 
@@ -29,6 +30,9 @@ public final class StrokeManager {
 
         if (strokeAccepted)
             strokesCompleted++;
+
+        if (strokesCompleted % Constants.STAT_UPDATE_STROKE_INTERVAL == 0)
+            project.updateSimilarity();
 
         if (tickMode || strokeAccepted)
             interval++;

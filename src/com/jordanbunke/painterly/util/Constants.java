@@ -16,7 +16,8 @@ public final class Constants {
     public static final int
             LOADING_LABEL_TICKS = 20,
             TEXTBOX_DEF_MAX_LENGTH = 20,
-            TOOLTIP_TICKS = 24;
+            TOOLTIP_TICKS = 24,
+            STAT_UPDATE_STROKE_INTERVAL = 250 /* TODO - better as setting */;
 
     public static final long MAX_CANVAS_PIXELS = 10000L * 10000L;
 

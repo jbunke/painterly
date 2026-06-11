@@ -20,6 +20,7 @@ public final class Project {
     public final Canvas canvas;
 
     private boolean painting;
+    private double similarity;
 
     public Project(
             final String name, final Path folder,
@@ -39,9 +40,21 @@ public final class Project {
         focusManager = new FocusManager(this);
 
         painting = false;
+
+        updateSimilarity();
     }
 
     // TODO - load from archive / file
+
+    public void toggleSim() {
+        painting = !painting;
+    }
+
+    public void update() {
+        // TODO - temp
+
+        if (painting) attemptStroke();
+    }
 
     private void attemptStroke() {
         final boolean strokeAccepted = canvas.attemptStroke(),
@@ -51,11 +64,23 @@ public final class Project {
             focusManager.tryUpdateBox();
     }
 
+    public void updateSimilarity() {
+        similarity = canvas.globalSimilarity();
+    }
+
+    public double getSimilarity() {
+        return similarity;
+    }
+
     public StrokeManager getStrokeManager() {
         return strokeManager;
     }
 
     public GameImage getSourceImage() {
         return sourceImage;
+    }
+
+    public boolean isPainting() {
+        return painting;
     }
 }

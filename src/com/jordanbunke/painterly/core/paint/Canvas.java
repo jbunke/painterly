@@ -10,7 +10,7 @@ public final class Canvas {
     private final GameImage scaledSource;
 
     // TODO
-    private GameImage accepted;
+    private GameImage painting;
 
     private boolean showSource;
 
@@ -20,12 +20,12 @@ public final class Canvas {
                 ? new GameImage(project.getSourceImage())
                 : ImageScaling.bicubic(project.getSourceImage(), project.scaleFactor);
 
-        accepted = initializeCanvas();
+        painting = blankCanvas();
 
         showSource = false;
     }
 
-    private GameImage initializeCanvas() {
+    private GameImage blankCanvas() {
         final GameImage canvas = new GameImage(project.width, project.height);
         canvas.fill(Colors.white());
 
@@ -35,12 +35,28 @@ public final class Canvas {
     }
 
     public boolean attemptStroke() {
-        // TODO
-        return false;
+        final GameImage copy = new GameImage(painting);
+        final RectBounds strokeBounds = PaintEngine.draw(project, copy);
+
+        // 4: reference similarity comparison
+        final double oldSim = PaintEngine.similarity(scaledSource, painting, strokeBounds);
+        final double newSim = PaintEngine.similarity(scaledSource, copy, strokeBounds);
+
+        final boolean accepted = newSim > oldSim;
+
+        if (accepted)
+            painting = copy;
+
+        return accepted;
+    }
+
+    public double globalSimilarity() {
+        return PaintEngine.similarity(scaledSource, painting,
+                new RectBounds(0, project.width, 0, project.height));
     }
 
     public GameImage getImageForViewport() {
-        return showSource ? scaledSource : accepted;
+        return showSource ? scaledSource : painting;
     }
 
     public void toggleShowSource() {
