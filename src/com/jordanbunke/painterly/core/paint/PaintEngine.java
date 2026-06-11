@@ -1,11 +1,11 @@
 package com.jordanbunke.painterly.core.paint;
 
+import com.jordanbunke.color_proc.ColorAlgo;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.core.Project;
-import com.jordanbunke.painterly.math.RSColors;
 
 import java.awt.*;
 
@@ -81,30 +81,18 @@ public final class PaintEngine {
     ) {
         final int pixels = (bounds.right() - bounds.left()) *
                 (bounds.bottom() - bounds.top());
-        double cumulativeSimilarity = 0.;
+        double cumSim = 0.;
 
-        for (int x = bounds.left(); x < bounds.right(); x++) {
-            for (int y = bounds.top(); y < bounds.bottom(); y++) {
-                cumulativeSimilarity += colorSimilarity(
-                        source.getColorAt(x, y), painting.getColorAt(x, y));
-            }
-        }
+        for (int x = bounds.left(); x < bounds.right(); x++)
+            for (int y = bounds.top(); y < bounds.bottom(); y++)
+                cumSim += ColorAlgo.diffRGB(source.getColorAt(x, y),
+                        painting.getColorAt(x, y));
 
-        return cumulativeSimilarity / (double) pixels;
+        return cumSim / (double) pixels;
     }
 
-    // TODO - rewrite
-    private static double colorSimilarity(
-            final Color cRef, final Color cP
-    ) {
-        final double rSim = (RSColors.MAX - Math.abs(cRef.getRed() -
-                cP.getRed())) / (double) RSColors.MAX;
-        final double gSim = (RSColors.MAX - Math.abs(cRef.getGreen() -
-                cP.getGreen())) / (double) RSColors.MAX;
-        final double bSim = (RSColors.MAX - Math.abs(cRef.getBlue() -
-                cP.getBlue())) / (double) RSColors.MAX;
-
-        return (rSim + gSim + bSim) / 3.;
+    private static double diagonal(final Project p) {
+        return Math.sqrt(Math.pow(p.width, 2) + Math.pow(p.height, 2));
     }
 
     private static int smudge(final int num, final int max) {

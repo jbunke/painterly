@@ -17,5 +17,6 @@
     <orderEntry type="library" name="delta-time-script" level="project" />
     <orderEntry type="library" name="delta-time-fonts" level="project" />
     <orderEntry type="library" name="delta-time-menu-extension" level="project" />
+    <orderEntry type="library" name="color-proc" level="project" />
   </component>
 </module>
