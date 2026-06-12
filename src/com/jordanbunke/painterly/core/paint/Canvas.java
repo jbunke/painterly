@@ -1,13 +1,14 @@
 package com.jordanbunke.painterly.core.paint;
 
 import algo.ImageScaling;
+import algo.Sobel;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.util.Colors;
 
 public final class Canvas {
     private final Project project;
-    private final GameImage scaledSource;
+    private final GameImage scaledSource, sobel;
 
     // TODO
     private GameImage painting;
@@ -16,9 +17,13 @@ public final class Canvas {
 
     public Canvas(final Project project) {
         this.project = project;
+
+        final GameImage source = project.getSourceImage();
+
         scaledSource = project.scaleFactor == 1
-                ? new GameImage(project.getSourceImage())
+                ? new GameImage(source)
                 : ImageScaling.bicubic(project.getSourceImage(), project.scaleFactor);
+        sobel = Sobel.calculate(source);
 
         painting = blankCanvas();
 
@@ -61,6 +66,10 @@ public final class Canvas {
 
     public void toggleShowSource() {
         showSource = !showSource;
+    }
+
+    public GameImage getSobel() {
+        return sobel;
     }
 
     public boolean isShowSource() {
