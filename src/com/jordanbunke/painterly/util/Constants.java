@@ -17,7 +17,8 @@ public final class Constants {
             LOADING_LABEL_TICKS = 20,
             TEXTBOX_DEF_MAX_LENGTH = 20,
             TOOLTIP_TICKS = 24,
-            STAT_UPDATE_STROKE_INTERVAL = 250 /* TODO - better as setting */;
+            STAT_UPDATE_STROKE_INTERVAL = 250 /* TODO - better as setting */,
+            MAX_RECENT_STROKES_DEBUG = 10;
 
     public static final double
             MAX_ANGLE_SAMPLE_PROB = 0.7,

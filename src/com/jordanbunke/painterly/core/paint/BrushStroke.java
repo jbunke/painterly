@@ -9,14 +9,20 @@ public final class BrushStroke {
     public final float breadth;
     public final int length;
 
+    // metadata
+    public final boolean alongEdge;
+    private boolean accepted;
+
     // TODO
 
     private BrushStroke(
-            final Coord2D position, final double angle,
+            final Coord2D position,
+            final double angle, final boolean alongEdge,
             final float breadth, final int length
     ) {
         this.position = position;
         this.angle = angle;
+        this.alongEdge = alongEdge;
         this.breadth = breadth;
         this.length = length;
 
@@ -33,7 +39,7 @@ public final class BrushStroke {
     public RectBounds affectedArea(
             final int canvasWidth, final int canvasHeight
     ) {
-        final int r = (int) Math.ceil(breadth / 2),
+        final int r = (int) Math.ceil(breadth),
                 x1 = position.x, x2 = endPosition.x,
                 y1 = position.y, y2 = endPosition.y;
 
@@ -47,10 +53,19 @@ public final class BrushStroke {
                 .build();
     }
 
+    public void setAccepted(final boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public boolean wasAccepted() {
+        return accepted;
+    }
+
     public static class Builder {
         public final Coord2D position;
 
         private double angle;
+        private boolean alongEdge;
         private float breadth;
         private int length;
 
@@ -59,6 +74,7 @@ public final class BrushStroke {
 
             // TODO
             angle = 0d;
+            alongEdge = false;
             breadth = 2f;
             length = 10;
         }
@@ -67,6 +83,11 @@ public final class BrushStroke {
 
         public Builder setAngle(final double angle) {
             this.angle = angle;
+            return this;
+        }
+
+        public Builder setAlongEdge(final boolean alongEdge) {
+            this.alongEdge = alongEdge;
             return this;
         }
 
@@ -82,7 +103,8 @@ public final class BrushStroke {
 
         public BrushStroke build() {
             // TODO
-            return new BrushStroke(position, angle, breadth, length);
+            return new BrushStroke(position,
+                    angle, alongEdge, breadth, length);
         }
     }
 }

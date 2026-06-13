@@ -10,13 +10,19 @@ import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.core.paint.BrushStroke;
+import com.jordanbunke.painterly.core.paint.RectBounds;
+import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.tool.ToolManager;
+import com.jordanbunke.painterly.util.Colors;
 
+import java.awt.*;
 import java.util.List;
 
 import static com.jordanbunke.painterly.util.Colors.systemColor;
 import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.PROJECT_VIEWPORT;
+import static com.jordanbunke.painterly.viewport.VisualMath.*;
 
 public final class Viewport implements ProgramContext {
     private static final Viewport INSTANCE;
@@ -131,6 +137,9 @@ public final class Viewport implements ProgramContext {
             return;
 
         canvas.draw(draw(p), x, y);
+
+        if (RuntimeSettings.isProfilerOn())
+            canvas.draw(debugDraw(p), x, y);
     }
 
     private GameImage draw(final Project p) {
@@ -138,14 +147,50 @@ public final class Viewport implements ProgramContext {
 
         viewport.fill(systemColor(MID));
 
-        final GameImage projectImage = p.canvas.getImageForViewport();
-        positioning.draw(viewport, projectImage);
+        positioning.draw(viewport, p);
 
         return viewport.submit();
     }
 
     @Override
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
+
+    private GameImage debugDraw(final Project p) {
+        final GameImage debugOverlay = new GameImage(width, height);
+
+        positioning.draw(debugOverlay, p.width, p.height,
+                (x, y, w, h) -> {
+            final List<BrushStroke> recent = p.debugData.getRecentStrokes();
+
+            for (BrushStroke stroke : recent) {
+                final Color successColor = stroke.wasAccepted()
+                        ? Colors.success() : Colors.failure(),
+                        edgeColor = stroke.alongEdge
+                                ? Colors.purple() : successColor;
+                final RectBounds box = stroke.affectedArea(p.width, p.height);
+
+                // TODO - change once stroke is spline
+
+                final Coord2D tl = projectPosition(box.left(),
+                        box.top(), p.width, p.height, x, y, w, h),
+                        br = projectPosition(box.right(),
+                                box.bottom(), p.width, p.height, x, y, w, h),
+                        start = projectPosition(stroke.position.x,
+                                stroke.position.y, p.width, p.height,
+                                x, y, w, h),
+                        end = projectPosition(stroke.endPosition.x,
+                                stroke.endPosition.y, p.width, p.height,
+                                x, y, w, h);
+
+                debugOverlay.drawRectangle(successColor, 2f,
+                        tl.x, tl.y, br.x - tl.x, br.y - tl.y);
+                debugOverlay.drawLine(edgeColor, 2f,
+                        start.x, start.y, end.x, end.y);
+            }
+        });
+
+        return debugOverlay.submit();
+    }
 
     public Positioning getPositioning() {
         return positioning;

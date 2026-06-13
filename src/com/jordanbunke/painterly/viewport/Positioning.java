@@ -21,20 +21,30 @@ public final class Positioning {
         anchorRatioY = MIDDLE;
     }
 
-    public void draw(final GameImage viewportCanvas, final GameImage projectImage) {
+    public void draw(final GameImage viewportCanvas, final Project p) {
+        draw(viewportCanvas, p.width, p.height,
+                (x, y, w, h) -> {
+            viewportCanvas.draw(p.canvas.getImageForViewport(), x, y, w, h);
+            // TODO - overlays
+        });
+    }
+
+    public void draw(
+            final GameImage viewportCanvas,
+            final int projectWidth, final int projectHeight,
+            final IProjection projection
+    ) {
         final double renderScale = determineRenderScale(
-                projectImage.getWidth(), projectImage.getHeight(),
+                projectWidth, projectHeight,
                 viewportCanvas.getWidth(), viewportCanvas.getHeight());
-        final int width = (int)(projectImage.getWidth() * renderScale),
-                height = (int)(projectImage.getHeight() * renderScale),
+        final int width = (int)(projectWidth * renderScale),
+                height = (int)(projectHeight * renderScale),
                 middleX = viewportCanvas.getWidth() / 2,
                 middleY = viewportCanvas.getHeight() / 2,
                 x = middleX - (int)(anchorRatioX * width),
                 y = middleY - (int)(anchorRatioY * height);
 
-        // TODO - overlays
-
-        viewportCanvas.draw(projectImage, x, y, width, height);
+        projection.project(x, y, width, height);
     }
 
     private double determineRenderScale(

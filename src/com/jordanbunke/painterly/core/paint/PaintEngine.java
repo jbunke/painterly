@@ -12,27 +12,22 @@ import com.jordanbunke.painterly.util.Constants;
 import java.awt.*;
 
 public final class PaintEngine {
-    public static RectBounds draw(final Project p, final GameImage copy) {
+    public static BrushStroke draw(final Project p, final GameImage copy) {
         final Coord2D strokePos = strokePosition(p);
         final BrushStroke stroke = stroke(p, strokePos);
         final Color color = color(p, stroke);
 
-        return draw(copy, stroke, color);
+        draw(copy, stroke, color);
+        return stroke;
     }
 
-    private static RectBounds draw(
+    private static void draw(
             final GameImage canvas, final BrushStroke stroke, final Color color
     ) {
         // TODO - naive implementation
-        System.out.println("Breadth: " + stroke.breadth);
-        System.out.println("Length: " + stroke.length);
-        System.out.println("Angle: " + (int)(stroke.angle * (180 / Math.PI)));
-
         canvas.drawLine(color, stroke.breadth,
                 stroke.position.x, stroke.position.y,
                 stroke.endPosition.x, stroke.endPosition.y);
-
-        return stroke.affectedArea(canvas.getWidth(), canvas.getHeight());
     }
 
     private static Coord2D strokePosition(final Project p) {
@@ -81,6 +76,8 @@ public final class PaintEngine {
                 angle -= CIRCLE;
             while (angle < 0)
                 angle += CIRCLE;
+
+            strokeBuilder.setAlongEdge(true);
         } else {
             // random direction
             angle = RNG.randomInRange(0, CIRCLE);

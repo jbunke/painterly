@@ -1,6 +1,7 @@
 package com.jordanbunke.painterly.core;
 
 import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.painterly.core.domains.debug.DebugData;
 import com.jordanbunke.painterly.core.domains.focus.FocusManager;
 import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
 import com.jordanbunke.painterly.core.paint.Canvas;
@@ -17,6 +18,7 @@ public final class Project {
 
     public final StrokeManager strokeManager;
     public final FocusManager focusManager;
+    public final DebugData debugData;
     public final Canvas canvas;
 
     private boolean painting;
@@ -36,6 +38,7 @@ public final class Project {
         this.height = sourceImage.getHeight() * scaleFactor;
 
         canvas = new Canvas(this);
+        debugData = new DebugData(this);
         strokeManager = new StrokeManager(this);
         focusManager = new FocusManager(this);
 

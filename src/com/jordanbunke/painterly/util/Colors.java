@@ -9,6 +9,8 @@ import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_THEME
 public final class Colors {
     private static final Color
             DEBUG = new Color(0x00ff00),
+            FAILURE = new Color(0xff0000),
+            PURPLE = new Color(0xe000c0),
             TRANSPARENT = new Color(0, 0, 0, 0),
             VEIL = new Color(0xc0c0c0c0, true),
             INVALID_TEXT = new Color(0xd04040),
@@ -102,6 +104,18 @@ public final class Colors {
 
     public static Color highlightOverlay() {
         return HIGHLIGHT_OVERLAY;
+    }
+
+    public static Color success() {
+        return DEBUG;
+    }
+
+    public static Color failure() {
+        return FAILURE;
+    }
+
+    public static Color purple() {
+        return PURPLE;
     }
 
     public static Color debug() {

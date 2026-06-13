@@ -9,6 +9,7 @@ import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.util.Layout;
 
 import java.util.function.Consumer;
@@ -31,7 +32,9 @@ public enum GlobalAction
     NEW_PROJECT(RC_NEW_PROJECT, new KeyboardShortcut(true, false, N),
             () -> DialogManager.set(DialogAssembly::newProject)),
     OPEN_PROJECT(RC_OPEN_PROJECT, new KeyboardShortcut(true, false, O),
-            () -> {} /* TODO */)
+            () -> {} /* TODO */),
+    TOGGLE_DEBUG_PROFILER(RC_NA, new KeyboardShortcut(false, true, P),
+            RuntimeSettings::toggleProfilerOn),
     ;
 
     static {
