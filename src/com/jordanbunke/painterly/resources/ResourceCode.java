@@ -50,6 +50,7 @@ public enum ResourceCode {
     RC_OPEN_PROJECT, // also: tooltip,
     RC_PROGRAM_SETTINGS, // also: tooltip
     RC_QUIT,
+    RC_RESET_FOCUS_AREA, // TODO - also: tooltip?
     RC_RESET_POS,
     RC_START,
     RC_UPLOAD,

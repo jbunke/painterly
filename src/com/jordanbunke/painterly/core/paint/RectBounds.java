@@ -2,6 +2,28 @@ package com.jordanbunke.painterly.core.paint;
 
 public record RectBounds(int left, int right, int top, int bottom) {
 
+    public int width() {
+        return right - left;
+    }
+
+    public int height() {
+        return bottom - top;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj instanceof RectBounds that)
+            return left == that.left && right == that.right &&
+                    top == that.top && bottom == that.bottom;
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return left + right + top + bottom;
+    }
+
     public static class Builder {
         private int left, right, top, bottom;
 

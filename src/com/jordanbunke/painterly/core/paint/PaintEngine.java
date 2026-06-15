@@ -13,7 +13,7 @@ import java.awt.*;
 
 public final class PaintEngine {
     public static BrushStroke draw(final Project p, final GameImage copy) {
-        final Coord2D strokePos = strokePosition(p);
+        final Coord2D strokePos = p.focusManager.strokePosition();
         final BrushStroke stroke = stroke(p, strokePos);
         final Color color = color(p, stroke);
 
@@ -28,14 +28,6 @@ public final class PaintEngine {
         canvas.drawLine(color, stroke.breadth,
                 stroke.position.x, stroke.position.y,
                 stroke.endPosition.x, stroke.endPosition.y);
-    }
-
-    private static Coord2D strokePosition(final Project p) {
-        // TODO - naive implementation
-        // TODO - get focus bounds from FocusManager
-
-        return new Coord2D(RNG.randomInRange(0, p.width),
-                RNG.randomInRange(0, p.height));
     }
 
     private static BrushStroke stroke(
@@ -173,8 +165,9 @@ public final class PaintEngine {
     }
 
     private static double diagonal(final Project p) {
-        // TODO - factor in FocusManager
-        return Math.sqrt(Math.pow(p.width, 2) + Math.pow(p.height, 2));
+        final RectBounds bounds = p.focusManager.getFocusArea();
+        return Math.sqrt(Math.pow(bounds.width(), 2) +
+                Math.pow(bounds.height(), 2));
     }
 
     private static int smudge(final int num, final int max) {

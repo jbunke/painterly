@@ -18,7 +18,8 @@ public final class Constants {
             TEXTBOX_DEF_MAX_LENGTH = 20,
             TOOLTIP_TICKS = 24,
             STAT_UPDATE_STROKE_INTERVAL = 250 /* TODO - better as setting */,
-            MAX_RECENT_STROKES_DEBUG = 10;
+            MAX_RECENT_STROKES_DEBUG = 10,
+            MAX_BOX_DIVS = 40 /* TODO - test */;
 
     public static final double
             MAX_ANGLE_SAMPLE_PROB = 0.7,

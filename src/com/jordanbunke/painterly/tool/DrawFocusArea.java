@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.events.GameMouseEvent;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.viewport.Positioning;
 
@@ -25,8 +26,6 @@ public final class DrawFocusArea extends Tool {
         complement = Positioning.INVALID;
         tl = Positioning.INVALID;
         br = Positioning.INVALID;
-
-        // TODO
     }
 
     public static DrawFocusArea get() {
@@ -61,7 +60,9 @@ public final class DrawFocusArea extends Tool {
     @Override
     public void onMouseUp(final GameMouseEvent mouseEvent, final Project p) {
         if (selecting) {
-            // TODO - send focus area to focus manager
+            final RectBounds focusArea =
+                    new RectBounds(tl.x, br.x + 1, tl.y, br.y + 1);
+            p.focusManager.setFocusArea(focusArea);
 
             selecting = false;
             mouseEvent.markAsProcessed();
@@ -96,8 +97,6 @@ public final class DrawFocusArea extends Tool {
             viewportCanvas.drawRectangle(Colors.purple(), 2f, rx, ry, rw, rh);
         }
     }
-
-    // TODO - implementation
 
     private void updateTLBR() {
         tl = new Coord2D(Math.min(pivot.x, complement.x),

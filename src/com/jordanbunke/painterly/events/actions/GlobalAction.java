@@ -39,7 +39,7 @@ public enum GlobalAction
             RuntimeSettings::toggleProfilerOn),
     SET_TOOL_HAND(RC_TOOL_HAND, KeyboardShortcut.single(H),
             () -> ToolManager.setCurrentTool(HAND)),
-    SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, KeyboardShortcut.single(F),
+    SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, KeyboardShortcut.single(X),
             () -> ToolManager.setCurrentTool(DRAW_FOCUS_AREA)),
     ;
 
