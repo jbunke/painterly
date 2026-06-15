@@ -112,7 +112,8 @@ public final class Viewport implements ProgramContext {
                 // zoom
                 mse.markAsProcessed();
 
-                positioning.scrollZoom(mse.clicksScrolled < 0 /* TODO - account for inverse scroll zoom setting */);
+                positioning.scrollZoom(mse.clicksScrolled < 0 /* TODO - account for inverse scroll zoom setting */,
+                        p, mouseInBounds, mousePos.displace(-x, -y));
             }
         }
     }
@@ -194,6 +195,14 @@ public final class Viewport implements ProgramContext {
 
     public Positioning getPositioning() {
         return positioning;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public int getWidth() {
