@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.tool.ToolManager;
 
 /**
  * Positioning, i.e. zoom and anchor position, of the currently active project
@@ -13,7 +14,7 @@ public final class Positioning {
     private static final double MIN_FTSR = 0.95, MAX_FTSR = 20d,
             MIDDLE = 0.5, MIN_ANCHOR = 0d, MAX_ANCHOR = 1d,
             SCROLL_ZOOM_RATE = 1.1;
-    private static final Coord2D INVALID = new Coord2D(-1, -1);
+    public static final Coord2D INVALID = new Coord2D(-1, -1);
 
     private double fitToScreenRatio, anchorRatioX, anchorRatioY;
 
@@ -27,6 +28,10 @@ public final class Positioning {
         draw(viewportCanvas, p.width, p.height,
                 (x, y, w, h) -> {
             viewportCanvas.draw(p.canvas.getImageForViewport(), x, y, w, h);
+
+            // Tool overlay
+            ToolManager.getCurrentTool().drawOverlay(viewportCanvas, p, x, y, w, h);
+
             // TODO - overlays
         });
     }
@@ -80,8 +85,26 @@ public final class Positioning {
 
         fitToScreenRatio = MathPlus.bounded(MIN_FTSR, fitToScreenRatio, MAX_FTSR);
 
-        if (adjustAnchor && !INVALID.equals(targetPixel))
+        if (adjustAnchor && isTargetPixelValid(targetPixel))
             adjustAnchorAfterZoom(oldRatio, targetPixel, p);
+    }
+
+    private void adjustAnchorAfterZoom(
+            final double oldRatio, final Coord2D targetPixel,
+            final Project p
+    ) {
+        final Coord2D oldAnchorPixel = new Coord2D(
+                (int)(anchorRatioX * p.width),
+                (int)(anchorRatioY * p.height));
+        final double trueZoomRate = fitToScreenRatio / oldRatio;
+        final int oldDX = oldAnchorPixel.x - targetPixel.x,
+                oldDY = oldAnchorPixel.y - targetPixel.y,
+                dx = (int)(oldDX / trueZoomRate),
+                dy = (int)(oldDY / trueZoomRate);
+        final Coord2D anchorPixel = targetPixel.displace(dx, dy);
+
+        setAnchor(anchorPixel.x / (double) p.width,
+                anchorPixel.y / (double) p.height);
     }
 
     private void setAnchor(final double anchorRatioX, final double anchorRatioY) {
@@ -118,7 +141,7 @@ public final class Positioning {
         setAnchor(initAnchorRatioX + anchorDX, initAnchorRatioY + anchorDY);
     }
 
-    private Coord2D determineTargetPixel(
+    public Coord2D determineTargetPixel(
             final Project p, final Coord2D mousePosInViewport
     ) {
         final int mx = mousePosInViewport.x, my = mousePosInViewport.y,
@@ -139,21 +162,7 @@ public final class Positioning {
         return x >= 0 && y >= 0 && x < pw && y < ph ? new Coord2D(x, y) : INVALID;
     }
 
-    private void adjustAnchorAfterZoom(
-            final double oldRatio, final Coord2D targetPixel,
-            final Project p
-    ) {
-        final Coord2D oldAnchorPixel = new Coord2D(
-                (int)(anchorRatioX * p.width),
-                (int)(anchorRatioY * p.height));
-        final double trueZoomRate = fitToScreenRatio / oldRatio;
-        final int oldDX = oldAnchorPixel.x - targetPixel.x,
-                oldDY = oldAnchorPixel.y - targetPixel.y,
-                dx = (int)(oldDX / trueZoomRate),
-                dy = (int)(oldDY / trueZoomRate);
-        final Coord2D anchorPixel = targetPixel.displace(dx, dy);
-
-        setAnchor(anchorPixel.x / (double) p.width,
-                anchorPixel.y / (double) p.height);
+    public static boolean isTargetPixelValid(final Coord2D targetPixel) {
+        return !INVALID.equals(targetPixel);
     }
 }

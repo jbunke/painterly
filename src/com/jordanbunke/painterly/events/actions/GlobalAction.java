@@ -10,6 +10,7 @@ import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.settings.RuntimeSettings;
+import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.Layout;
 
 import java.util.function.Consumer;
@@ -18,6 +19,7 @@ import java.util.function.Supplier;
 
 import static com.jordanbunke.delta_time.events.Key.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.tool.ToolManager.ToolEnum.*;
 
 public enum GlobalAction
         implements IAction</* TODO - evaluate whether more suitable type exists */ Runnable>, ISubMenuEntry {
@@ -35,6 +37,10 @@ public enum GlobalAction
             () -> {} /* TODO */),
     TOGGLE_DEBUG_PROFILER(RC_NA, new KeyboardShortcut(false, true, P),
             RuntimeSettings::toggleProfilerOn),
+    SET_TOOL_HAND(RC_TOOL_HAND, KeyboardShortcut.single(H),
+            () -> ToolManager.setCurrentTool(HAND)),
+    SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, KeyboardShortcut.single(F),
+            () -> ToolManager.setCurrentTool(DRAW_FOCUS_AREA)),
     ;
 
     static {

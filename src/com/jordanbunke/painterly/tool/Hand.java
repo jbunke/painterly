@@ -14,6 +14,10 @@ public final class Hand extends Tool {
     }
 
     private boolean panning;
+    /*
+    * TODO - Call deselect on current tool when active project changes;
+    *  rendering this field unnecessary
+    * */
     private Project project;
     private Coord2D initMousePos;
     private double initAnchorRatioX, initAnchorRatioY;
@@ -67,5 +71,10 @@ public final class Hand extends Tool {
             panning = false;
             mouseEvent.markAsProcessed();
         }
+    }
+
+    @Override
+    public void deselect() {
+        panning = false;
     }
 }

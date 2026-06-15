@@ -1,9 +1,11 @@
 package com.jordanbunke.painterly.tool;
 
 import com.jordanbunke.delta_time.events.GameMouseEvent;
+import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.util.Cursor;
+import com.jordanbunke.painterly.viewport.Viewport;
 
 public abstract class Tool {
     /**
@@ -37,5 +39,28 @@ public abstract class Tool {
 
     public void process(final Coord2D mousePos, final Project p) {
 
+    }
+
+    /**
+     * Abort tool behaviour if tool is deselected during behaviour
+     * (i.e. between mouse-down and mouse-up events)
+     * */
+    public abstract void deselect();
+
+    public void drawOverlay(
+            final GameImage viewportCanvas, final Project p,
+            final int x, final int y, final int w, final int h
+    ) {
+
+    }
+
+    // HELPERS
+
+    Coord2D getTargetPixel(final Coord2D mousePos, final Project p) {
+        final Viewport v = Viewport.get();
+        final Coord2D mousePosInViewport =
+                mousePos.displace(-v.getX(), -v.getY());
+
+        return v.getPositioning().determineTargetPixel(p, mousePosInViewport);
     }
 }

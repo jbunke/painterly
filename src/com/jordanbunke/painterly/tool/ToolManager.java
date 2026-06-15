@@ -3,8 +3,8 @@ package com.jordanbunke.painterly.tool;
 import java.util.function.Supplier;
 
 public final class ToolManager {
-    private enum ToolEnum {
-        HAND(Hand::get);
+    public enum ToolEnum {
+        HAND(Hand::get), DRAW_FOCUS_AREA(DrawFocusArea::get);
 
         private final Supplier<Tool> retriever;
 
@@ -21,5 +21,12 @@ public final class ToolManager {
 
     public static Tool getCurrentTool() {
         return currentTool.retriever.get();
+    }
+
+    public static void setCurrentTool(final ToolEnum tool) {
+        if (tool != currentTool)
+            currentTool.retriever.get().deselect();
+
+        currentTool = tool;
     }
 }

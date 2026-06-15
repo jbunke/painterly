@@ -37,5 +37,7 @@
     "start" : "Start painting",
     "upload" : "Upload",
     "toggle_fullscreen" : "$fullscreen_action",
-    "toggle_source" : "Toggle canvas/source image"
+    "toggle_source" : "Toggle canvas/source image",
+    "tool_draw_focus_area" : "Draw focus area",
+    "tool_hand" : "Hand"
 }

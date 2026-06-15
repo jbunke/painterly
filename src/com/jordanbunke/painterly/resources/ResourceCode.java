@@ -57,6 +57,10 @@ public enum ResourceCode {
     RC_TOGGLE_SIM, // TODO - UI text
     RC_TOGGLE_SOURCE,
 
+    // Tools
+    RC_TOOL_DRAW_FOCUS_AREA,
+    RC_TOOL_HAND,
+
     // Values
     // TODO - variable output possibilities - make language-dependent _values json files
     RC_MEASURING_ACCEPTED,
