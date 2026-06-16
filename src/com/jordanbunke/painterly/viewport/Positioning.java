@@ -29,6 +29,9 @@ public final class Positioning {
                 (x, y, w, h) -> {
             viewportCanvas.draw(p.canvas.getImageForViewport(), x, y, w, h);
 
+            // Focus area and focus box overlays
+            p.focusManager.drawOverlay(viewportCanvas, x, y, w, h);
+
             // Tool overlay
             ToolManager.getCurrentTool().drawOverlay(viewportCanvas, p, x, y, w, h);
 

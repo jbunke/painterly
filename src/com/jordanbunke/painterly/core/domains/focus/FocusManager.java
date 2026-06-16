@@ -1,17 +1,23 @@
 package com.jordanbunke.painterly.core.domains.focus;
 
+import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
+import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.Constants;
+
+import java.awt.*;
+
+import static com.jordanbunke.painterly.viewport.VisualMath.projectPosition;
 
 public final class FocusManager {
     private final Project project;
 
     private FocusBoxMode focusBoxMode;
-    private boolean entireArea;
+    private boolean entireArea, wholeCanvas;
     private RectBounds focusArea;
     private int divsX, divsY, x, y, maxDivsX, maxDivsY;
 
@@ -20,6 +26,7 @@ public final class FocusManager {
 
         focusArea = new RectBounds(0, project.width, 0, project.height);
         entireArea = true;
+        wholeCanvas = true;
         focusBoxMode = FocusBoxMode.FREE;
 
         divsX = 1;
@@ -48,6 +55,8 @@ public final class FocusManager {
     public void setFocusArea(final RectBounds focusArea) {
         if (!this.focusArea.equals(focusArea)) {
             this.focusArea = focusArea;
+            wholeCanvas = focusArea.width() == project.width &&
+                    focusArea.height() == project.height;
 
             entireArea = true;
             divsX = 1;
@@ -126,5 +135,53 @@ public final class FocusManager {
 
     public void tryUpdateBox() {
         // TODO
+    }
+
+    public void drawOverlay(
+            final GameImage viewportCanvas,
+            final int x, final int y, final int w, final int h
+    ) {
+        if (!wholeCanvas)
+            areaOverlay(viewportCanvas, x, y, w, h);
+
+        if (!entireArea && (divsX > 1 || divsY > 1))
+            boxOverlay(viewportCanvas, x, y, w, h);
+    }
+
+    private void areaOverlay(
+            final GameImage viewportCanvas,
+            final int x, final int y, final int w, final int h
+    ) {
+        final int AREA_OPACITY = 0x80;
+
+        boundsOverlay(viewportCanvas, focusArea,
+                Colors.focusArea(AREA_OPACITY), x, y, w, h);
+    }
+
+    private void boxOverlay(
+            final GameImage viewportCanvas,
+            final int x, final int y, final int w, final int h
+    ) {
+        final int BOX_OPACITY = 0xc0;
+
+        boundsOverlay(viewportCanvas, currentBoxBounds(),
+                Colors.focusBox(BOX_OPACITY), x, y, w, h);
+    }
+
+    private void boundsOverlay(
+            final GameImage viewportCanvas, final RectBounds bounds,
+            final Color color,
+            final int x, final int y, final int w, final int h
+    ) {
+        final Coord2D tlRenderPos = projectPosition(
+                bounds.left(), bounds.top(),
+                project.width, project.height, x, y, w, h),
+                brRenderPos = projectPosition(
+                        bounds.right(), bounds.bottom(),
+                        project.width, project.height, x, y, w, h);
+        final int rx = tlRenderPos.x, ry = tlRenderPos.y,
+                rw = brRenderPos.x - rx, rh = brRenderPos.y - ry;
+
+        viewportCanvas.drawRectangle(color, 2f, rx, ry, rw, rh);
     }
 }

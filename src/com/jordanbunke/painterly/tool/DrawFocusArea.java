@@ -1,5 +1,6 @@
 package com.jordanbunke.painterly.tool;
 
+import com.jordanbunke.color_proc.ColorProc;
 import com.jordanbunke.delta_time.events.GameMouseEvent;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
@@ -94,7 +95,9 @@ public final class DrawFocusArea extends Tool {
 
             // TODO - rendering is temp
 
-            viewportCanvas.drawRectangle(Colors.purple(), 2f, rx, ry, rw, rh);
+            viewportCanvas.drawRectangle(
+                    Colors.focusArea(ColorProc.RGB_SCALE),
+                    2f, rx, ry, rw, rh);
         }
     }
 

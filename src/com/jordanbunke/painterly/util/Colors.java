@@ -1,5 +1,6 @@
 package com.jordanbunke.painterly.util;
 
+import com.jordanbunke.color_proc.ColorProc;
 import com.jordanbunke.painterly.settings.Settings;
 
 import java.awt.*;
@@ -116,6 +117,16 @@ public final class Colors {
 
     public static Color purple() {
         return PURPLE;
+    }
+
+    public static Color focusArea(final int alpha) {
+        // TODO
+        return ColorProc.fromHSV(0.12, 0.6, 1d, alpha);
+    }
+
+    public static Color focusBox(final int alpha) {
+        // TODO
+        return ColorProc.fromHSV(0.4, 0.6, 1d, alpha);
     }
 
     public static Color debug() {
