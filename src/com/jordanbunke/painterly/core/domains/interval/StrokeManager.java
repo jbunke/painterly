@@ -28,11 +28,13 @@ public final class StrokeManager {
     public boolean tallyStroke(final boolean strokeAccepted) {
         strokesAttempted++;
 
-        if (strokeAccepted)
+        if (strokeAccepted) {
             strokesCompleted++;
 
-        if (strokesCompleted % Constants.STAT_UPDATE_STROKE_INTERVAL == 0)
-            project.updateSimilarity();
+            // TODO - use variable
+            if (strokesCompleted % Constants.STAT_UPDATE_STROKE_INTERVAL == 0)
+                project.updateSimilarity();
+        }
 
         if (tickMode || strokeAccepted)
             interval++;
@@ -47,5 +49,9 @@ public final class StrokeManager {
 
     public boolean isTickMode() {
         return tickMode;
+    }
+
+    public void toggleTickMode() {
+        tickMode = !tickMode;
     }
 }

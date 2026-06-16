@@ -13,6 +13,7 @@ public enum ResourceCode {
 
     // UI text
     RC_ABOUT, // also: tooltip
+    RC_CLEAR_FOCUS_BOXES,
     RC_COPYRIGHT,
     RC_DIALOG_CANCEL,
     RC_DIALOG_CANNOT_BE_EMPTY,
@@ -63,6 +64,7 @@ public enum ResourceCode {
     RC_UPLOAD,
     RC_TOGGLE_FULLSCREEN,
     RC_TOGGLE_SIM, // TODO - UI text
+    RC_TOGGLE_TICK_MODE, // TODO - also: tooltip
     RC_TOGGLE_SOURCE,
 
     // Tools

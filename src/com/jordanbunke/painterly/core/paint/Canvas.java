@@ -65,8 +65,11 @@ public final class Canvas {
     }
 
     public double globalSimilarity() {
-        return PaintEngine.similarity(scaledSource, painting,
-                new RectBounds(0, project.width, 0, project.height));
+        return similarity(new RectBounds(0, project.width, 0, project.height));
+    }
+
+    public double similarity(final RectBounds bounds) {
+        return PaintEngine.similarity(scaledSource, painting, bounds);
     }
 
     public GameImage getImageForViewport() {

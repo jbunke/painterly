@@ -29,7 +29,8 @@ public final class Constants {
             LINE_BREADTH_PROB = 0.5,
             LINE_BREADTH_MULTIPLIER = 0.3,
             MIN_STROKE_LENGTH_MULTIPLIER = 0.25,
-            MAX_STROKE_LENGTH_SIZE_RATIO = 0.25;
+            MAX_STROKE_LENGTH_SIZE_RATIO = 0.25,
+            PRIORITIZE_WORST_EXPONENT = 3d;
 
     public static final long MAX_CANVAS_PIXELS = 10000L * 10000L;
 

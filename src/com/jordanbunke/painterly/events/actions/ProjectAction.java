@@ -23,6 +23,10 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             p -> Viewport.get().getPositioning().reset()),
     RESET_FOCUS_AREA(RC_RESET_FOCUS_AREA, KeyboardShortcut.single(BACKSPACE),
             p -> p.focusManager.resetFocusArea()),
+    CLEAR_FOCUS_BOXES(RC_CLEAR_FOCUS_BOXES, KeyboardShortcut.single(A),
+            p -> p.focusManager.clearFocusBoxes()),
+    TOGGLE_TICK_MODE(RC_TOGGLE_TICK_MODE, KeyboardShortcut.single(S),
+            p -> p.strokeManager.toggleTickMode()),
     // focus box augmentation
     INC_DIVS_X(RC_NA, new KeyboardShortcut(false, true, RIGHT_ARROW),
             p -> p.focusManager.augmentDivsX(1)),

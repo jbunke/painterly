@@ -16,7 +16,7 @@ public enum ResourceVariables {
         final Project p = ProjectManager.get().getProject();
 
         if (p != null)
-            return (p.getStrokeManager().isTickMode()
+            return (p.strokeManager.isTickMode()
                     ? RC_MEASURING_ATTEMPTED : RC_MEASURING_ACCEPTED).asValue();
 
         return RC_UNKNOWN.asValue();

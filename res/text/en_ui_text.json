@@ -1,5 +1,6 @@
 {
     "about" : "About",
+    "clear_focus_boxes" : "Clear focus boxes",
     "copyright" : "(c) 2026 Jordan Bunke",
     "dialog_cancel" : "Cancel",
     "dialog_cannot_be_empty" : "Cannot be empty",
@@ -45,6 +46,7 @@
     "upload" : "Upload",
     "toggle_fullscreen" : "$fullscreen_action",
     "toggle_source" : "Toggle canvas/source image",
+    "toggle_tick_mode" : "Toggle tick mode",
     "tool_draw_focus_area" : "Draw focus area",
     "tool_hand" : "Hand"
 }

@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.core.domains.focus;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.delta_time.utility.math.MathPlus;
+import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
@@ -10,6 +11,9 @@ import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.Constants;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.jordanbunke.painterly.viewport.VisualMath.projectPosition;
 
@@ -58,13 +62,17 @@ public final class FocusManager {
             wholeCanvas = focusArea.width() == project.width &&
                     focusArea.height() == project.height;
 
-            entireArea = true;
-            divsX = 1;
-            divsY = 1;
-            x = 0;
-            y = 0;
-            determineDivMaxima();
+            clearFocusBoxes();
         }
+    }
+
+    public void clearFocusBoxes() {
+        entireArea = true;
+        divsX = 1;
+        divsY = 1;
+        x = 0;
+        y = 0;
+        determineDivMaxima();
     }
 
     public void augmentDivsX(final int dx) {
@@ -150,7 +158,50 @@ public final class FocusManager {
                 final int boxNumber = (y * divsX) + x;
                 setFromBoxNumber(boxNumber - 1);
             }
-            // TODO - worst and prioritize worst
+            case WORST -> {
+                int worstX = 0, worstY = 0;
+                double leastSimilar = 1d;
+
+                for (int x = 0; x < divsX; x++) {
+                    for (int y = 0; y < divsY; y++) {
+                        final RectBounds bounds = bounds(x, y);
+                        final double similarity =
+                                project.canvas.similarity(bounds);
+
+                        if (similarity < leastSimilar) {
+                            leastSimilar = similarity;
+                            worstX = x;
+                            worstY = y;
+                        }
+                    }
+                }
+
+                setX(worstX);
+                setY(worstY);
+            }
+            case PRIORITIZE_WORST -> {
+                final int divisions = divsX * divsY;
+                final List<Pair<Coord2D, Double>> boxes =
+                        new ArrayList<>(divisions);
+
+                for (int x = 0; x < divsX; x++) {
+                    for (int y = 0; y < divsY; y++) {
+                        final RectBounds bounds = bounds(x, y);
+                        final double similarity =
+                                project.canvas.similarity(bounds);
+
+                        boxes.add(new Pair<>(new Coord2D(x, y), similarity));
+                    }
+                }
+
+                boxes.sort(Comparator.comparingDouble(Pair::b));
+
+                final int index = (int)(Math.pow(RNG.randomInRange(0d, 1d),
+                        Constants.PRIORITIZE_WORST_EXPONENT) * divisions);
+
+                setX(boxes.get(index).a().x);
+                setY(boxes.get(index).a().y);
+            }
         }
     }
 

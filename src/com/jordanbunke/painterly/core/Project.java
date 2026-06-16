@@ -75,10 +75,6 @@ public final class Project {
         return similarity;
     }
 
-    public StrokeManager getStrokeManager() {
-        return strokeManager;
-    }
-
     public GameImage getSourceImage() {
         return sourceImage;
     }
