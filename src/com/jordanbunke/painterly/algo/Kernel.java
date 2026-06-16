@@ -1,4 +1,4 @@
-package algo;
+package com.jordanbunke.painterly.algo;
 
 public final class Kernel {
     public final int width, height;

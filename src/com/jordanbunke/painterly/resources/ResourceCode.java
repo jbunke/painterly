@@ -24,6 +24,13 @@ public enum ResourceCode {
     RC_DIALOG_DEFAULT_OK,
     RC_DIALOG_MUST_BE_POSITIVE,
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
+    // Focus box modes
+    RC_FB_BACKWARDS,
+    RC_FB_FREE,
+    RC_FB_FORWARDS,
+    RC_FB_PRIORITIZE_WORST,
+    RC_FB_RANDOM,
+    RC_FB_WORST,
     // Loading messages
     RC_LOAD_INIT_PROJECT,
     RC_LOAD_UPDATE_STATS,

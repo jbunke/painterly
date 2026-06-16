@@ -2,6 +2,7 @@ package com.jordanbunke.painterly.events.actions;
 
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
@@ -14,7 +15,6 @@ import static com.jordanbunke.delta_time.events.Key.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
-    // SET_FB_MODE_ITERATE(, KeyboardShortcut.single(S), /* TODO */ p -> {}),
     SAVE_AS(RC_NAV_SAVE_AS, new KeyboardShortcut(true, true, S), /* TODO */ p -> {}),
     TOGGLE_SIM(RC_TOGGLE_SIM, KeyboardShortcut.single(SPACE), Project::toggleSim),
     TOGGLE_SOURCE(RC_TOGGLE_SOURCE, KeyboardShortcut.single(ENTER),
@@ -23,6 +23,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             p -> Viewport.get().getPositioning().reset()),
     RESET_FOCUS_AREA(RC_RESET_FOCUS_AREA, KeyboardShortcut.single(BACKSPACE),
             p -> p.focusManager.resetFocusArea()),
+    // focus box augmentation
     INC_DIVS_X(RC_NA, new KeyboardShortcut(false, true, RIGHT_ARROW),
             p -> p.focusManager.augmentDivsX(1)),
     DEC_DIVS_X(RC_NA, new KeyboardShortcut(false, true, LEFT_ARROW),
@@ -31,6 +32,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             p -> p.focusManager.augmentDivsY(1)),
     DEC_DIVS_Y(RC_NA, new KeyboardShortcut(false, true, DOWN_ARROW),
             p -> p.focusManager.augmentDivsY(-1)),
+    // free focus box navigation
     INC_X(RC_NA, KeyboardShortcut.single(RIGHT_ARROW),
             p -> p.focusManager.augmentX(1)),
     DEC_X(RC_NA, KeyboardShortcut.single(LEFT_ARROW),
@@ -39,6 +41,19 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             p -> p.focusManager.augmentY(1)),
     DEC_Y(RC_NA, KeyboardShortcut.single(UP_ARROW),
             p -> p.focusManager.augmentY(-1)),
+    // focus box mode setters
+    SET_FB_FREE(RC_FB_FREE, KeyboardShortcut.single(L),
+            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FREE)),
+    SET_FB_RANDOM(RC_FB_RANDOM, KeyboardShortcut.single(R),
+            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.RANDOM)),
+    SET_FB_FORWARDS(RC_FB_FORWARDS, KeyboardShortcut.single(F),
+            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FORWARDS)),
+    SET_FB_BACKWARDS(RC_FB_BACKWARDS, KeyboardShortcut.single(D),
+            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.BACKWARDS)),
+    SET_FB_WORST(RC_FB_WORST, KeyboardShortcut.single(W),
+            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.WORST)),
+    SET_FB_PRIORITIZE_WORST(RC_FB_PRIORITIZE_WORST, KeyboardShortcut.single(E),
+            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.PRIORITIZE_WORST)),
     ;
 
     static {

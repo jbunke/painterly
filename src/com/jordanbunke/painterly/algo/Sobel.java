@@ -1,4 +1,4 @@
-package algo;
+package com.jordanbunke.painterly.algo;
 
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
@@ -7,6 +7,7 @@ import com.jordanbunke.painterly.util.Colors;
 import java.awt.*;
 
 import static com.jordanbunke.color_proc.ColorProc.*;
+import static com.jordanbunke.painterly.algo.CircleMath.*;
 
 public final class Sobel {
     private static final Kernel KERNEL_X, KERNEL_Y;
@@ -110,7 +111,9 @@ public final class Sobel {
             final int x, final int y, final Project p
     ) {
         final double hue = rgbToHue(getSobelPixel(x, y, p));
-        return Math.PI * ((2 * hue) - 1);
+
+        // return angle perpendicular to Sobel direction indicated by hue
+        return augmentAngle(fractionOfCircle(hue), fractionOfCircle(0.25));
     }
 
     private static Color getSobelPixel(

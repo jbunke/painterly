@@ -1,6 +1,7 @@
 package com.jordanbunke.painterly.core.paint;
 
-import algo.Sobel;
+import com.jordanbunke.painterly.algo.CircleMath;
+import com.jordanbunke.painterly.algo.Sobel;
 import com.jordanbunke.color_proc.ColorAlgo;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
@@ -48,8 +49,6 @@ public final class PaintEngine {
     private static void strokeAngle(
             final Project p, final BrushStroke.Builder strokeBuilder
     ) {
-        final double CIRCLE = 2 * Math.PI;
-
         final Coord2D pos = sourcePosition(p, strokeBuilder.position);
         final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
                 edgeDirection = Sobel.edgeDirection(pos.x, pos.y, p),
@@ -62,17 +61,12 @@ public final class PaintEngine {
             final double variance = RNG.randomInRange(
                     -Constants.MAX_ANGLE_VARIANCE,
                     Constants.MAX_ANGLE_VARIANCE);
-            angle = edgeDirection + variance;
-
-            while (angle >= CIRCLE)
-                angle -= CIRCLE;
-            while (angle < 0)
-                angle += CIRCLE;
+            angle = CircleMath.augmentAngle(edgeDirection, variance);
 
             strokeBuilder.setAlongEdge(true);
         } else {
             // random direction
-            angle = RNG.randomInRange(0, CIRCLE);
+            angle = RNG.randomInRange(0, CircleMath.CIRCLE);
         }
 
         strokeBuilder.setAngle(angle);

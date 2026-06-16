@@ -1,7 +1,7 @@
 package com.jordanbunke.painterly.core.paint;
 
-import algo.ImageScaling;
-import algo.Sobel;
+import com.jordanbunke.painterly.algo.ImageScaling;
+import com.jordanbunke.painterly.algo.Sobel;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.settings.RuntimeSettings;

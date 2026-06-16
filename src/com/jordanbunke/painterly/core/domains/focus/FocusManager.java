@@ -134,7 +134,36 @@ public final class FocusManager {
     }
 
     public void tryUpdateBox() {
-        // TODO
+        if (divsX == 1 && divsY == 1)
+            return;
+
+        switch (focusBoxMode) {
+            case RANDOM -> {
+                setX(RNG.randomInRange(0, divsX));
+                setY(RNG.randomInRange(0, divsY));
+            }
+            case FORWARDS -> {
+                final int boxNumber = (y * divsX) + x;
+                setFromBoxNumber(boxNumber + 1);
+            }
+            case BACKWARDS -> {
+                final int boxNumber = (y * divsX) + x;
+                setFromBoxNumber(boxNumber - 1);
+            }
+            // TODO - worst and prioritize worst
+        }
+    }
+
+    private void setFromBoxNumber(int boxNumber) {
+        final int divisions = divsX * divsY;
+
+        while (boxNumber >= divisions)
+            boxNumber -= divisions;
+        while (boxNumber < 0)
+            boxNumber += divisions;
+
+        setX(boxNumber % divsX);
+        setY(boxNumber / divsX);
     }
 
     public void drawOverlay(
