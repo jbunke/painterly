@@ -4,7 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 
 public enum Cursor {
-    MAIN, POINTER, RETICLE, TEXT,
+    UNASSIGNED, MAIN, POINTER, RETICLE, TEXT,
     VERT_SCROLL, HORZ_SCROLL, HAND_OPEN, HAND_GRAB, NONE;
 
     public String id() {
@@ -17,7 +17,7 @@ public enum Cursor {
     private final GameImage image;
 
     static {
-        cursor = MAIN;
+        cursor = UNASSIGNED;
         mousePos = new Coord2D();
     }
 
@@ -26,12 +26,12 @@ public enum Cursor {
     }
 
     public static void reset(final Coord2D mousePos) {
-        cursor = MAIN;
+        cursor = UNASSIGNED;
         Cursor.mousePos = mousePos;
     }
 
     public static void ping(final Cursor cursor) {
-        if (Cursor.cursor == MAIN)
+        if (Cursor.cursor == UNASSIGNED)
             Cursor.cursor = cursor;
     }
 
@@ -40,6 +40,9 @@ public enum Cursor {
     }
 
     public static void render(final GameImage canvas) {
+        // Set to main cursor if unassigned
+        ping(MAIN);
+
         final Coord2D crp = Layout.cursorRenderPos(cursor.image, mousePos);
         canvas.draw(cursor.image, crp.x, crp.y);
     }

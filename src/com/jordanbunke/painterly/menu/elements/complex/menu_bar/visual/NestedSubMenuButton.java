@@ -9,6 +9,7 @@ import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.util.Cursor;
 
 import static com.jordanbunke.painterly.util.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.TEXT_BUTTON_DEF_HEIGHT;
@@ -50,8 +51,10 @@ public final class NestedSubMenuButton extends MenuBarButton {
     public void process(final InputEventLogger eventLogger) {
         super.process(eventLogger);
 
-        if (isHighlighted())
+        if (isHighlighted()) {
+            Cursor.ping(Cursor.MAIN);
             MenuBarManager.pingHover(subMenu);
+        }
     }
 
     @Override
