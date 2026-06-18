@@ -71,7 +71,7 @@ public enum GlobalAction
         this.shortcut = shortcut;
         this.behaviour = behaviour;
 
-        iconCode = ResourceCode.RC_NA;
+        iconCode = RC_NA;
         precondition = null;
     }
 

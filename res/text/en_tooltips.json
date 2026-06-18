@@ -1,5 +1,6 @@
 {
     "about" : "Help, Info & Additional Resources\n---\nRead the change log, roadmap, and license",
+    "cb_stroke_count" : "Strokes completed | Strokes attempted",
     "interval_progress" : "Interval progress (measuring $accepted_or_attempted)",
     "new_project" : "Create a new $program_name project from a source image",
     "open_project" : "Open a $program_name project",

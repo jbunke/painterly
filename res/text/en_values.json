@@ -3,5 +3,6 @@
     "measuring_attempted" : "stroke attempts",
     "exit_fullscreen" : "Windowed",
     "fullscreen" : "Fullscreen",
+    "unknowable" : "---",
     "unknown" : "???"
 }

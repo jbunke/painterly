@@ -2,6 +2,8 @@ package com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual;
 
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 
+// TODO - remove class
+@Deprecated
 public interface IMenuBarButton {
     Coord2D getRenderPosition();
     int getWidth();

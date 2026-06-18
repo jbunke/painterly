@@ -41,7 +41,7 @@ public final class Layout {
             MENU_BAR_HEIGHT = 32,
             MENU_BAR_PADDING_X = 10, // TODO - test
             MENU_BAR_SEPARATOR_HEIGHT = 1,
-            CONTEXT_BAR_HEIGHT = 36,
+            CONTEXT_BAR_HEIGHT = 32, // TODO - potentially expand for icons
             KEY_SHORTCUT_INTERVAL_X = 4,
             KEY_SHORTCUT_TEXT_MARGIN_X = 6,
             KEY_SHORTCUT_SHADOW_MARGIN_X = 10,
@@ -295,5 +295,11 @@ public final class Layout {
 
         @Override
         public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
+    }
+
+    // misc.
+
+    public static int defaultContextBarElementWidth() {
+        return ScreenBox.CONTEXT_BAR.width.get() / 8;
     }
 }

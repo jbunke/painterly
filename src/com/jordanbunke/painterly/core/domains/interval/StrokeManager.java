@@ -54,4 +54,12 @@ public final class StrokeManager {
     public void toggleTickMode() {
         tickMode = !tickMode;
     }
+
+    public int getStrokesAttempted() {
+        return strokesAttempted;
+    }
+
+    public int getStrokesCompleted() {
+        return strokesCompleted;
+    }
 }

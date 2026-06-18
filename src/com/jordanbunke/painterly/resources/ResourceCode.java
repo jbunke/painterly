@@ -13,6 +13,10 @@ public enum ResourceCode {
 
     // UI text
     RC_ABOUT, // also: tooltip
+
+    // Context bar
+    RC_CB_STROKE_COUNT,
+
     RC_CLEAR_FOCUS_BOXES,
     RC_COPYRIGHT,
     RC_DIALOG_CANCEL,
@@ -25,6 +29,7 @@ public enum ResourceCode {
     RC_DIALOG_DEFAULT_OK,
     RC_DIALOG_MUST_BE_POSITIVE,
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
+
     // Focus box modes
     RC_FB_BACKWARDS,
     RC_FB_FREE,
@@ -32,9 +37,11 @@ public enum ResourceCode {
     RC_FB_PRIORITIZE_WORST,
     RC_FB_RANDOM,
     RC_FB_WORST,
+
     // Loading messages
     RC_LOAD_INIT_PROJECT,
     RC_LOAD_UPDATE_STATS,
+
     // Navigation
     RC_NAV_PROGRAM,
     RC_NAV_MAIN_MENU,
@@ -43,7 +50,7 @@ public enum ResourceCode {
     RC_NAV_SAVE_AS,
     RC_NAV_VIEW,
     /* TODO */
-    // End navigation
+
     RC_NEW_PROJECT, // also: tooltip,
     RC_NO_PROJECTS_OPEN,
     RC_NPD_CHOOSE_FOLDER,
@@ -77,6 +84,7 @@ public enum ResourceCode {
     RC_MEASURING_ATTEMPTED,
     RC_EXIT_FULLSCREEN,
     RC_FULLSCREEN,
+    RC_UNKNOWABLE,
     RC_UNKNOWN,
     ;
 

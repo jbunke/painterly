@@ -1,5 +1,6 @@
 {
     "about" : "About",
+    "cb_stroke_count" : "$strokes_completed | $strokes_attempted",
     "clear_focus_boxes" : "Clear focus boxes",
     "copyright" : "(c) 2026 Jordan Bunke",
     "dialog_cancel" : "Cancel",

@@ -73,6 +73,55 @@ public final class Graphics {
         return textImage.getWidth() + TEXT_BUTTON_PADDING_X;
     }
 
+    public static GameImage drawContextBarElement(final TextButton tb) {
+        // TODO - temp
+        final Color textColor, bgColor, accentColor;
+
+        if (tb.isSelected()) {
+            bgColor = systemColor(LIGHT);
+            accentColor = systemColor(MID_DARK);
+            textColor = systemColor(DARK);
+        } else if (tb.isHighlighted()) {
+            bgColor = systemColor(MID_DARK);
+            accentColor = systemColor(MID_LIGHT);
+            textColor = systemColor(LIGHT);
+        } else if (tb.getButtonType() == ButtonType.STUB) {
+            bgColor = systemColor(DARK);
+            accentColor = systemColor(MID_DARK);
+            textColor = systemColor(MID_LIGHT);
+        } else {
+            bgColor = systemColor(DARK);
+            accentColor = systemColor(MID);
+            textColor = systemColor(LIGHT);
+        }
+
+        final int w = tb.getWidth(), h = tb.getHeight();
+        final GameImage button = new GameImage(w, h);
+
+        final GameImage textImage = new FontFormatter(FONT_DEF).realize()
+                .setColor(textColor).addText(tb.getLabel()).build().draw();
+
+        // background
+        button.fill(bgColor);
+
+        // draw text
+        // TODO
+        final int x = switch (tb.getAlignment()) {
+            case LEFT -> TEXT_BUTTON_TEXT_OFFSET_X;
+            case CENTER -> (w - textImage.getWidth()) / 2;
+            case RIGHT -> w - (TEXT_BUTTON_TEXT_OFFSET_X + textImage.getWidth());
+        };
+
+        // TODO
+        button.draw(textImage, x, TEXT_BUTTON_TEXT_OFFSET_Y);
+
+        // border
+        button.drawLine(accentColor, 4f, 0, 0, 0, h);
+        button.drawLine(accentColor, 4f, w, 0, w, h);
+
+        return button.submit();
+    }
+
     public static GameImage drawSubMenuHeader(final TextButton tb) {
         final int w = tb.getWidth(), h = tb.getHeight();
         final GameImage button = new GameImage(w, h);
