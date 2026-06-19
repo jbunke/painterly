@@ -6,7 +6,7 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public class ResourceVariableTest {
     public static void main(String[] args) {
-        final String out = LanguageData.retrieveTooltip(RC_INTERVAL_PROGRESS);
+        final String out = LanguageData.retrieveTooltip(RC_CB_INTERVAL_PROGRESS);
         System.out.println(out);
     }
 }

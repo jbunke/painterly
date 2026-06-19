@@ -1,7 +1,13 @@
 {
     "about" : "Help, Info & Additional Resources\n---\nRead the change log, roadmap, and license",
+    "cb_current_tool" : "The currently selected tool",
+    "cb_divs_x" : "Focus box divisions along X-axis",
+    "cb_divs_y" : "Focus box divisions along Y-axis",
+    "cb_focus_box_mode" : "Focus box mode\n---\nDetermines how the next box\ncoordinate is calculated",
+    "cb_interval_progress" : "Interval progress (measuring $accepted_or_attempted)",
+    "cb_interval_target" : "Interval target (measuring $accepted_or_attempted)",
+    "cb_similarity" : "RGB similarity of the painting to the source image",
     "cb_stroke_count" : "Strokes completed | Strokes attempted",
-    "interval_progress" : "Interval progress (measuring $accepted_or_attempted)",
     "new_project" : "Create a new $program_name project from a source image",
     "open_project" : "Open a $program_name project",
     "program_settings" : "Program config settings like\nlanguage and visual theming"

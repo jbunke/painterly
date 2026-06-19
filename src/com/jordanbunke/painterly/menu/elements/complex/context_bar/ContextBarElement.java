@@ -1,12 +1,15 @@
 package com.jordanbunke.painterly.menu.elements.complex.context_bar;
 
 import com.jordanbunke.delta_time.debug.GameDebugger;
+import com.jordanbunke.delta_time.events.GameEvent;
+import com.jordanbunke.delta_time.events.GameMouseEvent;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.menu.menu_elements.button.MenuButtonStub;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
@@ -17,19 +20,19 @@ import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.Tooltip;
 
+import java.util.List;
+
 import static com.jordanbunke.painterly.util.Graphics.drawContextBarElement;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.CONTEXT_BAR;
 
 public final class ContextBarElement extends MenuButtonStub
         implements TextButton {
     private final MenuElement expansion;
-    private final boolean expandable;
+    private final boolean expandable, requiresProject;
 
-    private final ResourceCode textCode;
+    private final ResourceCode textCode, tooltipCode;
     // TODO - ResourceCode supplier for icon
     private final Alignment alignment;
-
-    private final String tooltip;
 
     private boolean expanded;
 
@@ -39,16 +42,17 @@ public final class ContextBarElement extends MenuButtonStub
     private ContextBarElement(
             final Coord2D position, final Bounds2D dimensions,
             final Anchor anchor,
-            final MenuElement expansion,
+            final MenuElement expansion, final boolean requiresProject,
             final ResourceCode textCode, final Alignment alignment,
-            final String tooltip
+            final ResourceCode tooltipCode
     ) {
         super(position, dimensions, anchor, true);
 
         this.expansion = expansion;
         expandable = expansion != null;
+        this.requiresProject = expandable && requiresProject;
 
-        this.tooltip = tooltip;
+        this.tooltipCode = tooltipCode;
 
         this.textCode = textCode;
         this.alignment = alignment;
@@ -75,17 +79,37 @@ public final class ContextBarElement extends MenuButtonStub
 
     @Override
     public void process(final InputEventLogger eventLogger) {
-        super.process(eventLogger);
-
         final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
+        final boolean mouseInBounds = mouseIsWithinBounds(mousePos),
+                hasProject = ProjectManager.get().hasProject(),
+                projectConditionsSatisfied = !requiresProject || hasProject;
 
-        if (mouseIsWithinBounds(mousePos)) {
-            Tooltip.get().ping(tooltip, mousePos);
+        // tooltip and cursor
+        if (mouseInBounds) {
+            Tooltip.get().ping(Tooltip.resolve(tooltipCode), mousePos);
 
-            if (expandable)
+            if (expandable && (projectConditionsSatisfied || expanded))
                 Cursor.ping(Cursor.POINTER);
         }
 
+        // highlight
+        setHighlighted(mouseInBounds && expandable && projectConditionsSatisfied);
+
+        // element click processing
+        if (mouseInBounds && expandable &&
+                (projectConditionsSatisfied || expanded)) {
+            final List<GameEvent> unprocessed = eventLogger.getUnprocessedEvents();
+            for (GameEvent e : unprocessed) {
+                if (e instanceof GameMouseEvent mouseEvent &&
+                        mouseEvent.matchesAction(GameMouseEvent.Action.DOWN)) {
+                    mouseEvent.markAsProcessed();
+                    execute();
+                    return;
+                }
+            }
+        }
+
+        // expansion processing handoff
         if (expanded)
             expansion.process(eventLogger);
     }
@@ -170,6 +194,7 @@ public final class ContextBarElement extends MenuButtonStub
 
         private ResourceCode tooltipCode;
         private MenuElement expansion;
+        private boolean requiresProject;
 
         private Alignment alignment;
 
@@ -184,6 +209,7 @@ public final class ContextBarElement extends MenuButtonStub
 
             tooltipCode = ResourceCode.RC_NA;
             expansion = null;
+            requiresProject = true;
 
             alignment = Alignment.CENTER;
         }
@@ -198,8 +224,17 @@ public final class ContextBarElement extends MenuButtonStub
             return this;
         }
 
+        public Builder setWidthFromPercentage(final double percentage) {
+            return setWidth(CONTEXT_BAR.ofWidth(percentage));
+        }
+
         public Builder setExpansion(final MenuElement expansion) {
             this.expansion = expansion;
+            return this;
+        }
+
+        public Builder setRequiresProject(final boolean requiresProject) {
+            this.requiresProject = requiresProject;
             return this;
         }
 
@@ -215,12 +250,11 @@ public final class ContextBarElement extends MenuButtonStub
 
         @Override
         public ContextBarElement build() {
-            final String tooltip = Tooltip.resolve(tooltipCode);
-
             // TODO
 
             return new ContextBarElement(position, dimensions, anchor,
-                    expansion, textCode, alignment, tooltip);
+                    expansion, requiresProject, textCode, alignment,
+                    tooltipCode);
         }
 
         // GETTER

@@ -9,12 +9,18 @@ public enum ResourceCode {
     // TODO
 
     // Tooltips
-    RC_INTERVAL_PROGRESS, // TODO - temporary
 
     // UI text
     RC_ABOUT, // also: tooltip
 
     // Context bar
+    RC_CB_CURRENT_TOOL,
+    RC_CB_DIVS_X,
+    RC_CB_DIVS_Y,
+    RC_CB_FOCUS_BOX_MODE,
+    RC_CB_INTERVAL_TARGET,
+    RC_CB_INTERVAL_PROGRESS,
+    RC_CB_SIMILARITY,
     RC_CB_STROKE_COUNT,
 
     RC_CLEAR_FOCUS_BOXES,

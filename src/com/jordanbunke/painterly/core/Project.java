@@ -6,6 +6,8 @@ import com.jordanbunke.painterly.core.domains.focus.FocusManager;
 import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
 import com.jordanbunke.painterly.core.paint.Canvas;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Path;
 
 public final class Project {
@@ -49,7 +51,7 @@ public final class Project {
 
     // TODO - load from archive / file
 
-    public void toggleSim() {
+    public void toggleSimulation() {
         painting = !painting;
     }
 
@@ -73,6 +75,11 @@ public final class Project {
 
     public double getSimilarity() {
         return similarity;
+    }
+
+    public String formattedSimilarity() {
+        return BigDecimal.valueOf(similarity * 100)
+                .setScale(2 /* TODO - setting */, RoundingMode.HALF_UP) + "%";
     }
 
     public GameImage getSourceImage() {

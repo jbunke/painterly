@@ -1,5 +1,5 @@
 {
-    "measuring_accepted" : "accepted strokes",
+    "measuring_accepted" : "completed strokes",
     "measuring_attempted" : "stroke attempts",
     "exit_fullscreen" : "Windowed",
     "fullscreen" : "Fullscreen",

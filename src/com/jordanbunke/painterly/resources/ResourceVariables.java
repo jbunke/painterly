@@ -4,6 +4,8 @@ import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
+import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.Layout;
 
@@ -16,8 +18,27 @@ public enum ResourceVariables {
     RV_ACCEPTED_OR_ATTEMPTED(p -> (p.strokeManager.isTickMode()
             ? RC_MEASURING_ATTEMPTED : RC_MEASURING_ACCEPTED).asValue(),
             RC_UNKNOWN.asValue()),
+    RV_CURRENT_TOOL(() -> ResourceValue.ofString(
+            LanguageData.retrieveUIText(ToolManager.getCurrentCode()))),
+    RV_DIVS_X(p -> ResourceValue.ofString(
+            String.valueOf(p.focusManager.getDivsX())),
+            RC_UNKNOWABLE.asValue()),
+    RV_DIVS_Y(p -> ResourceValue.ofString(
+            String.valueOf(p.focusManager.getDivsY())),
+            RC_UNKNOWABLE.asValue()),
+    RV_FOCUS_BOX_MODE(p -> ResourceValue.ofString(
+            p.focusManager.getFocusBoxMode().formattedName()),
+            RC_UNKNOWABLE.asValue()),
+    RV_FORMATTED_SIM(p -> ResourceValue.ofString(
+            p.formattedSimilarity()), RC_UNKNOWABLE.asValue()),
     RV_FULLSCREEN_ACTION(() -> (Layout.isFullscreen()
             ? RC_EXIT_FULLSCREEN : RC_FULLSCREEN).asValue()),
+    RV_INTERVAL_PROGRESS(p -> ResourceValue.ofString(
+            String.valueOf(p.strokeManager.getIntervalProgress())),
+            RC_UNKNOWABLE.asValue()),
+    RV_INTERVAL_TARGET(p -> ResourceValue.ofString(
+            String.valueOf(p.strokeManager.getIntervalTarget())),
+            RC_UNKNOWABLE.asValue()),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_NPD_FOLDER(() ->
             ResourceValue.ofString(NewProject.get().raFolder())),

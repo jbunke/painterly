@@ -9,7 +9,8 @@ import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_DEFAU
 public final class StrokeManager {
     private final Project project;
 
-    private int strokesAttempted, strokesCompleted, intervalTarget, interval;
+    private int strokesAttempted, strokesCompleted,
+            intervalTarget, intervalProgress;
 
     /**
      * {@code true} is attempted strokes; {@code false} is completed strokes
@@ -22,7 +23,7 @@ public final class StrokeManager {
         strokesAttempted = 0;
         strokesCompleted = 0;
         intervalTarget = Settings.get(SET_ID_DEFAULT_INTERVAL_TARGET, Integer.class);
-        interval = 0;
+        intervalProgress = 0;
     }
 
     public boolean tallyStroke(final boolean strokeAccepted) {
@@ -37,10 +38,10 @@ public final class StrokeManager {
         }
 
         if (tickMode || strokeAccepted)
-            interval++;
+            intervalProgress++;
 
-        if (interval >= intervalTarget) {
-            interval = 0;
+        if (intervalProgress >= intervalTarget) {
+            intervalProgress = 0;
             return true;
         }
 
@@ -61,5 +62,13 @@ public final class StrokeManager {
 
     public int getStrokesCompleted() {
         return strokesCompleted;
+    }
+
+    public int getIntervalProgress() {
+        return intervalProgress;
+    }
+
+    public int getIntervalTarget() {
+        return intervalTarget;
     }
 }

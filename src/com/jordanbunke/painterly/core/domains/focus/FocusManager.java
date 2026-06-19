@@ -264,4 +264,16 @@ public final class FocusManager {
 
         viewportCanvas.drawRectangle(color, 2f, rx, ry, rw, rh);
     }
+
+    public FocusBoxMode getFocusBoxMode() {
+        return focusBoxMode;
+    }
+
+    public int getDivsX() {
+        return divsX;
+    }
+
+    public int getDivsY() {
+        return divsY;
+    }
 }
