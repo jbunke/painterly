@@ -29,9 +29,9 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     // tick mode setters
     TOGGLE_TICK_MODE(RC_TOGGLE_TICK_MODE, KeyboardShortcut.single(S),
             p -> p.strokeManager.toggleTickMode()),
-    SET_TICK_MODE_ATTEMPTED(RC_TICK_MODE_ATTEMPTED, null,
+    SET_TICK_MODE_ATTEMPTED(RC_TICK_MODE_ATTEMPTED, true, false, null,
             p -> p.strokeManager.setTickModeToAttempted()),
-    SET_TICK_MODE_COMPLETED(RC_TICK_MODE_COMPLETED, null,
+    SET_TICK_MODE_COMPLETED(RC_TICK_MODE_COMPLETED, true, false, null,
             p -> p.strokeManager.setTickModeToCompleted()),
     // focus box augmentation
     INC_DIVS_X(RC_NA, new KeyboardShortcut(false, true, RIGHT_ARROW),
@@ -52,17 +52,23 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     DEC_Y(RC_NA, KeyboardShortcut.single(UP_ARROW),
             p -> p.focusManager.augmentY(-1)),
     // focus box mode setters
-    SET_FB_FREE(RC_FB_FREE, KeyboardShortcut.single(L),
+    SET_FB_FREE(RC_FB_FREE, true, false,
+            KeyboardShortcut.single(L),
             p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FREE)),
-    SET_FB_RANDOM(RC_FB_RANDOM, KeyboardShortcut.single(R),
+    SET_FB_RANDOM(RC_FB_RANDOM, true, false,
+            KeyboardShortcut.single(R),
             p -> p.focusManager.setFocusBoxMode(FocusBoxMode.RANDOM)),
-    SET_FB_FORWARDS(RC_FB_FORWARDS, KeyboardShortcut.single(F),
+    SET_FB_FORWARDS(RC_FB_FORWARDS, true, false,
+            KeyboardShortcut.single(F),
             p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FORWARDS)),
-    SET_FB_BACKWARDS(RC_FB_BACKWARDS, KeyboardShortcut.single(D),
+    SET_FB_BACKWARDS(RC_FB_BACKWARDS, true, false,
+            KeyboardShortcut.single(D),
             p -> p.focusManager.setFocusBoxMode(FocusBoxMode.BACKWARDS)),
-    SET_FB_WORST(RC_FB_WORST, KeyboardShortcut.single(W),
+    SET_FB_WORST(RC_FB_WORST, true, false,
+            KeyboardShortcut.single(W),
             p -> p.focusManager.setFocusBoxMode(FocusBoxMode.WORST)),
-    SET_FB_PRIORITIZE_WORST(RC_FB_PRIORITIZE_WORST, KeyboardShortcut.single(E),
+    SET_FB_PRIORITIZE_WORST(RC_FB_PRIORITIZE_WORST, true, false,
+            KeyboardShortcut.single(E),
             p -> p.focusManager.setFocusBoxMode(FocusBoxMode.PRIORITIZE_WORST)),
     ;
 
@@ -76,13 +82,14 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
 
     private final KeyboardShortcut shortcut;
     private final Consumer<Project> behaviour;
-    private final ResourceCode code;
+    private final ResourceCode code, tooltipCode;
 
     private ResourceCode iconCode;
     private Predicate<Project> precondition;
 
     ProjectAction(
             final ResourceCode code,
+            final ResourceCode tooltipCode, final ResourceCode iconCode,
             final KeyboardShortcut shortcut,
             final Consumer<Project> behaviour
     ) {
@@ -90,8 +97,27 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
         this.shortcut = shortcut;
         this.behaviour = behaviour;
 
-        iconCode = ResourceCode.RC_NA;
+        this.tooltipCode = tooltipCode;
+        this.iconCode = iconCode;
         precondition = null;
+    }
+
+    ProjectAction(
+            final ResourceCode code,
+            final boolean inheritTooltip, final boolean inheritIcon,
+            final KeyboardShortcut shortcut,
+            final Consumer<Project> behaviour
+    ) {
+        this(code, inheritTooltip ? code : RC_NA,
+                inheritIcon ? code : RC_NA, shortcut, behaviour);
+    }
+
+    ProjectAction(
+            final ResourceCode code,
+            final KeyboardShortcut shortcut,
+            final Consumer<Project> behaviour
+    ) {
+        this(code, false, false, shortcut, behaviour);
     }
 
     @Override
@@ -122,5 +148,15 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     @Override
     public ResourceCode getCode() {
         return code;
+    }
+
+    @Override
+    public ResourceCode getTooltipCode() {
+        return tooltipCode;
+    }
+
+    @Override
+    public ResourceCode getIconCode() {
+        return iconCode;
     }
 }

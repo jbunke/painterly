@@ -10,6 +10,7 @@ import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.Cursor;
+import com.jordanbunke.painterly.util.Tooltip;
 
 import static com.jordanbunke.painterly.util.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
@@ -50,6 +51,10 @@ public final class ActionMenuButton<T> extends MenuBarButton {
         super.process(eventLogger);
 
         if (isHighlighted()) {
+            final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
+            Tooltip.get().ping(Tooltip.resolve(action.getTooltipCode()),
+                    mousePos);
+
             if (MenuBarManager.isClicked() && passing)
                 Cursor.ping(Cursor.POINTER);
 

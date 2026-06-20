@@ -52,7 +52,7 @@
     "reset_pos" : "Fit to screen",
     "start" : "Start painting",
     "upload" : "Upload",
-    "tick_mode_attempted" : "Attempted strokes",
+    "tick_mode_attempted" : "Stroke attempts",
     "tick_mode_completed" : "Completed strokes",
     "toggle_fullscreen" : "$fullscreen_action",
     "toggle_source" : "Toggle canvas/source image",

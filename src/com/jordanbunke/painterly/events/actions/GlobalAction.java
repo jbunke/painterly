@@ -37,9 +37,11 @@ public enum GlobalAction
             () -> {} /* TODO */),
     TOGGLE_DEBUG_PROFILER(RC_NA, new KeyboardShortcut(false, true, P),
             RuntimeSettings::toggleProfilerOn),
-    SET_TOOL_HAND(RC_TOOL_HAND, KeyboardShortcut.single(H),
+    SET_TOOL_HAND(RC_TOOL_HAND, true, true,
+            KeyboardShortcut.single(H),
             () -> ToolManager.setCurrentTool(HAND)),
-    SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, KeyboardShortcut.single(X),
+    SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, true, true,
+            KeyboardShortcut.single(X),
             () -> ToolManager.setCurrentTool(DRAW_FOCUS_AREA)),
     ;
 
@@ -57,13 +59,14 @@ public enum GlobalAction
 
     private final KeyboardShortcut shortcut;
     private final Runnable behaviour;
-    private final ResourceCode code;
+    private final ResourceCode code, tooltipCode;
 
     private ResourceCode iconCode;
     private Supplier<Boolean> precondition;
 
     GlobalAction(
             final ResourceCode code,
+            final ResourceCode tooltipCode, final ResourceCode iconCode,
             final KeyboardShortcut shortcut,
             final Runnable behaviour
     ) {
@@ -71,8 +74,27 @@ public enum GlobalAction
         this.shortcut = shortcut;
         this.behaviour = behaviour;
 
-        iconCode = RC_NA;
+        this.tooltipCode = tooltipCode;
+        this.iconCode = iconCode;
         precondition = null;
+    }
+
+    GlobalAction(
+            final ResourceCode code,
+            final boolean inheritTooltip, final boolean inheritIcon,
+            final KeyboardShortcut shortcut,
+            final Runnable behaviour
+    ) {
+        this(code, inheritTooltip ? code : RC_NA,
+                inheritIcon ? code : RC_NA, shortcut, behaviour);
+    }
+
+    GlobalAction(
+            final ResourceCode code,
+            final KeyboardShortcut shortcut,
+            final Runnable behaviour
+    ) {
+        this(code, false, false, shortcut, behaviour);
     }
 
     GlobalAction(
@@ -120,5 +142,15 @@ public enum GlobalAction
     @Override
     public ResourceCode getCode() {
         return code;
+    }
+
+    @Override
+    public ResourceCode getTooltipCode() {
+        return tooltipCode;
+    }
+
+    @Override
+    public ResourceCode getIconCode() {
+        return iconCode;
     }
 }

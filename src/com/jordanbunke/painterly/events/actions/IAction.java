@@ -19,6 +19,8 @@ public interface IAction<T> {
     Predicate<T> getPrecondition();
     Consumer<T> getBehaviour();
     ResourceCode getCode();
+    ResourceCode getTooltipCode();
+    ResourceCode getIconCode();
     T defaultFetch();
 
     default boolean requiresNonNull() {
