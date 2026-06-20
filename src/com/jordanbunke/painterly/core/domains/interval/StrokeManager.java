@@ -7,6 +7,8 @@ import com.jordanbunke.painterly.util.Constants;
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_DEFAULT_INTERVAL_TARGET;
 
 public final class StrokeManager {
+    private static final boolean ATTEMPTED = true, COMPLETED = false;
+
     private final Project project;
 
     private int strokesAttempted, strokesCompleted,
@@ -54,6 +56,14 @@ public final class StrokeManager {
 
     public void toggleTickMode() {
         tickMode = !tickMode;
+    }
+
+    public void setTickModeToAttempted() {
+        tickMode = ATTEMPTED;
+    }
+
+    public void setTickModeToCompleted() {
+        tickMode = COMPLETED;
     }
 
     public int getStrokesAttempted() {

@@ -75,6 +75,8 @@ public enum ResourceCode {
     RC_RESET_POS,
     RC_START,
     RC_UPLOAD,
+    RC_TICK_MODE_ATTEMPTED, // TODO - also: tooltip
+    RC_TICK_MODE_COMPLETED, // TODO - also: tooltip
     RC_TOGGLE_FULLSCREEN,
     RC_TOGGLE_SIM, // TODO - UI text
     RC_TOGGLE_TICK_MODE, // TODO - also: tooltip

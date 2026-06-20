@@ -107,7 +107,8 @@ public final class Graphics {
         // draw text
         // TODO
         final int x = switch (tb.getAlignment()) {
-            case LEFT -> TEXT_BUTTON_TEXT_OFFSET_X;
+            // TODO - subject to whether there is an icon?
+            case LEFT -> MENU_BAR_PADDING_X + ICON_DIM + MENU_BAR_PADDING_X;
             case CENTER -> (w - textImage.getWidth()) / 2;
             case RIGHT -> w - (TEXT_BUTTON_TEXT_OFFSET_X + textImage.getWidth());
         };

@@ -27,6 +27,8 @@ import static com.jordanbunke.painterly.util.Layout.ScreenBox.CONTEXT_BAR;
 
 public final class ContextBarElement extends MenuButtonStub
         implements TextButton {
+    public final ContextBarSection section;
+
     private final MenuElement expansion;
     private final boolean expandable, requiresProject;
 
@@ -41,12 +43,14 @@ public final class ContextBarElement extends MenuButtonStub
 
     private ContextBarElement(
             final Coord2D position, final Bounds2D dimensions,
-            final Anchor anchor,
+            final Anchor anchor, final ContextBarSection section,
             final MenuElement expansion, final boolean requiresProject,
             final ResourceCode textCode, final Alignment alignment,
             final ResourceCode tooltipCode
     ) {
         super(position, dimensions, anchor, true);
+
+        this.section = section;
 
         this.expansion = expansion;
         expandable = expansion != null;
@@ -64,8 +68,11 @@ public final class ContextBarElement extends MenuButtonStub
         updateAssets();
     }
 
-    public static Builder init(final ResourceCode textCode, final int x) {
-        return new Builder(textCode, x);
+    public static Builder init(
+            final ContextBarSection section,
+            final ResourceCode textCode, final int x
+    ) {
+        return new Builder(section, textCode, x);
     }
 
     public void collapse() {
@@ -186,6 +193,7 @@ public final class ContextBarElement extends MenuButtonStub
     }
 
     public static class Builder implements MenuElementBuilder<ContextBarElement> {
+        private final ContextBarSection section;
         private final ResourceCode textCode;
         private final Coord2D position;
 
@@ -198,7 +206,11 @@ public final class ContextBarElement extends MenuButtonStub
 
         private Alignment alignment;
 
-        private Builder(final ResourceCode textCode, final int x) {
+        private Builder(
+                final ContextBarSection section,
+                final ResourceCode textCode, final int x
+        ) {
+            this.section = section;
             this.textCode = textCode;
             position = new Coord2D(x, CONTEXT_BAR.y.get());
 
@@ -253,8 +265,8 @@ public final class ContextBarElement extends MenuButtonStub
             // TODO
 
             return new ContextBarElement(position, dimensions, anchor,
-                    expansion, requiresProject, textCode, alignment,
-                    tooltipCode);
+                    section, expansion, requiresProject, textCode,
+                    alignment, tooltipCode);
         }
 
         // GETTER
