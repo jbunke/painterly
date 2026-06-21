@@ -63,6 +63,7 @@ public final class FocusManager {
                     focusArea.height() == project.height;
 
             clearFocusBoxes();
+            project.progressManager.update();
         }
     }
 
@@ -275,5 +276,9 @@ public final class FocusManager {
 
     public int getDivsY() {
         return divsY;
+    }
+
+    public boolean isWholeCanvas() {
+        return wholeCanvas;
     }
 }

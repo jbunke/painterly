@@ -141,12 +141,21 @@ public final class ContextBar extends MenuElement {
         elements.add(divsY);
 
         // similarity
-        // TODO - expansion, update tooltip, width, icon
-        final ContextBarElement similarity = ContextBarElement
+        // TODO - update tooltip, width, icon
+        final ContextBarElement.Builder similarityBuilder = ContextBarElement
                 .init(SIMILARITY, RC_CB_SIMILARITY, CONTEXT_BAR.atX(1d))
                 .setTooltipCode(RC_CB_SIMILARITY)
                 .setAlignment(Alignment.RIGHT)
-                .setAnchor(Anchor.RIGHT_TOP)
+                .setAnchor(Anchor.RIGHT_TOP);
+        final OptionsContainer similarityOptions = OptionsContainer
+                .init(similarityBuilder.getPosition())
+                .setAnchor(similarityBuilder.complementaryReflected())
+                .setActions(SET_DISPLAY_FOCUS, SET_DISPLAY_GLOBAL)
+                .setPostExecution(() -> ContextBar.get()
+                        .collapseSection(SIMILARITY))
+                .build();
+        final ContextBarElement similarity = similarityBuilder
+                .setExpansion(similarityOptions)
                 .build();
         elements.add(similarity);
 

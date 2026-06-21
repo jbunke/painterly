@@ -3,11 +3,10 @@ package com.jordanbunke.painterly.core;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.domains.debug.DebugData;
 import com.jordanbunke.painterly.core.domains.focus.FocusManager;
+import com.jordanbunke.painterly.core.domains.interval.ProgressManager;
 import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
 import com.jordanbunke.painterly.core.paint.Canvas;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.file.Path;
 
 public final class Project {
@@ -19,12 +18,12 @@ public final class Project {
     private final GameImage sourceImage;
 
     public final StrokeManager strokeManager;
+    public final ProgressManager progressManager;
     public final FocusManager focusManager;
     public final DebugData debugData;
     public final Canvas canvas;
 
     private boolean painting;
-    private double similarity;
 
     public Project(
             final String name, final Path folder,
@@ -43,10 +42,9 @@ public final class Project {
         debugData = new DebugData(this);
         strokeManager = new StrokeManager(this);
         focusManager = new FocusManager(this);
+        progressManager = new ProgressManager(this);
 
         painting = false;
-
-        updateSimilarity();
     }
 
     // TODO - load from archive / file
@@ -67,19 +65,6 @@ public final class Project {
 
         if (intervalCompleted)
             focusManager.tryUpdateBox();
-    }
-
-    public void updateSimilarity() {
-        similarity = canvas.globalSimilarity();
-    }
-
-    public double getSimilarity() {
-        return similarity;
-    }
-
-    public String formattedSimilarity() {
-        return BigDecimal.valueOf(similarity * 100)
-                .setScale(2 /* TODO - setting */, RoundingMode.HALF_UP) + "%";
     }
 
     public GameImage getSourceImage() {

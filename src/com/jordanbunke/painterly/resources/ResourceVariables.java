@@ -30,7 +30,8 @@ public enum ResourceVariables {
             p.focusManager.getFocusBoxMode().formattedName()),
             RC_UNKNOWABLE.asValue()),
     RV_FORMATTED_SIM(p -> ResourceValue.ofString(
-            p.formattedSimilarity()), RC_UNKNOWABLE.asValue()),
+            p.progressManager.formattedSimilarity()),
+            RC_UNKNOWABLE.asValue()),
     RV_FULLSCREEN_ACTION(() -> (Layout.isFullscreen()
             ? RC_EXIT_FULLSCREEN : RC_FULLSCREEN).asValue()),
     RV_INTERVAL_PROGRESS(p -> ResourceValue.ofString(

@@ -80,7 +80,8 @@ public final class PaintEngine {
     ) {
         // TODO
 
-        final double diagonal = diagonal(p), similarity = p.getSimilarity(),
+        final double diagonal = diagonal(p),
+                similarity = p.progressManager.getGlobalSimilarity(),
                 simComp = Math.max(1 - Math.pow(similarity, 1.5),
                         Constants.MIN_STROKE_LENGTH_MULTIPLIER),
                 sizeComp = diagonal *
@@ -99,7 +100,8 @@ public final class PaintEngine {
     ) {
         final Coord2D pos = sourcePosition(p, strokeBuilder.position);
         final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
-                diagonal = diagonal(p), similarity = p.getSimilarity(),
+                diagonal = diagonal(p),
+                similarity = p.progressManager.getGlobalSimilarity(),
                 simComp = 1 - Math.pow(similarity, 4d),
                 sizeComp = Math.pow(diagonal, 0.67),
                 rndComp = RNG.randomInRange(0.8, 1d);

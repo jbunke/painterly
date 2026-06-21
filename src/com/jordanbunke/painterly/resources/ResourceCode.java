@@ -35,6 +35,8 @@ public enum ResourceCode {
     RC_DIALOG_DEFAULT_OK,
     RC_DIALOG_MUST_BE_POSITIVE,
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
+    RC_DISPLAY_FOCUS,
+    RC_DISPLAY_GLOBAL,
 
     // Focus box modes
     RC_FB_BACKWARDS,

@@ -20,6 +20,8 @@
     "dialog_default_ok" : "Confirm",
     "dialog_must_be_positive" : "Must be positive",
     "dialog_variable_cannot_be_null" : "Undefined",
+    "display_focus" : "Focus area similarity",
+    "display_global" : "Entire canvas similarity",
     "fb_backwards" : "Backwards",
     "fb_free" : "Free",
     "fb_forwards" : "Forwards",
