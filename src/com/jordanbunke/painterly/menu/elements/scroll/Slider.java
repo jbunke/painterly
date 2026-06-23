@@ -13,7 +13,15 @@ public abstract class Slider extends AbstractSlider {
             final int maxValue, final Property<Integer> property,
             final int sliderBallDim
     ) {
-        super(position, dimensions, Anchor.LEFT_TOP, 0, maxValue,
+        this(position, dimensions, 0, maxValue, property, sliderBallDim);
+    }
+
+    public Slider(
+            final Coord2D position, final Bounds2D dimensions,
+            final int minValue, final int maxValue,
+            final Property<Integer> property, final int sliderBallDim
+    ) {
+        super(position, dimensions, Anchor.LEFT_TOP, minValue, maxValue,
                 property, true, sliderBallDim);
     }
 

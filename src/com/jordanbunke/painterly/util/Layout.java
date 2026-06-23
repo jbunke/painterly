@@ -5,6 +5,7 @@ import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.Menu;
+import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
@@ -35,6 +36,10 @@ public final class Layout {
             DIALOG_RESOLUTION_BUTTON_WIDTH = 120, // TODO - test
             DIALOG_ROW_INCREMENT = 30, // TODO - test
             ICON_DIM = 24, // TODO - test
+            SLIDER_HEIGHT = ICON_DIM,
+            SLIDER_DEF_WIDTH = 100,
+            SLIDER_BALL_DIM = ICON_DIM,
+            SLIDER_SHELL_HEIGHT = SLIDER_HEIGHT - 8,
             TOOLTIP_OFFSET_LEFT = -12,
             TOOLTIP_OFFSET_RIGHT = 8,
             MENU_BAR_DIVIDER_WIDTH = 50, // TODO - test
@@ -42,6 +47,7 @@ public final class Layout {
             MENU_BAR_PADDING_X = 10, // TODO - test
             MENU_BAR_SEPARATOR_HEIGHT = 1,
             CONTEXT_BAR_HEIGHT = 32, // TODO - potentially expand for icons
+            CONTEXT_BAR_PADDING_X = 8,
             KEY_SHORTCUT_INTERVAL_X = 4,
             KEY_SHORTCUT_TEXT_MARGIN_X = 6,
             KEY_SHORTCUT_SHADOW_MARGIN_X = 10,
@@ -301,5 +307,13 @@ public final class Layout {
 
     public static int defaultContextBarElementWidth() {
         return ScreenBox.CONTEXT_BAR.width.get() / 8;
+    }
+
+    public static Coord2D follow(final MenuElement ref, final int bufferX) {
+        return ref.getRenderPosition().displaceX(ref.getWidth() + bufferX);
+    }
+
+    public static Coord2D follow(final MenuElement ref) {
+        return follow(ref, 0);
     }
 }

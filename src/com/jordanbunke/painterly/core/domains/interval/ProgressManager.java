@@ -48,4 +48,8 @@ public final class ProgressManager {
     public double getGlobalSimilarity() {
         return globalSimilarity;
     }
+
+    public boolean isDisplay() {
+        return display;
+    }
 }

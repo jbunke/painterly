@@ -2,12 +2,13 @@ package com.jordanbunke.painterly.resources;
 
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
-import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.core.domains.interval.ProgressManager;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.Layout;
+import com.jordanbunke.painterly.util.ProjectUtils;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -53,6 +54,9 @@ public enum ResourceVariables {
             ResourceValue.ofString(NewProject.get().raWidth())),
     RV_NPD_H(() ->
             ResourceValue.ofString(NewProject.get().raHeight())),
+    RV_SIM_SCOPE(p -> (p.progressManager.isDisplay() == ProgressManager.FOCUS
+            ? RC_SCOPE_FOCUS_AREA : RC_SCOPE_GLOBAL).asValue(),
+            RC_UNKNOWABLE.asValue()),
     RV_STROKES_ATTEMPTED(p -> ResourceValue.ofString(
             String.valueOf(p.strokeManager.getStrokesAttempted())),
             RC_UNKNOWABLE.asValue()),
@@ -71,14 +75,7 @@ public enum ResourceVariables {
             final Function<Project, ResourceValue> f,
             final ResourceValue noActiveProjectCase
     ) {
-        valueGetter = () -> {
-            final Project p = ProjectManager.get().getProject();
-
-            if (p != null)
-                return f.apply(p);
-
-            return noActiveProjectCase;
-        };
+        valueGetter = ProjectUtils.wrapGetter(f, noActiveProjectCase);
     }
 
     private final static String ENUM_PREFIX = "RV_", ID_PREFIX = "$";

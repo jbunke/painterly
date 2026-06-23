@@ -77,33 +77,31 @@ public final class FocusManager {
     }
 
     public void augmentDivsX(final int dx) {
-        entireArea = false;
         setDivsX(divsX + dx);
     }
 
     public void augmentDivsY(final int dy) {
-        entireArea = false;
         setDivsY(divsY + dy);
     }
 
     public void augmentX(final int dx) {
-        entireArea = false;
         setX(x + dx);
     }
 
     public void augmentY(final int dy) {
-        entireArea = false;
         setY(y + dy);
     }
 
     public void setDivsX(final int divsX) {
         this.divsX = MathPlus.bounded(1, divsX, maxDivsX);
         setX(x);
+        determineIfEntireArea();
     }
 
     public void setDivsY(final int divsY) {
         this.divsY = MathPlus.bounded(1, divsY, maxDivsY);
         setY(y);
+        determineIfEntireArea();
     }
 
     public void setX(final int x) {
@@ -112,6 +110,10 @@ public final class FocusManager {
 
     public void setY(final int y) {
         this.y = MathPlus.bounded(0, y, divsY - 1);
+    }
+
+    private void determineIfEntireArea() {
+        entireArea = divsX == 1 && divsY == 1;
     }
 
     private void determineDivMaxima() {
@@ -225,7 +227,7 @@ public final class FocusManager {
         if (!wholeCanvas)
             areaOverlay(viewportCanvas, x, y, w, h);
 
-        if (!entireArea && (divsX > 1 || divsY > 1))
+        if (!entireArea)
             boxOverlay(viewportCanvas, x, y, w, h);
     }
 

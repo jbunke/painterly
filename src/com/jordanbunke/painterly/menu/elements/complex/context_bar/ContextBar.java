@@ -4,12 +4,13 @@ import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
-import com.jordanbunke.delta_time.menu.menu_elements.invisible.PlaceholderMenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
+import com.jordanbunke.painterly.menu.elements.complex.context_bar.int_value.IntValueContainer;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.multichoice.OptionsContainer;
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.tool.ToolManager;
+import com.jordanbunke.painterly.util.Constants;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -91,13 +92,23 @@ public final class ContextBar extends MenuElement {
         elements.add(intervalProgress);
 
         // interval target
-        // TODO - expansion, width, icon
-        final ContextBarElement intervalTarget = ContextBarElement
-                .init(INTERVAL_TARGET, RC_CB_INTERVAL_TARGET,
-                        intervalProgress.nextX())
-                .setTooltipCode(RC_CB_INTERVAL_TARGET)
-                .setExpansion(new PlaceholderMenuElement())
-                .setWidthFromPercentage(0.05)
+        // TODO - width, icon
+        final ContextBarElement.Builder intervalTargetBuilder =
+                ContextBarElement.init(INTERVAL_TARGET, RC_CB_INTERVAL_TARGET,
+                                intervalProgress.nextX())
+                        .setTooltipCode(RC_CB_INTERVAL_TARGET)
+                        .setWidthFromPercentage(0.05);
+        final IntValueContainer intervalTargetValue = IntValueContainer
+                .init(intervalTargetBuilder.getPosition())
+                .setAnchor(intervalTargetBuilder.complementaryReflected())
+                .setMinValue(Constants.MIN_INTERVAL_TARGET)
+                .setMaxValue(Constants.MAX_INTERVAL_TARGET)
+                .setProjectGetter(p -> p.strokeManager.getIntervalTarget())
+                .setProjectSetter((p, i) ->
+                        p.strokeManager.setIntervalTarget(i))
+                .build();
+        final ContextBarElement intervalTarget = intervalTargetBuilder
+                .setExpansion(intervalTargetValue)
                 .build();
         elements.add(intervalTarget);
 
@@ -121,22 +132,42 @@ public final class ContextBar extends MenuElement {
         elements.add(focusBoxMode);
 
         // X divisions
-        // TODO - expansion, width, icon
-        final ContextBarElement divsX = ContextBarElement
+        // TODO - width, icon
+        final ContextBarElement.Builder divsXBuilder = ContextBarElement
                 .init(DIVS_X, RC_CB_DIVS_X, focusBoxMode.nextX())
                 .setTooltipCode(RC_CB_DIVS_X)
-                .setExpansion(new PlaceholderMenuElement())
-                .setWidthFromPercentage(0.05)
+                .setWidthFromPercentage(0.05);
+        final IntValueContainer divsXValue = IntValueContainer
+                .init(divsXBuilder.getPosition())
+                .setAnchor(divsXBuilder.complementaryReflected())
+                .setMinValue(1)
+                .setMaxValue(Constants.MAX_BOX_DIVS)
+                .setProjectGetter(p -> p.focusManager.getDivsX())
+                .setProjectSetter((p, i) ->
+                        p.focusManager.setDivsX(i))
+                .build();
+        final ContextBarElement divsX = divsXBuilder
+                .setExpansion(divsXValue)
                 .build();
         elements.add(divsX);
 
         // Y divisions
-        // TODO - expansion, width, icon
-        final ContextBarElement divsY = ContextBarElement
+        // TODO - width, icon
+        final ContextBarElement.Builder divsYBuilder = ContextBarElement
                 .init(DIVS_Y, RC_CB_DIVS_Y, divsX.nextX())
                 .setTooltipCode(RC_CB_DIVS_Y)
-                .setExpansion(new PlaceholderMenuElement())
-                .setWidthFromPercentage(0.05)
+                .setWidthFromPercentage(0.05);
+        final IntValueContainer divsYValue = IntValueContainer
+                .init(divsYBuilder.getPosition())
+                .setAnchor(divsYBuilder.complementaryReflected())
+                .setMinValue(1)
+                .setMaxValue(Constants.MAX_BOX_DIVS)
+                .setProjectGetter(p -> p.focusManager.getDivsY())
+                .setProjectSetter((p, i) ->
+                        p.focusManager.setDivsY(i))
+                .build();
+        final ContextBarElement divsY = divsYBuilder
+                .setExpansion(divsYValue)
                 .build();
         elements.add(divsY);
 

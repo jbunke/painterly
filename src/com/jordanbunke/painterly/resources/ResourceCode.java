@@ -6,7 +6,8 @@ public enum ResourceCode {
     RC_NA, // special resource code indicating N/A
 
     // Icons
-    // TODO
+    RC_DECREMENT,
+    RC_INCREMENT,
 
     // Tooltips
 
@@ -94,6 +95,8 @@ public enum ResourceCode {
     RC_MEASURING_ATTEMPTED,
     RC_EXIT_FULLSCREEN,
     RC_FULLSCREEN,
+    RC_SCOPE_FOCUS_AREA,
+    RC_SCOPE_GLOBAL,
     RC_UNKNOWABLE,
     RC_UNKNOWN,
     ;

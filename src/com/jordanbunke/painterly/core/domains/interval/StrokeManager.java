@@ -1,7 +1,9 @@
 package com.jordanbunke.painterly.core.domains.interval;
 
+import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.settings.Settings;
+import com.jordanbunke.painterly.util.Constants;
 
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_DEFAULT_INTERVAL_TARGET;
 
@@ -43,6 +45,8 @@ public final class StrokeManager {
         if (intervalProgress >= intervalTarget) {
             intervalProgress = 0;
 
+            // TODO - change so that similarity updates are separated from
+            //        intervals
             if (completedInInterval > 0)
                 project.progressManager.update();
 
@@ -84,5 +88,10 @@ public final class StrokeManager {
 
     public int getIntervalTarget() {
         return intervalTarget;
+    }
+
+    public void setIntervalTarget(final int intervalTarget) {
+        this.intervalTarget = MathPlus.bounded(Constants.MIN_INTERVAL_TARGET,
+                intervalTarget, Constants.MAX_INTERVAL_TARGET);
     }
 }

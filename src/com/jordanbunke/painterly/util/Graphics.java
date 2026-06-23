@@ -336,6 +336,42 @@ public final class Graphics {
         return box.submit();
     }
 
+    public static GameImage drawHorzSlider(
+            final int w, final int h, final double fractionX, final Button b
+    ) {
+        // TODO - temp
+        final GameImage slider = new GameImage(w, h);
+
+        final int shellHeight = SLIDER_SHELL_HEIGHT,
+                shellY = (SLIDER_HEIGHT - shellHeight) / 2,
+                bd = SLIDER_BALL_DIM, range = w - bd,
+                ballX = (int)(fractionX * range);
+
+        slider.fillRectangle(systemColor(LIGHT), 0, shellY, w, shellHeight);
+        slider.drawRectangle(systemColor(MID_DARK), 2f, 0, shellY, w, shellHeight);
+
+        final GameImage ball = new GameImage(bd, bd);
+        final Color ballBorder, ballFill;
+
+        if (b.isSelected()) {
+            ballFill = systemColor(MID_LIGHT);
+            ballBorder = systemColor(LIGHT);
+        } else if (b.isHighlighted()) {
+            ballFill = systemColor(MID);
+            ballBorder = systemColor(MID_LIGHT);
+        } else {
+            ballFill = systemColor(MID);
+            ballBorder = systemColor(MID_DARK);
+        }
+
+        ball.fill(ballFill);
+        ball.drawRectangle(ballBorder, 2f, 0, 0, bd, bd);
+
+        slider.draw(ball.submit(), ballX, 0);
+
+        return slider.submit();
+    }
+
     public static GameImage drawVertScrollBar(
             final int w, final int h, final int barH,
             final int barY, final Button b
@@ -482,6 +518,14 @@ public final class Graphics {
                 new GameImage(width, MENU_BAR_SEPARATOR_HEIGHT);
         sepImage.fill(systemColor(LIGHT));
         return sepImage.submit();
+    }
+
+    public static GameImage drawContextBarExpansionBackground(
+            final int w, final int h
+    ) {
+        final GameImage image = new GameImage(w, h);
+        image.fill(systemColor(DARK)); // TODO
+        return image.submit();
     }
 
     public static int standardTextWidth(final String text) {
