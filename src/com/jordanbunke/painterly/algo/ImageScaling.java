@@ -6,7 +6,7 @@ import com.jordanbunke.delta_time.utility.math.MathPlus;
 public final class ImageScaling {
     public static GameImage bicubic(
             final GameImage source,
-            final int scaleFactor
+            final double scaleFactor
     ) {
         return bicubic(source, scaleFactor, scaleFactor);
     }

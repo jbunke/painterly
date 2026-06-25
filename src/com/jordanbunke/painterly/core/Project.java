@@ -10,7 +10,8 @@ import com.jordanbunke.painterly.core.paint.Canvas;
 import java.nio.file.Path;
 
 public final class Project {
-    public final int scaleFactor, width, height;
+    public final double scaleFactor;
+    public final int width, height;
 
     private String name;
     private Path folder;
@@ -27,7 +28,7 @@ public final class Project {
 
     public Project(
             final String name, final Path folder,
-            final GameImage sourceImage, final int scaleFactor
+            final GameImage sourceImage, final double scaleFactor
     ) {
         this.name = name;
         this.folder = folder;
@@ -35,8 +36,8 @@ public final class Project {
 
         // TODO - throw exception if invalid
         this.scaleFactor = scaleFactor;
-        this.width = sourceImage.getWidth() * scaleFactor;
-        this.height = sourceImage.getHeight() * scaleFactor;
+        this.width = (int)(sourceImage.getWidth() * scaleFactor);
+        this.height = (int)(sourceImage.getHeight() * scaleFactor);
 
         canvas = new Canvas(this);
         debugData = new DebugData(this);

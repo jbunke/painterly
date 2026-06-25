@@ -67,7 +67,7 @@ public final class DialogAssembly {
                 scaleFactorTextbox = forDialog(
                         Textbox.init(scaleFactorLabel.followTB())
                                 .setDialogVariableEndpoint(np.scaleFactor,
-                                        Validator::nullableParseInt)
+                                        Validator::nullableParseDouble)
                                 .setWidthRelative(0.4)
                                 .build()),
                 scaleFactorFeedback = feedbackUnderLeadLabel(

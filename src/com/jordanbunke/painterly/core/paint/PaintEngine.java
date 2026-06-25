@@ -125,10 +125,10 @@ public final class PaintEngine {
 
         final int sampleX = MathPlus.bounded(0,
                 smudge(sourcePos.x, stroke.length),
-                (p.width / p.scaleFactor) - 1),
+                (int)(p.width / p.scaleFactor) - 1),
                 sampleY = MathPlus.bounded(0,
                         smudge(sourcePos.y, stroke.length),
-                        (p.height / p.scaleFactor) - 1);
+                        (int)(p.height / p.scaleFactor) - 1);
 
         return p.getSourceImage().getColorAt(sampleX, sampleY);
     }
@@ -136,8 +136,8 @@ public final class PaintEngine {
     private static Coord2D sourcePosition(
             final Project p, final Coord2D position
     ) {
-        return new Coord2D(position.x / p.scaleFactor,
-                position.y / p.scaleFactor);
+        return new Coord2D((int)(position.x / p.scaleFactor),
+                (int)(position.y / p.scaleFactor));
     }
 
     public static double similarity(

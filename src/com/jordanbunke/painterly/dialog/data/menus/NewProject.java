@@ -25,7 +25,7 @@ public final class NewProject extends DialogVariableSet {
     public final DialogVariable<String> name;
     public final DialogVariable<Path> folder;
     public final DialogVariable<GameImage> sourceImage;
-    public final DialogVariable<Integer> scaleFactor;
+    public final DialogVariable<Double> scaleFactor;
 
     private String refImageFilename;
 
@@ -37,7 +37,7 @@ public final class NewProject extends DialogVariableSet {
         name = new DialogVariable<>("", this::validName);
         folder = new DialogVariable<>(null, this::validFolder);
         sourceImage = new DialogVariable<>(null, this::validSourceImage);
-        scaleFactor = new DialogVariable<>(10, this::validScaleFactor);
+        scaleFactor = new DialogVariable<>(3d, this::validScaleFactor);
     }
 
     public static NewProject get() {
@@ -126,19 +126,20 @@ public final class NewProject extends DialogVariableSet {
     }
 
     private Pair<Boolean, ResourceCode> validScaleFactor(
-            final Integer scaleFactor
+            final Double scaleFactor
     ) {
         if (scaleFactor == null)
             return new Pair<>(false, RC_DIALOG_CANNOT_READ_INT);
-        else if (scaleFactor < 1)
-            return new Pair<>(false, RC_DIALOG_MUST_BE_POSITIVE);
+        else if (scaleFactor < 1d)
+            return new Pair<>(false, RC_DIALOG_MUST_BE_GR_EQ_1);
         else if (!sourceImage.passing())
             return new Pair<>(false,
                     RC_DIALOG_CANNOT_VALIDATE_SCALE_FACTOR_WITHOUT_IMAGE);
         else {
             final GameImage refImage = sourceImage.get();
-            final long pixels = (long) refImage.getWidth() *
-                    refImage.getHeight() * scaleFactor * scaleFactor;
+            final int w = (int)(refImage.getWidth() * scaleFactor),
+                    h = (int)(refImage.getHeight() * scaleFactor);
+            final long pixels = (long) w * h;
 
             if (pixels > Constants.MAX_CANVAS_PIXELS)
                 return new Pair<>(false, RC_NA /* TODO */);
@@ -166,11 +167,11 @@ public final class NewProject extends DialogVariableSet {
     }
 
     public String raWidth() {
-        return String.valueOf(sourceImage.get().getWidth() * scaleFactor.get());
+        return String.valueOf((int)(sourceImage.get().getWidth() * scaleFactor.get()));
     }
 
     public String raHeight() {
-        return String.valueOf(sourceImage.get().getHeight() * scaleFactor.get());
+        return String.valueOf((int)(sourceImage.get().getHeight() * scaleFactor.get()));
     }
 
     // helper

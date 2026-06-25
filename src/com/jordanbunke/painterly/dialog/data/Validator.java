@@ -21,6 +21,14 @@ public interface Validator<T> {
         return new Pair<>(false, RC_NA);
     }
 
+    static Double nullableParseDouble(final String s) {
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
+    }
+
     static Integer nullableParseInt(final String s) {
         try {
             return Integer.parseInt(s);

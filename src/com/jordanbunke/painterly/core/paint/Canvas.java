@@ -21,7 +21,7 @@ public final class Canvas {
 
         final GameImage source = project.getSourceImage();
 
-        scaledSource = project.scaleFactor == 1
+        scaledSource = project.scaleFactor == 1d
                 ? new GameImage(source)
                 : ImageScaling.bicubic(project.getSourceImage(), project.scaleFactor);
         sobel = Sobel.calculate(source);
