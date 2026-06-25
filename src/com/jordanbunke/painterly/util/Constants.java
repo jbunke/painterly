@@ -33,7 +33,7 @@ public final class Constants {
             MAX_STROKE_LENGTH_SIZE_RATIO = 0.25,
             PRIORITIZE_WORST_EXPONENT = 3d;
 
-    public static final long MAX_CANVAS_PIXELS = 10000L * 10000L;
+    public static final long MAX_CANVAS_PIXELS = 6000L * 6000L;
 
     public static final String PNG = "png", JPEG = "jpg";
 

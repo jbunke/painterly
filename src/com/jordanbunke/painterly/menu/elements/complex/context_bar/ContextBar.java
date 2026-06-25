@@ -47,11 +47,13 @@ public final class ContextBar extends MenuElement {
         // TODO - temp
 
         // tool
-        // TODO - width, dynamic icon
+        // TODO - width
         final ContextBarElement.Builder toolBuilder = ContextBarElement
                 .init(TOOL, RC_CB_CURRENT_TOOL, 0)
                 .setTooltipCode(RC_CB_CURRENT_TOOL)
                 .setRequiresProject(false)
+                .setIconCodeGetter(() ->
+                        ToolManager.getCurrentAction().getIconCode())
                 .setAlignment(Alignment.LEFT);
         final OptionsContainer toolOptions = OptionsContainer
                 .init(toolBuilder.getPosition())
@@ -73,12 +75,14 @@ public final class ContextBar extends MenuElement {
         elements.add(strokeCount);
 
         // interval progress
-        // TODO - width, icon
+        // TODO - width
         final ContextBarElement.Builder intervalProgressBuilder =
                 ContextBarElement.init(INTERVAL_PROGRESS,
                                 RC_CB_INTERVAL_PROGRESS, strokeCount.nextX())
                         .setTooltipCode(RC_CB_INTERVAL_PROGRESS)
-                        .setWidthFromPercentage(0.05);
+                        .setStaticIconCode(RC_CB_INTERVAL_PROGRESS)
+                        .setAlignment(Alignment.LEFT)
+                        .setWidthFromPercentage(0.08);
         final OptionsContainer intervalProgressOptions = OptionsContainer
                 .init(intervalProgressBuilder.getPosition())
                 .setAnchor(intervalProgressBuilder.complementaryReflected())
@@ -92,12 +96,14 @@ public final class ContextBar extends MenuElement {
         elements.add(intervalProgress);
 
         // interval target
-        // TODO - width, icon
+        // TODO - width
         final ContextBarElement.Builder intervalTargetBuilder =
                 ContextBarElement.init(INTERVAL_TARGET, RC_CB_INTERVAL_TARGET,
                                 intervalProgress.nextX())
                         .setTooltipCode(RC_CB_INTERVAL_TARGET)
-                        .setWidthFromPercentage(0.05);
+                        .setStaticIconCode(RC_CB_INTERVAL_TARGET)
+                        .setAlignment(Alignment.LEFT)
+                        .setWidthFromPercentage(0.08);
         final IntValueContainer intervalTargetValue = IntValueContainer
                 .init(intervalTargetBuilder.getPosition())
                 .setAnchor(intervalTargetBuilder.complementaryReflected())
@@ -132,11 +138,12 @@ public final class ContextBar extends MenuElement {
         elements.add(focusBoxMode);
 
         // X divisions
-        // TODO - width, icon
+        // TODO - width
         final ContextBarElement.Builder divsXBuilder = ContextBarElement
                 .init(DIVS_X, RC_CB_DIVS_X, focusBoxMode.nextX())
                 .setTooltipCode(RC_CB_DIVS_X)
-                .setWidthFromPercentage(0.05);
+                .setStaticIconCode(RC_CB_DIVS_X)
+                .setWidthFromPercentage(0.08);
         final IntValueContainer divsXValue = IntValueContainer
                 .init(divsXBuilder.getPosition())
                 .setAnchor(divsXBuilder.complementaryReflected())
@@ -152,11 +159,12 @@ public final class ContextBar extends MenuElement {
         elements.add(divsX);
 
         // Y divisions
-        // TODO - width, icon
+        // TODO - width
         final ContextBarElement.Builder divsYBuilder = ContextBarElement
                 .init(DIVS_Y, RC_CB_DIVS_Y, divsX.nextX())
                 .setTooltipCode(RC_CB_DIVS_Y)
-                .setWidthFromPercentage(0.05);
+                .setStaticIconCode(RC_CB_DIVS_Y)
+                .setWidthFromPercentage(0.08);
         final IntValueContainer divsYValue = IntValueContainer
                 .init(divsYBuilder.getPosition())
                 .setAnchor(divsYBuilder.complementaryReflected())

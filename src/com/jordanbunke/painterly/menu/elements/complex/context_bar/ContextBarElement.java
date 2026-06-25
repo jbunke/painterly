@@ -21,6 +21,7 @@ import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.Tooltip;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.util.Graphics.drawContextBarElement;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.CONTEXT_BAR;
@@ -33,7 +34,7 @@ public final class ContextBarElement extends MenuButtonStub
     private final boolean expandable, requiresProject;
 
     private final ResourceCode textCode, tooltipCode;
-    // TODO - ResourceCode supplier for icon
+    private final Supplier<ResourceCode> iconCodeGetter;
     private final Alignment alignment;
 
     private boolean expanded;
@@ -46,7 +47,8 @@ public final class ContextBarElement extends MenuButtonStub
             final Anchor anchor, final ContextBarSection section,
             final MenuElement expansion, final boolean requiresProject,
             final ResourceCode textCode, final Alignment alignment,
-            final ResourceCode tooltipCode
+            final ResourceCode tooltipCode,
+            final Supplier<ResourceCode> iconCodeGetter
     ) {
         super(position, dimensions, anchor, true);
 
@@ -60,6 +62,8 @@ public final class ContextBarElement extends MenuButtonStub
 
         this.textCode = textCode;
         this.alignment = alignment;
+
+        this.iconCodeGetter = iconCodeGetter;
 
         label = LanguageData.retrieveUIText(textCode);
 
@@ -147,11 +151,13 @@ public final class ContextBarElement extends MenuButtonStub
     }
 
     private void updateAssets() {
-        base = drawContextBarElement(sim(false, false));
+        final ResourceCode iconCode = iconCodeGetter.get();
+
+        base = drawContextBarElement(sim(false, false), iconCode);
 
         if (expandable) {
-            highlight = drawContextBarElement(sim(false, true));
-            selected = drawContextBarElement(sim(true, false));
+            highlight = drawContextBarElement(sim(false, true), iconCode);
+            selected = drawContextBarElement(sim(true, false), iconCode);
         }
     }
 
@@ -201,6 +207,7 @@ public final class ContextBarElement extends MenuButtonStub
         private Anchor anchor;
 
         private ResourceCode tooltipCode;
+        private Supplier<ResourceCode> iconCodeGetter;
         private MenuElement expansion;
         private boolean requiresProject;
 
@@ -220,6 +227,7 @@ public final class ContextBarElement extends MenuButtonStub
             anchor = Anchor.LEFT_TOP;
 
             tooltipCode = ResourceCode.RC_NA;
+            iconCodeGetter = () -> ResourceCode.RC_NA;
             expansion = null;
             requiresProject = true;
 
@@ -260,13 +268,22 @@ public final class ContextBarElement extends MenuButtonStub
             return this;
         }
 
+        public Builder setIconCodeGetter(
+                final Supplier<ResourceCode> iconCodeGetter
+        ) {
+            this.iconCodeGetter = iconCodeGetter;
+            return this;
+        }
+
+        public Builder setStaticIconCode(final ResourceCode iconCode) {
+            return setIconCodeGetter(() -> iconCode);
+        }
+
         @Override
         public ContextBarElement build() {
-            // TODO
-
             return new ContextBarElement(position, dimensions, anchor,
                     section, expansion, requiresProject, textCode,
-                    alignment, tooltipCode);
+                    alignment, tooltipCode, iconCodeGetter);
         }
 
         // GETTER

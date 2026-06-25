@@ -38,7 +38,7 @@ public final class ToolManager {
         currentTool = tool;
     }
 
-    public static ResourceCode getCurrentCode() {
-        return currentTool.setter.getCode();
+    public static GlobalAction getCurrentAction() {
+        return currentTool.setter;
     }
 }

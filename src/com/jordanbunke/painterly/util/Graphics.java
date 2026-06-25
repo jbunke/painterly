@@ -73,7 +73,9 @@ public final class Graphics {
         return textImage.getWidth() + TEXT_BUTTON_PADDING_X;
     }
 
-    public static GameImage drawContextBarElement(final TextButton tb) {
+    public static GameImage drawContextBarElement(
+            final TextButton tb, final ResourceCode iconCode
+    ) {
         // TODO - temp
         final Color textColor, bgColor, accentColor;
 
@@ -113,8 +115,11 @@ public final class Graphics {
             case RIGHT -> w - (TEXT_BUTTON_TEXT_OFFSET_X + textImage.getWidth());
         };
 
-        // TODO
+        // text
         button.draw(textImage, x, TEXT_BUTTON_TEXT_OFFSET_Y);
+
+        // icon
+        stampIcon(button, iconCode);
 
         // border
         button.drawLine(accentColor, 4f, 0, 0, 0, h);
@@ -145,14 +150,17 @@ public final class Graphics {
             final IAction<T> action
     ) {
         final KeyboardShortcut shortcut = action.getShortcut();
+        final ResourceCode iconCode = action.getIconCode();
 
         final int w = tb.getWidth(), h = tb.getHeight();
         final GameImage button = new GameImage(w, h);
 
         drawSubMenuButton(button, tb, stub);
 
-        // TODO - icon
+        // icon
+        stampIcon(button, iconCode);
 
+        // keyboard shortcut
         if (shortcut != null) {
             final GameImage shortcutImage = drawKeyboardShortcut(shortcut);
             final int shortcutX = button.getWidth() -
@@ -162,6 +170,19 @@ public final class Graphics {
         }
 
         return button.submit();
+    }
+
+    private static void stampIcon(
+            final GameImage image, final ResourceCode iconCode
+    ) {
+        if (iconCode == null || iconCode == ResourceCode.RC_NA)
+            return;
+
+        final int h = image.getHeight(), y = (h - ICON_DIM) / 2;
+
+        final GameImage icon = readIcon(iconCode);
+
+        image.draw(icon, MENU_BAR_PADDING_X, y);
     }
 
     /**

@@ -20,7 +20,7 @@ public enum ResourceVariables {
             ? RC_MEASURING_ATTEMPTED : RC_MEASURING_ACCEPTED).asValue(),
             RC_UNKNOWN.asValue()),
     RV_CURRENT_TOOL(() -> ResourceValue.ofString(
-            LanguageData.retrieveUIText(ToolManager.getCurrentCode()))),
+            LanguageData.retrieveUIText(ToolManager.getCurrentAction().getCode()))),
     RV_DIVS_X(p -> ResourceValue.ofString(
             String.valueOf(p.focusManager.getDivsX())),
             RC_UNKNOWABLE.asValue()),
