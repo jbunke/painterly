@@ -6,6 +6,8 @@ public enum ResourceCode {
     RC_NA, // special resource code indicating N/A
 
     // Icons
+    RC_CHECKED_FALSE,
+    RC_CHECKED_TRUE,
     RC_DECREMENT,
     RC_INCREMENT,
 

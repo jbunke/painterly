@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.function.Function;
 
+import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.util.Colors.*;
 import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
@@ -175,7 +176,7 @@ public final class Graphics {
     private static void stampIcon(
             final GameImage image, final ResourceCode iconCode
     ) {
-        if (iconCode == null || iconCode == ResourceCode.RC_NA)
+        if (iconCode == null || iconCode == RC_NA)
             return;
 
         final int h = image.getHeight(), y = (h - ICON_DIM) / 2;
@@ -255,6 +256,16 @@ public final class Graphics {
         button.drawRectangle(accentColor, 4f, 0, 0, w, h);
 
         return button.submit();
+    }
+
+    public static GameImage drawCheckbox(
+            final boolean highlighted, final boolean checked
+    ) {
+        // TODO - review
+        final GameImage icon = readIcon(checked
+                ? RC_CHECKED_TRUE : RC_CHECKED_FALSE);
+
+        return highlighted ? highlightIcon(icon) : icon;
     }
 
     public static GameImage drawTextbox(
