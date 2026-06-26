@@ -37,12 +37,18 @@ public enum GlobalAction
             () -> {} /* TODO */),
     TOGGLE_DEBUG_PROFILER(RC_NA, new KeyboardShortcut(false, true, P),
             RuntimeSettings::toggleProfilerOn),
-    SET_TOOL_HAND(RC_TOOL_HAND, true, true,
-            KeyboardShortcut.single(H),
-            () -> ToolManager.setCurrentTool(HAND)),
     SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, true, true,
             KeyboardShortcut.single(X),
             () -> ToolManager.setCurrentTool(DRAW_FOCUS_AREA)),
+    SET_TOOL_HAND(RC_TOOL_HAND, true, true,
+            KeyboardShortcut.single(H),
+            () -> ToolManager.setCurrentTool(HAND)),
+    SET_TOOL_MOVE_FOCUS_AREA(RC_TOOL_MOVE_FOCUS_AREA, true, true,
+            KeyboardShortcut.single(M),
+            () -> ToolManager.setCurrentTool(MOVE_FOCUS_AREA)),
+    SET_TOOL_ZOOM(RC_TOOL_ZOOM, true, true,
+            KeyboardShortcut.single(Z),
+            () -> ToolManager.setCurrentTool(ZOOM)),
     ;
 
     static {

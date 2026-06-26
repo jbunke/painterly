@@ -20,5 +20,7 @@
     "tick_mode_attempted" : "Both completed strokes and rejected stroke\nattempts count towards interval progress",
     "tick_mode_completed" : "Only completed strokes count towards interval progress",
     "tool_draw_focus_area" : "Use the mouse to draw a rectangle\nto define the bounds within which\nbrush strokes will be attempted",
-    "tool_hand" : "Click and drag to reposition the canvas"
+    "tool_hand" : "Click and drag to reposition the canvas",
+    "tool_move_focus_area" : "Click and drag on the focus area\nor the nodes around its border to\nmove or resize the focus area",
+    "tool_zoom" : "Left-click and right-click on the canvas\nto zoom in and out, respectively"
 }

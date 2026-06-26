@@ -1,7 +1,6 @@
 package com.jordanbunke.painterly.tool;
 
 import com.jordanbunke.painterly.events.actions.GlobalAction;
-import com.jordanbunke.painterly.resources.ResourceCode;
 
 import java.util.function.Supplier;
 
@@ -9,8 +8,11 @@ import static com.jordanbunke.painterly.events.actions.GlobalAction.*;
 
 public final class ToolManager {
     public enum ToolEnum {
+        DRAW_FOCUS_AREA(DrawFocusArea::get, SET_TOOL_DRAW_FOCUS_AREA),
         HAND(Hand::get, SET_TOOL_HAND),
-        DRAW_FOCUS_AREA(DrawFocusArea::get, SET_TOOL_DRAW_FOCUS_AREA);
+        MOVE_FOCUS_AREA(MoveFocusArea::get, SET_TOOL_MOVE_FOCUS_AREA),
+        ZOOM(Zoom::get, SET_TOOL_ZOOM),
+        ;
 
         private final Supplier<Tool> retriever;
         public final GlobalAction setter;

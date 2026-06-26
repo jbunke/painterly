@@ -88,6 +88,8 @@ public enum ResourceCode {
     // Tools
     RC_TOOL_DRAW_FOCUS_AREA,
     RC_TOOL_HAND,
+    RC_TOOL_MOVE_FOCUS_AREA,
+    RC_TOOL_ZOOM,
 
     // Values
     // TODO - variable output possibilities - make language-dependent _values json files

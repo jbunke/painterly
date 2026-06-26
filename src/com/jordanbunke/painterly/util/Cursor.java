@@ -5,7 +5,9 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 
 public enum Cursor {
     UNASSIGNED, MAIN, POINTER, RETICLE, TEXT,
-    VERT_SCROLL, HORZ_SCROLL, HAND_OPEN, HAND_GRAB, NONE;
+    VERT_SCROLL, HORZ_SCROLL, HAND_OPEN, HAND_GRAB,
+    ZOOM, MOVE_SELECTION, MOVE_TL_BR, MOVE_TR_BL,
+    NONE;
 
     public String id() {
         return name().toLowerCase();

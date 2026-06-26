@@ -13,7 +13,7 @@ import com.jordanbunke.painterly.tool.ToolManager;
 public final class Positioning {
     private static final double MIN_FTSR = 0.95, MAX_FTSR = 20d,
             MIDDLE = 0.5, MIN_ANCHOR = 0d, MAX_ANCHOR = 1d,
-            SCROLL_ZOOM_RATE = 1.1;
+            SCROLL_ZOOM_RATE = 1.1, CLICK_ZOOM_RATE = 1.3;
     public static final Coord2D INVALID = new Coord2D(-1, -1);
 
     private double fitToScreenRatio, anchorRatioX, anchorRatioY;
@@ -67,6 +67,12 @@ public final class Positioning {
         return Math.min(scaleX, scaleY);
     }
 
+    public void clickZoom(
+            final boolean in, final Project p, final Coord2D mousePosInViewport
+    ) {
+        zoom(in, CLICK_ZOOM_RATE, p, true, mousePosInViewport);
+    }
+
     public void scrollZoom(
             final boolean in, final Project p,
             final boolean adjustAnchor, final Coord2D mousePosInViewport
@@ -88,7 +94,7 @@ public final class Positioning {
 
         fitToScreenRatio = MathPlus.bounded(MIN_FTSR, fitToScreenRatio, MAX_FTSR);
 
-        if (adjustAnchor && isTargetPixelValid(targetPixel))
+        if (adjustAnchor && isTargetPixelValid(targetPixel, p))
             adjustAnchorAfterZoom(oldRatio, targetPixel, p);
     }
 
@@ -162,10 +168,25 @@ public final class Positioning {
                 x = (int)(((mx - x0) / (double) rw) * pw),
                 y = (int)(((my - y0) / (double) rh) * ph);
 
-        return x >= 0 && y >= 0 && x < pw && y < ph ? new Coord2D(x, y) : INVALID;
+        return new Coord2D(x, y);
     }
 
-    public static boolean isTargetPixelValid(final Coord2D targetPixel) {
-        return !INVALID.equals(targetPixel);
+    public static boolean isTargetPixelValid(
+            final Coord2D targetPixel, final Project p
+    ) {
+        final int x = targetPixel.x, y = targetPixel.y,
+                pw = p.width, ph = p.height;
+
+        return x >= 0 && y >= 0 && x < pw && y < ph;
+    }
+
+    public static Coord2D boundTargetPixel(
+            final Coord2D targetPixel, final Project p
+    ) {
+        final int x = targetPixel.x, y = targetPixel.y,
+                pw = p.width, ph = p.height;
+
+        return new Coord2D(MathPlus.bounded(0, x, pw - 1),
+                MathPlus.bounded(0, y, ph - 1));
     }
 }

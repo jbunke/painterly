@@ -37,7 +37,7 @@ public final class DrawFocusArea extends Tool {
     public void onMouseDown(final GameMouseEvent mouseEvent, final Project p) {
         final Coord2D targetPixel = getTargetPixel(mouseEvent.mousePosition, p);
 
-        selecting = Positioning.isTargetPixelValid(targetPixel);
+        selecting = Positioning.isTargetPixelValid(targetPixel, p);
 
         if (selecting) {
             pivot = targetPixel;
@@ -51,10 +51,8 @@ public final class DrawFocusArea extends Tool {
         if (selecting) {
             final Coord2D targetPixel = getTargetPixel(mousePos, p);
 
-            if (Positioning.isTargetPixelValid(targetPixel)) {
-                complement = targetPixel;
-                updateTLBR();
-            }
+            complement = Positioning.boundTargetPixel(targetPixel, p);
+            updateTLBR();
         }
     }
 

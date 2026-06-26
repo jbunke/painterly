@@ -83,6 +83,8 @@ public final class DialogAssembly {
 
     // helper
 
+    // TODO - are you sure template
+
     private static PopUpDialog buildDialogForVariableSet(
             final PopUpDialog.Builder db, final DialogVariableSet vars
     ) {
