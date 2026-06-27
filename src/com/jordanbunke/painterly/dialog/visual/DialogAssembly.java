@@ -6,14 +6,12 @@ import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
 import com.jordanbunke.painterly.dialog.data.menus.DialogVariableSet;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
-import com.jordanbunke.painterly.menu.elements.label.DynamicLabel;
+import com.jordanbunke.painterly.menu.elements.icon_button.FeedbackElement;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.menu.elements.textbox.Textbox;
 import com.jordanbunke.painterly.resources.ResourceCode;
 
-import static com.jordanbunke.painterly.util.Colors.*;
-import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
@@ -35,11 +33,11 @@ public final class DialogAssembly {
         final DialogElement
                 projectNameLabelDE = leadLabelForDialog(db, projectNameLabel),
                 folderLabelDE = leadLabelForDialog(db, folderLabel,
-                        deb -> deb.setRow(2.5)),
+                        deb -> deb.setRow(1.5)),
                 refImageLabelDE = leadLabelForDialog(db, refImageLabel,
-                        deb -> deb.setRow(5)),
+                        deb -> deb.setRow(3)),
                 scaleFactorLabelDE = leadLabelForDialog(db, scaleFactorLabel,
-                        deb -> deb.setRow(7.5));
+                        deb -> deb.setRow(4.5));
 
         db.addElements(projectNameLabelDE, folderLabelDE,
                 refImageLabelDE, scaleFactorLabelDE);
@@ -50,28 +48,28 @@ public final class DialogAssembly {
                         Textbox.init(projectNameLabel.followTB())
                                 .setDialogVariableEndpoint(np.name, s -> s)
                                 .build()),
-                projectNameFeedback = feedbackUnderLeadLabel(
-                        projectNameLabelDE, np.name),
+                projectNameFeedback = feedbackAfterInteraction(
+                        projectNameTextbox, np.name),
                 folderButton = forDialog(
                         SimpleTextButton.init(RC_NPD_CHOOSE_FOLDER,
                                 folderLabel.followTB(),
                                 np::chooseFolder).build()),
-                folderFeedback = feedbackUnderLeadLabel(
-                        folderLabelDE, np.folder),
+                folderFeedback = feedbackAfterInteraction(
+                        folderButton, np.folder),
                 uploadImageButton = forDialog(
                         SimpleTextButton.init(RC_UPLOAD,
                                 refImageLabel.followTB(),
                                 np::uploadSourceImage).build()),
-                uploadImageFeedback = feedbackUnderLeadLabel(
-                        refImageLabelDE, np.sourceImage),
+                uploadImageFeedback = feedbackAfterInteraction(
+                        uploadImageButton, np.sourceImage),
                 scaleFactorTextbox = forDialog(
                         Textbox.init(scaleFactorLabel.followTB())
                                 .setDialogVariableEndpoint(np.scaleFactor,
                                         Validator::nullableParseDouble)
                                 .setWidthRelative(0.4)
                                 .build()),
-                scaleFactorFeedback = feedbackUnderLeadLabel(
-                        scaleFactorLabelDE, np.scaleFactor);
+                scaleFactorFeedback = feedbackAfterInteraction(
+                        scaleFactorTextbox, np.scaleFactor);
 
         db.addElements(projectNameTextbox, projectNameFeedback,
                 folderButton, folderFeedback,
@@ -104,14 +102,15 @@ public final class DialogAssembly {
         return deb.autoAlignX(db).autoAlignY(db).build();
     }
 
-    private static DialogElement feedbackUnderLeadLabel(
-            final DialogElement leadLabelDE, final DialogVariable<?> variable
+    private static DialogElement feedbackAfterInteraction(
+            final DialogElement interactionDE, final DialogVariable<?> variable
     ) {
-        return forDialog(
-                DynamicLabel.init(leadLabelDE.below(DIALOG_MARGIN),
-                                variable::feedback)
-                        .setColor(systemColor(MID))
-                        .build());
+        final int adjustmentY =
+                ((interactionDE.element.getHeight() - ICON_DIM) / 2);
+
+        return forDialog(FeedbackElement.init(
+                interactionDE.rightOf(DIALOG_MARGIN).displaceY(adjustmentY),
+                variable).build());
     }
 
     private static DialogElement forDialog(final MenuElement element) {

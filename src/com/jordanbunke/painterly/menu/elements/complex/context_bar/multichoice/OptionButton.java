@@ -54,8 +54,7 @@ public final class OptionButton<T> extends MenuButtonStub implements TextButton 
 
         if (isHighlighted()) {
             final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
-            Tooltip.get().ping(Tooltip.resolve(action.getTooltipCode()),
-                    mousePos);
+            Tooltip.get().pingCode(action.getTooltipCode(), mousePos);
 
             if (passing)
                 Cursor.ping(Cursor.POINTER);

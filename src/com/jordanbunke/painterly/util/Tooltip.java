@@ -39,9 +39,11 @@ public final class Tooltip {
                 : LanguageData.retrieveTooltip(code);
     }
 
-    public void ping(
-            final String tooltip, final Coord2D mousePos
-    ) {
+    public void pingCode(final ResourceCode code, final Coord2D mousePos) {
+        ping(resolve(code), mousePos);
+    }
+
+    public void ping(final String tooltip, final Coord2D mousePos) {
         this.mousePos = mousePos;
         this.tooltip = tooltip;
     }

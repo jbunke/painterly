@@ -8,6 +8,8 @@ public enum ResourceCode {
     // Icons
     RC_CHECKED_FALSE,
     RC_CHECKED_TRUE,
+    RC_FEEDBACK_INVALID,
+    RC_FEEDBACK_VALID,
     RC_DECREMENT,
     RC_INCREMENT,
 

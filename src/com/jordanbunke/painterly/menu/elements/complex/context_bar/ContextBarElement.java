@@ -97,7 +97,7 @@ public final class ContextBarElement extends MenuButtonStub
 
         // tooltip and cursor
         if (mouseInBounds) {
-            Tooltip.get().ping(Tooltip.resolve(tooltipCode), mousePos);
+            Tooltip.get().pingCode(tooltipCode, mousePos);
 
             if (expandable && (projectConditionsSatisfied || expanded))
                 Cursor.ping(Cursor.POINTER);
