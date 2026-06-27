@@ -54,7 +54,7 @@ public final class SimpleLabel extends StaticMenuElement {
             this.position = position;
 
             instructions = new LinkedList<>();
-            instructions.add(tb -> tb.addText(text));
+            addTextAsLines(text);
 
             anchor = Anchor.LEFT_TOP;
             color = Colors.systemColor(Colors.SystemColor.DARK);
@@ -88,9 +88,14 @@ public final class SimpleLabel extends StaticMenuElement {
             return this;
         }
 
-        public Builder setText(final String text) {
+        public Builder setText(final String text, final boolean splitLines) {
             instructions.clear();
-            instructions.add(tb -> tb.addText(text));
+
+            if (splitLines)
+                addTextAsLines(text);
+            else
+                instructions.add(tb -> tb.addText(text));
+
             return this;
         }
 
@@ -115,6 +120,18 @@ public final class SimpleLabel extends StaticMenuElement {
             final GameImage image = tb.build().draw();
 
             return new SimpleLabel(position, anchor, image);
+        }
+
+        private void addTextAsLines(final String text) {
+            final String[] lines = text.split("\n");
+
+            for (int i = 0; i < lines.length; i++) {
+                final String line = lines[i];
+                instructions.add(tb -> tb.addText(line));
+
+                if (i + 1 < lines.length)
+                    instructions.add(TextBuilder::addLineBreak);
+            }
         }
     }
 

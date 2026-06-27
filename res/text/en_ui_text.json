@@ -1,5 +1,7 @@
 {
     "about" : "About",
+    "ays_quit_message" : "Are you sure you want to quit $program_name?\nAll unsaved changes will be lost.",
+    "ays_quit_title" : "Quit $program_name?",
     "cb_current_tool" : "$current_tool",
     "cb_divs_x" : "$divs_x",
     "cb_divs_y" : "$divs_y",

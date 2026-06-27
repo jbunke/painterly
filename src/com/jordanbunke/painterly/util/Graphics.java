@@ -518,6 +518,7 @@ public final class Graphics {
     // ADDITIONAL UI
 
     public static GameImage drawTooltip(final String text) {
+        // TODO - temp implementation
         final Color textColor = systemColor(DARK);
         final String[] lines = text.split("\n");
         final GameImage[] lineImages = Arrays.stream(lines)

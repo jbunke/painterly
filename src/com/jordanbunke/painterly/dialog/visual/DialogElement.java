@@ -99,6 +99,25 @@ public final class DialogElement {
             return this;
         }
 
+        /**
+         * To be invoked after {@link #columnIndex} and {@link #columns}
+         * have been specified.
+         * <br>
+         * Only used for sole elements on a line that are X-anchored to center
+         * */
+        public Builder centerInColumnX(final PopUpDialog.Builder db) {
+            /*
+             * Anchor sanity check:
+             * Only apply centering if element is center-anchored
+             * */
+            switch (element.getAnchor()) {
+                case CENTRAL_TOP, CENTRAL, CENTRAL_BOTTOM ->
+                        element.setX(db.middleOfColumnX(columnIndex, columns));
+            }
+
+            return this;
+        }
+
         public DialogElement build() {
             return new DialogElement(columnIndex, columns, row, element);
         }

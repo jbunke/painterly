@@ -1,7 +1,6 @@
 package com.jordanbunke.painterly.events.actions;
 
 import com.jordanbunke.delta_time.io.InputEventLogger;
-import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
@@ -25,10 +24,11 @@ public enum GlobalAction
         implements IAction</* TODO - evaluate whether more suitable type exists */ Runnable>, ISubMenuEntry {
     MAIN_MENU(RC_NAV_MAIN_MENU, null,
             () -> ProgramState.setMenu(MenuAssembly::mainMenu)),
-    QUIT_PROGRAM(RC_NAV_QUIT_PROGRAM, null, Painterly::quitProgram),
+    QUIT_PROGRAM(RC_NAV_QUIT_PROGRAM, null,
+            () -> DialogManager.set(DialogAssembly::aysQuit)),
     DIALOG_CLOSE(KeyboardShortcut.single(ESCAPE), DialogManager::close),
     DIALOG_OK(KeyboardShortcut.single(ENTER),
-            () -> DialogManager.get().variableSet.ok()),
+            () -> DialogManager.get().ok()),
     TOGGLE_FULLSCREEN(RC_TOGGLE_FULLSCREEN, KeyboardShortcut.single(ESCAPE),
             Layout::toggleFullscreen),
     NEW_PROJECT(RC_NEW_PROJECT, new KeyboardShortcut(true, false, N),
@@ -58,7 +58,7 @@ public enum GlobalAction
         // Populate preconditions
         DIALOG_CLOSE.precondition = DialogManager::has;
         DIALOG_OK.precondition = () -> DialogManager.has() &&
-                DialogManager.get().variableSet.validate();
+                DialogManager.get().validate();
         TOGGLE_FULLSCREEN.precondition = () -> !DialogManager.has();
         // TODO
     }

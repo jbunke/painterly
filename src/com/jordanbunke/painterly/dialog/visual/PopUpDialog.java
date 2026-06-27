@@ -9,7 +9,6 @@ import com.jordanbunke.delta_time.menu.menu_elements.container.MenuElementGroupi
 import com.jordanbunke.delta_time.menu.menu_elements.ext.scroll.Scrollable;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
-import com.jordanbunke.painterly.dialog.data.menus.DialogVariableSet;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.complex.logic.EnumMenuElement;
@@ -33,21 +32,23 @@ import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.SCREEN;
 
 public final class PopUpDialog extends MenuElementContainer {
-    public final DialogVariableSet variableSet;
+    private final Supplier<Boolean> precondition;
+    private final Runnable onOK;
 
     private final GameImage background;
     private final MenuElement title, contents, resolutionButtons;
 
     private PopUpDialog(
             final int width, final int height,
-            final DialogVariableSet variableSet,
+            final Supplier<Boolean> precondition, final Runnable onOK,
             final MenuElement title, final MenuElement contents,
             final MenuElement resolutionButtons
     ) {
         super(SCREEN.at(0.5, 0.5),
                 new Bounds2D(width, height), Anchor.CENTRAL, true);
 
-        this.variableSet = variableSet;
+        this.precondition = precondition;
+        this.onOK = onOK;
 
         this.title = title;
         this.contents = contents;
@@ -56,11 +57,16 @@ public final class PopUpDialog extends MenuElementContainer {
         background = Graphics.drawDialogBackground(width, height);
     }
 
-    public static Builder init(
-            final ResourceCode titleCode,
-            final DialogVariableSet variableSet
-    ) {
-        return new Builder(titleCode, variableSet);
+    public static Builder init(final ResourceCode titleCode) {
+        return new Builder(titleCode);
+    }
+
+    public void ok() {
+        onOK.run();
+    }
+
+    public boolean validate() {
+        return precondition.get();
     }
 
     @Override
@@ -117,8 +123,6 @@ public final class PopUpDialog extends MenuElementContainer {
 
     public static class Builder implements MenuElementBuilder<PopUpDialog> {
         private final String title;
-        private final DialogVariableSet variableSet;
-
         private final List<DialogElement> elements;
 
         private boolean widthFromContents, heightFromContents;
@@ -133,12 +137,8 @@ public final class PopUpDialog extends MenuElementContainer {
         private Supplier<Boolean> precondition;
         private Runnable onOK;
 
-        Builder(
-                final ResourceCode titleCode,
-                final DialogVariableSet variableSet
-        ) {
+        Builder(final ResourceCode titleCode) {
             this.title = LanguageData.retrieveUIText(titleCode);
-            this.variableSet = variableSet;
 
             elements = new LinkedList<>();
 
@@ -233,6 +233,13 @@ public final class PopUpDialog extends MenuElementContainer {
                     (DIALOG_MARGIN * (columnIndex + 1));
         }
 
+        public int middleOfColumnX(final int columnIndex, final int columns) {
+            final int nonMarginWidth = width - ((columns + 1) * DIALOG_MARGIN),
+                    columnWidth = nonMarginWidth / columns;
+
+            return elementX(columnIndex, columns) + (columnWidth / 2);
+        }
+
         public int elementY(final double row) {
             return ((int)(row * DIALOG_ROW_INCREMENT));
         }
@@ -314,7 +321,8 @@ public final class PopUpDialog extends MenuElementContainer {
                             .map(Scrollable::new).toArray(Scrollable[]::new),
                     contentBottom + elementOffset.y, 0);
 
-            return new PopUpDialog(width, height, variableSet, titleLabel, scrollBox,
+            return new PopUpDialog(width, height, precondition, onOK,
+                    titleLabel, scrollBox,
                     new MenuElementGrouping(resolutionButtons.toArray(MenuElement[]::new)));
         }
 

@@ -18,6 +18,10 @@ public enum ResourceCode {
     // UI text
     RC_ABOUT, // also: tooltip
 
+    // Are you sure
+    RC_AYS_QUIT_MESSAGE,
+    RC_AYS_QUIT_TITLE,
+
     // Context bar
     RC_CB_CURRENT_TOOL,
     RC_CB_DIVS_X,

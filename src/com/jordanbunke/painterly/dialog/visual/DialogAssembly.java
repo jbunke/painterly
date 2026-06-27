@@ -2,6 +2,7 @@ package com.jordanbunke.painterly.dialog.visual;
 
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
 import com.jordanbunke.painterly.dialog.data.menus.DialogVariableSet;
@@ -19,7 +20,7 @@ public final class DialogAssembly {
     // TODO
     public static PopUpDialog newProject() {
         final NewProject np = NewProject.get();
-        final PopUpDialog.Builder db = PopUpDialog.init(RC_NEW_PROJECT, np)
+        final PopUpDialog.Builder db = PopUpDialog.init(RC_NEW_PROJECT)
                 .setHeightFromContents();
 
         // lead label menu elements
@@ -79,9 +80,34 @@ public final class DialogAssembly {
         return buildDialogForVariableSet(db, np);
     }
 
-    // helper
+    // ARE YOU SUREs
 
-    // TODO - are you sure template
+    public static PopUpDialog aysQuit() {
+        return areYouSure(RC_AYS_QUIT_TITLE, RC_AYS_QUIT_MESSAGE,
+                Painterly::quitProgram);
+    }
+
+    // template
+    private static PopUpDialog areYouSure(
+            final ResourceCode titleCode, final ResourceCode messageCode,
+            final Runnable onOk
+            /* TODO - add ResourceCode for overriding OK text */
+    ) {
+        final PopUpDialog.Builder db = PopUpDialog.init(titleCode)
+                .setHeightFromContents()
+                .setWidthAsScreenPercentage(0.4);
+
+        final SimpleLabel messageLabel = SimpleLabel
+                .init(messageCode, new Coord2D())
+                .setAnchor(MenuElement.Anchor.CENTRAL_TOP)
+                .build();
+        final DialogElement message = leadLabelForDialog(db, messageLabel,
+                deb -> deb.centerInColumnX(db));
+
+        return db.addElement(message).setOnOK(onOk).build();
+    }
+
+    // helper
 
     private static PopUpDialog buildDialogForVariableSet(
             final PopUpDialog.Builder db, final DialogVariableSet vars
