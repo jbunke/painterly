@@ -54,6 +54,10 @@ public final class Project {
         painting = !painting;
     }
 
+    public void disable() {
+        painting = false;
+    }
+
     public void update() {
         // TODO - temp
 
@@ -74,5 +78,9 @@ public final class Project {
 
     public boolean isPainting() {
         return painting;
+    }
+
+    public String getName() {
+        return name;
     }
 }

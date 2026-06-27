@@ -48,6 +48,10 @@ public final class Tooltip {
         this.tooltip = tooltip;
     }
 
+    public boolean isBlankForFrame() {
+        return tooltip.equals(NONE);
+    }
+
     public void check() {
         if (tooltip.equals(NONE) || !tooltip.equals(lastCheck)) {
             ticks = 0;

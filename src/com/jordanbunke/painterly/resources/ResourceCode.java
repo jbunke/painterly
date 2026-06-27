@@ -35,6 +35,7 @@ public enum ResourceCode {
     RC_CB_STROKE_COUNT,
 
     RC_CLEAR_FOCUS_BOXES,
+    RC_CLOSE_PROJECT,
     RC_COPYRIGHT,
     RC_DELETE_ACTIVE_BOUNDS,
     RC_DIALOG_CANCEL,
@@ -114,6 +115,8 @@ public enum ResourceCode {
     RC_FULLSCREEN,
     RC_SCOPE_FOCUS_AREA,
     RC_SCOPE_GLOBAL,
+    RC_SIM_PAUSE,
+    RC_SIM_RESUME,
     RC_UNKNOWABLE,
     RC_UNKNOWN,
     ;

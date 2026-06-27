@@ -13,6 +13,7 @@ import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBarManager;
+import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
 
 import java.util.Arrays;
 
@@ -45,12 +46,14 @@ public final class Workspace implements ProgramContext {
         // menu bar status processing
         menuBarStatus(eventLogger);
 
-        // TODO
         // menu bar
         MenuBar.get().process(eventLogger);
 
         // context bar
         ContextBar.get().process(eventLogger);
+
+        // project bar
+        ProjectBar.get().process(eventLogger);
 
         // global processing
         processGlobalActions(eventLogger);
@@ -99,6 +102,9 @@ public final class Workspace implements ProgramContext {
         // update context bar
         ContextBar.get().update(deltaTime);
 
+        // update project bar
+        ProjectBar.get().update(deltaTime);
+
         // active project processing
         final Project p = ProjectManager.get().getProject();
 
@@ -114,8 +120,6 @@ public final class Workspace implements ProgramContext {
 
     @Override
     public void render(final GameImage canvas) {
-        renderProjectButtons(canvas);
-
         // render project
         if (!ProjectManager.get().hasProject())
             noProjectsOpenMenu.render(canvas);
@@ -128,12 +132,11 @@ public final class Workspace implements ProgramContext {
         // render context bar
         ContextBar.get().render(canvas);
 
+        // render project bar
+        ProjectBar.get().render(canvas);
+
         // render menu bar
         MenuBar.get().render(canvas);
-    }
-
-    private void renderProjectButtons(final GameImage canvas) {
-        // TODO - render project buttons
     }
 
     @Override

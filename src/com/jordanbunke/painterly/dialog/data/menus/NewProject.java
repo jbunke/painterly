@@ -37,7 +37,7 @@ public final class NewProject extends DialogVariableSet {
         name = new DialogVariable<>("", this::validName);
         folder = new DialogVariable<>(null, this::validFolder);
         sourceImage = new DialogVariable<>(null, this::validSourceImage);
-        scaleFactor = new DialogVariable<>(3d, this::validScaleFactor);
+        scaleFactor = new DialogVariable<>(1d, this::validScaleFactor);
     }
 
     public static NewProject get() {

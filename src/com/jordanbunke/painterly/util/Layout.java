@@ -16,6 +16,7 @@ import com.jordanbunke.painterly.flow.Workspace;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
+import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.viewport.Viewport;
 
@@ -29,12 +30,15 @@ public final class Layout {
 
     public static final int
             DEBUG_EDGE_MARGIN = 10,
+            FPS_ALLOTTED_WIDTH = 80,
+            MENU_BAR_PROJECT_BAR_GAP_WIDTH = 80,
+            MIN_PROJECT_BUTTONS_TO_RENDER = 5,
             DIALOG_MARGIN = 10,
             DIALOG_CONTENT_MIN_HEIGHT = 30, // TODO - test
             DIALOG_CONTENT_TOP_OFFSET_Y = 50, // TODO - test
             DIALOG_MIN_SCREEN_HEIGHT_DIFF = 200, // TODO - test
             DIALOG_RESOLUTION_BUTTON_WIDTH = 120, // TODO - test
-            DIALOG_ROW_INCREMENT = 30, // TODO - test
+            DIALOG_ROW_INCREMENT = 45, // TODO - test
             ICON_DIM = 24, // TODO - test
             SLIDER_HEIGHT = ICON_DIM,
             SLIDER_DEF_WIDTH = 100,
@@ -149,6 +153,7 @@ public final class Layout {
     private static void regenAll() {
         MenuBar.regen();
         ContextBar.regen();
+        ProjectBar.regen();
         DialogManager.regen();
         ProgramState.regen();
         Workspace.get().regen();

@@ -101,23 +101,11 @@ public final class Graphics {
         final int w = tb.getWidth(), h = tb.getHeight();
         final GameImage button = new GameImage(w, h);
 
-        final GameImage textImage = new FontFormatter(FONT_DEF).realize()
-                .setColor(textColor).addText(tb.getLabel()).build().draw();
-
         // background
         button.fill(bgColor);
 
         // draw text
-        // TODO
-        final int x = switch (tb.getAlignment()) {
-            // TODO - subject to whether there is an icon?
-            case LEFT -> MENU_BAR_PADDING_X + ICON_DIM + MENU_BAR_PADDING_X;
-            case CENTER -> (w - textImage.getWidth()) / 2;
-            case RIGHT -> w - (TEXT_BUTTON_TEXT_OFFSET_X + textImage.getWidth());
-        };
-
-        // text
-        button.draw(textImage, x, TEXT_BUTTON_TEXT_OFFSET_Y);
+        stampText(button, tb, textColor, true);
 
         // icon
         stampIcon(button, iconCode);
@@ -186,6 +174,25 @@ public final class Graphics {
         image.draw(icon, MENU_BAR_PADDING_X, y);
     }
 
+    private static void stampText(
+            final GameImage image, final TextButton tb,
+            final Color textColor, final boolean hasIcon
+    ) {
+        final GameImage textImage = new FontFormatter(FONT_DEF).realize()
+                .setColor(textColor).addText(tb.getLabel()).build().draw();
+        final int w = tb.getWidth();
+
+        final int x = switch (tb.getAlignment()) {
+            case LEFT -> hasIcon
+                    ? MENU_BAR_PADDING_X + ICON_DIM + MENU_BAR_PADDING_X
+                    : TEXT_BUTTON_TEXT_OFFSET_X;
+            case CENTER -> (w - textImage.getWidth()) / 2;
+            case RIGHT -> w - (TEXT_BUTTON_TEXT_OFFSET_X + textImage.getWidth());
+        };
+
+        image.draw(textImage, x, TEXT_BUTTON_TEXT_OFFSET_Y);
+    }
+
     /**
      * For common elements in sub-menu expanders and action buttons
      * */
@@ -204,13 +211,37 @@ public final class Graphics {
 
         button.fill(bgColor);
 
-        final GameImage textImage = new FontFormatter(FONT_DEF).realize()
-                .setColor(textColor).addText(tb.getLabel()).build().draw();
-
-        final int textX = MENU_BAR_PADDING_X + ICON_DIM + MENU_BAR_PADDING_X;
-        button.draw(textImage, textX, TEXT_BUTTON_TEXT_OFFSET_Y);
+        stampText(button, tb, textColor, true);
 
         // TODO - highlight underline?
+    }
+
+    public static GameImage drawProjectButton(final TextButton tb) {
+        // TODO - temp implementation
+
+        final boolean highlight = tb.isHighlighted(),
+                selected = tb.isSelected();
+
+        final Color textColor, bgColor, accentColor;
+
+        bgColor = systemColor(highlight ? MID_DARK : DARK);
+        textColor = systemColor(LIGHT);
+        accentColor = systemColor(selected ? LIGHT
+                : (highlight ? MID_LIGHT : MID));
+
+        final int w = tb.getWidth(), h = tb.getHeight();
+        final GameImage button = new GameImage(w, h);
+
+        // background
+        button.fill(bgColor);
+
+        // draw text
+        stampText(button, tb, textColor, selected);
+
+        // border
+        button.drawRectangle(accentColor, 4f, 0, 0, w, h);
+
+        return button.submit();
     }
 
     public static GameImage drawTextButton(final TextButton tb) {
@@ -234,23 +265,14 @@ public final class Graphics {
             }
         }
 
-        final GameImage textImage = new FontFormatter(FONT_DEF).realize()
-                .setColor(textColor).addText(tb.getLabel()).build().draw();
-        final GameImage button = new GameImage(tb.getWidth(), tb.getHeight());
-
-        final int w = button.getWidth(), h = button.getHeight();
+        final int w = tb.getWidth(), h = tb.getHeight();
+        final GameImage button = new GameImage(w, h);
 
         // background
         button.fill(bgColor);
 
         // draw text
-        final int x = switch (tb.getAlignment()) {
-            case LEFT -> TEXT_BUTTON_TEXT_OFFSET_X;
-            case CENTER -> (w - textImage.getWidth()) / 2;
-            case RIGHT -> w - (TEXT_BUTTON_TEXT_OFFSET_X + textImage.getWidth());
-        };
-
-        button.draw(textImage, x, TEXT_BUTTON_TEXT_OFFSET_Y);
+        stampText(button, tb, textColor, false);
 
         // border
         button.drawRectangle(accentColor, 4f, 0, 0, w, h);

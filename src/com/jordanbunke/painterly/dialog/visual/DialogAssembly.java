@@ -35,11 +35,11 @@ public final class DialogAssembly {
         final DialogElement
                 projectNameLabelDE = leadLabelForDialog(db, projectNameLabel),
                 folderLabelDE = leadLabelForDialog(db, folderLabel,
-                        deb -> deb.setRow(1.5)),
+                        deb -> deb.setRow(1)),
                 refImageLabelDE = leadLabelForDialog(db, refImageLabel,
-                        deb -> deb.setRow(3)),
+                        deb -> deb.setRow(2)),
                 scaleFactorLabelDE = leadLabelForDialog(db, scaleFactorLabel,
-                        deb -> deb.setRow(4.5));
+                        deb -> deb.setRow(3));
 
         db.addElements(projectNameLabelDE, folderLabelDE,
                 refImageLabelDE, scaleFactorLabelDE);

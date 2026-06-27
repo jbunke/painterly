@@ -85,6 +85,10 @@ public final class MenuBar extends MenuElement {
             subMenu.collapse();
     }
 
+    public int endX() {
+        return subMenus[subMenus.length - 1].nextX();
+    }
+
     @Override
     public void process(final InputEventLogger eventLogger) {
         for (SubMenu subMenu : subMenus)
