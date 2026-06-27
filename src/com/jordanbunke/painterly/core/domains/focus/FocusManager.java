@@ -125,7 +125,7 @@ public final class FocusManager {
         return focusArea;
     }
 
-    private RectBounds activeBounds() {
+    public RectBounds activeBounds() {
         return entireArea ? focusArea : currentBoxBounds();
     }
 

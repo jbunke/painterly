@@ -19,6 +19,8 @@ public enum ResourceCode {
     RC_ABOUT, // also: tooltip
 
     // Are you sure
+    RC_AYS_DELETE_ACTIVE_BOUNDS_MESSAGE,
+    RC_AYS_DELETE_ACTIVE_BOUNDS_TITLE,
     RC_AYS_QUIT_MESSAGE,
     RC_AYS_QUIT_TITLE,
 
@@ -34,6 +36,7 @@ public enum ResourceCode {
 
     RC_CLEAR_FOCUS_BOXES,
     RC_COPYRIGHT,
+    RC_DELETE_ACTIVE_BOUNDS,
     RC_DIALOG_CANCEL,
     RC_DIALOG_CANNOT_BE_EMPTY,
     RC_DIALOG_CANNOT_BE_ONLY_WHITESPACE,

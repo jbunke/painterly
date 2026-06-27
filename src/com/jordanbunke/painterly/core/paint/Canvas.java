@@ -35,7 +35,7 @@ public final class Canvas {
         final GameImage canvas = new GameImage(project.width, project.height);
         canvas.fill(Colors.white());
 
-        // TODO - texture?
+        // TODO - canvas texture?
 
         return canvas.submit();
     }
@@ -62,6 +62,23 @@ public final class Canvas {
         }
 
         return accepted;
+    }
+
+    public void deleteActiveBounds() {
+        final RectBounds bounds = project.focusManager.activeBounds();
+        final int TRANSPARENT = Colors.transparent().getRGB();
+
+        final GameImage canvas = blankCanvas(),
+                copy = new GameImage(painting);
+
+        for (int x = bounds.left(); x < bounds.right(); x++)
+            for (int y = bounds.top(); y < bounds.bottom(); y++)
+                copy.setRGB(x, y, TRANSPARENT);
+
+        canvas.draw(copy.submit());
+        painting = canvas;
+
+        project.progressManager.update();
     }
 
     public double globalSimilarity() {

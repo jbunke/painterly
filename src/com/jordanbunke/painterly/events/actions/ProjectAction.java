@@ -3,6 +3,8 @@ package com.jordanbunke.painterly.events.actions;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
+import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
+import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
@@ -26,6 +28,10 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             p -> p.focusManager.resetFocusArea()),
     CLEAR_FOCUS_BOXES(RC_CLEAR_FOCUS_BOXES, KeyboardShortcut.single(A),
             p -> p.focusManager.clearFocusBoxes()),
+    DELETE_ACTIVE_BOUNDS(RC_DELETE_ACTIVE_BOUNDS, true, false /* TODO */,
+            KeyboardShortcut.single(DELETE),
+            p -> DialogManager.set(
+                    () -> DialogAssembly.aysDeleteActiveBounds(p))),
     // similarity display setters
     SET_DISPLAY_FOCUS(RC_DISPLAY_FOCUS, false, false /* TODO */, null,
             p -> p.progressManager.setDisplayToFocus()),

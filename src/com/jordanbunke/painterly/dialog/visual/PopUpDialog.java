@@ -63,6 +63,10 @@ public final class PopUpDialog extends MenuElementContainer {
 
     public void ok() {
         onOK.run();
+
+        // in case behaviour is not set from DialogVariableSet::ok
+        if (DialogManager.has())
+            DialogManager.close();
     }
 
     public boolean validate() {

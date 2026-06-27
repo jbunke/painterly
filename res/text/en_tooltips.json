@@ -8,6 +8,7 @@
     "cb_interval_target" : "Interval target (measuring $accepted_or_attempted)",
     "cb_similarity" : "RGB similarity of the painting to the source image",
     "cb_stroke_count" : "Strokes completed | Strokes attempted",
+    "delete_active_bounds" : "Wipes all brush strokes from\nthe active sampling bounds:\nbe that the focus box, focus area,\nor the entire canvas",
     "fb_backwards" : "Right-to-left, bottom-to-top",
     "fb_free" : "No automatic movement between intervals;\nonly manual movement with the arrow keys",
     "fb_forwards" : "Left-to-right, top-to-bottom",
