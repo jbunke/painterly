@@ -1,4 +1,4 @@
-package com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual;
+package com.jordanbunke.painterly.menu.elements.complex.menu_bar;
 
 import com.jordanbunke.delta_time.events.GameEvent;
 import com.jordanbunke.delta_time.events.GameMouseEvent;

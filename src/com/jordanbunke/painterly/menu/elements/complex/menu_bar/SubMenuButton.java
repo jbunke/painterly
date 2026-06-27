@@ -1,4 +1,4 @@
-package com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual;
+package com.jordanbunke.painterly.menu.elements.complex.menu_bar;
 
 import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;

@@ -1,4 +1,4 @@
-package com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual;
+package com.jordanbunke.painterly.menu.elements.complex.menu_bar;
 
 import com.jordanbunke.delta_time.debug.GameDebugger;
 import com.jordanbunke.delta_time.image.GameImage;
@@ -58,6 +58,14 @@ public final class MenuBar extends MenuElement {
                         .addSeparator()
                         // TODO - end temp
                         .addProjectAction(SAVE_AS)
+                        .build())
+                .addSubMenu(SubMenuData.init(RC_NAV_EDIT)
+                        .addNestedSubMenu(SubMenuData.init(RC_NAV_FOCUS_AREA)
+                                .addProjectAction(CLEAR_FOCUS_BOXES)
+                                .addProjectAction(FOCUS_BOX_AS_FOCUS_AREA)
+                                .addProjectAction(RESET_FOCUS_AREA)
+                                .addProjectAction(DELETE_ACTIVE_BOUNDS)
+                                .build())
                         .build())
                 .addSubMenu(SubMenuData.init(RC_NAV_VIEW)
                         .addGlobalAction(TOGGLE_FULLSCREEN)

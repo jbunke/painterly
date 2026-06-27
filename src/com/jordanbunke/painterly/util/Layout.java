@@ -15,7 +15,7 @@ import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.flow.Workspace;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
-import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBar;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.viewport.Viewport;
 

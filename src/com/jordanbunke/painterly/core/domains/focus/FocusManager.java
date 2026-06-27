@@ -52,6 +52,11 @@ public final class FocusManager {
         this.focusBoxMode = focusBoxMode;
     }
 
+    public void focusBoxAsNewFocusArea() {
+        if (!entireArea)
+            setFocusArea(currentBoxBounds());
+    }
+
     public void resetFocusArea() {
         setFocusArea(new RectBounds(0, project.width, 0, project.height));
     }
@@ -282,5 +287,9 @@ public final class FocusManager {
 
     public boolean isWholeCanvas() {
         return wholeCanvas;
+    }
+
+    public boolean isEntireArea() {
+        return entireArea;
     }
 }

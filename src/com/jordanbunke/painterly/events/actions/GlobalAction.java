@@ -6,7 +6,7 @@ import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.menu.MenuAssembly;
-import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.ISubMenuEntry;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.tool.ToolManager;

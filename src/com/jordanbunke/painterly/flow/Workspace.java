@@ -11,8 +11,8 @@ import com.jordanbunke.painterly.events.actions.GlobalAction;
 import com.jordanbunke.painterly.events.actions.ProjectAction;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
-import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBar;
-import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.MenuBarManager;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBarManager;
 
 import java.util.Arrays;
 

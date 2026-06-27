@@ -58,15 +58,19 @@ public enum ResourceCode {
     RC_FB_RANDOM,
     RC_FB_WORST,
 
+    RC_FOCUS_BOX_AS_FOCUS_AREA, // also: tooltip?
+
     // Loading messages
     RC_LOAD_INIT_PROJECT,
     RC_LOAD_UPDATE_STATS,
 
     // Navigation
-    RC_NAV_PROGRAM,
+    RC_NAV_EDIT,
+    RC_NAV_FOCUS_AREA,
     RC_NAV_MAIN_MENU,
-    RC_NAV_QUIT_PROGRAM,
+    RC_NAV_PROGRAM,
     RC_NAV_PROJECT,
+    RC_NAV_QUIT_PROGRAM,
     RC_NAV_SAVE_AS,
     RC_NAV_VIEW,
     /* TODO */

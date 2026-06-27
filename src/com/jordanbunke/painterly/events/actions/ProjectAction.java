@@ -6,7 +6,7 @@ import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
-import com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual.ISubMenuEntry;
+import com.jordanbunke.painterly.menu.elements.complex.menu_bar.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.viewport.Viewport;
 
@@ -26,6 +26,9 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             p -> Viewport.get().getPositioning().reset()),
     RESET_FOCUS_AREA(RC_RESET_FOCUS_AREA, KeyboardShortcut.single(BACKSPACE),
             p -> p.focusManager.resetFocusArea()),
+    FOCUS_BOX_AS_FOCUS_AREA(RC_FOCUS_BOX_AS_FOCUS_AREA, true, false /* TODO */,
+            KeyboardShortcut.single(Q),
+            p -> p.focusManager.focusBoxAsNewFocusArea()),
     CLEAR_FOCUS_BOXES(RC_CLEAR_FOCUS_BOXES, KeyboardShortcut.single(A),
             p -> p.focusManager.clearFocusBoxes()),
     DELETE_ACTIVE_BOUNDS(RC_DELETE_ACTIVE_BOUNDS, true, false /* TODO */,
@@ -88,6 +91,8 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
         // TODO
 
         // Populate preconditions
+        FOCUS_BOX_AS_FOCUS_AREA.precondition =
+                p -> !p.focusManager.isEntireArea();
         // TODO
     }
 

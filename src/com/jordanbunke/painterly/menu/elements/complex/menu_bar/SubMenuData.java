@@ -1,4 +1,4 @@
-package com.jordanbunke.painterly.menu.elements.complex.menu_bar.visual;
+package com.jordanbunke.painterly.menu.elements.complex.menu_bar;
 
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.painterly.events.actions.GlobalAction;
