@@ -150,6 +150,28 @@ public final class Positioning {
         setAnchor(initAnchorRatioX + anchorDX, initAnchorRatioY + anchorDY);
     }
 
+    public Coord2D determineScreenPixel(
+            final Project p, final Coord2D targetPixel
+    ) {
+        final Viewport v = Viewport.get();
+        final int tx = targetPixel.x, ty = targetPixel.y,
+                pw = p.width, ph = p.height,
+                vx = v.getX(), vy = v.getY(),
+                vw = v.getWidth(), vh = v.getHeight();
+
+        final double renderScale = determineRenderScale(pw, ph, vw, vh);
+
+        final int rw = (int)(pw * renderScale),
+                rh = (int)(ph * renderScale),
+                middleX = vw / 2, middleY = vh / 2,
+                x0 = vx + middleX - (int)(anchorRatioX * rw),
+                y0 = vy + middleY - (int)(anchorRatioY * rh),
+                x = x0 + (int)((tx / (double) pw) * rw),
+                y = y0 + (int)((ty / (double) ph) * rh);
+
+        return new Coord2D(x, y);
+    }
+
     public Coord2D determineTargetPixel(
             final Project p, final Coord2D mousePosInViewport
     ) {

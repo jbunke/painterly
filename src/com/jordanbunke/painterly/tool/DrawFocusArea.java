@@ -6,10 +6,9 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
-import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.viewport.Positioning;
 
-import static com.jordanbunke.painterly.viewport.VisualMath.projectPosition;
+import static com.jordanbunke.painterly.util.Graphics.drawAreaOverlay;
 
 public final class DrawFocusArea extends Tool {
     private static final DrawFocusArea INSTANCE;
@@ -81,18 +80,9 @@ public final class DrawFocusArea extends Tool {
             final int x, final int y, final int w, final int h
     ) {
         if (selecting) {
-            final Coord2D tlRenderPos = projectPosition(tl.x, tl.y,
-                    p.width, p.height, x, y, w, h),
-                    brRenderPos = projectPosition(br.x, br.y,
-                            p.width, p.height, x, y, w, h);
-            final int rx = tlRenderPos.x, ry = tlRenderPos.y,
-                    rw = brRenderPos.x - rx, rh = brRenderPos.y - ry;
-
-            // TODO - rendering is temp
-
-            viewportCanvas.drawRectangle(
-                    Colors.focusArea(ColorProc.RGB_SCALE),
-                    2f, rx, ry, rw, rh);
+            final RectBounds bounds = new RectBounds(tl.x, br.x, tl.y, br.y);
+            drawAreaOverlay(viewportCanvas, bounds, p,
+                    ColorProc.RGB_SCALE, x, y, w, h);
         }
     }
 

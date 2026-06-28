@@ -7,15 +7,13 @@ import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
-import com.jordanbunke.painterly.util.Colors;
 import com.jordanbunke.painterly.util.Constants;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.jordanbunke.painterly.viewport.VisualMath.projectPosition;
+import static com.jordanbunke.painterly.util.Graphics.*;
 
 public final class FocusManager {
     private final Project project;
@@ -241,9 +239,8 @@ public final class FocusManager {
             final int x, final int y, final int w, final int h
     ) {
         final int AREA_OPACITY = 0x80;
-
-        boundsOverlay(viewportCanvas, focusArea,
-                Colors.focusArea(AREA_OPACITY), x, y, w, h);
+        drawAreaOverlay(viewportCanvas, focusArea,
+                project, AREA_OPACITY, x, y, w, h);
     }
 
     private void boxOverlay(
@@ -251,26 +248,8 @@ public final class FocusManager {
             final int x, final int y, final int w, final int h
     ) {
         final int BOX_OPACITY = 0xc0;
-
-        boundsOverlay(viewportCanvas, currentBoxBounds(),
-                Colors.focusBox(BOX_OPACITY), x, y, w, h);
-    }
-
-    private void boundsOverlay(
-            final GameImage viewportCanvas, final RectBounds bounds,
-            final Color color,
-            final int x, final int y, final int w, final int h
-    ) {
-        final Coord2D tlRenderPos = projectPosition(
-                bounds.left(), bounds.top(),
-                project.width, project.height, x, y, w, h),
-                brRenderPos = projectPosition(
-                        bounds.right(), bounds.bottom(),
-                        project.width, project.height, x, y, w, h);
-        final int rx = tlRenderPos.x, ry = tlRenderPos.y,
-                rw = brRenderPos.x - rx, rh = brRenderPos.y - ry;
-
-        viewportCanvas.drawRectangle(color, 2f, rx, ry, rw, rh);
+        drawBoxOverlay(viewportCanvas, currentBoxBounds(),
+                project, BOX_OPACITY, x, y, w, h);
     }
 
     public FocusBoxMode getFocusBoxMode() {

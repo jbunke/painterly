@@ -4,6 +4,8 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.events.actions.IAction;
 import com.jordanbunke.painterly.menu.elements.Button;
@@ -22,6 +24,7 @@ import static com.jordanbunke.painterly.util.Colors.*;
 import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.ProgramFont.*;
+import static com.jordanbunke.painterly.viewport.VisualMath.projectPosition;
 
 public final class Graphics {
     private static final Path ICONS_FOLDER = Path.of("icons"),
@@ -538,6 +541,41 @@ public final class Graphics {
     // TODO
 
     // ADDITIONAL UI
+
+    public static void drawAreaOverlay(
+            final GameImage viewportCanvas, final RectBounds bounds,
+            final Project project, final int opacity,
+            final int x, final int y, final int w, final int h
+    ) {
+        drawBoundsOverlay(viewportCanvas, bounds, project,
+                Colors.focusArea(opacity), x, y, w, h);
+    }
+
+    public static void drawBoxOverlay(
+            final GameImage viewportCanvas, final RectBounds bounds,
+            final Project project, final int opacity,
+            final int x, final int y, final int w, final int h
+    ) {
+        drawBoundsOverlay(viewportCanvas, bounds, project,
+                Colors.focusBox(opacity), x, y, w, h);
+    }
+
+    public static void drawBoundsOverlay(
+            final GameImage viewportCanvas, final RectBounds bounds,
+            final Project project, final Color color,
+            final int x, final int y, final int w, final int h
+    ) {
+        final Coord2D tlRenderPos = projectPosition(
+                bounds.left(), bounds.top(),
+                project.width, project.height, x, y, w, h),
+                brRenderPos = projectPosition(
+                        bounds.right(), bounds.bottom(),
+                        project.width, project.height, x, y, w, h);
+        final int rx = tlRenderPos.x, ry = tlRenderPos.y,
+                rw = brRenderPos.x - rx, rh = brRenderPos.y - ry;
+
+        viewportCanvas.drawRectangle(color, 2f, rx, ry, rw, rh);
+    }
 
     public static GameImage drawTooltip(final String text) {
         // TODO - temp implementation

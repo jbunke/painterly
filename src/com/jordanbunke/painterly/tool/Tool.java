@@ -63,4 +63,9 @@ public abstract class Tool {
 
         return v.getPositioning().determineTargetPixel(p, mousePosInViewport);
     }
+
+    Coord2D getScreenPixel(final Coord2D projectPixel, final Project p) {
+        return Viewport.get().getPositioning()
+                .determineScreenPixel(p, projectPixel);
+    }
 }
