@@ -14,6 +14,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.resources.StringVariableMap.ID.*;
 
 public enum ResourceVariables {
     RV_ACCEPTED_OR_ATTEMPTED(p -> (p.strokeManager.isTickMode()
@@ -42,6 +43,8 @@ public enum ResourceVariables {
             String.valueOf(p.strokeManager.getIntervalTarget())),
             RC_UNKNOWABLE.asValue()),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
+    RV_PROJECT_NAME(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(PROJECT_NAME))),
     RV_NPD_FOLDER(() ->
             ResourceValue.ofString(NewProject.get().raFolder())),
     RV_NPD_SRC_NAME(() ->

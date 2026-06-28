@@ -1,7 +1,6 @@
 package com.jordanbunke.painterly.dialog.data.menus;
 
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
-import com.jordanbunke.painterly.dialog.visual.DialogManager;
 
 public abstract class DialogVariableSet {
     public boolean validate() {
@@ -22,6 +21,5 @@ public abstract class DialogVariableSet {
 
     public void ok() {
         executionApparatus(this::whenReady);
-        DialogManager.close();
     }
 }

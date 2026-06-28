@@ -19,6 +19,8 @@ public enum ResourceCode {
     RC_ABOUT, // also: tooltip
 
     // Are you sure
+    RC_AYS_CLOSE_PROJECT_MESSAGE,
+    RC_AYS_CLOSE_PROJECT_TITLE,
     RC_AYS_DELETE_ACTIVE_BOUNDS_MESSAGE,
     RC_AYS_DELETE_ACTIVE_BOUNDS_TITLE,
     RC_AYS_QUIT_MESSAGE,

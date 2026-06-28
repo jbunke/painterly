@@ -63,10 +63,6 @@ public final class PopUpDialog extends MenuElementContainer {
 
     public void ok() {
         onOK.run();
-
-        // in case behaviour is not set from DialogVariableSet::ok
-        if (DialogManager.has())
-            DialogManager.close();
     }
 
     public boolean validate() {
@@ -155,7 +151,7 @@ public final class PopUpDialog extends MenuElementContainer {
             onlyInformation = false;
             okText = LanguageData.retrieveUIText(RC_DIALOG_DEFAULT_OK);
             precondition = () -> true;
-            onOK = () -> {};
+            onOK = DialogManager::close;
         }
 
         // elements
@@ -270,7 +266,10 @@ public final class PopUpDialog extends MenuElementContainer {
         }
 
         public Builder setOnOK(final Runnable onOK) {
-            this.onOK = onOK;
+            this.onOK = () -> {
+                onOK.run();
+                DialogManager.close();
+            };
             return this;
         }
 

@@ -10,6 +10,8 @@ import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
+import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.icon_button.IconButton;
 import com.jordanbunke.painterly.menu.elements.icon_button.IconOptionsButton;
@@ -17,12 +19,14 @@ import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
+import com.jordanbunke.painterly.resources.StringVariableMap;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Tooltip;
 
 import java.util.List;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.resources.StringVariableMap.ID.PROJECT_NAME;
 import static com.jordanbunke.painterly.util.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.MENU_BAR;
@@ -60,8 +64,11 @@ public final class ProjectButton extends MenuButtonStub implements TextButton {
         closeButton = IconButton
                 .init(RC_CLOSE_PROJECT,
                         tr.displace(-iconBuffer, iconBuffer),
-                        () -> ProjectManager.get().closeProject(index))
-                .setAnchor(Anchor.RIGHT_TOP)
+                        () -> {
+                    StringVariableMap.post(PROJECT_NAME, project.getName());
+                    DialogManager.set(() ->
+                            DialogAssembly.aysCloseProject(index));
+                }).setAnchor(Anchor.RIGHT_TOP)
                 .setTooltipCode(RC_CLOSE_PROJECT)
                 .build();
 

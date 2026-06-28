@@ -1,9 +1,11 @@
 {
     "about" : "About",
-    "ays_quit_message" : "Are you sure you want to quit $program_name?\nAll unsaved changes will be lost.",
-    "ays_quit_title" : "Quit $program_name?",
+    "ays_close_project_message" : "Are you sure you want to close \"$project_name\"?\nAll unsaved changes will be lost.",
+    "ays_close_project_title" : "Close \"$project_name\"?",
     "ays_delete_active_bounds_message" : "Are you sure you want to delete the active bounds?\nThis cannot be undone.",
     "ays_delete_active_bounds_title" : "Delete active bounds?",
+    "ays_quit_message" : "Are you sure you want to quit $program_name?\nAll unsaved changes will be lost.",
+    "ays_quit_title" : "Quit $program_name?",
     "cb_current_tool" : "$current_tool",
     "cb_divs_x" : "$divs_x",
     "cb_divs_y" : "$divs_y",

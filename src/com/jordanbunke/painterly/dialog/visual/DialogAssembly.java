@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
 import com.jordanbunke.painterly.dialog.data.menus.DialogVariableSet;
@@ -82,6 +83,12 @@ public final class DialogAssembly {
     }
 
     // ARE YOU SUREs
+
+    public static PopUpDialog aysCloseProject(final int index) {
+        return areYouSure(RC_AYS_CLOSE_PROJECT_TITLE,
+                RC_AYS_CLOSE_PROJECT_MESSAGE,
+                () -> ProjectManager.get().closeProject(index));
+    }
 
     public static PopUpDialog aysDeleteActiveBounds(final Project p) {
         return areYouSure(RC_AYS_DELETE_ACTIVE_BOUNDS_TITLE,
