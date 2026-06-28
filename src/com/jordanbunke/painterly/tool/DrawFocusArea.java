@@ -57,7 +57,7 @@ public final class DrawFocusArea extends Tool {
         if (selecting) {
             final RectBounds focusArea =
                     new RectBounds(tl.x, br.x + 1, tl.y, br.y + 1);
-            p.focusManager.setFocusArea(focusArea);
+            p.focusManager.setFocusArea(focusArea, true);
 
             selecting = false;
             mouseEvent.markAsProcessed();

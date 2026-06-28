@@ -1,5 +1,7 @@
 package com.jordanbunke.painterly.core.paint;
 
+import com.jordanbunke.delta_time.utility.math.Coord2D;
+
 public record RectBounds(int left, int right, int top, int bottom) {
 
     public int width() {
@@ -8,6 +10,33 @@ public record RectBounds(int left, int right, int top, int bottom) {
 
     public int height() {
         return bottom - top;
+    }
+
+    public Coord2D topLeft() {
+        return new Coord2D(left, top);
+    }
+
+    public Coord2D topRight() {
+        return new Coord2D(right, top);
+    }
+
+    public Coord2D bottomLeft() {
+        return new Coord2D(left, bottom);
+    }
+
+    public Coord2D bottomRight() {
+        return new Coord2D(right, bottom);
+    }
+
+    public RectBounds displace(final int deltaX, final int deltaY) {
+        final int left = left() + deltaX, right = right() + deltaX,
+                top = top() + deltaY, bottom = bottom() + deltaY;
+
+        return new RectBounds(left, right, top, bottom);
+    }
+
+    public boolean hasArea() {
+        return left < right && top < bottom;
     }
 
     @Override
@@ -36,6 +65,34 @@ public record RectBounds(int left, int right, int top, int bottom) {
 
         public RectBounds build() {
             return new RectBounds(left, right, top, bottom);
+        }
+
+        public Builder from(final RectBounds ref) {
+            left = ref.left;
+            right = ref.right;
+            top = ref.top;
+            bottom = ref.bottom;
+            return this;
+        }
+
+        public Builder setBottom(final int bottom) {
+            this.bottom = bottom;
+            return this;
+        }
+
+        public Builder setLeft(final int left) {
+            this.left = left;
+            return this;
+        }
+
+        public Builder setRight(final int right) {
+            this.right = right;
+            return this;
+        }
+
+        public Builder setTop(final int top) {
+            this.top = top;
+            return this;
         }
 
         public Builder updateLeft(final int leftCandidate) {

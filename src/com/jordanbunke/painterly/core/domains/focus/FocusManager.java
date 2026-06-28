@@ -52,20 +52,24 @@ public final class FocusManager {
 
     public void focusBoxAsNewFocusArea() {
         if (!entireArea)
-            setFocusArea(currentBoxBounds());
+            setFocusArea(currentBoxBounds(), true);
     }
 
     public void resetFocusArea() {
-        setFocusArea(new RectBounds(0, project.width, 0, project.height));
+        setFocusArea(new RectBounds(0, project.width, 0, project.height),
+                true);
     }
 
-    public void setFocusArea(final RectBounds focusArea) {
+    public void setFocusArea(
+            final RectBounds focusArea, final boolean clearFocusBoxes
+    ) {
         if (!this.focusArea.equals(focusArea)) {
             this.focusArea = focusArea;
             wholeCanvas = focusArea.width() == project.width &&
                     focusArea.height() == project.height;
 
-            clearFocusBoxes();
+            if (clearFocusBoxes)
+                clearFocusBoxes();
             project.progressManager.update();
         }
     }
