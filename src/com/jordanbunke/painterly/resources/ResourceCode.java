@@ -13,6 +13,9 @@ public enum ResourceCode {
     RC_DECREMENT,
     RC_INCREMENT,
 
+    // Misc. images
+    RC_CONTROL_POINT,
+
     // Tooltips
 
     // UI text

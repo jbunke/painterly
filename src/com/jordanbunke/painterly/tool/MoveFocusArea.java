@@ -11,6 +11,7 @@ import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.viewport.Positioning;
 
 import static com.jordanbunke.painterly.util.Graphics.drawAreaOverlay;
+import static com.jordanbunke.painterly.util.Graphics.drawControlPoints;
 
 public final class MoveFocusArea extends Tool {
     private static final MoveFocusArea INSTANCE;
@@ -207,6 +208,7 @@ public final class MoveFocusArea extends Tool {
         final RectBounds bounds = is.transform(p, getDelta());
         drawAreaOverlay(viewportCanvas, bounds, p,
                 ColorProc.RGB_SCALE, x, y, w, h);
+        drawControlPoints(viewportCanvas, bounds, p, x, y, w, h);
     }
 
     private TransformInfo determineTransformInfo(

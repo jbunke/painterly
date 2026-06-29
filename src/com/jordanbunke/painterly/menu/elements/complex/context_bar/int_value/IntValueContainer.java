@@ -9,6 +9,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.icon_button.IconButton;
+import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.ProjectUtils;
 
 import java.util.function.BiConsumer;
@@ -71,6 +72,9 @@ public final class IntValueContainer extends MenuElement {
         slider.process(eventLogger);
         decrement.process(eventLogger);
         increment.process(eventLogger);
+
+        if (mouseIsWithinBounds(eventLogger.getAdjustedMousePosition()))
+            Cursor.ping(Cursor.MAIN);
     }
 
     @Override

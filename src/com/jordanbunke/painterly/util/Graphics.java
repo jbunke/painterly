@@ -28,9 +28,14 @@ import static com.jordanbunke.painterly.viewport.VisualMath.projectPosition;
 
 public final class Graphics {
     private static final Path ICONS_FOLDER = Path.of("icons"),
-            CURSORS_FOLDER = Path.of("cursors");
+            CURSORS_FOLDER = Path.of("cursors"),
+            MISC_IMG_FOLDER = Path.of("img_misc");
 
-    // TODO
+    private static final GameImage CONTROL_POINT;
+
+    static {
+        CONTROL_POINT = readMiscImage(RC_CONTROL_POINT);
+    }
 
     // IO
 
@@ -43,6 +48,11 @@ public final class Graphics {
         final Path cursorFile = CURSORS_FOLDER.resolve(
                 cursor.id() + ".png");
         return ResourceLoader.loadImageResource(cursorFile);
+    }
+
+    public static GameImage readMiscImage(final ResourceCode code) {
+        final Path iconFile = MISC_IMG_FOLDER.resolve(code.id() + ".png");
+        return ResourceLoader.loadImageResource(iconFile);
     }
 
     // UI ELEMENTS
@@ -575,6 +585,35 @@ public final class Graphics {
                 rw = brRenderPos.x - rx, rh = brRenderPos.y - ry;
 
         viewportCanvas.drawRectangle(color, 2f, rx, ry, rw, rh);
+    }
+
+    public static void drawControlPoints(
+            final GameImage viewportCanvas,
+            final RectBounds bounds, final Project project,
+            final int x, final int y, final int w, final int h
+    ) {
+        final GameImage cp = CONTROL_POINT;
+
+        final Coord2D tlRenderPos = projectPosition(
+                bounds.left(), bounds.top(),
+                project.width, project.height, x, y, w, h),
+                brRenderPos = projectPosition(
+                        bounds.right(), bounds.bottom(),
+                        project.width, project.height, x, y, w, h);
+        final int rx = tlRenderPos.x, ry = tlRenderPos.y,
+                rw = brRenderPos.x - rx, rh = brRenderPos.y - ry,
+                ox = cp.getWidth() / 2, oy = cp.getHeight() / 2,
+                l = rx - ox, t = ry - oy, r = l + rw, b = t + rh,
+                mx = l + (rw / 2), my = t + (rh / 2);
+
+        viewportCanvas.draw(cp, l, t);
+        viewportCanvas.draw(cp, r, t);
+        viewportCanvas.draw(cp, l, b);
+        viewportCanvas.draw(cp, r, b);
+        viewportCanvas.draw(cp, mx, t);
+        viewportCanvas.draw(cp, mx, b);
+        viewportCanvas.draw(cp, l, my);
+        viewportCanvas.draw(cp, r, my);
     }
 
     public static GameImage drawTooltip(final String text) {

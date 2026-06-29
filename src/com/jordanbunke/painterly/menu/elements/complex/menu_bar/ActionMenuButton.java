@@ -54,8 +54,8 @@ public final class ActionMenuButton<T> extends MenuBarButton {
             final Coord2D mousePos = eventLogger.getAdjustedMousePosition();
             Tooltip.get().pingCode(action.getTooltipCode(), mousePos);
 
-            if (MenuBarManager.isClicked() && passing)
-                Cursor.ping(Cursor.POINTER);
+            Cursor.ping(MenuBarManager.isClicked() && passing
+                    ? Cursor.POINTER : Cursor.MAIN);
 
             MenuBarManager.pingHover(parent);
         }
