@@ -6,6 +6,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
+import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.viewport.Positioning;
 
 import static com.jordanbunke.painterly.util.Graphics.drawAreaOverlay;
@@ -71,7 +72,10 @@ public final class DrawFocusArea extends Tool {
 
     @Override
     public void updateCursor(final boolean mouseInViewport) {
-        // TODO
+        if (selecting)
+            Cursor.force(Cursor.RETICLE);
+        else if (mouseInViewport)
+            Cursor.ping(Cursor.DRAW_FOCUS_AREA);
     }
 
     @Override

@@ -102,9 +102,8 @@ public final class MoveFocusArea extends Tool {
             return switch (this) {
                 case TL, BR -> Cursor.MOVE_TL_BR;
                 case TR, BL -> Cursor.MOVE_TR_BL;
-                // TODO - consider dedicated cursor codes
-                case LEFT, RIGHT -> Cursor.HORZ_SCROLL;
-                case TOP, BOTTOM -> Cursor.VERT_SCROLL;
+                case LEFT, RIGHT -> Cursor.MOVE_L_R;
+                case TOP, BOTTOM -> Cursor.MOVE_T_B;
             };
         }
     }

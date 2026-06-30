@@ -140,7 +140,7 @@ public final class FocusManager {
         return bounds(x, y);
     }
 
-    private RectBounds bounds(final int x, final int y) {
+    public RectBounds bounds(final int x, final int y) {
         final int x0 = focusArea.left(), y0 = focusArea.top(),
                 w = focusArea.width(), h = focusArea.height();
 

@@ -1,6 +1,7 @@
 package com.jordanbunke.painterly.core;
 
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
+import com.jordanbunke.painterly.tool.ToolManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,7 @@ public final class ProjectManager {
         if (isValidIndex(index) && this.index != index) {
             this.index = index;
             disableAll();
+            ToolManager.getCurrentTool().deselect();
             return true;
         }
 

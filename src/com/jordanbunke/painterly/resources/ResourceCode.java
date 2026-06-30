@@ -108,6 +108,7 @@ public enum ResourceCode {
 
     // Tools
     RC_TOOL_DRAW_FOCUS_AREA,
+    RC_TOOL_FOCUS_BOX_SELECT,
     RC_TOOL_HAND,
     RC_TOOL_MOVE_FOCUS_AREA,
     RC_TOOL_ZOOM,

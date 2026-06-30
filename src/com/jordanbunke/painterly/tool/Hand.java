@@ -14,17 +14,11 @@ public final class Hand extends Tool {
     }
 
     private boolean panning;
-    /*
-    * TODO - Call deselect on current tool when active project changes;
-    *  rendering this field unnecessary
-    * */
-    private Project project;
     private Coord2D initMousePos;
     private double initAnchorRatioX, initAnchorRatioY;
 
     private Hand() {
         panning = false;
-        project = null;
         initMousePos = new Coord2D();
         initAnchorRatioX = 0d;
         initAnchorRatioY = 0d;
@@ -43,7 +37,6 @@ public final class Hand extends Tool {
     @Override
     public void onMouseDown(final GameMouseEvent mouseEvent, final Project p) {
         panning = true;
-        project = p;
         initMousePos = mouseEvent.mousePosition;
         initAnchorRatioX = Viewport.get().getPositioning().getAnchorRatioX();
         initAnchorRatioY = Viewport.get().getPositioning().getAnchorRatioY();
@@ -52,11 +45,6 @@ public final class Hand extends Tool {
     @Override
     public void process(final Coord2D mousePos, final Project p) {
         if (panning) {
-            if (!p.equals(project)) {
-                panning = false;
-                return;
-            }
-
             final int mouseDX = mousePos.x - initMousePos.x,
                     mouseDY = mousePos.y - initMousePos.y;
 

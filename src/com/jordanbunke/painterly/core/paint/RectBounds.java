@@ -39,6 +39,11 @@ public record RectBounds(int left, int right, int top, int bottom) {
         return left < right && top < bottom;
     }
 
+    public boolean isInside(final Coord2D point) {
+        return point.x >= left && point.x < right &&
+                point.y >= top && point.y < bottom;
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof RectBounds that)

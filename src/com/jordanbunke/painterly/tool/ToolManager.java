@@ -10,6 +10,7 @@ public final class ToolManager {
     public enum ToolEnum {
         DRAW_FOCUS_AREA(DrawFocusArea::get, SET_TOOL_DRAW_FOCUS_AREA),
         MOVE_FOCUS_AREA(MoveFocusArea::get, SET_TOOL_MOVE_FOCUS_AREA),
+        FOCUS_BOX_SELECT(FocusBoxSelect::get, SET_TOOL_FOCUS_BOX_SELECT),
         HAND(Hand::get, SET_TOOL_HAND),
         ZOOM(Zoom::get, SET_TOOL_ZOOM),
         ;

@@ -71,6 +71,7 @@
     "toggle_source" : "Toggle painting/source image",
     "toggle_tick_mode" : "Toggle tick mode",
     "tool_draw_focus_area" : "Draw focus area",
+    "tool_focus_box_select" : "Focus box select",
     "tool_hand" : "Hand",
     "tool_move_focus_area" : "Move focus area",
     "tool_zoom" : "Zoom"

@@ -12,6 +12,7 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.paint.BrushStroke;
 import com.jordanbunke.painterly.core.paint.RectBounds;
+import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.Colors;
@@ -109,11 +110,15 @@ public final class Viewport implements ProgramContext {
                 }
             }
             else if (event instanceof GameMouseScrollEvent mse) {
-                // zoom
                 mse.markAsProcessed();
 
-                positioning.scrollZoom(mse.clicksScrolled < 0 /* TODO - account for inverse scroll zoom setting */,
-                        p, mouseInBounds, mousePos.displace(-x, -y));
+                if (KeyboardShortcut.areModKeysPressed(true, true, eventLogger))
+                    p.focusManager.augmentDivsX(-mse.clicksScrolled);
+                else if (KeyboardShortcut.areModKeysPressed(false, true, eventLogger))
+                    p.focusManager.augmentDivsY(-mse.clicksScrolled);
+                else
+                    positioning.scrollZoom(mse.clicksScrolled < 0 /* TODO - account for inverse scroll zoom setting */,
+                            p, mouseInBounds, mousePos.displace(-x, -y));
             }
         }
     }
