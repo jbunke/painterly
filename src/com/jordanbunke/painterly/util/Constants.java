@@ -20,7 +20,8 @@ public final class Constants {
             MAX_RECENT_STROKES_DEBUG = 10,
             MAX_BOX_DIVS = 40 /* TODO - test */,
             MIN_INTERVAL_TARGET = 1,
-            MAX_INTERVAL_TARGET = 250;
+            MAX_INTERVAL_TARGET = 250,
+            DEBUG_MESSAGE_FRAMES = (int)(2.5 * FPS);
 
     public static final double
             MAX_ANGLE_SAMPLE_PROB = 0.7,

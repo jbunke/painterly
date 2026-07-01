@@ -14,6 +14,7 @@ import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBarManager;
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
+import com.jordanbunke.painterly.util.debug.LogManager;
 
 import java.util.Arrays;
 
@@ -96,6 +97,9 @@ public final class Workspace implements ProgramContext {
 
     @Override
     public void update(final double deltaTime) {
+        // update debug manager
+        LogManager.update();
+
         // update menu bar
         MenuBar.get().update(deltaTime);
 
@@ -128,6 +132,9 @@ public final class Workspace implements ProgramContext {
         Arrays.stream(ScreenBox.values())
                 .filter(ScreenBox::isRendered)
                 .forEach(sc -> sc.render(canvas));
+
+        // render debug message log
+        LogManager.render(canvas);
 
         // render context bar
         ContextBar.get().render(canvas);

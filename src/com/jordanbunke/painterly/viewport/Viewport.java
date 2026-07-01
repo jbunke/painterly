@@ -13,9 +13,10 @@ import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.paint.BrushStroke;
 import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
-import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.util.debug.LogChannel;
+import com.jordanbunke.painterly.util.debug.LogManager;
 
 import java.awt.*;
 import java.util.List;
@@ -144,7 +145,7 @@ public final class Viewport implements ProgramContext {
 
         canvas.draw(draw(p), x, y);
 
-        if (RuntimeSettings.isProfilerOn())
+        if (LogManager.isChannelActive(LogChannel.RECENT_STROKE_ATTEMPTS))
             canvas.draw(debugDraw(p), x, y);
     }
 

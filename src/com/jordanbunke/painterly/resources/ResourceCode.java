@@ -70,6 +70,12 @@ public enum ResourceCode {
     RC_LOAD_INIT_PROJECT,
     RC_LOAD_UPDATE_STATS,
 
+    // Log messages
+    RC_LOG_AUTOSAVED,
+    RC_LOG_EXPORTED,
+    RC_LOG_PRIORITIZE_WORST,
+    RC_LOG_SAVED,
+
     // Navigation
     RC_NAV_EDIT,
     RC_NAV_FOCUS_AREA,

@@ -28,6 +28,8 @@ public enum ResourceVariables {
     RV_DIVS_Y(p -> ResourceValue.ofString(
             String.valueOf(p.focusManager.getDivsY())),
             RC_UNKNOWABLE.asValue()),
+    RV_FILENAME(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(FILENAME))),
     RV_FOCUS_BOX_MODE(p -> ResourceValue.ofString(
             p.focusManager.getFocusBoxMode().formattedName()),
             RC_UNKNOWABLE.asValue()),
@@ -45,6 +47,10 @@ public enum ResourceVariables {
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_PROJECT_NAME(() -> ResourceValue.ofString(
             StringVariableMap.retrieve(PROJECT_NAME))),
+    RV_PW_DIVISIONS(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(PW_DIVISIONS))),
+    RV_PW_RANK(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(PW_RANK))),
     RV_NPD_FOLDER(() ->
             ResourceValue.ofString(NewProject.get().raFolder())),
     RV_NPD_SRC_NAME(() ->

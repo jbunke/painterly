@@ -4,8 +4,9 @@ import com.jordanbunke.painterly.algo.ImageScaling;
 import com.jordanbunke.painterly.algo.Sobel;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
-import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.util.debug.LogChannel;
+import com.jordanbunke.painterly.util.debug.LogManager;
 
 public final class Canvas {
     private final Project project;
@@ -56,10 +57,10 @@ public final class Canvas {
         if (accepted)
             painting = copy;
 
-        if (RuntimeSettings.canDebug()) {
-            stroke.setAccepted(accepted);
+        stroke.setAccepted(accepted);
+
+        if (LogManager.isChannelActive(LogChannel.RECENT_STROKE_ATTEMPTS))
             project.debugData.addStroke(stroke);
-        }
 
         return accepted;
     }

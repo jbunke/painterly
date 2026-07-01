@@ -7,13 +7,19 @@ import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
+import com.jordanbunke.painterly.resources.StringVariableMap;
 import com.jordanbunke.painterly.util.Constants;
+import com.jordanbunke.painterly.util.debug.LogManager;
+import com.jordanbunke.painterly.util.debug.LogMessage;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.resources.StringVariableMap.ID.*;
 import static com.jordanbunke.painterly.util.Graphics.*;
+import static com.jordanbunke.painterly.util.debug.LogChannel.*;
 
 public final class FocusManager {
     private final Project project;
@@ -211,6 +217,11 @@ public final class FocusManager {
 
                 setX(boxes.get(index).a().x);
                 setY(boxes.get(index).a().y);
+
+                StringVariableMap.post(PW_RANK, String.valueOf(divisions - index));
+                StringVariableMap.post(PW_DIVISIONS, String.valueOf(divisions));
+                LogManager.log(new LogMessage(PRIORITIZE_WORST_DECISIONS,
+                        RC_LOG_PRIORITIZE_WORST));
             }
         }
     }

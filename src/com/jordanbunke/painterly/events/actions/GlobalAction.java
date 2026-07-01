@@ -8,9 +8,10 @@ import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
-import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.Layout;
+import com.jordanbunke.painterly.util.debug.LogChannel;
+import com.jordanbunke.painterly.util.debug.LogManager;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -34,8 +35,12 @@ public enum GlobalAction
             () -> DialogManager.set(DialogAssembly::newProject)),
     OPEN_PROJECT(RC_OPEN_PROJECT, new KeyboardShortcut(true, false, O),
             () -> {} /* TODO */),
-    TOGGLE_DEBUG_PROFILER(RC_NA, new KeyboardShortcut(false, true, P),
-            RuntimeSettings::toggleProfilerOn),
+    TOGGLE_RECENT_STROKE_VISUALIZATION(RC_NA /* TODO */,
+            new KeyboardShortcut(false, true, P),
+            () -> LogManager.toggleChannelStatus(LogChannel.RECENT_STROKE_ATTEMPTS)),
+    TOGGLE_FPS_INDICATOR(RC_NA /* TODO */,
+            new KeyboardShortcut(false, true, F),
+            () -> LogManager.toggleChannelStatus(LogChannel.FPS)),
     SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, true, true,
             KeyboardShortcut.single(X),
             () -> ToolManager.setCurrentTool(DRAW_FOCUS_AREA)),

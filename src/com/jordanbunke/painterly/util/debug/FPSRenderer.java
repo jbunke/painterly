@@ -5,12 +5,11 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
-import com.jordanbunke.painterly.settings.RuntimeSettings;
 import com.jordanbunke.painterly.util.Colors;
 
 import static com.jordanbunke.painterly.util.Layout.*;
 
-public final class DebugRenderer {
+public final class FPSRenderer {
     private static int lastFps, lastW;
     private static SimpleLabel fpsLabel;
 
@@ -21,7 +20,7 @@ public final class DebugRenderer {
     }
 
     public static void debugRender(final GameImage canvas, final GameDebugger debugger) {
-        if (RuntimeSettings.isFPS())
+        if (LogManager.isChannelActive(LogChannel.FPS))
             renderFps(canvas, debugger.getFPS());
     }
 

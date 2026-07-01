@@ -616,6 +616,35 @@ public final class Graphics {
         viewportCanvas.draw(cp, r, my);
     }
 
+    public static GameImage drawDebugMessage(final String text) {
+        // TODO - temp implementation
+        final Color textColor = debug();
+        final String[] lines = text.split("\n");
+        final GameImage[] lineImages = Arrays.stream(lines)
+                .map(l -> new FontFormatter(FONT_DEF).realize()
+                        .setColor(textColor).addText(l).build().draw())
+                .toArray(GameImage[]::new);
+        final int ls = lines.length,
+                w = Arrays.stream(lineImages)
+                        .map(GameImage::getWidth)
+                        .reduce(1, Math::max) + TOOLTIP_PADDING_X,
+                h = TOOLTIP_LINE_INC_Y * ls;
+
+        final GameImage tooltip = new GameImage(w, h);
+
+        // background
+        tooltip.fill(systemColor(DARK));
+
+        for (int l = 0; l < ls; l++) {
+            final GameImage line = lineImages[l];
+            final int x = w - (line.getWidth() + TOOLTIP_PADDING_X / 2),
+                    y = TOOLTIP_INITIAL_OFFSET_Y + (l * TOOLTIP_LINE_INC_Y);
+            tooltip.draw(line, x, y);
+        }
+
+        return tooltip.submit();
+    }
+
     public static GameImage drawTooltip(final String text) {
         // TODO - temp implementation
         final Color textColor = systemColor(DARK);
