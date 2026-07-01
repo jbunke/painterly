@@ -55,6 +55,7 @@ public enum ResourceCode {
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
     RC_DISPLAY_FOCUS,
     RC_DISPLAY_GLOBAL,
+    RC_EXPORT,
 
     // Focus box modes
     RC_FB_BACKWARDS,
@@ -73,6 +74,7 @@ public enum ResourceCode {
     // Log messages
     RC_LOG_AUTOSAVED,
     RC_LOG_EXPORTED,
+    RC_LOG_INTERVAL_RATIO,
     RC_LOG_PRIORITIZE_WORST,
     RC_LOG_SAVED,
 
@@ -83,7 +85,6 @@ public enum ResourceCode {
     RC_NAV_PROGRAM,
     RC_NAV_PROJECT,
     RC_NAV_QUIT_PROGRAM,
-    RC_NAV_SAVE_AS,
     RC_NAV_VIEW,
     /* TODO */
 
@@ -103,6 +104,8 @@ public enum ResourceCode {
     RC_QUIT,
     RC_RESET_FOCUS_AREA, // TODO - also: tooltip?
     RC_RESET_POS,
+    RC_SAVE,
+    RC_SAVE_AS,
     RC_START,
     RC_UPLOAD,
     RC_TICK_MODE_ATTEMPTED, // TODO - also: tooltip

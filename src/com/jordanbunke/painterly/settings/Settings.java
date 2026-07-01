@@ -31,7 +31,8 @@ public final class Settings {
         SET_ID_FULLSCREEN,
         SET_ID_LANGUAGE,
         SET_ID_THEME,
-        SET_ID_DEFAULT_INTERVAL_TARGET
+        SET_ID_DEFAULT_INTERVAL_TARGET,
+        SET_AUTOSAVE_ON_BY_DEFAULT,
         // TODO - additional settings
         ;
 
@@ -99,6 +100,8 @@ public final class Settings {
                 Colors.Theme::id, Colors.Theme.DEFAULT));
         addSetting(new Setting<>(Integer.class, SET_ID_DEFAULT_INTERVAL_TARGET,
                 Integer::parseInt, 50));
+        addSetting(new Setting<>(Boolean.class, SET_AUTOSAVE_ON_BY_DEFAULT,
+                Boolean::parseBoolean, true));
         // TODO - initialize additional settings
     }
 

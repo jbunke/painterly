@@ -2,10 +2,19 @@ package com.jordanbunke.painterly.core.domains.interval;
 
 import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.resources.StringVariableMap;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.util.Constants;
+import com.jordanbunke.painterly.util.debug.LogManager;
+import com.jordanbunke.painterly.util.debug.LogMessage;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.resources.StringVariableMap.ID.*;
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_DEFAULT_INTERVAL_TARGET;
+import static com.jordanbunke.painterly.util.debug.LogChannel.*;
 
 public final class StrokeManager {
     private static final boolean ATTEMPTED = true, COMPLETED = false;
@@ -36,13 +45,28 @@ public final class StrokeManager {
         if (strokeAccepted) {
             strokesCompleted++;
             completedInInterval++;
+
+            project.saveManager.checkAutosave(strokesCompleted);
         }
 
         // expressed as equality with constant for sake of readability
         if (tickMode == ATTEMPTED || strokeAccepted)
             intervalProgress++;
 
+        // end of interval check
         if (intervalProgress >= intervalTarget) {
+            if (tickMode == ATTEMPTED) {
+                StringVariableMap.post(INTERVAL_COMPLETED,
+                        String.valueOf(completedInInterval));
+                StringVariableMap.post(INTERVAL_TOTAL,
+                        String.valueOf(intervalTarget));
+                final double ratio = completedInInterval / (double) intervalTarget;
+                StringVariableMap.post(INTERVAL_PERC,
+                        BigDecimal.valueOf(ratio * 100)
+                                .setScale(2, RoundingMode.HALF_UP).toString());
+                LogManager.log(new LogMessage(INTERVAL_STATS, RC_LOG_INTERVAL_RATIO));
+            }
+
             intervalProgress = 0;
 
             // TODO - change so that similarity updates are separated from

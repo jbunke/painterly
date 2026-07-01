@@ -17,7 +17,13 @@ import static com.jordanbunke.delta_time.events.Key.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
-    SAVE_AS(RC_NAV_SAVE_AS, new KeyboardShortcut(true, true, S), /* TODO */ p -> {}),
+    EXPORT(RC_EXPORT, false /* TODO */, false /* TODO */,
+            new KeyboardShortcut(true, false, E),
+            p -> p.saveManager.export()),
+    SAVE(RC_SAVE, false /* TODO */, false /* TODO */,
+            new KeyboardShortcut(true, false, S),
+            p -> p.saveManager.save()),
+    SAVE_AS(RC_SAVE_AS, new KeyboardShortcut(true, true, S), /* TODO */ p -> {}),
     TOGGLE_SIM(RC_TOGGLE_SIM, KeyboardShortcut.single(SPACE),
             Project::toggleSimulation),
     TOGGLE_SOURCE(RC_TOGGLE_SOURCE, KeyboardShortcut.single(ENTER),

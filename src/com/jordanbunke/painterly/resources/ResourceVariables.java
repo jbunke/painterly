@@ -38,12 +38,18 @@ public enum ResourceVariables {
             RC_UNKNOWABLE.asValue()),
     RV_FULLSCREEN_ACTION(() -> (Layout.isFullscreen()
             ? RC_EXIT_FULLSCREEN : RC_FULLSCREEN).asValue()),
+    RV_INTERVAL_COMPLETED(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(INTERVAL_COMPLETED))),
+    RV_INTERVAL_PERC(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(INTERVAL_PERC))),
     RV_INTERVAL_PROGRESS(p -> ResourceValue.ofString(
             String.valueOf(p.strokeManager.getIntervalProgress())),
             RC_UNKNOWABLE.asValue()),
     RV_INTERVAL_TARGET(p -> ResourceValue.ofString(
             String.valueOf(p.strokeManager.getIntervalTarget())),
             RC_UNKNOWABLE.asValue()),
+    RV_INTERVAL_TOTAL(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(INTERVAL_TOTAL))),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_PROJECT_NAME(() -> ResourceValue.ofString(
             StringVariableMap.retrieve(PROJECT_NAME))),

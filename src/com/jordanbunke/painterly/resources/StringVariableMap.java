@@ -5,7 +5,8 @@ import java.util.Map;
 
 public final class StringVariableMap {
     public enum ID {
-        FILENAME, PROJECT_NAME, PW_RANK, PW_DIVISIONS
+        FILENAME, PROJECT_NAME, PW_RANK, PW_DIVISIONS,
+        INTERVAL_COMPLETED, INTERVAL_TOTAL, INTERVAL_PERC
         ;
     }
 

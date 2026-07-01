@@ -102,6 +102,10 @@ public final class Canvas {
         return sobel;
     }
 
+    public GameImage getPainting() {
+        return painting;
+    }
+
     public boolean isShowSource() {
         return showSource;
     }
