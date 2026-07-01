@@ -1,5 +1,6 @@
 package com.jordanbunke.painterly.util;
 
+import com.jordanbunke.color_proc.ColorProc;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.ResourceLoader;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
@@ -551,6 +552,22 @@ public final class Graphics {
     // TODO
 
     // ADDITIONAL UI
+
+    public static void drawViewportReticle(
+            final GameImage viewportCanvas, final Coord2D mousePosInViewport
+    ) {
+        final int w = viewportCanvas.getWidth(),
+                h = viewportCanvas.getHeight();
+        final int x = mousePosInViewport.x,
+                y = mousePosInViewport.y;
+
+        if (x >= 0 && x < w && y >= 0 && y < h) {
+            // TODO - consider different color
+            final Color color = Colors.focusArea(ColorProc.RGB_SCALE);
+            viewportCanvas.drawLine(color, 2f, x, 0, x, h);
+            viewportCanvas.drawLine(color, 2f, 0, y, w, y);
+        }
+    }
 
     public static void drawAreaOverlay(
             final GameImage viewportCanvas, final RectBounds bounds,

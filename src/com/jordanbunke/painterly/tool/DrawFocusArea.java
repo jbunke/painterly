@@ -8,8 +8,9 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.viewport.Positioning;
+import com.jordanbunke.painterly.viewport.Viewport;
 
-import static com.jordanbunke.painterly.util.Graphics.drawAreaOverlay;
+import static com.jordanbunke.painterly.util.Graphics.*;
 
 public final class DrawFocusArea extends Tool {
     private static final DrawFocusArea INSTANCE;
@@ -19,10 +20,11 @@ public final class DrawFocusArea extends Tool {
     }
 
     private boolean selecting;
-    private Coord2D pivot, complement, tl, br;
+    private Coord2D mousePos, pivot, complement, tl, br;
 
     private DrawFocusArea() {
         selecting = false;
+        mousePos = Positioning.INVALID;
         pivot = Positioning.INVALID;
         complement = Positioning.INVALID;
         tl = Positioning.INVALID;
@@ -35,7 +37,8 @@ public final class DrawFocusArea extends Tool {
 
     @Override
     public void onMouseDown(final GameMouseEvent mouseEvent, final Project p) {
-        final Coord2D targetPixel = getTargetPixel(mouseEvent.mousePosition, p);
+        mousePos = mouseEvent.mousePosition;
+        final Coord2D targetPixel = getTargetPixel(mousePos, p);
 
         selecting = true;
         pivot = Positioning.boundTargetPixel(targetPixel, p);
@@ -45,6 +48,8 @@ public final class DrawFocusArea extends Tool {
 
     @Override
     public void process(final Coord2D mousePos, final Project p) {
+        this.mousePos = mousePos;
+
         if (selecting) {
             final Coord2D targetPixel = getTargetPixel(mousePos, p);
 
@@ -87,6 +92,11 @@ public final class DrawFocusArea extends Tool {
             final RectBounds bounds = new RectBounds(tl.x, br.x, tl.y, br.y);
             drawAreaOverlay(viewportCanvas, bounds, p,
                     ColorProc.RGB_SCALE, x, y, w, h);
+        } else {
+            final Viewport v = Viewport.get();
+            final Coord2D mousePosInViewport =
+                    mousePos.displace(-v.getX(), -v.getY());
+            drawViewportReticle(viewportCanvas, mousePosInViewport);
         }
     }
 
