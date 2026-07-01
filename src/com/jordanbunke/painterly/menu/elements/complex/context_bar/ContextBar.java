@@ -53,8 +53,7 @@ public final class ContextBar extends MenuElement {
                 .setTooltipCode(RC_CB_CURRENT_TOOL)
                 .setRequiresProject(false)
                 .setIconCodeGetter(() ->
-                        ToolManager.getCurrentAction().getIconCode())
-                .setAlignment(Alignment.LEFT);
+                        ToolManager.getCurrentAction().getIconCode());
         final OptionsContainer toolOptions = OptionsContainer
                 .init(toolBuilder.getPosition())
                 .setAnchor(toolBuilder.complementaryReflected())
@@ -66,22 +65,38 @@ public final class ContextBar extends MenuElement {
                 .build();
         elements.add(tool);
 
-        // stroke count
+        // strokes completed
         // TODO - width
-        final ContextBarElement strokeCount = ContextBarElement
-                .init(STROKE_COUNT, RC_CB_STROKE_COUNT, tool.nextX())
-                .setTooltipCode(RC_CB_STROKE_COUNT)
+        final ContextBarElement strokesCompleted = ContextBarElement
+                .init(STROKES_COMPLETED, RC_CB_STROKES_COMPLETED, tool.nextX())
+                .setTooltipCode(RC_CB_STROKES_COMPLETED)
+                .setStaticIconCode(RC_CB_STROKES_COMPLETED)
+                .setWidthFromPercentage(0.08)
                 .build();
-        elements.add(strokeCount);
+        elements.add(strokesCompleted);
+
+        // strokes attempted
+        // TODO - width
+        final ContextBarElement strokesAttempted = ContextBarElement
+                .init(STROKES_ATTEMPTED, RC_CB_STROKES_ATTEMPTED,
+                        strokesCompleted.nextX())
+                .setTooltipCode(RC_CB_STROKES_ATTEMPTED)
+                .setStaticIconCode(RC_CB_STROKES_ATTEMPTED)
+                .setWidthFromPercentage(0.08)
+                .build();
+        elements.add(strokesAttempted);
 
         // interval progress
         // TODO - width
         final ContextBarElement.Builder intervalProgressBuilder =
                 ContextBarElement.init(INTERVAL_PROGRESS,
-                                RC_CB_INTERVAL_PROGRESS, strokeCount.nextX())
+                                RC_CB_INTERVAL_PROGRESS,
+                                strokesAttempted.nextX())
                         .setTooltipCode(RC_CB_INTERVAL_PROGRESS)
-                        .setStaticIconCode(RC_CB_INTERVAL_PROGRESS)
-                        .setAlignment(Alignment.LEFT)
+                        .setIconCodeGetter(p -> p.strokeManager.isTickMode()
+                                ? RC_TICK_MODE_ATTEMPTED
+                                : RC_TICK_MODE_COMPLETED,
+                                RC_CB_INTERVAL_PROGRESS)
                         .setWidthFromPercentage(0.08);
         final OptionsContainer intervalProgressOptions = OptionsContainer
                 .init(intervalProgressBuilder.getPosition())
@@ -102,7 +117,6 @@ public final class ContextBar extends MenuElement {
                                 intervalProgress.nextX())
                         .setTooltipCode(RC_CB_INTERVAL_TARGET)
                         .setStaticIconCode(RC_CB_INTERVAL_TARGET)
-                        .setAlignment(Alignment.LEFT)
                         .setWidthFromPercentage(0.08);
         final IntValueContainer intervalTargetValue = IntValueContainer
                 .init(intervalTargetBuilder.getPosition())
@@ -123,8 +137,7 @@ public final class ContextBar extends MenuElement {
         final ContextBarElement.Builder focusBoxModeBuilder =
                 ContextBarElement.init(FOCUS_BOX_MODE, RC_CB_FOCUS_BOX_MODE,
                                 intervalTarget.nextX())
-                        .setTooltipCode(RC_CB_FOCUS_BOX_MODE)
-                        .setAlignment(Alignment.LEFT);
+                        .setTooltipCode(RC_CB_FOCUS_BOX_MODE);
         final OptionsContainer focusBoxModeOptions = OptionsContainer
                 .init(focusBoxModeBuilder.getPosition())
                 .setAnchor(focusBoxModeBuilder.complementaryReflected())

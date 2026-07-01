@@ -21,7 +21,7 @@ public final class Constants {
             MAX_BOX_DIVS = 40 /* TODO - test */,
             MIN_INTERVAL_TARGET = 1,
             MAX_INTERVAL_TARGET = 250,
-            DEBUG_MESSAGE_FRAMES = (int)(2.5 * FPS),
+            DEBUG_MESSAGE_FRAMES = (int)(5 * FPS),
             MIN_AUTOSAVE_FREQUENCY = 250,
             DEF_AUTOSAVE_FREQUENCY = 1000,
             MAX_AUTOSAVE_FREQUENCY = 5000;

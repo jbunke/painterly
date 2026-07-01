@@ -49,9 +49,9 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     // tick mode setters
     TOGGLE_TICK_MODE(RC_TOGGLE_TICK_MODE, KeyboardShortcut.single(S),
             p -> p.strokeManager.toggleTickMode()),
-    SET_TICK_MODE_ATTEMPTED(RC_TICK_MODE_ATTEMPTED, true, false, null,
+    SET_TICK_MODE_ATTEMPTED(RC_TICK_MODE_ATTEMPTED, true, true, null,
             p -> p.strokeManager.setTickModeToAttempted()),
-    SET_TICK_MODE_COMPLETED(RC_TICK_MODE_COMPLETED, true, false, null,
+    SET_TICK_MODE_COMPLETED(RC_TICK_MODE_COMPLETED, true, true, null,
             p -> p.strokeManager.setTickModeToCompleted()),
     // focus box augmentation
     INC_DIVS_X(RC_NA, new KeyboardShortcut(false, true, RIGHT_ARROW),

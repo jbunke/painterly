@@ -2,7 +2,8 @@ package com.jordanbunke.painterly.menu.elements.complex.context_bar;
 
 public enum ContextBarSection {
     TOOL,
-    STROKE_COUNT,
+    STROKES_COMPLETED,
+    STROKES_ATTEMPTED,
     INTERVAL_PROGRESS,
     INTERVAL_TARGET,
     FOCUS_BOX_MODE,

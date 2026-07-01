@@ -9,6 +9,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.menu.menu_elements.button.MenuButtonStub;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
@@ -21,6 +22,7 @@ import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.Tooltip;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.util.Graphics.drawContextBarElement;
@@ -40,6 +42,7 @@ public final class ContextBarElement extends MenuButtonStub
     private boolean expanded;
 
     private String label;
+    private ResourceCode iconCode;
     private GameImage base, highlight, selected;
 
     private ContextBarElement(
@@ -66,6 +69,7 @@ public final class ContextBarElement extends MenuButtonStub
         this.iconCodeGetter = iconCodeGetter;
 
         label = LanguageData.retrieveUIText(textCode);
+        iconCode = iconCodeGetter.get();
 
         highlight = GameImage.dummy();
         selected = GameImage.dummy();
@@ -135,24 +139,24 @@ public final class ContextBarElement extends MenuButtonStub
 
     @Override
     public void update(final double deltaTime) {
-        checkForTextUpdate();
+        checkForAssetUpdate();
 
         if (expanded)
             expansion.update(deltaTime);
     }
 
-    private void checkForTextUpdate() {
+    private void checkForAssetUpdate() {
         final String label = LanguageData.retrieveUIText(textCode);
+        final ResourceCode iconCode = iconCodeGetter.get();
 
-        if (!this.label.equals(label)) {
+        if (!(this.label.equals(label) && this.iconCode == iconCode)) {
             this.label = label;
+            this.iconCode = iconCode;
             updateAssets();
         }
     }
 
     private void updateAssets() {
-        final ResourceCode iconCode = iconCodeGetter.get();
-
         base = drawContextBarElement(sim(false, false), iconCode);
 
         if (expandable) {
@@ -231,7 +235,7 @@ public final class ContextBarElement extends MenuButtonStub
             expansion = null;
             requiresProject = true;
 
-            alignment = Alignment.CENTER;
+            alignment = Alignment.LEFT;
         }
 
         public Builder setAnchor(final Anchor anchor) {
@@ -273,6 +277,20 @@ public final class ContextBarElement extends MenuButtonStub
         ) {
             this.iconCodeGetter = iconCodeGetter;
             return this;
+        }
+
+        public Builder setIconCodeGetter(
+                final Function<Project, ResourceCode> iconCodeGetter,
+                final ResourceCode failCase
+        ) {
+            return setIconCodeGetter(() -> {
+                final Project p = ProjectManager.get().getProject();
+
+                if (p == null)
+                    return failCase;
+
+                return iconCodeGetter.apply(p);
+            });
         }
 
         public Builder setStaticIconCode(final ResourceCode iconCode) {

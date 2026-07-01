@@ -15,6 +15,7 @@ import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.flow.Workspace;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
+import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBarSection;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
 import com.jordanbunke.painterly.settings.Settings;
@@ -311,7 +312,7 @@ public final class Layout {
     // misc.
 
     public static int defaultContextBarElementWidth() {
-        return ScreenBox.CONTEXT_BAR.width.get() / 8;
+        return ScreenBox.CONTEXT_BAR.width.get() / ContextBarSection.values().length;
     }
 
     public static Coord2D follow(final MenuElement ref, final int bufferX) {
