@@ -51,7 +51,33 @@ public final class Project {
         painting = false;
     }
 
-    // TODO - load from archive / file
+    /**
+     * Constructor used for opening a project from a file
+     * */
+    public Project(
+            final String name, final Path folder,
+            final GameImage sourceImage, final GameImage paintingImage,
+            final int width, final int height, final double scaleFactor,
+            final int strokesCompleted, final int strokesAttempted
+    ) {
+        this.name = name;
+        this.folder = folder;
+        this.sourceImage = sourceImage;
+
+        this.scaleFactor = scaleFactor;
+        this.width = width;
+        this.height = height;
+
+        canvas = new Canvas(this, paintingImage);
+        debugData = new DebugData(this);
+        strokeManager = new StrokeManager(this,
+                strokesCompleted, strokesAttempted);
+        focusManager = new FocusManager(this);
+        progressManager = new ProgressManager(this);
+        saveManager = new SaveManager(this);
+
+        painting = false;
+    }
 
     public void toggleSimulation() {
         painting = !painting;

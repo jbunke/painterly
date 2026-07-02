@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.io.GameImageIO;
 import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.io.SaveLoader;
 import com.jordanbunke.painterly.resources.StringVariableMap;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.util.Constants;
@@ -46,7 +47,7 @@ public final class SaveManager {
     }
 
     private void save(final boolean autosaving) {
-        // TODO
+        SaveLoader.saveProject(project);
 
         StringVariableMap.post(PROJECT_NAME, project.getName());
         LogManager.log(new LogMessage(SAVE_EXPORT,

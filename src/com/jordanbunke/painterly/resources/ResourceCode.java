@@ -4,6 +4,8 @@ import com.jordanbunke.painterly.util.EnumUtils;
 
 public enum ResourceCode {
     RC_NA, // special resource code indicating N/A
+    RC_UNKNOWABLE,
+    RC_UNKNOWN,
 
     // Icons
     RC_CHECKED_FALSE,
@@ -56,6 +58,18 @@ public enum ResourceCode {
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
     RC_DISPLAY_FOCUS,
     RC_DISPLAY_GLOBAL,
+
+    // Error codes
+    RC_ERR_COULD_NOT_PARSE_SPEC_AS_JSON,
+    RC_ERR_COULD_NOT_READ_FOLDER_FROM_SPEC,
+    RC_ERR_COULD_NOT_READ_NAME_FROM_SPEC,
+    RC_ERR_COULD_NOT_READ_PAINTING,
+    RC_ERR_COULD_NOT_READ_SOURCE,
+    RC_ERR_NO_SPEC_PATH,
+
+    // Error scenarios
+    RC_ERR_SC_OPEN_PROJECT,
+
     RC_EXPORT,
 
     // Focus box modes
@@ -70,6 +84,7 @@ public enum ResourceCode {
 
     // Loading messages
     RC_LOAD_INIT_PROJECT,
+    RC_LOAD_LOAD_PROJECT,
     RC_LOAD_UPDATE_STATS,
 
     // Log messages
@@ -101,7 +116,8 @@ public enum ResourceCode {
     RC_NPD_VALIDATED_SCALE_FACTOR,
     RC_OFD_ACCEPTED_RASTER_TYPES,
     RC_OPEN_PROJECT, // also: tooltip,
-    RC_PROGRAM_SETTINGS, // also: tooltip
+    RC_PROGRAM_SETTINGS, // also: tooltip,
+    RC_PROJECT_ZIP_DESCRIPTION,
     RC_QUIT,
     RC_RESET_FOCUS_AREA, // TODO - also: tooltip?
     RC_RESET_POS,
@@ -132,9 +148,7 @@ public enum ResourceCode {
     RC_SCOPE_FOCUS_AREA,
     RC_SCOPE_GLOBAL,
     RC_SIM_PAUSE,
-    RC_SIM_RESUME,
-    RC_UNKNOWABLE,
-    RC_UNKNOWN,
+    RC_SIM_RESUME
     ;
 
     private final static String prefix = "RC_";

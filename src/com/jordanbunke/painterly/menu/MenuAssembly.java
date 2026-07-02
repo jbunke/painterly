@@ -9,8 +9,6 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.Painterly;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.flow.ProgramState;
-import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
-import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.label.LoadingLabel;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
@@ -25,6 +23,7 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static com.jordanbunke.delta_time.menu.menu_elements.MenuElement.Anchor.*;
+import static com.jordanbunke.painterly.events.actions.GlobalAction.*;
 import static com.jordanbunke.painterly.menu.elements.text_button.Alignment.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.util.Layout.*;
@@ -127,12 +126,9 @@ public final class MenuAssembly {
                                         .displaceY(MARGIN)
                                         .displaceX(MARGIN * (i == 0 ? -1 : 1))),
                 // buttons
-                SimpleTextButton.init(RC_NEW_PROJECT, new Coord2D(),
-                                () -> DialogManager.set(DialogAssembly::newProject))
-                        .setTooltipCode(RC_NEW_PROJECT)
+                SimpleTextButton.initAction(new Coord2D(), NEW_PROJECT)
                         .setAnchor(RIGHT_TOP),
-                SimpleTextButton.init(RC_OPEN_PROJECT, new Coord2D(), () -> {} /* TODO */)
-                        .setTooltipCode(RC_OPEN_PROJECT)
+                SimpleTextButton.initAction(new Coord2D(), OPEN_PROJECT)
                         .setAnchor(LEFT_TOP));
 
         return mb.build();

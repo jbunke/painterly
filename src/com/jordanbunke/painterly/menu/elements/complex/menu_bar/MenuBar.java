@@ -51,17 +51,22 @@ public final class MenuBar extends MenuElement {
                         .addProjectAction(EXPORT)
                         .build())
                 .addSubMenu(SubMenuData.init(RC_NAV_EDIT)
-                        .addNestedSubMenu(SubMenuData.init(RC_NAV_FOCUS_AREA)
-                                .addProjectAction(CLEAR_FOCUS_BOXES)
-                                .addProjectAction(FOCUS_BOX_AS_FOCUS_AREA)
-                                .addProjectAction(RESET_FOCUS_AREA)
-                                .addProjectAction(DELETE_ACTIVE_BOUNDS)
-                                .build())
+                        .addProjectAction(TOGGLE_SIM)
+                        .addSeparator()
+                        .addProjectAction(CLEAR_FOCUS_BOXES)
+                        .addProjectAction(FOCUS_BOX_AS_FOCUS_AREA)
+                        .addProjectAction(RESET_FOCUS_AREA)
+                        .addProjectAction(DELETE_ACTIVE_BOUNDS)
                         .build())
                 .addSubMenu(SubMenuData.init(RC_NAV_VIEW)
                         .addGlobalAction(TOGGLE_FULLSCREEN)
+                        .addSeparator()
                         .addProjectAction(TOGGLE_SOURCE)
                         .addProjectAction(RESET_POSITIONING)
+                        // TODO
+//                        .addSeparator()
+//                        .addGlobalAction(TOGGLE_FPS_INDICATOR)
+//                        .addGlobalAction(TOGGLE_RECENT_STROKE_VISUALIZATION)
                         .build());
 
         return b.build();

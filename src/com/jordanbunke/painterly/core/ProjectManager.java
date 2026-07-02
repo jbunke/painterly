@@ -2,6 +2,7 @@ package com.jordanbunke.painterly.core;
 
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
 import com.jordanbunke.painterly.tool.ToolManager;
+import com.jordanbunke.painterly.util.Constants;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,6 +66,9 @@ public final class ProjectManager {
     }
 
     public void addProject(final Project project, final boolean setActive) {
+        if (!canAddProject())
+            return;
+
         projects.add(project);
 
         if (setActive)
@@ -87,6 +91,10 @@ public final class ProjectManager {
 
     public boolean isValidIndex(final int index) {
         return index >= 0 && index < projects.size();
+    }
+
+    public boolean canAddProject() {
+        return projects.size() < Constants.MAX_PROJECTS_ALLOWED;
     }
 
     private void disableAll() {

@@ -6,6 +6,7 @@ import com.jordanbunke.painterly.core.domains.interval.ProgressManager;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.tool.ToolManager;
+import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.ProjectUtils;
@@ -28,6 +29,12 @@ public enum ResourceVariables {
     RV_DIVS_Y(p -> ResourceValue.ofString(
             String.valueOf(p.focusManager.getDivsY())),
             RC_UNKNOWABLE.asValue()),
+    RV_FILE_PAINTING(() -> ResourceValue.ofString(
+            Constants.PAINTING_FILENAME)),
+    RV_FILE_SOURCE(() -> ResourceValue.ofString(
+            Constants.SOURCE_FILENAME)),
+    RV_FILE_SPEC(() -> ResourceValue.ofString(
+            Constants.SPEC_FILENAME)),
     RV_FILENAME(() -> ResourceValue.ofString(
             StringVariableMap.retrieve(FILENAME))),
     RV_FOCUS_BOX_MODE(p -> ResourceValue.ofString(
@@ -69,6 +76,9 @@ public enum ResourceVariables {
             ResourceValue.ofString(NewProject.get().raWidth())),
     RV_NPD_H(() ->
             ResourceValue.ofString(NewProject.get().raHeight())),
+    RV_SIM_ACTION_STATUS(p -> (p.isPainting()
+            ? RC_SIM_PAUSE : RC_SIM_RESUME).asValue(),
+            RC_SIM_RESUME.asValue()),
     RV_SIM_SCOPE(p -> (p.progressManager.isDisplay() == ProgressManager.FOCUS
             ? RC_SCOPE_FOCUS_AREA : RC_SCOPE_GLOBAL).asValue(),
             RC_UNKNOWABLE.asValue()),

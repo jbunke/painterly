@@ -30,10 +30,17 @@ public final class StrokeManager {
     private boolean tickMode;
 
     public StrokeManager(final Project project) {
+        this(project, 0, 0);
+    }
+
+    public StrokeManager(
+            final Project project,
+            final int strokesCompleted, final int strokesAttempted
+    ) {
         this.project = project;
 
-        strokesAttempted = 0;
-        strokesCompleted = 0;
+        this.strokesAttempted = strokesAttempted;
+        this.strokesCompleted = strokesCompleted;
         intervalTarget = Settings.get(SET_ID_DEFAULT_INTERVAL_TARGET, Integer.class);
         intervalProgress = 0;
         completedInInterval = 0;

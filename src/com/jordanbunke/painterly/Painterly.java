@@ -73,11 +73,26 @@ public final class Painterly implements ProgramContext {
     }
 
     private GameWindow makeWindow() {
-        final GameWindow window = new GameWindow(
-                ProgramInfo.PROGRAM_NAME + " " + ProgramInfo.formatVersion(),
-                Layout.width(), Layout.height(), /* TODO */ GameImage.dummy(),
-                true, /* TODO - assess */ true, Layout.isFullscreen()
-        );
+        final GameWindow.Builder wb = new GameWindow.Builder();
+
+        final String title = ProgramInfo.PROGRAM_NAME + " " +
+                ProgramInfo.formatVersion();
+        final boolean fullscreen = Layout.isFullscreen();
+
+        wb.setTitle(title)
+                .setIcon(/* TODO */ GameImage.dummy())
+                .setExitOnClose(true)
+                .setCanResize(false) // TODO - allow resizing
+                .setFullscreen(fullscreen);
+
+        if (!fullscreen) {
+            wb.setMinWidth(Layout.MIN_WINDOWED_WIDTH)
+                    .setMinHeight(Layout.MIN_WINDOWED_HEIGHT)
+                    .setWidth(Layout.width(), false)
+                    .setHeight(Layout.height(), false);
+        }
+
+        final GameWindow window = wb.build();
         window.hideCursor();
 
         return window;
@@ -87,8 +102,6 @@ public final class Painterly implements ProgramContext {
         window = makeWindow();
         program.setCanvasSize(Layout.width(), Layout.height());
         program.replaceWindow(window);
-
-        // TODO - redraw components if necessary
 
         window.focus();
     }

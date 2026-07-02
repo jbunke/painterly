@@ -30,6 +30,8 @@ public final class Layout {
     // layout constants
 
     public static final int
+            MIN_WINDOWED_WIDTH = 1000,
+            MIN_WINDOWED_HEIGHT = 500,
             DEBUG_EDGE_MARGIN = 10,
             FPS_ALLOTTED_WIDTH = 80,
             MENU_BAR_PROJECT_BAR_GAP_WIDTH = 80,
@@ -102,10 +104,14 @@ public final class Layout {
     // mutable fields
 
     private static Bounds2D size;
+    private static int windowedWidth, windowedHeight;
 
     // startup
 
     static {
+        // TODO - variables
+        windowedWidth = 1600;
+        windowedHeight = 900;
         determineSize();
     }
 
@@ -118,10 +124,18 @@ public final class Layout {
             final Dimension screenDims = Toolkit.getDefaultToolkit().getScreenSize();
             size = new Bounds2D(screenDims.width, screenDims.height);
         } else {
-            // TODO - temporary
-            final int width = 1600, height = 900;
-            size = new Bounds2D(width, height);
+            size = new Bounds2D(windowedWidth, windowedHeight);
         }
+    }
+
+    // TODO - invoke
+    public static void updatedWindowedSize(
+            final int windowedWidth, final int windowedHeight
+    ) {
+        Layout.windowedWidth = windowedWidth;
+        Layout.windowedHeight = windowedHeight;
+
+        onResize(false);
     }
 
     public static int width() {
@@ -141,12 +155,14 @@ public final class Layout {
     public static void toggleFullscreen() {
         Settings.set(SET_ID_FULLSCREEN, !isFullscreen());
 
-        onResize();
+        onResize(true);
     }
 
-    private static void onResize() {
+    private static void onResize(final boolean remakeWindow) {
         determineSize();
-        Painterly.get().remakeWindow();
+
+        if (remakeWindow)
+            Painterly.get().remakeWindow();
 
         regenAll();
     }

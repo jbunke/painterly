@@ -5,7 +5,10 @@ import java.nio.file.Path;
 public final class Constants {
     public static final String
             NAME_CODE = "name", VERSION_CODE = "version",
-            IS_DEVBUILD_CODE = "devbuild";
+            IS_DEVBUILD_CODE = "devbuild",
+            SPEC_FILENAME = "project.json",
+            SOURCE_FILENAME = "source.png",
+            PAINTING_FILENAME = "painting.png";
 
     public static final Path PROGRAM_FILE = Path.of("program.json"),
             VERSION_FILE = Path.of("version"),
@@ -24,7 +27,8 @@ public final class Constants {
             DEBUG_MESSAGE_FRAMES = (int)(5 * FPS),
             MIN_AUTOSAVE_FREQUENCY = 250,
             DEF_AUTOSAVE_FREQUENCY = 1000,
-            MAX_AUTOSAVE_FREQUENCY = 5000;
+            MAX_AUTOSAVE_FREQUENCY = 5000,
+            MAX_PROJECTS_ALLOWED = 10;
 
     public static final double
             MAX_ANGLE_SAMPLE_PROB = 0.7,

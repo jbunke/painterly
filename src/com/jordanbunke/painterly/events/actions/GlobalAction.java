@@ -1,10 +1,12 @@
 package com.jordanbunke.painterly.events.actions;
 
 import com.jordanbunke.delta_time.io.InputEventLogger;
+import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.flow.ProgramState;
+import com.jordanbunke.painterly.io.SaveLoader;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
@@ -22,7 +24,7 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.tool.ToolManager.ToolEnum.*;
 
 public enum GlobalAction
-        implements IAction</* TODO - evaluate whether more suitable type exists */ Runnable>, ISubMenuEntry {
+        implements IAction<Runnable>, ISubMenuEntry {
     MAIN_MENU(RC_NAV_MAIN_MENU, null,
             () -> ProgramState.setMenu(MenuAssembly::mainMenu)),
     QUIT_PROGRAM(RC_NAV_QUIT_PROGRAM, null,
@@ -31,10 +33,12 @@ public enum GlobalAction
     DIALOG_OK(KeyboardShortcut.single(ENTER), () -> DialogManager.get().ok()),
     TOGGLE_FULLSCREEN(RC_TOGGLE_FULLSCREEN, KeyboardShortcut.single(ESCAPE),
             Layout::toggleFullscreen),
-    NEW_PROJECT(RC_NEW_PROJECT, new KeyboardShortcut(true, false, N),
+    NEW_PROJECT(RC_NEW_PROJECT, true, false /* TODO */,
+            new KeyboardShortcut(true, false, N),
             () -> DialogManager.set(DialogAssembly::newProject)),
-    OPEN_PROJECT(RC_OPEN_PROJECT, new KeyboardShortcut(true, false, O),
-            () -> {} /* TODO */),
+    OPEN_PROJECT(RC_OPEN_PROJECT, true, false /* TODO */,
+            new KeyboardShortcut(true, false, O),
+            SaveLoader::openProject),
     TOGGLE_RECENT_STROKE_VISUALIZATION(RC_NA /* TODO */,
             new KeyboardShortcut(false, true, P),
             () -> LogManager.toggleChannelStatus(LogChannel.RECENT_STROKE_ATTEMPTS)),
@@ -67,6 +71,8 @@ public enum GlobalAction
         DIALOG_OK.precondition = () -> DialogManager.has() &&
                 DialogManager.get().validate();
         TOGGLE_FULLSCREEN.precondition = () -> !DialogManager.has();
+        NEW_PROJECT.precondition = () -> ProjectManager.get().canAddProject();
+        OPEN_PROJECT.precondition = () -> ProjectManager.get().canAddProject();
         // TODO
     }
 

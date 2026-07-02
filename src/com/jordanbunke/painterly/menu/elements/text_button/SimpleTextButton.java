@@ -7,6 +7,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.button.MenuButton;
 import com.jordanbunke.delta_time.menu.menu_elements.visual.StaticMenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.events.actions.GlobalAction;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.complex.logic.EnumMenuElement;
 import com.jordanbunke.painterly.resources.ResourceCode;
@@ -92,7 +93,16 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
             final ResourceCode code, final Coord2D position,
             final Runnable behaviour
     ) {
-        return initLiteral(LanguageData.retrieveUIText(code), position, behaviour);
+        return new Builder(LanguageData.retrieveUIText(code),
+                position, behaviour);
+    }
+
+    public static Builder initAction(
+            final Coord2D position, final GlobalAction action
+    ) {
+        return new Builder(LanguageData.retrieveUIText(action.getCode()),
+                position, action::execute)
+                .setTooltipCode(action.getTooltipCode());
     }
 
     public static Builder initLiteral(

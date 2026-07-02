@@ -23,7 +23,7 @@ public enum ProgramState implements ProgramContext {
     private static Menu menu;
     private static Supplier<Menu> lastSource;
 
-    private static boolean loading;
+    private static boolean loading, resetKeyInputs;
 
     public static ProgramState get() {
         return state;
@@ -98,6 +98,9 @@ public enum ProgramState implements ProgramContext {
 
     @Override
     public void process(final InputEventLogger eventLogger) {
+        if (resetKeyInputs)
+            resetKeyInputs(eventLogger);
+
         resetMouseData(eventLogger);
 
         if (DialogManager.has()) {
@@ -153,4 +156,13 @@ public enum ProgramState implements ProgramContext {
 
     @Override
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
+
+    public static void scheduleKeyInputReset() {
+        resetKeyInputs = true;
+    }
+
+    private static void resetKeyInputs(final InputEventLogger eventLogger) {
+        eventLogger.unpressAllKeys();
+        resetKeyInputs = false;
+    }
 }

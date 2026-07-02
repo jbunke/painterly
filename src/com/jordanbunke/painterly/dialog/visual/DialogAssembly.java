@@ -15,6 +15,8 @@ import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.menu.elements.textbox.Textbox;
 import com.jordanbunke.painterly.resources.ResourceCode;
 
+import java.util.stream.IntStream;
+
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
@@ -80,6 +82,26 @@ public final class DialogAssembly {
                 scaleFactorTextbox, scaleFactorFeedback);
 
         return buildDialogForVariableSet(db, np);
+    }
+
+    public static PopUpDialog errorMessages(
+            final ResourceCode titleCode, final ResourceCode... errorCodes
+    ) {
+        final PopUpDialog.Builder db = PopUpDialog.init(titleCode)
+                .setSizeFromContents()
+                .setAsOnlyInformation();
+
+        final DialogElement[] labelDEs =
+                IntStream.range(0, errorCodes.length).mapToObj(i -> {
+                    final ResourceCode errorCode = errorCodes[i];
+                    final SimpleLabel label = leadLabel(errorCode);
+                    return leadLabelForDialog(db, label,
+                            deb -> deb.setRow(i));
+                }).toArray(DialogElement[]::new);
+
+        db.addElements(labelDEs);
+
+        return db.build();
     }
 
     // ARE YOU SUREs

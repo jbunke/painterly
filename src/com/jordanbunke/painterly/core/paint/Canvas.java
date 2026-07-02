@@ -18,6 +18,10 @@ public final class Canvas {
     private boolean showSource;
 
     public Canvas(final Project project) {
+        this(project, blankCanvas(project.width, project.height));
+    }
+
+    public Canvas(final Project project, final GameImage painting) {
         this.project = project;
 
         final GameImage source = project.getSourceImage();
@@ -27,13 +31,13 @@ public final class Canvas {
                 : ImageScaling.bicubic(project.getSourceImage(), project.scaleFactor);
         sobel = Sobel.calculate(source);
 
-        painting = blankCanvas();
+        this.painting = painting;
 
         showSource = false;
     }
 
-    private GameImage blankCanvas() {
-        final GameImage canvas = new GameImage(project.width, project.height);
+    private static GameImage blankCanvas(final int width, final int height) {
+        final GameImage canvas = new GameImage(width, height);
         canvas.fill(Colors.white());
 
         // TODO - canvas texture?
@@ -69,7 +73,7 @@ public final class Canvas {
         final RectBounds bounds = project.focusManager.activeBounds();
         final int TRANSPARENT = Colors.transparent().getRGB();
 
-        final GameImage canvas = blankCanvas(),
+        final GameImage canvas = blankCanvas(project.width, project.height),
                 copy = new GameImage(painting);
 
         for (int x = bounds.left(); x < bounds.right(); x++)
