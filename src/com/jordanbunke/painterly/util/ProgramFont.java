@@ -12,7 +12,7 @@ import static com.jordanbunke.painterly.util.Colors.*;
 import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
 
 public enum ProgramFont {
-    FONT_DEF("deltan", 3, 0.6, 0.6);
+    FONT_DEF("norman-bold", 2, 0.6, 0.6);
 
     private final Font font;
     private final double lineSpacing;
