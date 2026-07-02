@@ -133,11 +133,14 @@ public final class ContextBar extends MenuElement {
         elements.add(intervalTarget);
 
         // focus box mode
-        // TODO - width, icon?
+        // TODO - width
         final ContextBarElement.Builder focusBoxModeBuilder =
                 ContextBarElement.init(FOCUS_BOX_MODE, RC_CB_FOCUS_BOX_MODE,
                                 intervalTarget.nextX())
-                        .setTooltipCode(RC_CB_FOCUS_BOX_MODE);
+                        .setTooltipCode(RC_CB_FOCUS_BOX_MODE)
+                        .setIconCodeGetter(p -> p.focusManager
+                                .getFocusBoxMode().setter.getIconCode(),
+                                RC_FB_FREE);
         final OptionsContainer focusBoxModeOptions = OptionsContainer
                 .init(focusBoxModeBuilder.getPosition())
                 .setAnchor(focusBoxModeBuilder.complementaryReflected())
