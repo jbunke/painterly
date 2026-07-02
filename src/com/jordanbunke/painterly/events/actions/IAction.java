@@ -80,6 +80,10 @@ public interface IAction<T> {
     }
 
     default int getWidthAllotment() {
+        return getWidthAllotment(true);
+    }
+
+    default int getWidthAllotment(final boolean doShortcut) {
         final ResourceCode code = getCode();
         final KeyboardShortcut shortcut = getShortcut();
 
@@ -99,7 +103,7 @@ public interface IAction<T> {
         // text
         width += standardTextWidth(text);
 
-        if (shortcut != null) {
+        if (doShortcut && shortcut != null) {
             // text to shortcut divider
             width += MENU_BAR_DIVIDER_WIDTH;
 

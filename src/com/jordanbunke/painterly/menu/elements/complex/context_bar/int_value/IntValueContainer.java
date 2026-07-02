@@ -52,7 +52,7 @@ public final class IntValueContainer extends MenuElement {
                         setter.accept(v - 1);
                 }).setTooltipCode(RC_NA).build();
         increment = IconButton
-                .init(RC_INCREMENT, follow(decrement, CONTEXT_BAR_PADDING_X),
+                .init(RC_INCREMENT, follow(decrement),
                         () -> {
                     final int v = getter.get();
 
@@ -155,7 +155,7 @@ public final class IntValueContainer extends MenuElement {
 
         @Override
         public IntValueContainer build() {
-            final int width = (4 * CONTEXT_BAR_PADDING_X) +
+            final int width = (3 * CONTEXT_BAR_PADDING_X) +
                     (2 * ICON_DIM) + SLIDER_DEF_WIDTH;
 
             return new IntValueContainer(position,

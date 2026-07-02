@@ -17,6 +17,7 @@ public enum ResourceCode {
 
     // Misc. images
     RC_CONTROL_POINT,
+    RC_HIGHLIGHT,
 
     // Tooltips
 

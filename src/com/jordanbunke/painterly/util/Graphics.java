@@ -32,10 +32,11 @@ public final class Graphics {
             CURSORS_FOLDER = Path.of("cursors"),
             MISC_IMG_FOLDER = Path.of("img_misc");
 
-    private static final GameImage CONTROL_POINT;
+    private static final GameImage CONTROL_POINT, HIGHLIGHT;
 
     static {
         CONTROL_POINT = readMiscImage(RC_CONTROL_POINT);
+        HIGHLIGHT = readMiscImage(RC_HIGHLIGHT);
     }
 
     // IO
@@ -713,41 +714,10 @@ public final class Graphics {
 
     // ALGORITHMS
 
-    public static GameImage highlightIcon(
-            final GameImage icon
-    ) {
-        final int w = icon.getWidth(), h = icon.getHeight();
-        final GameImage highlight = new GameImage(icon);
-
-        for (int x = 0; x < w; x++) {
-            for (int y = 0; y < h; y++) {
-                final Color c = icon.getColorAt(x, y);
-
-                if (c.getAlpha() == 0 && hasAdjacent(icon, x, y))
-                    highlight.dot(/* TODO */ Colors.bg(), x, y);
-            }
-        }
-
+    public static GameImage highlightIcon(final GameImage icon) {
+        final GameImage highlight = new GameImage(HIGHLIGHT);
+        highlight.draw(icon);
         return highlight.submit();
-    }
-
-    private static boolean hasAdjacent(
-            final GameImage image, final int x, final int y
-    ) {
-        return notTransparent(image, x - 1, y) ||
-                notTransparent(image, x + 1, y) ||
-                notTransparent(image, x, y - 1) ||
-                notTransparent(image, x, y + 1);
-    }
-
-    private static boolean notTransparent(
-            final GameImage image, final int x, final int y
-    ) {
-        if (x < 0 || x >= image.getWidth() ||
-                y < 0 || y >= image.getHeight())
-            return false;
-
-        return image.getColorAt(x, y).getAlpha() > 0;
     }
 
     public static GameImage pixelWiseTransformation(

@@ -199,7 +199,8 @@ public final class ContextBarElement extends MenuButtonStub
     }
 
     public int nextX() {
-        return getRenderPosition().x + getWidth();
+        return getRenderPosition().x + getWidth() +
+                /* TODO - test */ Layout.CONTEXT_BAR_GAP_X;
     }
 
     public static class Builder implements MenuElementBuilder<ContextBarElement> {

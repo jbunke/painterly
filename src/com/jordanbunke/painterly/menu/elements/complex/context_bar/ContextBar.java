@@ -11,6 +11,7 @@ import com.jordanbunke.painterly.menu.elements.complex.context_bar.multichoice.O
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.Constants;
+import com.jordanbunke.painterly.util.EnumUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 import static com.jordanbunke.painterly.events.actions.ProjectAction.*;
 import static com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBarSection.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.CONTEXT_BAR;
 
 public final class ContextBar extends MenuElement {
@@ -44,13 +46,14 @@ public final class ContextBar extends MenuElement {
     private static ContextBar build() {
         final List<ContextBarElement> elements = new LinkedList<>();
 
-        // TODO - temp
-
         // tool
-        // TODO - width
+        final int toolWidth = EnumUtils.stream(ToolManager.ToolEnum.class)
+                .mapToInt(t -> t.setter.getWidthAllotment(false))
+                .reduce(1, Math::max);
         final ContextBarElement.Builder toolBuilder = ContextBarElement
                 .init(TOOL, RC_CB_CURRENT_TOOL, 0)
                 .setTooltipCode(RC_CB_CURRENT_TOOL)
+                .setWidth(toolWidth)
                 .setRequiresProject(false)
                 .setIconCodeGetter(() ->
                         ToolManager.getCurrentAction().getIconCode());
@@ -66,28 +69,25 @@ public final class ContextBar extends MenuElement {
         elements.add(tool);
 
         // strokes completed
-        // TODO - width
         final ContextBarElement strokesCompleted = ContextBarElement
                 .init(STROKES_COMPLETED, RC_CB_STROKES_COMPLETED, tool.nextX())
                 .setTooltipCode(RC_CB_STROKES_COMPLETED)
                 .setStaticIconCode(RC_CB_STROKES_COMPLETED)
-                .setWidthFromPercentage(0.08)
+                .setWidth(CONTEXT_BAR_NUM_SECTION_LARGE_WIDTH)
                 .build();
         elements.add(strokesCompleted);
 
         // strokes attempted
-        // TODO - width
         final ContextBarElement strokesAttempted = ContextBarElement
                 .init(STROKES_ATTEMPTED, RC_CB_STROKES_ATTEMPTED,
                         strokesCompleted.nextX())
                 .setTooltipCode(RC_CB_STROKES_ATTEMPTED)
                 .setStaticIconCode(RC_CB_STROKES_ATTEMPTED)
-                .setWidthFromPercentage(0.08)
+                .setWidth(CONTEXT_BAR_NUM_SECTION_LARGE_WIDTH)
                 .build();
         elements.add(strokesAttempted);
 
         // interval progress
-        // TODO - width
         final ContextBarElement.Builder intervalProgressBuilder =
                 ContextBarElement.init(INTERVAL_PROGRESS,
                                 RC_CB_INTERVAL_PROGRESS,
@@ -97,7 +97,7 @@ public final class ContextBar extends MenuElement {
                                 ? RC_TICK_MODE_ATTEMPTED
                                 : RC_TICK_MODE_COMPLETED,
                                 RC_CB_INTERVAL_PROGRESS)
-                        .setWidthFromPercentage(0.08);
+                        .setWidth(CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH);
         final OptionsContainer intervalProgressOptions = OptionsContainer
                 .init(intervalProgressBuilder.getPosition())
                 .setAnchor(intervalProgressBuilder.complementaryReflected())
@@ -111,13 +111,12 @@ public final class ContextBar extends MenuElement {
         elements.add(intervalProgress);
 
         // interval target
-        // TODO - width
         final ContextBarElement.Builder intervalTargetBuilder =
                 ContextBarElement.init(INTERVAL_TARGET, RC_CB_INTERVAL_TARGET,
                                 intervalProgress.nextX())
                         .setTooltipCode(RC_CB_INTERVAL_TARGET)
                         .setStaticIconCode(RC_CB_INTERVAL_TARGET)
-                        .setWidthFromPercentage(0.08);
+                        .setWidth(CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH);
         final IntValueContainer intervalTargetValue = IntValueContainer
                 .init(intervalTargetBuilder.getPosition())
                 .setAnchor(intervalTargetBuilder.complementaryReflected())
@@ -133,11 +132,14 @@ public final class ContextBar extends MenuElement {
         elements.add(intervalTarget);
 
         // focus box mode
-        // TODO - width
+        final int focusBoxModeWidth = EnumUtils.stream(FocusBoxMode.class)
+                .mapToInt(f -> f.setter.getWidthAllotment(false))
+                .reduce(1, Math::max);
         final ContextBarElement.Builder focusBoxModeBuilder =
                 ContextBarElement.init(FOCUS_BOX_MODE, RC_CB_FOCUS_BOX_MODE,
                                 intervalTarget.nextX())
                         .setTooltipCode(RC_CB_FOCUS_BOX_MODE)
+                        .setWidth(focusBoxModeWidth)
                         .setIconCodeGetter(p -> p.focusManager
                                 .getFocusBoxMode().setter.getIconCode(),
                                 RC_FB_FREE);
@@ -154,12 +156,11 @@ public final class ContextBar extends MenuElement {
         elements.add(focusBoxMode);
 
         // X divisions
-        // TODO - width
         final ContextBarElement.Builder divsXBuilder = ContextBarElement
                 .init(DIVS_X, RC_CB_DIVS_X, focusBoxMode.nextX())
                 .setTooltipCode(RC_CB_DIVS_X)
                 .setStaticIconCode(RC_CB_DIVS_X)
-                .setWidthFromPercentage(0.08);
+                .setWidth(CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH);
         final IntValueContainer divsXValue = IntValueContainer
                 .init(divsXBuilder.getPosition())
                 .setAnchor(divsXBuilder.complementaryReflected())
@@ -175,12 +176,11 @@ public final class ContextBar extends MenuElement {
         elements.add(divsX);
 
         // Y divisions
-        // TODO - width
         final ContextBarElement.Builder divsYBuilder = ContextBarElement
                 .init(DIVS_Y, RC_CB_DIVS_Y, divsX.nextX())
                 .setTooltipCode(RC_CB_DIVS_Y)
                 .setStaticIconCode(RC_CB_DIVS_Y)
-                .setWidthFromPercentage(0.08);
+                .setWidth(CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH);
         final IntValueContainer divsYValue = IntValueContainer
                 .init(divsYBuilder.getPosition())
                 .setAnchor(divsYBuilder.complementaryReflected())
