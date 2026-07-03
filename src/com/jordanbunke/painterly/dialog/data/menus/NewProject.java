@@ -39,15 +39,16 @@ public final class NewProject extends DialogVariableSet {
     }
 
     private NewProject() {
-        name = new DialogVariable<>("", this::validName);
-        folder = new DialogVariable<>(null, this::validFolder);
-        sourceImage = new DialogVariable<>(null, this::validSourceImage);
-        scaleFactor = new DialogVariable<>(1d, this::validScaleFactor);
+        name = new DialogVariable<>(() -> "", this::validName);
+        folder = new DialogVariable<>(() -> null, false, this::validFolder);
+        sourceImage = new DialogVariable<>(() -> null, this::validSourceImage);
+        scaleFactor = new DialogVariable<>(() -> 1d, this::validScaleFactor);
         autosave = new DialogVariable<>(
-                Settings.get(SET_ID_AUTOSAVE_ON_BY_DEFAULT, Boolean.class),
+                () -> Settings.get(SET_ID_AUTOSAVE_ON_BY_DEFAULT, Boolean.class),
                 Validator::always);
         autosaveFrequency = new DialogVariable<>(
-                Constants.DEF_AUTOSAVE_FREQUENCY, this::validAutosaveFrequency);
+                () -> Constants.DEF_AUTOSAVE_FREQUENCY,
+                this::validAutosaveFrequency);
     }
 
     public static NewProject get() {

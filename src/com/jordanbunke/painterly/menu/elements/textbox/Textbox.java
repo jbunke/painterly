@@ -182,7 +182,7 @@ public class Textbox extends AbstractTextbox {
             if (dynamic)
                 getter = () -> String.valueOf(variable.get());
 
-            if (setInitialText && variable.passing())
+            if (setInitialText && variable.exists())
                 setInitialText(String.valueOf(variable.get()));
 
             return this;

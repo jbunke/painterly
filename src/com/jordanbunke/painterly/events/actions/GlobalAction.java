@@ -2,6 +2,7 @@ package com.jordanbunke.painterly.events.actions;
 
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
@@ -34,8 +35,10 @@ public enum GlobalAction
     TOGGLE_FULLSCREEN(RC_TOGGLE_FULLSCREEN, KeyboardShortcut.single(ESCAPE),
             Layout::toggleFullscreen),
     NEW_PROJECT(RC_NEW_PROJECT, true, true,
-            new KeyboardShortcut(true, false, N),
-            () -> DialogManager.set(DialogAssembly::newProject)),
+            new KeyboardShortcut(true, false, N), () -> {
+        NewProject.get().softReset();
+        DialogManager.set(DialogAssembly::newProject);
+    }),
     OPEN_PROJECT(RC_OPEN_PROJECT, true, true,
             new KeyboardShortcut(true, false, O),
             SaveLoader::openProject),
