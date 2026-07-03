@@ -8,6 +8,8 @@ import com.jordanbunke.painterly.theme.Colors;
 import com.jordanbunke.painterly.util.debug.LogChannel;
 import com.jordanbunke.painterly.util.debug.LogManager;
 
+import static com.jordanbunke.painterly.theme.Graphics.blankCanvas;
+
 public final class Canvas {
     private final Project project;
     private final GameImage scaledSource, sobel;
@@ -16,10 +18,6 @@ public final class Canvas {
     private GameImage painting;
 
     private boolean showSource;
-
-    public Canvas(final Project project) {
-        this(project, blankCanvas(project.width, project.height));
-    }
 
     public Canvas(final Project project, final GameImage painting) {
         this.project = project;
@@ -34,15 +32,6 @@ public final class Canvas {
         this.painting = painting;
 
         showSource = false;
-    }
-
-    private static GameImage blankCanvas(final int width, final int height) {
-        final GameImage canvas = new GameImage(width, height);
-        canvas.fill(Colors.white());
-
-        // TODO - canvas texture?
-
-        return canvas.submit();
     }
 
     public boolean attemptStroke() {

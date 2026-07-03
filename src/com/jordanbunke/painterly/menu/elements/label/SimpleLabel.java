@@ -145,4 +145,8 @@ public final class SimpleLabel extends StaticMenuElement {
     public Coord2D followTB() {
         return followTB(STANDARD_FOLLOW_X);
     }
+
+    public Coord2D followIcon() {
+        return rightOf().displaceX(STANDARD_FOLLOW_X);
+    }
 }

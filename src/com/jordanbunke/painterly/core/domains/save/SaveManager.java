@@ -6,7 +6,6 @@ import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.io.SaveLoader;
 import com.jordanbunke.painterly.resources.StringVariableMap;
-import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.debug.LogManager;
 import com.jordanbunke.painterly.util.debug.LogMessage;
@@ -15,7 +14,6 @@ import java.nio.file.Path;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.resources.StringVariableMap.ID.*;
-import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_AUTOSAVE_ON_BY_DEFAULT;
 import static com.jordanbunke.painterly.util.debug.LogChannel.*;
 
 public final class SaveManager {
@@ -26,11 +24,14 @@ public final class SaveManager {
     private boolean autosave;
     private int autosaveFrequency;
 
-    public SaveManager(final Project project) {
+    public SaveManager(
+            final Project project,
+            final boolean autosave, final int autosaveFrequency
+    ) {
         this.project = project;
 
-        autosave = Settings.get(SET_AUTOSAVE_ON_BY_DEFAULT, Boolean.class);
-        setAutosaveFrequency(Constants.DEF_AUTOSAVE_FREQUENCY);
+        this.autosave = autosave;
+        setAutosaveFrequency(autosaveFrequency);
     }
 
     public void save() {
@@ -73,11 +74,15 @@ public final class SaveManager {
                 autosaveFrequency, Constants.MAX_AUTOSAVE_FREQUENCY);
     }
 
-    public boolean isAutosave() {
-        return autosave;
-    }
-
     public void setAutosave(final boolean autosave) {
         this.autosave = autosave;
+    }
+
+    public int getAutosaveFrequency() {
+        return autosaveFrequency;
+    }
+
+    public boolean isAutosave() {
+        return autosave;
     }
 }

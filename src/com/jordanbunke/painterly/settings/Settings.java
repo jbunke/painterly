@@ -32,7 +32,7 @@ public final class Settings {
         SET_ID_LANGUAGE,
         SET_ID_THEME,
         SET_ID_DEFAULT_INTERVAL_TARGET,
-        SET_AUTOSAVE_ON_BY_DEFAULT,
+        SET_ID_AUTOSAVE_ON_BY_DEFAULT,
         // TODO - additional settings
         ;
 
@@ -100,7 +100,7 @@ public final class Settings {
                 ThemeEnum::id, ThemeEnum.DEFAULT));
         addSetting(new Setting<>(Integer.class, SET_ID_DEFAULT_INTERVAL_TARGET,
                 Integer::parseInt, 50));
-        addSetting(new Setting<>(Boolean.class, SET_AUTOSAVE_ON_BY_DEFAULT,
+        addSetting(new Setting<>(Boolean.class, SET_ID_AUTOSAVE_ON_BY_DEFAULT,
                 Boolean::parseBoolean, true));
         // TODO - initialize additional settings
     }

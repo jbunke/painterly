@@ -28,7 +28,7 @@ public final class DialogVariable<T> {
     public String feedback() {
         final ResourceCode code = validator.check(value).b();
 
-        return code == RC_NA ? "" : LanguageData.retrieveUIText(code);
+        return code == RC_NA ? "" : LanguageData.retrieveTooltip(code);
     }
 
     public void set(final T value) {

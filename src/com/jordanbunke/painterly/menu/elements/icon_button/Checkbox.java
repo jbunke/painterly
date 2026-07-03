@@ -1,11 +1,14 @@
 package com.jordanbunke.painterly.menu.elements.icon_button;
 
+import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.menu_elements.ext.AbstractCheckbox;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.funke.core.ConcreteProperty;
+import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.theme.Graphics;
+import com.jordanbunke.painterly.util.Cursor;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -23,6 +26,14 @@ public final class Checkbox extends AbstractCheckbox {
 
     public static Builder init(final Coord2D position) {
         return new Builder(position);
+    }
+
+    @Override
+    public void process(final InputEventLogger eventLogger) {
+        super.process(eventLogger);
+
+        if (isHighlighted())
+            Cursor.ping(Cursor.POINTER);
     }
 
     public static class Builder implements MenuElementBuilder<Checkbox> {
@@ -53,6 +64,12 @@ public final class Checkbox extends AbstractCheckbox {
         public Builder setSetter(final Consumer<Boolean> setter) {
             this.setter = setter;
             return this;
+        }
+
+        public Builder setDialogVariableEndpoint(
+                final DialogVariable<Boolean> variable
+        ) {
+            return setSetter(variable::set).setGetter(variable::get);
         }
 
         @Override

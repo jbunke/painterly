@@ -11,7 +11,7 @@ import java.util.Objects;
 public interface Validator<T> {
     Pair<Boolean, ResourceCode> check(T value);
 
-    static Pair<Boolean, ResourceCode> nonNull(Object o) {
+    static Pair<Boolean, ResourceCode> nonNull(final Object o) {
         final boolean pass = Objects.nonNull(o);
         return new Pair<>(pass, pass ? RC_NA : RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
     }
@@ -19,6 +19,10 @@ public interface Validator<T> {
     @SuppressWarnings("unused")
     static Pair<Boolean, ResourceCode> never() {
         return new Pair<>(false, RC_NA);
+    }
+
+    static Pair<Boolean, ResourceCode> always(final Object o) {
+        return new Pair<>(true, RC_NA);
     }
 
     static Double nullableParseDouble(final String s) {

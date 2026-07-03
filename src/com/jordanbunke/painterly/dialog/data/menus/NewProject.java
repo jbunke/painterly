@@ -7,9 +7,11 @@ import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
+import com.jordanbunke.painterly.dialog.data.Validator;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.util.Constants;
 
 import java.io.File;
@@ -18,6 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_AUTOSAVE_ON_BY_DEFAULT;
 
 public final class NewProject extends DialogVariableSet {
     private static final NewProject INSTANCE;
@@ -26,6 +29,8 @@ public final class NewProject extends DialogVariableSet {
     public final DialogVariable<Path> folder;
     public final DialogVariable<GameImage> sourceImage;
     public final DialogVariable<Double> scaleFactor;
+    public final DialogVariable<Boolean> autosave;
+    public final DialogVariable<Integer> autosaveFrequency;
 
     private String refImageFilename;
 
@@ -38,6 +43,11 @@ public final class NewProject extends DialogVariableSet {
         folder = new DialogVariable<>(null, this::validFolder);
         sourceImage = new DialogVariable<>(null, this::validSourceImage);
         scaleFactor = new DialogVariable<>(1d, this::validScaleFactor);
+        autosave = new DialogVariable<>(
+                Settings.get(SET_ID_AUTOSAVE_ON_BY_DEFAULT, Boolean.class),
+                Validator::always);
+        autosaveFrequency = new DialogVariable<>(
+                Constants.DEF_AUTOSAVE_FREQUENCY, this::validAutosaveFrequency);
     }
 
     public static NewProject get() {
@@ -47,7 +57,8 @@ public final class NewProject extends DialogVariableSet {
     @Override
     DialogVariable<?>[] getAllVariables() {
         return new DialogVariable[] {
-                name, folder, sourceImage, scaleFactor
+                name, folder, sourceImage, scaleFactor,
+                autosave, autosaveFrequency
         };
     }
 
@@ -58,8 +69,12 @@ public final class NewProject extends DialogVariableSet {
 
     @Override
     void whenReady() {
-        final Project project = new Project(name.get(),
-                folder.get(), sourceImage.get(), scaleFactor.get());
+        final Project project = new Project.Builder(name.get(),
+                folder.get(), sourceImage.get())
+                .setScaleFactor(scaleFactor.get(), true)
+                .setAutosave(autosave.get())
+                .setAutosaveFrequency(autosaveFrequency.get())
+                .build();
         ProjectManager.get().addProject(project, true);
     }
 
@@ -125,11 +140,24 @@ public final class NewProject extends DialogVariableSet {
         return new Pair<>(true, RC_NPD_VALIDATED_SRC_IMAGE);
     }
 
+    private Pair<Boolean, ResourceCode> validAutosaveFrequency(
+            final Integer autosaveFrequency
+    ) {
+        if (autosaveFrequency == null)
+            return new Pair<>(false, RC_DIALOG_CANNOT_READ_INT);
+        else if (autosaveFrequency < Constants.MIN_AUTOSAVE_FREQUENCY)
+            return new Pair<>(false, RC_NA /* TODO */);
+        else if (autosaveFrequency > Constants.MAX_AUTOSAVE_FREQUENCY)
+            return new Pair<>(false, RC_NA /* TODO */);
+
+        return new Pair<>(true, RC_NA);
+    }
+
     private Pair<Boolean, ResourceCode> validScaleFactor(
             final Double scaleFactor
     ) {
         if (scaleFactor == null)
-            return new Pair<>(false, RC_DIALOG_CANNOT_READ_INT);
+            return new Pair<>(false, RC_DIALOG_CANNOT_READ_DOUBLE);
         else if (scaleFactor < 1d)
             return new Pair<>(false, RC_DIALOG_MUST_BE_GR_EQ_1);
         else if (!sourceImage.passing())

@@ -18,6 +18,7 @@ import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.util.Constants;
 
 import java.io.*;
@@ -28,12 +29,14 @@ import java.util.List;
 import java.util.Set;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
+import static com.jordanbunke.painterly.settings.Settings.SettingID.*;
 
 public final class SaveLoader {
     enum ID {
         VERSION, NAME, FOLDER,
         WIDTH, HEIGHT, SCALE_FACTOR,
         STROKES_COMPLETED, STROKES_ATTEMPTED,
+        AUTOSAVE, AUTOSAVE_FREQUENCY
         ;
     }
 
@@ -87,6 +90,8 @@ public final class SaveLoader {
                 case SCALE_FACTOR -> project.scaleFactor;
                 case STROKES_COMPLETED -> project.strokeManager.getStrokesCompleted();
                 case STROKES_ATTEMPTED -> project.strokeManager.getStrokesAttempted();
+                case AUTOSAVE -> project.saveManager.isAutosave();
+                case AUTOSAVE_FREQUENCY -> project.saveManager.getAutosaveFrequency();
             };
             jb.add(new JSONPair(key, value));
         }
@@ -152,6 +157,9 @@ public final class SaveLoader {
         int width = painting.getWidth(), height = painting.getHeight(),
                 strokesCompleted = 0, strokesAttempted = 0;
         double scaleFactor = width / (double) source.getWidth();
+        boolean autosave = Settings.get(
+                SET_ID_AUTOSAVE_ON_BY_DEFAULT, Boolean.class);
+        int autosaveFrequency = Constants.DEF_AUTOSAVE_FREQUENCY;
 
         if (specPath.toFile().isFile()) {
             final String content = FileIO.readFile(specPath);
@@ -179,17 +187,22 @@ public final class SaveLoader {
                     case FOLDER -> folder =
                             Path.of(PathHelper.formatPathString(v));
                     case WIDTH ->
-                            width = parseInt(pair.value(), width);
+                            width = castJSONInt(pair.value(), width);
                     case HEIGHT ->
-                            height = parseInt(pair.value(), height);
+                            height = castJSONInt(pair.value(), height);
                     case SCALE_FACTOR -> scaleFactor =
-                            parseDouble(pair.value(), scaleFactor);
+                            castJSONDouble(pair.value(), scaleFactor);
                     case STROKES_COMPLETED ->
-                            strokesCompleted = parseInt(
+                            strokesCompleted = castJSONInt(
                                     pair.value(), strokesCompleted);
                     case STROKES_ATTEMPTED ->
-                            strokesAttempted = parseInt(
+                            strokesAttempted = castJSONInt(
                                     pair.value(), strokesAttempted);
+                    case AUTOSAVE ->
+                            autosave = castJSONBoolean(pair.value(), autosave);
+                    case AUTOSAVE_FREQUENCY ->
+                            autosaveFrequency = castJSONInt(
+                                    pair.value(), autosaveFrequency);
                 }
             }
 
@@ -202,24 +215,34 @@ public final class SaveLoader {
                 return;
 
             // build project
-            final Project project = new Project(name, folder,
-                    source, painting, width, height, scaleFactor,
-                    strokesCompleted, strokesAttempted);
+            final Project project = new Project.Builder(name, folder, source)
+                    .setPaintingImage(painting)
+                    .setScaleFactor(scaleFactor)
+                    .setWidth(width).setHeight(height)
+                    .setStrokesAttempted(strokesAttempted)
+                    .setStrokesCompleted(strokesCompleted)
+                    .setAutosave(autosave)
+                    .setAutosaveFrequency(autosaveFrequency)
+                    .build();
             ProjectManager.get().addProject(project, true);
         } else {
             errorList.add(RC_ERR_NO_SPEC_PATH);
         }
     }
 
-    private static double parseDouble(final Object value, final double failCase) {
-        return parse(value, Double.class, failCase);
+    private static boolean castJSONBoolean(final Object value, final boolean failCase) {
+        return castJSON(value, Boolean.class, failCase);
     }
 
-    private static int parseInt(final Object value, final int failCase) {
-        return parse(value, Integer.class, failCase);
+    private static double castJSONDouble(final Object value, final double failCase) {
+        return castJSON(value, Double.class, failCase);
     }
 
-    private static <T> T parse(
+    private static int castJSONInt(final Object value, final int failCase) {
+        return castJSON(value, Integer.class, failCase);
+    }
+
+    private static <T> T castJSON(
             final Object value, final Class<T> type, final T failCase
     ) {
         return type.isInstance(value) ? type.cast(value) : failCase;

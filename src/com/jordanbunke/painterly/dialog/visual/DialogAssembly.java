@@ -9,11 +9,13 @@ import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
 import com.jordanbunke.painterly.dialog.data.menus.DialogVariableSet;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
+import com.jordanbunke.painterly.menu.elements.icon_button.Checkbox;
 import com.jordanbunke.painterly.menu.elements.icon_button.FeedbackElement;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.menu.elements.textbox.Textbox;
 import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.util.Constants;
 
 import java.util.stream.IntStream;
 
@@ -32,20 +34,32 @@ public final class DialogAssembly {
                 projectNameLabel = leadLabel(RC_NPD_PROJECT_NAME),
                 folderLabel = leadLabel(RC_NPD_FOLDER),
                 refImageLabel = leadLabel(RC_NPD_SOURCE_IMAGE),
-                scaleFactorLabel = leadLabel(RC_NPD_SCALE_FACTOR);
+                scaleFactorLabel = leadLabel(RC_NPD_SCALE_FACTOR),
+                autosaveLabel = leadLabel(RC_NPD_AUTOSAVE),
+                autosaveFrequencyLabel = leadLabel(RC_NPD_AUTOSAVE_FREQUENCY);
 
         // dialog realization
         final DialogElement
                 projectNameLabelDE = leadLabelForDialog(db, projectNameLabel),
-                folderLabelDE = leadLabelForDialog(db, folderLabel,
+                folderLabelDE = leadLabelForDialog(db,
+                        folderLabel,
                         deb -> deb.setRow(1)),
-                refImageLabelDE = leadLabelForDialog(db, refImageLabel,
+                refImageLabelDE = leadLabelForDialog(db,
+                        refImageLabel,
                         deb -> deb.setRow(2)),
-                scaleFactorLabelDE = leadLabelForDialog(db, scaleFactorLabel,
-                        deb -> deb.setRow(3));
+                scaleFactorLabelDE = leadLabelForDialog(db,
+                        scaleFactorLabel,
+                        deb -> deb.setRow(3)),
+                autosaveLabelDE = leadLabelForDialog(db,
+                        autosaveLabel,
+                        deb -> deb.setRow(4)),
+                autosaveFrequencyLabelDE = leadLabelForDialog(db,
+                        autosaveFrequencyLabel,
+                        deb -> deb.setRow(5));
 
         db.addElements(projectNameLabelDE, folderLabelDE,
-                refImageLabelDE, scaleFactorLabelDE);
+                refImageLabelDE, scaleFactorLabelDE,
+                autosaveLabelDE, autosaveFrequencyLabelDE);
 
         // dependent dialog elements, directly realized
         final DialogElement
@@ -74,12 +88,29 @@ public final class DialogAssembly {
                                 .setWidthRelative(0.4)
                                 .build()),
                 scaleFactorFeedback = feedbackAfterInteraction(
-                        scaleFactorTextbox, np.scaleFactor);
+                        scaleFactorTextbox, np.scaleFactor),
+                autosaveCheckbox = forDialog(
+                        Checkbox.init(autosaveLabel.followIcon())
+                                .setDialogVariableEndpoint(np.autosave)
+                                .build()),
+                autosaveFrequencyTextbox = forDialog(
+                        Textbox.init(autosaveFrequencyLabel.followTB())
+                                .setDialogVariableEndpoint(np.autosaveFrequency,
+                                        Validator::nullableParseInt)
+                                .setPrefix(RC_NPD_AUTOSAVE_FREQUENCY_PREFIX)
+                                .setSuffix(RC_NPD_AUTOSAVE_FREQUENCY_SUFFIX)
+                                .setWidthRelative(1.5)
+                                .setMaxLength(String.valueOf(Constants.MAX_AUTOSAVE_FREQUENCY).length())
+                                .build()),
+                autosaveFrequencyFeedback = feedbackAfterInteraction(
+                        autosaveFrequencyTextbox, np.autosaveFrequency);
 
         db.addElements(projectNameTextbox, projectNameFeedback,
                 folderButton, folderFeedback,
                 uploadImageButton, uploadImageFeedback,
-                scaleFactorTextbox, scaleFactorFeedback);
+                scaleFactorTextbox, scaleFactorFeedback,
+                autosaveCheckbox,
+                autosaveFrequencyTextbox, autosaveFrequencyFeedback);
 
         return buildDialogForVariableSet(db, np);
     }

@@ -6,6 +6,8 @@ import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
+import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.theme.Graphics;
@@ -126,9 +128,17 @@ public class Textbox extends AbstractTextbox {
             return this;
         }
 
+        public Builder setPrefix(final ResourceCode prefixCode) {
+            return setPrefix(LanguageData.retrieveUIText(prefixCode));
+        }
+
         public Builder setSuffix(final String suffix) {
             this.suffix = suffix;
             return this;
+        }
+
+        public Builder setSuffix(final ResourceCode suffixCode) {
+            return setSuffix(LanguageData.retrieveUIText(suffixCode));
         }
 
         public Builder setMaxLength(final int maxLength) {

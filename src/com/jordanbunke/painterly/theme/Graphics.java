@@ -282,6 +282,15 @@ public final class Graphics {
 
     // HELPER
 
+    public static GameImage blankCanvas(final int width, final int height) {
+        final GameImage canvas = new GameImage(width, height);
+        canvas.fill(Colors.white());
+
+        // TODO - canvas texture?
+
+        return canvas.submit();
+    }
+
     public static int standardTextWidth(final String text) {
         return new FontFormatter(FONT_DEF).realize().addText(text)
                 .build().draw().getWidth();

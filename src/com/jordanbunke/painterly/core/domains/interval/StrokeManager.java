@@ -29,10 +29,6 @@ public final class StrokeManager {
      * */
     private boolean tickMode;
 
-    public StrokeManager(final Project project) {
-        this(project, 0, 0);
-    }
-
     public StrokeManager(
             final Project project,
             final int strokesCompleted, final int strokesAttempted
