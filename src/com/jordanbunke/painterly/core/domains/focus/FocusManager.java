@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.resources.StringVariableMap.ID.*;
-import static com.jordanbunke.painterly.util.Graphics.*;
+import static com.jordanbunke.painterly.theme.Graphics.*;
 import static com.jordanbunke.painterly.util.debug.LogChannel.*;
 
 public final class FocusManager {

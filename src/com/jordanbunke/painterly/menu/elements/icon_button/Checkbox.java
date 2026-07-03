@@ -5,7 +5,7 @@ import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.funke.core.ConcreteProperty;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
-import com.jordanbunke.painterly.util.Graphics;
+import com.jordanbunke.painterly.theme.Graphics;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

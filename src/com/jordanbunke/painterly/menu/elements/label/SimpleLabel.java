@@ -8,7 +8,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.Colors;
 import com.jordanbunke.painterly.util.ProgramFont;
 
 import java.awt.*;

@@ -11,7 +11,7 @@ import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.util.Tooltip;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
-import static com.jordanbunke.painterly.util.Graphics.readIcon;
+import static com.jordanbunke.painterly.theme.Graphics.readIcon;
 import static com.jordanbunke.painterly.util.Layout.ICON_DIM;
 
 public final class FeedbackElement extends MenuElement {

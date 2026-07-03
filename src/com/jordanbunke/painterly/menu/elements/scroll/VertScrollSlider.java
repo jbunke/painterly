@@ -6,8 +6,9 @@ import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.funke.core.ConcreteProperty;
 import com.jordanbunke.painterly.menu.elements.Button;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
-import com.jordanbunke.painterly.util.Graphics;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -55,12 +56,13 @@ public final class VertScrollSlider extends Slider {
         // pre-processing
         final int barH = sliderBallDim, rangeY = getHeight() - barH,
                 barY = (int) (getSliderFraction() * rangeY);
+        final Theme theme = ThemeManager.get();
 
-        base = Graphics.drawVertScrollBar(getWidth(), getHeight(),
+        base = theme.drawVertScrollBar(getWidth(), getHeight(),
                 barH, barY, Button.sim(false, false));
-        highlight = Graphics.drawVertScrollBar(getWidth(), getHeight(),
+        highlight = theme.drawVertScrollBar(getWidth(), getHeight(),
                 barH, barY, Button.sim(false, true));
-        sliding = Graphics.drawVertScrollBar(getWidth(), getHeight(),
+        sliding = theme.drawVertScrollBar(getWidth(), getHeight(),
                 barH, barY, Button.sim(true, false));
     }
 

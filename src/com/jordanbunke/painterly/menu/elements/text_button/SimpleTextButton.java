@@ -12,6 +12,9 @@ import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.complex.logic.EnumMenuElement;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.Graphics;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.*;
 
 import java.util.function.Supplier;
@@ -39,8 +42,9 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
         this.alignment = alignment;
         this.buttonType = buttonType;
 
-        base = Graphics.drawTextButton(sim(false, false));
-        highlight = Graphics.drawTextButton(sim(false, true));
+        final Theme theme = ThemeManager.get();
+        base = theme.drawTextButton(sim(false, false));
+        highlight = theme.drawTextButton(sim(false, true));
     }
 
     @Override
@@ -203,7 +207,7 @@ public final class SimpleTextButton extends MenuButton implements TextButton {
             final SimpleTextButton button = build();
             final StaticMenuElement stub = new StaticMenuElement(
                     position, button.getDimensions(), anchor,
-                    Graphics.drawTextButton(
+                    ThemeManager.get().drawTextButton(
                             TextButton.of(button.label,
                                     button.getWidth(), button.getHeight(),
                                     button.alignment, ButtonType.STUB)));

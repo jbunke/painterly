@@ -8,7 +8,7 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.util.Cursor;
 
-import static com.jordanbunke.painterly.util.Graphics.drawBoxOverlay;
+import static com.jordanbunke.painterly.theme.Graphics.drawBoxOverlay;
 
 public final class FocusBoxSelect extends Tool {
     private static final FocusBoxSelect INSTANCE;

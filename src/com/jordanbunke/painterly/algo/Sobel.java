@@ -2,7 +2,7 @@ package com.jordanbunke.painterly.algo;
 
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.Colors;
 
 import java.awt.*;
 

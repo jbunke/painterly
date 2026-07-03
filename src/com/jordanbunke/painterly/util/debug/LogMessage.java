@@ -3,7 +3,7 @@ package com.jordanbunke.painterly.util.debug;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
-import com.jordanbunke.painterly.util.Graphics;
+import com.jordanbunke.painterly.theme.ThemeManager;
 
 public final class LogMessage {
     public final LogChannel channel;
@@ -14,7 +14,7 @@ public final class LogMessage {
     public LogMessage(final LogChannel channel, final ResourceCode code) {
         this.channel = channel;
         final String text = LanguageData.retrieveUIText(code);
-        image = Graphics.drawDebugMessage(text);
+        image = ThemeManager.get().drawDebugMessage(text);
 
         age = 0;
     }

@@ -17,6 +17,8 @@ import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.Tooltip;
@@ -25,7 +27,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.jordanbunke.painterly.util.Graphics.drawContextBarElement;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.CONTEXT_BAR;
 
 public final class ContextBarElement extends MenuButtonStub
@@ -157,11 +158,16 @@ public final class ContextBarElement extends MenuButtonStub
     }
 
     private void updateAssets() {
-        base = drawContextBarElement(sim(false, false), iconCode);
+        final Theme theme = ThemeManager.get();
+
+        base = theme.drawContextBarElement(
+                sim(false, false), iconCode);
 
         if (expandable) {
-            highlight = drawContextBarElement(sim(false, true), iconCode);
-            selected = drawContextBarElement(sim(true, false), iconCode);
+            highlight = theme.drawContextBarElement(
+                    sim(false, true), iconCode);
+            selected = theme.drawContextBarElement(
+                    sim(true, false), iconCode);
         }
     }
 

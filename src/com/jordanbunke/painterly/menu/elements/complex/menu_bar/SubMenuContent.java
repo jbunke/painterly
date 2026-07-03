@@ -6,7 +6,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.container.MenuElementContai
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.events.actions.IAction;
-import com.jordanbunke.painterly.util.Graphics;
+import com.jordanbunke.painterly.theme.ThemeManager;
 
 import static com.jordanbunke.painterly.util.Layout.*;
 
@@ -27,7 +27,7 @@ public final class SubMenuContent extends MenuElementContainer {
         this.menuElements = menuElements;
         this.separators = separators;
 
-        sepImage = Graphics.drawMenuBarSeparator(getWidth());
+        sepImage = ThemeManager.get().drawMenuBarSeparator(getWidth());
     }
 
     public static SubMenuContent at(

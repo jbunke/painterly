@@ -9,10 +9,11 @@ import com.jordanbunke.painterly.events.actions.IAction;
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Tooltip;
 
-import static com.jordanbunke.painterly.util.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 
 public final class ActionMenuButton<T> extends MenuBarButton {
@@ -78,9 +79,13 @@ public final class ActionMenuButton<T> extends MenuBarButton {
     }
 
     private void drawButtons() {
-        stub = drawActionMenuButton(this, true, action);
-        base = drawActionMenuButton(sim(false, false), false, action);
-        highlight = drawActionMenuButton(sim(false, true), false, action);
+        final Theme theme = ThemeManager.get();
+
+        stub = theme.drawActionMenuButton(this, true, action);
+        base = theme.drawActionMenuButton(
+                sim(false, false), false, action);
+        highlight = theme.drawActionMenuButton(
+                sim(false, true), false, action);
     }
 
     @Override

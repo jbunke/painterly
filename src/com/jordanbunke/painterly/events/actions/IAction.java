@@ -9,8 +9,8 @@ import com.jordanbunke.painterly.resources.lang.LanguageData;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static com.jordanbunke.painterly.util.Graphics.drawKeyboardShortcut;
-import static com.jordanbunke.painterly.util.Graphics.standardTextWidth;
+import static com.jordanbunke.painterly.theme.Graphics.drawKeyboardShortcut;
+import static com.jordanbunke.painterly.theme.Graphics.standardTextWidth;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.MENU_BAR_PADDING_X;
 

@@ -7,7 +7,7 @@ import com.jordanbunke.delta_time.text.Text;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.Colors;
 import com.jordanbunke.painterly.util.ProgramFont;
 
 import java.awt.*;

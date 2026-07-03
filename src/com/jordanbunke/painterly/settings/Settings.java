@@ -8,7 +8,7 @@ import com.jordanbunke.json.JSONPair;
 import com.jordanbunke.json.JSONReader;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.resources.lang.Language;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.ThemeEnum;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.OSUtils;
@@ -95,9 +95,9 @@ public final class Settings {
         addSetting(new Setting<>(Language.class, SET_ID_LANGUAGE,
                 Language::fromCode, Objects::nonNull,
                 Language::code, Language.ENGLISH));
-        addSetting(new Setting<>(Colors.Theme.class, SET_ID_THEME,
-                Colors.Theme::fromID, Objects::nonNull,
-                Colors.Theme::id, Colors.Theme.DEFAULT));
+        addSetting(new Setting<>(ThemeEnum.class, SET_ID_THEME,
+                ThemeEnum::fromID, Objects::nonNull,
+                ThemeEnum::id, ThemeEnum.DEFAULT));
         addSetting(new Setting<>(Integer.class, SET_ID_DEFAULT_INTERVAL_TARGET,
                 Integer::parseInt, 50));
         addSetting(new Setting<>(Boolean.class, SET_AUTOSAVE_ON_BY_DEFAULT,

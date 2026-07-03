@@ -55,7 +55,7 @@ public final class Layout {
             MENU_BAR_SEPARATOR_HEIGHT = 1,
             CONTEXT_BAR_HEIGHT = 32, // TODO - potentially expand for icons
             CONTEXT_BAR_PADDING_X = 8,
-            CONTEXT_BAR_GAP_X = 10,
+            CONTEXT_BAR_GAP_X = 10, // TODO - test
             CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH = 100,
             CONTEXT_BAR_NUM_SECTION_LARGE_WIDTH = 128,
             KEY_SHORTCUT_INTERVAL_X = 4,
@@ -170,7 +170,7 @@ public final class Layout {
         regenAll();
     }
 
-    private static void regenAll() {
+    public static void regenAll() {
         MenuBar.regen();
         ContextBar.regen();
         ProjectBar.regen();

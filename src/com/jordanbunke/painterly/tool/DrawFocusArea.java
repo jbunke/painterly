@@ -10,7 +10,7 @@ import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.viewport.Positioning;
 import com.jordanbunke.painterly.viewport.Viewport;
 
-import static com.jordanbunke.painterly.util.Graphics.*;
+import static com.jordanbunke.painterly.theme.Graphics.*;
 
 public final class DrawFocusArea extends Tool {
     private static final DrawFocusArea INSTANCE;

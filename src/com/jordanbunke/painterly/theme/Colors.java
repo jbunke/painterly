@@ -1,11 +1,8 @@
-package com.jordanbunke.painterly.util;
+package com.jordanbunke.painterly.theme;
 
 import com.jordanbunke.color_proc.ColorProc;
-import com.jordanbunke.painterly.settings.Settings;
 
 import java.awt.*;
-
-import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_THEME;
 
 public final class Colors {
     private static final Color
@@ -37,42 +34,8 @@ public final class Colors {
         }
     }
 
-    public enum Theme {
-        DEFAULT(/* TODO */);
-
-        private final Color[] systemColors;
-
-        Theme(final Color... colors) {
-            final SystemColor[] sc = SystemColor.values();
-            final int l = sc.length;
-
-            systemColors = new Color[l];
-
-            for (int i = 0; i < l; i++) {
-                systemColors[i] = i < colors.length
-                        ? colors[i] : sc[i].defaultColor;
-            }
-        }
-
-        public String id() {
-            return name().toLowerCase();
-        }
-
-        public static Theme fromID(final String id) {
-            try {
-                return Theme.valueOf(id.toUpperCase());
-            } catch (IllegalArgumentException iae) {
-                return null;
-            }
-        }
-    }
-
-    private static Theme getTheme() {
-        return Settings.get(SET_ID_THEME, Theme.class);
-    }
-
     public static Color systemColor(final SystemColor systemColor) {
-        return getTheme().systemColors[systemColor.ordinal()];
+        return systemColor.defaultColor;
     }
 
     public static Color dialogVeil() {

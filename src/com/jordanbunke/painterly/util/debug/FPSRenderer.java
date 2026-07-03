@@ -5,7 +5,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.Colors;
 
 import static com.jordanbunke.painterly.util.Layout.*;
 

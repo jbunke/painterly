@@ -8,7 +8,7 @@ import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.Cursor;
-import com.jordanbunke.painterly.util.Graphics;
+import com.jordanbunke.painterly.theme.Graphics;
 import com.jordanbunke.painterly.util.ProgramFont;
 
 import java.util.function.Consumer;

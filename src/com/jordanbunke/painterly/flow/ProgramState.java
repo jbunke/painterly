@@ -9,6 +9,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.theme.Colors;
 import com.jordanbunke.painterly.util.*;
 
 import java.util.function.Supplier;

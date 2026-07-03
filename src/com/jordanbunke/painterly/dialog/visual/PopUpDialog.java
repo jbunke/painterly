@@ -17,7 +17,8 @@ import com.jordanbunke.painterly.menu.elements.scroll.VertScrollBox;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
-import com.jordanbunke.painterly.util.Graphics;
+import com.jordanbunke.painterly.theme.Graphics;
+import com.jordanbunke.painterly.theme.ThemeManager;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -26,8 +27,8 @@ import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.events.actions.GlobalAction.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
-import static com.jordanbunke.painterly.util.Colors.*;
-import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
+import static com.jordanbunke.painterly.theme.Colors.*;
+import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.SCREEN;
 
@@ -54,7 +55,7 @@ public final class PopUpDialog extends MenuElementContainer {
         this.contents = contents;
         this.resolutionButtons = resolutionButtons;
 
-        background = Graphics.drawDialogBackground(width, height);
+        background = ThemeManager.get().drawDialogBackground(width, height);
     }
 
     public static Builder init(final ResourceCode titleCode) {

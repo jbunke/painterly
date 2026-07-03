@@ -7,8 +7,9 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.funke.core.ConcreteProperty;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.scroll.Slider;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
-import com.jordanbunke.painterly.util.Graphics;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -62,12 +63,13 @@ public final class HorzNonScrollSlider extends Slider {
     @Override
     protected void updateAssets() {
         final double fractionX = getSliderFraction();
+        final Theme theme = ThemeManager.get();
 
-        base = Graphics.drawHorzSlider(getWidth(), getHeight(),
+        base = theme.drawHorzSlider(getWidth(), getHeight(),
                 fractionX, sim(false, false));
-        highlight = Graphics.drawHorzSlider(getWidth(), getHeight(),
+        highlight = theme.drawHorzSlider(getWidth(), getHeight(),
                 fractionX, sim(false, true));
-        sliding = Graphics.drawHorzSlider(getWidth(), getHeight(),
+        sliding = theme.drawHorzSlider(getWidth(), getHeight(),
                 fractionX, sim(true, false));
     }
 

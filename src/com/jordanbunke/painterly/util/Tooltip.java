@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.ThemeManager;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.RC_NA;
 
@@ -60,7 +61,7 @@ public final class Tooltip {
             ticks++;
 
             if (ticks == Constants.TOOLTIP_TICKS)
-                image = Graphics.drawTooltip(tooltip);
+                image = ThemeManager.get().drawTooltip(tooltip);
         }
 
         lastCheck = tooltip;

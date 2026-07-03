@@ -20,6 +20,8 @@ import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.StringVariableMap;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Tooltip;
 
@@ -27,7 +29,6 @@ import java.util.List;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.resources.StringVariableMap.ID.PROJECT_NAME;
-import static com.jordanbunke.painterly.util.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.MENU_BAR;
 
@@ -80,9 +81,10 @@ public final class ProjectButton extends MenuButtonStub implements TextButton {
                 .setIndexFunction((() -> project.isPainting() ? 1 : 0))
                 .build();
 
-        base = drawProjectButton(sim(false, false));
-        highlight = drawProjectButton(sim(false, true));
-        selected = drawProjectButton(sim(true, false));
+        final Theme theme = ThemeManager.get();
+        base = theme.drawProjectButton(sim(false, false));
+        highlight = theme.drawProjectButton(sim(false, true));
+        selected = theme.drawProjectButton(sim(true, false));
     }
 
     public static Builder init(final int x, final int width, final int index) {

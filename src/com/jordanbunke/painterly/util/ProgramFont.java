@@ -8,8 +8,8 @@ import com.jordanbunke.delta_time.text.TextBuilder;
 import java.awt.*;
 import java.nio.file.Path;
 
-import static com.jordanbunke.painterly.util.Colors.*;
-import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
+import static com.jordanbunke.painterly.theme.Colors.*;
+import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
 
 public enum ProgramFont {
     FONT_DEF("norman-bold", 2, 0.6, 0.6);

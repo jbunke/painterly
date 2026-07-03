@@ -16,7 +16,7 @@ import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.Colors;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

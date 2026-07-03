@@ -9,6 +9,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.icon_button.IconButton;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.ProjectUtils;
 
@@ -18,7 +19,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
-import static com.jordanbunke.painterly.util.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 
 public final class IntValueContainer extends MenuElement {
@@ -60,7 +60,8 @@ public final class IntValueContainer extends MenuElement {
                         setter.accept(v + 1);
                 }).setTooltipCode(RC_NA).build();
 
-        bg = drawContextBarExpansionBackground(getWidth(), getHeight());
+        bg = ThemeManager.get().drawContextBarExpansionBackground(
+                getWidth(), getHeight());
     }
 
     public static Builder init(final Coord2D position) {

@@ -9,9 +9,11 @@ import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
 
-import static com.jordanbunke.painterly.util.Graphics.*;
+import static com.jordanbunke.painterly.theme.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 
 public final class SubMenuButton extends MenuBarButton {
@@ -29,9 +31,9 @@ public final class SubMenuButton extends MenuBarButton {
         this.label = label;
         this.subMenu = subMenu;
 
-        // TODO - actual dedicated draw functions
-        base = drawTextButton(sim(false, false));
-        highlight = drawTextButton(sim(false, true));
+        final Theme theme = ThemeManager.get();
+        base = theme.drawNavbarSubMenuButton(sim(false, false));
+        highlight = theme.drawNavbarSubMenuButton(sim(false, true));
     }
 
     public static SubMenuButton at(

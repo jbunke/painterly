@@ -14,15 +14,15 @@ import com.jordanbunke.painterly.core.paint.BrushStroke;
 import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.tool.ToolManager;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.Colors;
 import com.jordanbunke.painterly.util.debug.LogChannel;
 import com.jordanbunke.painterly.util.debug.LogManager;
 
 import java.awt.*;
 import java.util.List;
 
-import static com.jordanbunke.painterly.util.Colors.systemColor;
-import static com.jordanbunke.painterly.util.Colors.SystemColor.*;
+import static com.jordanbunke.painterly.theme.Colors.systemColor;
+import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.PROJECT_VIEWPORT;
 import static com.jordanbunke.painterly.viewport.VisualMath.*;
 

@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
-import static com.jordanbunke.painterly.util.Graphics.*;
+import static com.jordanbunke.painterly.theme.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 
 public final class SubMenuData implements ISubMenuEntry {

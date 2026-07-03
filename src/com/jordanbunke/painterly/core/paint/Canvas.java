@@ -4,7 +4,7 @@ import com.jordanbunke.painterly.algo.ImageScaling;
 import com.jordanbunke.painterly.algo.Sobel;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.painterly.core.Project;
-import com.jordanbunke.painterly.util.Colors;
+import com.jordanbunke.painterly.theme.Colors;
 import com.jordanbunke.painterly.util.debug.LogChannel;
 import com.jordanbunke.painterly.util.debug.LogManager;
 

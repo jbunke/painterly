@@ -6,7 +6,7 @@ import com.jordanbunke.painterly.events.actions.GlobalAction;
 import com.jordanbunke.painterly.events.actions.IAction;
 import com.jordanbunke.painterly.events.actions.ProjectAction;
 import com.jordanbunke.painterly.util.EnumUtils;
-import com.jordanbunke.painterly.util.Graphics;
+import com.jordanbunke.painterly.theme.Graphics;
 
 import java.util.Comparator;
 import java.util.stream.Stream;

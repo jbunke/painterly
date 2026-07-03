@@ -10,8 +10,8 @@ import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.viewport.Positioning;
 
-import static com.jordanbunke.painterly.util.Graphics.drawAreaOverlay;
-import static com.jordanbunke.painterly.util.Graphics.drawControlPoints;
+import static com.jordanbunke.painterly.theme.Graphics.drawAreaOverlay;
+import static com.jordanbunke.painterly.theme.Graphics.drawControlPoints;
 
 public final class MoveFocusArea extends Tool {
     private static final MoveFocusArea INSTANCE;

@@ -11,10 +11,11 @@ import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.Theme;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.util.Tooltip;
 
-import static com.jordanbunke.painterly.util.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 
 public final class OptionButton<T> extends MenuButtonStub implements TextButton {
@@ -78,10 +79,13 @@ public final class OptionButton<T> extends MenuButtonStub implements TextButton 
     }
 
     private void drawButtons() {
-        // TODO - unique visuals
-        stub = drawActionMenuButton(this, true, action);
-        base = drawActionMenuButton(sim(false, false), false, action);
-        highlight = drawActionMenuButton(sim(false, true), false, action);
+        final Theme theme = ThemeManager.get();
+
+        stub = theme.drawContextBarOptionButton(this, true, action);
+        base = theme.drawContextBarOptionButton(
+                sim(false, false), false, action);
+        highlight = theme.drawContextBarOptionButton(
+                sim(false, true), false, action);
     }
 
     @Override
