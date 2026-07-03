@@ -17,27 +17,31 @@ import static com.jordanbunke.delta_time.events.Key.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
-    EXPORT(RC_EXPORT, false /* TODO */, false /* TODO */,
+    EXPORT(RC_EXPORT, true, false /* TODO */,
             new KeyboardShortcut(true, false, E),
             p -> p.saveManager.export()),
-    SAVE(RC_SAVE, false /* TODO */, false /* TODO */,
+    SAVE(RC_SAVE, false /* TODO */, true,
             new KeyboardShortcut(true, false, S),
             p -> p.saveManager.save()),
-    SAVE_AS(RC_SAVE_AS, new KeyboardShortcut(true, true, S), /* TODO */ p -> {}),
+    SAVE_AS(RC_SAVE_AS, false /* TODO */, true,
+            new KeyboardShortcut(true, true, S),
+            /* TODO */ p -> {}),
     TOGGLE_SIM(RC_TOGGLE_SIM, KeyboardShortcut.single(SPACE),
             Project::toggleSimulation),
     TOGGLE_SOURCE(RC_TOGGLE_SOURCE, KeyboardShortcut.single(ENTER),
             p -> p.canvas.toggleShowSource()),
     RESET_POSITIONING(RC_RESET_POS, new KeyboardShortcut(true, false, ENTER),
             p -> Viewport.get().getPositioning().reset()),
-    RESET_FOCUS_AREA(RC_RESET_FOCUS_AREA, KeyboardShortcut.single(BACKSPACE),
+    RESET_FOCUS_AREA(RC_RESET_FOCUS_AREA, false /* TODO */, true,
+            KeyboardShortcut.single(BACKSPACE),
             p -> p.focusManager.resetFocusArea()),
-    FOCUS_BOX_AS_FOCUS_AREA(RC_FOCUS_BOX_AS_FOCUS_AREA, true, false /* TODO */,
+    FOCUS_BOX_AS_FOCUS_AREA(RC_FOCUS_BOX_AS_FOCUS_AREA, true, true,
             KeyboardShortcut.single(Q),
             p -> p.focusManager.focusBoxAsNewFocusArea()),
-    CLEAR_FOCUS_BOXES(RC_CLEAR_FOCUS_BOXES, KeyboardShortcut.single(A),
+    CLEAR_FOCUS_BOXES(RC_CLEAR_FOCUS_BOXES, false /* TODO */, true,
+            KeyboardShortcut.single(A),
             p -> p.focusManager.clearFocusBoxes()),
-    DELETE_ACTIVE_BOUNDS(RC_DELETE_ACTIVE_BOUNDS, true, false /* TODO */,
+    DELETE_ACTIVE_BOUNDS(RC_DELETE_ACTIVE_BOUNDS, true, true,
             KeyboardShortcut.single(DELETE),
             p -> DialogManager.set(
                     () -> DialogAssembly.aysDeleteActiveBounds(p))),
@@ -99,6 +103,10 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
         // Populate preconditions
         FOCUS_BOX_AS_FOCUS_AREA.precondition =
                 p -> !p.focusManager.isEntireArea();
+        CLEAR_FOCUS_BOXES.precondition =
+                p -> !p.focusManager.isEntireArea();
+        RESET_FOCUS_AREA.precondition =
+                p -> !p.focusManager.isWholeCanvas();
         // TODO
     }
 

@@ -11,6 +11,7 @@
     "cb_strokes_completed" : "Strokes completed",
     "close_project" : "Close project",
     "delete_active_bounds" : "Wipes all brush strokes from\nthe active sampling bounds:\nbe that the focus box, focus area,\nor the entire canvas",
+    "export" : "Exports the painting as a PNG image to the project's save folder.\nThe completed stroke count is appended to the file name.",
     "fb_backwards" : "Right-to-left, bottom-to-top",
     "fb_free" : "No automatic movement between intervals;\nonly manual movement with the arrow keys",
     "fb_forwards" : "Left-to-right, top-to-bottom",
