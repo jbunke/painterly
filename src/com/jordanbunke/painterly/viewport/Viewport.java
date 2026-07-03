@@ -13,6 +13,7 @@ import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.paint.BrushStroke;
 import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
+import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.theme.Colors;
 import com.jordanbunke.painterly.util.debug.LogChannel;
@@ -21,8 +22,6 @@ import com.jordanbunke.painterly.util.debug.LogManager;
 import java.awt.*;
 import java.util.List;
 
-import static com.jordanbunke.painterly.theme.Colors.systemColor;
-import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.PROJECT_VIEWPORT;
 import static com.jordanbunke.painterly.viewport.VisualMath.*;
 
@@ -152,7 +151,7 @@ public final class Viewport implements ProgramContext {
     private GameImage draw(final Project p) {
         final GameImage viewport = new GameImage(width, height);
 
-        viewport.fill(systemColor(MID));
+        viewport.fill(ThemeManager.get().viewportBackgroundColor());
 
         positioning.draw(viewport, p);
 

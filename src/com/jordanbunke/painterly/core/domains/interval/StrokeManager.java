@@ -17,7 +17,7 @@ import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_DEFAU
 import static com.jordanbunke.painterly.util.debug.LogChannel.*;
 
 public final class StrokeManager {
-    private static final boolean ATTEMPTED = true, COMPLETED = false;
+    public static final boolean ATTEMPTED = true, COMPLETED = false;
 
     private final Project project;
 

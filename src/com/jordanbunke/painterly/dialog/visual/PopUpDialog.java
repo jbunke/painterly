@@ -288,7 +288,7 @@ public final class PopUpDialog extends MenuElementContainer {
             // title
             final SimpleLabel titleLabel = SimpleLabel.initLiteral(
                             title, renderPos.displace(DIALOG_MARGIN, DIALOG_MARGIN))
-                    .setColor(systemColor(MID_DARK))
+                    .setColor(ThemeManager.get().dialogBoxTitleTextColor())
                     .setAnchor(Anchor.LEFT_TOP).build();
 
             // resolution buttons (cancel/close and OK?)

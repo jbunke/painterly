@@ -6,7 +6,7 @@
     "cb_focus_box_mode" : "Focus box mode\n---\nDetermines how the next box\ncoordinate is calculated",
     "cb_interval_progress" : "Interval progress (measuring $accepted_or_attempted)",
     "cb_interval_target" : "Interval target (measuring $accepted_or_attempted)",
-    "cb_similarity" : "RGB similarity of the painting to the source image",
+    "cb_similarity" : "RGB similarity of the painting to the source image ($sim_scope)",
     "cb_strokes_attempted" : "Strokes attempted",
     "cb_strokes_completed" : "Strokes completed",
     "close_project" : "Close project",

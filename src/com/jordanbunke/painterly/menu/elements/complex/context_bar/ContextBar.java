@@ -6,6 +6,8 @@ import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
+import com.jordanbunke.painterly.core.domains.interval.ProgressManager;
+import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.int_value.IntValueContainer;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.multichoice.OptionsContainer;
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
@@ -26,7 +28,6 @@ public final class ContextBar extends MenuElement {
     private static ContextBar INSTANCE;
 
     private final ContextBarElement[] elements;
-    // TODO - fields
 
     static {
         INSTANCE = build();
@@ -93,9 +94,9 @@ public final class ContextBar extends MenuElement {
                                 RC_CB_INTERVAL_PROGRESS,
                                 strokesAttempted.nextX())
                         .setTooltipCode(RC_CB_INTERVAL_PROGRESS)
-                        .setIconCodeGetter(p -> p.strokeManager.isTickMode()
-                                ? RC_TICK_MODE_ATTEMPTED
-                                : RC_TICK_MODE_COMPLETED,
+                        .setIconCodeGetter(
+                                p -> p.strokeManager.isTickMode() == StrokeManager.ATTEMPTED
+                                        ? RC_TICK_MODE_ATTEMPTED : RC_TICK_MODE_COMPLETED,
                                 RC_CB_INTERVAL_PROGRESS)
                         .setWidth(CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH);
         final OptionsContainer intervalProgressOptions = OptionsContainer
@@ -196,10 +197,14 @@ public final class ContextBar extends MenuElement {
         elements.add(divsY);
 
         // similarity
-        // TODO - update tooltip, width, icon
         final ContextBarElement.Builder similarityBuilder = ContextBarElement
                 .init(SIMILARITY, RC_CB_SIMILARITY, CONTEXT_BAR.atX(1d))
                 .setTooltipCode(RC_CB_SIMILARITY)
+                .setIconCodeGetter(
+                        p -> p.progressManager.isDisplay() == ProgressManager.FOCUS
+                                ? RC_DISPLAY_FOCUS : RC_DISPLAY_GLOBAL,
+                        RC_DISPLAY_GLOBAL)
+                .setWidth(CONTEXT_BAR_NUM_SECTION_LARGE_WIDTH)
                 .setAlignment(Alignment.RIGHT)
                 .setAnchor(Anchor.RIGHT_TOP);
         final OptionsContainer similarityOptions = OptionsContainer

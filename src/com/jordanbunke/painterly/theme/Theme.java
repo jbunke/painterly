@@ -17,7 +17,6 @@ import java.util.Arrays;
 
 import static com.jordanbunke.painterly.theme.Colors.*;
 import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
-import static com.jordanbunke.painterly.theme.Colors.SystemColor.DARK;
 import static com.jordanbunke.painterly.theme.Colors.highlightOverlay;
 import static com.jordanbunke.painterly.theme.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
@@ -402,10 +401,24 @@ public abstract class Theme {
         return sepImage.submit();
     }
 
+    public GameImage drawMenuBarBackground(final int w, final int h) {
+        return drawFilledDarkImage(w, h);
+    }
+
     public GameImage drawContextBarExpansionBackground(
             final int w, final int h
     ) {
-        // TODO
+        return drawFilledDarkImage(w, h);
+    }
+
+    public GameImage drawContextBarBackground(final int w, final int h) {
+        return drawFilledDarkImage(w, h);
+    }
+
+    // UI HELPERS
+
+    @SuppressWarnings("unused")
+    GameImage drawFilledDarkImage(final int w, final int h) {
         final GameImage image = new GameImage(w, h);
         image.fill(systemColor(DARK));
         return image.submit();
@@ -469,5 +482,19 @@ public abstract class Theme {
         }
 
         return tooltip.submit();
+    }
+
+    // COLOR DETERMINERS
+
+    // ROLE COLORS
+
+    public Color dialogBoxTitleTextColor() {
+        // TODO
+        return systemColor(MID_DARK);
+    }
+
+    public Color viewportBackgroundColor() {
+        // TODO
+        return systemColor(MID);
     }
 }

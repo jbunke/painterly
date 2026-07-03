@@ -46,9 +46,9 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             p -> DialogManager.set(
                     () -> DialogAssembly.aysDeleteActiveBounds(p))),
     // similarity display setters
-    SET_DISPLAY_FOCUS(RC_DISPLAY_FOCUS, false, false /* TODO */, null,
+    SET_DISPLAY_FOCUS(RC_DISPLAY_FOCUS, false, true, null,
             p -> p.progressManager.setDisplayToFocus()),
-    SET_DISPLAY_GLOBAL(RC_DISPLAY_GLOBAL, false, false /* TODO */, null,
+    SET_DISPLAY_GLOBAL(RC_DISPLAY_GLOBAL, false, true, null,
             p -> p.progressManager.setDisplayToGlobal()),
     // tick mode setters
     TOGGLE_TICK_MODE(RC_TOGGLE_TICK_MODE, KeyboardShortcut.single(S),

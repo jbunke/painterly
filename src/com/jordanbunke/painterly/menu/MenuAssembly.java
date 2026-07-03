@@ -1,6 +1,5 @@
 package com.jordanbunke.painterly.menu;
 
-import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.menu.Menu;
 import com.jordanbunke.delta_time.menu.MenuBuilder;
 import com.jordanbunke.delta_time.menu.menu_elements.visual.StaticMenuElement;
@@ -16,7 +15,7 @@ import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
-import com.jordanbunke.painterly.theme.Colors;
+import com.jordanbunke.painterly.theme.ThemeManager;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -83,10 +82,10 @@ public final class MenuAssembly {
         final int x = sb.x.get(), y = sb.y.get(),
                 w = sb.width.get(), h = sb.height.get();
 
-        // TODO
-
-        // TODO - temp
-        addTempScreenBoxSpan(mb, sb);
+        final StaticMenuElement background =
+                new StaticMenuElement(new Coord2D(x, y), LEFT_TOP,
+                        ThemeManager.get().drawMenuBarBackground(w, h));
+        mb.add(background);
 
         return mb.build();
     }
@@ -98,10 +97,10 @@ public final class MenuAssembly {
         final int x = sb.x.get(), y = sb.y.get(),
                 w = sb.width.get(), h = sb.height.get();
 
-        // TODO
-
-        // TODO - temp
-        addTempScreenBoxSpan(mb, sb);
+        final StaticMenuElement background =
+                new StaticMenuElement(new Coord2D(x, y), LEFT_TOP,
+                        ThemeManager.get().drawContextBarBackground(w, h));
+        mb.add(background);
 
         return mb.build();
     }
@@ -110,7 +109,6 @@ public final class MenuAssembly {
         final MenuBuilder mb = new MenuBuilder();
         final ScreenBox sb = PROJECT_VIEWPORT;
 
-        // TODO
         final SimpleLabel noProjectsOpenLabel = SimpleLabel.init(
                 RC_NO_PROJECTS_OPEN, sb.at(0.5, 0.5))
                 .setAnchor(CENTRAL_BOTTOM).build();
@@ -142,21 +140,6 @@ public final class MenuAssembly {
         mb.add(new LoadingLabel(code));
 
         return mb.build();
-    }
-
-    // TODO - temporary; for removal
-    @Deprecated
-    private static void addTempScreenBoxSpan(
-            final MenuBuilder mb, final ScreenBox sb
-    ) {
-        final int x = sb.x.get(), y = sb.y.get(),
-                w = sb.width.get(), h = sb.height.get();
-
-        final GameImage img = new GameImage(w, h);
-        img.fill(Colors.systemColor(Colors.SystemColor.DARK));
-        final StaticMenuElement tempBackground = new StaticMenuElement(
-                new Coord2D(x, y), LEFT_TOP, img);
-        mb.add(tempBackground);
     }
 
     // HELPER
