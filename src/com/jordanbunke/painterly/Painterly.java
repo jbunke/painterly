@@ -12,6 +12,7 @@ import com.jordanbunke.delta_time.window.GameWindow;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.settings.update.VersionHandler;
+import com.jordanbunke.painterly.theme.Graphics;
 import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.debug.FPSRenderer;
@@ -80,7 +81,7 @@ public final class Painterly implements ProgramContext {
         final boolean fullscreen = Layout.isFullscreen();
 
         wb.setTitle(title)
-                .setIcon(/* TODO */ GameImage.dummy())
+                .setIcon(Graphics.ICON)
                 .setExitOnClose(true)
                 .setCanResize(false) // TODO - allow resizing
                 .setFullscreen(fullscreen);

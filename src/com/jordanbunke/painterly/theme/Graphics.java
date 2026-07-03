@@ -30,9 +30,11 @@ public final class Graphics {
             CURSORS_FOLDER = Path.of("cursors"),
             MISC_IMG_FOLDER = Path.of("img_misc");
 
+    public static final GameImage ICON;
     private static final GameImage CONTROL_POINT, HIGHLIGHT;
 
     static {
+        ICON = readMiscImage(RC_ICON);
         CONTROL_POINT = readMiscImage(RC_CONTROL_POINT);
         HIGHLIGHT = readMiscImage(RC_HIGHLIGHT);
     }
