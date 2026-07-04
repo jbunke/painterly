@@ -26,12 +26,10 @@ public abstract class Theme {
     // UI ELEMENTS
 
     public GameImage drawDialogBackground(final int width, final int height) {
-        // TODO - temp implementation
-
         final GameImage image = new GameImage(width, height);
-        final Color bgColor = systemColor(LIGHT),
-                topBarColor = systemColor(MID),
-                borderColor = systemColor(MID_DARK);
+        final Color bgColor = getDialogBackgroundColor(),
+                topBarColor = getDialogTopBarColor(),
+                borderColor = getDialogBorderColor();
 
         // background
         image.fill(bgColor);
@@ -40,7 +38,7 @@ public abstract class Theme {
         image.fillRectangle(topBarColor, 0, 0, width, dialogTitleStripeHeight());
 
         // border
-        image.drawRectangle(borderColor, 4f, 0, 0, width, height);
+        image.drawRectangle(borderColor, 2f, 0, 0, width, height);
 
         return image.submit();
     }
@@ -48,26 +46,8 @@ public abstract class Theme {
     public GameImage drawContextBarElement(
             final TextButton tb, final ResourceCode iconCode
     ) {
-        // TODO - temp
-        final Color textColor, bgColor, accentColor;
-
-        if (tb.isSelected()) {
-            bgColor = systemColor(LIGHT);
-            accentColor = systemColor(MID_DARK);
-            textColor = systemColor(DARK);
-        } else if (tb.isHighlighted()) {
-            bgColor = systemColor(MID_DARK);
-            accentColor = systemColor(MID_LIGHT);
-            textColor = systemColor(LIGHT);
-        } else if (tb.getButtonType() == ButtonType.STUB) {
-            bgColor = systemColor(DARK);
-            accentColor = systemColor(MID_DARK);
-            textColor = systemColor(MID_LIGHT);
-        } else {
-            bgColor = systemColor(DARK);
-            accentColor = systemColor(MID);
-            textColor = systemColor(LIGHT);
-        }
+        final Color textColor = getContextBarElementTextColor(tb),
+                bgColor = getContextBarElementBackgroundColor(tb);
 
         final int w = tb.getWidth(), h = tb.getHeight();
         final GameImage button = new GameImage(w, h);
@@ -81,23 +61,17 @@ public abstract class Theme {
         // icon
         stampIcon(button, iconCode);
 
-        // border
-        button.drawLine(accentColor, 4f, 0, 0, 0, h);
-        button.drawLine(accentColor, 4f, w, 0, w, h);
-
         return button.submit();
     }
 
     public GameImage drawSubMenuHeader(final TextButton tb) {
-        // TODO
-
         final int w = tb.getWidth(), h = tb.getHeight();
         final GameImage button = new GameImage(w, h);
 
         drawSubMenuButton(button, tb, false);
 
         final GameImage expanderImage = new ProgramFont.FontFormatter(FONT_DEF)
-                .realize().setColor(systemColor(LIGHT))
+                .realize().setColor(getSubMenuButtonTextColor(tb, false))
                 .addText(Constants.NESTED_MENU_BAR_EXPANDER).build().draw();
 
         final int textX = tb.getWidth() -
@@ -149,34 +123,17 @@ public abstract class Theme {
             final GameImage button, final TextButton tb,
             final boolean stub
     ) {
-        // TODO - temp
-
-        final boolean highlight = tb.isHighlighted();
-
-        final Color textColor, bgColor;
-
-        textColor = stub ? systemColor(MID_LIGHT) : systemColor(LIGHT);
-        bgColor = highlight ? systemColor(MID) : systemColor(DARK);
+        final Color textColor = getSubMenuButtonTextColor(tb, stub),
+                bgColor = getSubMenuButtonBackgroundColor(tb, stub);
 
         button.fill(bgColor);
 
         stampText(button, tb, textColor, true);
-
-        // TODO - highlight underline?
     }
 
     public GameImage drawProjectButton(final TextButton tb) {
-        // TODO - temp implementation
-
-        final boolean highlight = tb.isHighlighted(),
-                selected = tb.isSelected();
-
-        final Color textColor, bgColor, accentColor;
-
-        bgColor = systemColor(highlight ? MID_DARK : DARK);
-        textColor = systemColor(LIGHT);
-        accentColor = systemColor(selected ? LIGHT
-                : (highlight ? MID_LIGHT : MID));
+        final Color textColor = getProjectButtonTextColor(tb), 
+                bgColor = getProjectButtonBackgroundColor(tb);
 
         final int w = tb.getWidth(), h = tb.getHeight();
         final GameImage button = new GameImage(w, h);
@@ -185,16 +142,22 @@ public abstract class Theme {
         button.fill(bgColor);
 
         // draw text
-        stampText(button, tb, textColor, selected);
+        stampText(button, tb, textColor, tb.isSelected());
 
-        // border
-        button.drawRectangle(accentColor, 4f, 0, 0, w, h);
+        // selection accent
+        if (tb.isSelected()) {
+            final Color accentColor = getProjectButtonSelectedAccentColor();
+            
+            final int INDICATOR_HEIGHT = 4;
+            button.fillRectangle(accentColor, 0, 
+                    h - INDICATOR_HEIGHT, w, INDICATOR_HEIGHT);
+        }
 
         return button.submit();
     }
 
     public GameImage drawNavbarSubMenuButton(final TextButton tb) {
-        // TODO
+        // TODO - unique visuals
         return drawTextButton(tb);
     }
 
@@ -209,13 +172,13 @@ public abstract class Theme {
         switch (type) {
             case STUB -> {
                 bgColor = transparent();
-                accentColor = systemColor(MID_DARK);
-                textColor = systemColor(MID_DARK);
+                accentColor = /* TODO */ systemColor(MID_DARK);
+                textColor = /* TODO */ systemColor(MID_DARK);
             }
             default -> {
-                bgColor = systemColor(highlight ? MID_DARK : DARK);
-                accentColor = systemColor(highlight ? MID_LIGHT : MID);
-                textColor = systemColor(LIGHT);
+                bgColor = /* TODO */ systemColor(highlight ? MID_DARK : DARK);
+                accentColor = /* TODO */ systemColor(highlight ? MID_LIGHT : MID);
+                textColor = /* TODO */ systemColor(LIGHT);
             }
         }
 
@@ -253,10 +216,10 @@ public abstract class Theme {
 
         // setup
         final Color
-                mainColor = valid ? systemColor(DARK) : invalidText(),
-                backgroundColor = valid ? systemColor(LIGHT) : invalidTextBG(),
+                mainColor = valid ? /* TODO */ systemColor(DARK) : invalidText(),
+                backgroundColor = valid ? /* TODO */ systemColor(LIGHT) : invalidTextBG(),
                 outlineColor = typing ? highlightOverlay() :
-                        (highlighted ? systemColor(LIGHT) : mainColor),
+                        (highlighted ? /* TODO */ systemColor(LIGHT) : mainColor),
                 affixColor = shiftRGB(mainColor, 0x40),
                 highlightOverlay = highlightOverlay();
 
@@ -344,21 +307,21 @@ public abstract class Theme {
                 bd = SLIDER_BALL_DIM, range = w - bd,
                 ballX = (int)(fractionX * range);
 
-        slider.fillRectangle(systemColor(LIGHT), 0, shellY, w, shellHeight);
-        slider.drawRectangle(systemColor(MID_DARK), 2f, 0, shellY, w, shellHeight);
+        slider.fillRectangle(/* TODO */ systemColor(LIGHT), 0, shellY, w, shellHeight);
+        slider.drawRectangle(/* TODO */ systemColor(MID_DARK), 2f, 0, shellY, w, shellHeight);
 
         final GameImage ball = new GameImage(bd, bd);
         final Color ballBorder, ballFill;
 
         if (b.isSelected()) {
-            ballFill = systemColor(MID_LIGHT);
-            ballBorder = systemColor(LIGHT);
+            ballFill = /* TODO */ systemColor(MID_LIGHT);
+            ballBorder = /* TODO */ systemColor(LIGHT);
         } else if (b.isHighlighted()) {
-            ballFill = systemColor(MID);
-            ballBorder = systemColor(MID_LIGHT);
+            ballFill = /* TODO */ systemColor(MID);
+            ballBorder = /* TODO */ systemColor(MID_LIGHT);
         } else {
-            ballFill = systemColor(MID);
-            ballBorder = systemColor(MID_DARK);
+            ballFill = /* TODO */ systemColor(MID);
+            ballBorder = /* TODO */ systemColor(MID_DARK);
         }
 
         ball.fill(ballFill);
@@ -378,14 +341,14 @@ public abstract class Theme {
         final GameImage scrollSpace = new GameImage(w, h),
                 scrollBar = new GameImage(w, barH);
 
-        final Color c = b.outcomes(systemColor(LIGHT),
-                systemColor(MID_LIGHT), systemColor(MID_DARK)),
-                accent = b.outcomes(systemColor(MID_LIGHT),
-                        systemColor(MID_DARK), systemColor(DARK));
+        final Color c = b.outcomes(/* TODO */ systemColor(LIGHT),
+                /* TODO */ systemColor(MID_LIGHT), /* TODO */ systemColor(MID_DARK)),
+                accent = b.outcomes(/* TODO */ systemColor(MID_LIGHT),
+                        /* TODO */ systemColor(MID_DARK), /* TODO */ systemColor(DARK));
 
         scrollBar.fill(c);
         scrollBar.drawLine(accent, 1f, 0, barH - 2, w, barH - 2);
-        scrollBar.drawRectangle(systemColor(DARK), 1f, 0, 0, w - 1, barH - 1);
+        scrollBar.drawRectangle(/* TODO */ systemColor(DARK), 1f, 0, 0, w - 1, barH - 1);
         // TODO - clearCorners(scrollBar);
 
         scrollSpace.draw(scrollBar, 0, barY);
@@ -393,11 +356,10 @@ public abstract class Theme {
         return scrollSpace.submit();
     }
 
-    public GameImage drawMenuBarSeparator(final int width) {
-        // TODO
+    public GameImage drawSubMenuSeparator(final int width) {
         final GameImage sepImage =
                 new GameImage(width, MENU_BAR_SEPARATOR_HEIGHT);
-        sepImage.fill(systemColor(LIGHT));
+        sepImage.fill(subMenuSeparatorColor());
         return sepImage.submit();
     }
 
@@ -420,7 +382,7 @@ public abstract class Theme {
     @SuppressWarnings("unused")
     GameImage drawFilledDarkImage(final int w, final int h) {
         final GameImage image = new GameImage(w, h);
-        image.fill(systemColor(DARK));
+        image.fill(primaryUIBackgroundColor());
         return image.submit();
     }
 
@@ -443,7 +405,7 @@ public abstract class Theme {
         final GameImage tooltip = new GameImage(w, h);
 
         // background
-        tooltip.fill(systemColor(DARK));
+        tooltip.fill(/* TODO */ systemColor(DARK));
 
         for (int l = 0; l < ls; l++) {
             final GameImage line = lineImages[l];
@@ -457,7 +419,7 @@ public abstract class Theme {
 
     public GameImage drawTooltip(final String text) {
         // TODO - temp implementation
-        final Color textColor = systemColor(DARK);
+        final Color textColor = /* TODO */ systemColor(DARK);
         final String[] lines = text.split("\n");
         final GameImage[] lineImages = Arrays.stream(lines)
                 .map(l -> new ProgramFont.FontFormatter(FONT_DEF).realize()
@@ -472,7 +434,7 @@ public abstract class Theme {
         final GameImage tooltip = new GameImage(w, h);
 
         // background
-        tooltip.fill(systemColor(MID_LIGHT));
+        tooltip.fill(/* TODO */ systemColor(MID_LIGHT));
 
         for (int l = 0; l < ls; l++) {
             final GameImage line = lineImages[l];
@@ -486,15 +448,115 @@ public abstract class Theme {
 
     // COLOR DETERMINERS
 
+    Color getSubMenuButtonTextColor(final TextButton tb, final boolean stub) {
+        return stub ? stubTextColor() : lightTextColor();
+    }
+
+    Color getSubMenuButtonBackgroundColor(final TextButton tb, final boolean stub) {
+        return tb.isHighlighted()
+                ? highlightUIBackgroundColor()
+                : primaryUIBackgroundColor();
+    }
+
+    Color getContextBarElementTextColor(final TextButton tb) {
+        return tb.isSelected() ? darkTextColor() : lightTextColor();
+    }
+
+    Color getContextBarElementBackgroundColor(final TextButton tb) {
+        if (tb.isSelected())
+            return contrastUIBackgroundColor();
+        else if (tb.isHighlighted())
+            return highlightUIBackgroundColor();
+        else
+            return primaryUIBackgroundColor();
+    }
+
+    Color getProjectButtonTextColor(final TextButton tb) {
+        return lightTextColor();
+    }
+    
+    Color getProjectButtonBackgroundColor(final TextButton tb) {
+        return tb.isHighlighted() 
+                ? highlightUIBackgroundColor() 
+                : primaryUIBackgroundColor();
+    }
+    
+    Color getProjectButtonSelectedAccentColor() {
+        // TODO
+        return systemColor(LIGHT);
+    }
+
+    Color getDialogTopBarColor() {
+        return menuBackgroundContrastColor();
+    }
+
+    Color getDialogBackgroundColor() {
+        return menuBackgroundColor();
+    }
+
+    Color getDialogBorderColor() {
+        return menuBorderColor();
+    }
+
     // ROLE COLORS
+
+    public Color subMenuSeparatorColor() {
+        // TODO
+        return systemColor(LIGHT);
+    }
 
     public Color dialogBoxTitleTextColor() {
         // TODO
-        return systemColor(MID_DARK);
+        return systemColor(LIGHT);
     }
 
     public Color viewportBackgroundColor() {
         // TODO
         return systemColor(MID);
+    }
+
+    Color menuBackgroundColor() {
+        // TODO
+        return systemColor(LIGHT);
+    }
+
+    Color menuBackgroundContrastColor() {
+        // TODO
+        return systemColor(MID_DARK);
+    }
+
+    Color menuBorderColor() {
+        // TODO
+        return systemColor(MID_DARK);
+    }
+
+    Color lightTextColor() {
+        // TODO
+        return systemColor(LIGHT);
+    }
+
+    Color darkTextColor() {
+        // TODO
+        return systemColor(DARK);
+    }
+
+    Color stubTextColor() {
+        // TODO
+        return systemColor(MID_LIGHT);
+    }
+
+    Color highlightUIBackgroundColor() {
+        // TODO
+        return systemColor(MID_DARK);
+    }
+
+    Color primaryUIBackgroundColor() {
+        // TODO
+        return systemColor(DARK);
+    }
+
+    Color contrastUIBackgroundColor() {
+        // TODO
+        return systemColor(LIGHT);
     }
 }

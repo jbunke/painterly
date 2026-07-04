@@ -27,7 +27,7 @@ public final class SubMenuContent extends MenuElementContainer {
         this.menuElements = menuElements;
         this.separators = separators;
 
-        sepImage = ThemeManager.get().drawMenuBarSeparator(getWidth());
+        sepImage = ThemeManager.get().drawSubMenuSeparator(getWidth());
     }
 
     public static SubMenuContent at(
