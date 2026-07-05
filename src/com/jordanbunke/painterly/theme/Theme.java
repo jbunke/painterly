@@ -399,8 +399,7 @@ public abstract class Theme {
     // TEXT POP-UPS
 
     public GameImage drawLogMessage(final String text) {
-        // TODO - temp implementation
-        final Color textColor = debug();
+        final Color textColor = logMessageTextColor();
         final GameImage[] lines = splitTextLines(text, textColor);
         final int ls = lines.length,
                 w = Arrays.stream(lines)
@@ -408,19 +407,19 @@ public abstract class Theme {
                         .reduce(1, Math::max) + TOOLTIP_PADDING_X,
                 h = TOOLTIP_LINE_INC_Y * ls;
 
-        final GameImage tooltip = new GameImage(w, h);
+        final GameImage logMessage = new GameImage(w, h);
 
         // background
-        tooltip.fill(/* TODO */ systemColor(DARK));
+        logMessage.fill(logMessageBackgroundColor());
 
         for (int l = 0; l < ls; l++) {
             final GameImage line = lines[l];
             final int x = w - (line.getWidth() + TOOLTIP_PADDING_X / 2),
                     y = TOOLTIP_INITIAL_OFFSET_Y + (l * TOOLTIP_LINE_INC_Y);
-            tooltip.draw(line, x, y);
+            logMessage.draw(line, x, y);
         }
 
-        return tooltip.submit();
+        return logMessage.submit();
     }
 
     public GameImage drawTooltip(final String text) {
@@ -632,13 +631,11 @@ public abstract class Theme {
     }
 
     Color logMessageTextColor() {
-        // TODO
-        return null;
+        return primaryTextColor();
     }
 
     Color logMessageBackgroundColor() {
-        // TODO
-        return null;
+        return primaryUIBackgroundColor();
     }
 
     Color validTextboxTextColor() {

@@ -15,7 +15,6 @@ import com.jordanbunke.painterly.util.*;
 import java.util.function.Supplier;
 
 import static com.jordanbunke.delta_time.utility.DeltaTimeGlobal.getStatusOf;
-import static com.jordanbunke.painterly.util.Layout.*;
 
 public enum ProgramState implements ProgramContext {
     WORKSPACE, MENU;
@@ -137,15 +136,11 @@ public enum ProgramState implements ProgramContext {
 
     @Override
     public void render(final GameImage canvas) {
-        canvas.fillRectangle(Colors.bg(), 0, 0, width(), height());
+        canvas.fill(Colors.white());
 
         switch (state) {
             case WORKSPACE -> Workspace.get().render(canvas);
-            case MENU -> {
-                // TODO - render common element (if necessary)
-                // e.g. screen box border
-                menu.render(canvas);
-            }
+            case MENU -> menu.render(canvas);
         }
 
         if (DialogManager.has())

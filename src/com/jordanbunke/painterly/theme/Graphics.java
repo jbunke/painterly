@@ -21,7 +21,6 @@ import java.util.function.Function;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.theme.Colors.*;
-import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.ProgramFont.*;
 import static com.jordanbunke.painterly.viewport.VisualMath.projectPosition;
@@ -133,10 +132,10 @@ public final class Graphics {
     }
 
     public static GameImage drawKey(final String keyAsString) {
-        final Color textColor = systemColor(LIGHT_TEXT),
-                backgroundColor = systemColor(DARK),
-                shadowColor = systemColor(MID_DARK),
-                outlineColor = systemColor(MID_LIGHT);
+        final Color textColor = white(),
+                backgroundColor = black(),
+                shadowColor = darkGrey(),
+                outlineColor = lightGrey();
 
         final GameImage textImage = new FontFormatter(FONT_DEF)
                 .setTextSize(1.0)
@@ -163,42 +162,6 @@ public final class Graphics {
         key.draw(textImage, KEY_SHORTCUT_TEXT_MARGIN_X, 0);
 
         return key.submit();
-    }
-
-    private static void keyShadowCurve(
-            final GameImage key, final Color accentColor
-    ) {
-        final int w = key.getWidth(), h = key.getHeight(),
-                margin = KEY_SHORTCUT_SHADOW_MARGIN_X;
-
-        for (int x = 0; x < margin; x++) {
-            final int extraH = (int)(Math.pow((margin - x) / (double)margin, 3.) * KEY_SHORTCUT_DROP_SHADOW_EXTRA),
-                    y = h - (KEY_SHORTCUT_DROP_SHADOW + extraH),
-                    x2 = w - (x + 1);
-
-            key.fillRectangle(accentColor, x, y, 1, extraH);
-            key.fillRectangle(x2, y, 1, extraH);
-        }
-    }
-
-    private static void clearKeyCorners(final GameImage key) {
-        final int w = key.getWidth(), h = key.getHeight(),
-                margin = KEY_SHORTCUT_CORNER_MARGIN_X;
-
-        for (int x = 0; x < margin; x++) {
-            final int ys = (int)(Math.pow((margin - x) / (double)margin, 3.) * KEY_SHORTCUT_MAX_CLEARED),
-                    x2 = w - (x + 1);
-
-            final int transparent = transparent().getRGB();
-            for (int y = 0; y < ys; y++) {
-                final int y2 = h - (y + 1);
-
-                key.setRGB(x, y, transparent);
-                key.setRGB(x2, y, transparent);
-                key.setRGB(x, y2, transparent);
-                key.setRGB(x2, y2, transparent);
-            }
-        }
     }
 
     // ADDITIONAL UI

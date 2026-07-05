@@ -48,16 +48,28 @@ public final class Colors {
         return TRANSPARENT;
     }
 
-    public static Color bg() {
-        return WHITE; // TODO
-    }
-
     public static Color black() {
         return BLACK;
     }
 
     public static Color white() {
         return WHITE;
+    }
+
+    public static Color darkGrey() {
+        return DARK_GREY;
+    }
+
+    public static Color grey() {
+        return GREY;
+    }
+
+    public static Color lighterGrey() {
+        return LIGHTER_GREY;
+    }
+
+    public static Color lightGrey() {
+        return LIGHT_GREY;
     }
 
     public static Color invalidText() {
