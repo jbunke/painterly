@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.events.actions;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
+import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
@@ -11,6 +12,7 @@ import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.viewport.Viewport;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.jordanbunke.delta_time.events.Key.*;
@@ -26,7 +28,9 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     SAVE_AS(RC_SAVE_AS, false /* TODO */, true,
             new KeyboardShortcut(true, true, S),
             /* TODO */ p -> {}),
-    TOGGLE_SIM(RC_TOGGLE_SIM, KeyboardShortcut.single(SPACE),
+    TOGGLE_SIM(RC_TOGGLE_SIM, RC_NA,
+            p -> p.isPainting() ? RC_SIM_PAUSE : RC_SIM_RESUME,
+            KeyboardShortcut.single(SPACE),
             Project::toggleSimulation),
     TOGGLE_SOURCE(RC_TOGGLE_SOURCE, KeyboardShortcut.single(ENTER),
             p -> p.canvas.toggleShowSource()),
@@ -51,7 +55,10 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     SET_DISPLAY_GLOBAL(RC_DISPLAY_GLOBAL, false, true, null,
             p -> p.progressManager.setDisplayToGlobal()),
     // tick mode setters
-    TOGGLE_TICK_MODE(RC_TOGGLE_TICK_MODE, KeyboardShortcut.single(S),
+    TOGGLE_TICK_MODE(RC_TOGGLE_TICK_MODE, /* TODO */ RC_NA,
+            p -> p.strokeManager.isTickMode() == StrokeManager.ATTEMPTED
+                    ? RC_TICK_MODE_ATTEMPTED : RC_TICK_MODE_COMPLETED,
+            KeyboardShortcut.single(S),
             p -> p.strokeManager.toggleTickMode()),
     SET_TICK_MODE_ATTEMPTED(RC_TICK_MODE_ATTEMPTED, true, true, null,
             p -> p.strokeManager.setTickModeToAttempted()),
@@ -97,9 +104,6 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     ;
 
     static {
-        // Populate icon codes for actions with icons
-        // TODO
-
         // Populate preconditions
         FOCUS_BOX_AS_FOCUS_AREA.precondition =
                 p -> !p.focusManager.isEntireArea();
@@ -114,12 +118,12 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     private final Consumer<Project> behaviour;
     private final ResourceCode code, tooltipCode;
 
-    private ResourceCode iconCode;
+    private final Function<Project, ResourceCode> iconCodeFunction;
     private Predicate<Project> precondition;
 
     ProjectAction(
-            final ResourceCode code,
-            final ResourceCode tooltipCode, final ResourceCode iconCode,
+            final ResourceCode code, final ResourceCode tooltipCode,
+            final Function<Project, ResourceCode> iconCodeFunction,
             final KeyboardShortcut shortcut,
             final Consumer<Project> behaviour
     ) {
@@ -128,7 +132,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
         this.behaviour = behaviour;
 
         this.tooltipCode = tooltipCode;
-        this.iconCode = iconCode;
+        this.iconCodeFunction = iconCodeFunction;
         precondition = null;
     }
 
@@ -139,7 +143,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             final Consumer<Project> behaviour
     ) {
         this(code, inheritTooltip ? code : RC_NA,
-                inheritIcon ? code : RC_NA, shortcut, behaviour);
+                inheritIcon ? p -> code : p -> RC_NA, shortcut, behaviour);
     }
 
     ProjectAction(
@@ -187,6 +191,10 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
 
     @Override
     public ResourceCode getIconCode() {
-        return iconCode;
+        try {
+            return iconCodeFunction.apply(defaultFetch());
+        } catch (NullPointerException npe) {
+            return RC_NA;
+        }
     }
 }

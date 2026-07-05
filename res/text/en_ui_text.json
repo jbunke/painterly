@@ -80,7 +80,7 @@
     "toggle_fullscreen" : "$fullscreen_action",
     "toggle_sim" : "$sim_action_status",
     "toggle_source" : "Toggle painting/source image",
-    "toggle_tick_mode" : "Toggle tick mode",
+    "toggle_tick_mode" : "Toggle interval progress mode",
     "tool_draw_focus_area" : "Draw focus area",
     "tool_focus_box_select" : "Focus box select",
     "tool_hand" : "Hand",

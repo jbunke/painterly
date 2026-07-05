@@ -8,6 +8,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.events.actions.IAction;
 import com.jordanbunke.painterly.menu.elements.text_button.Alignment;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
+import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.theme.Theme;
 import com.jordanbunke.painterly.theme.ThemeManager;
@@ -21,6 +22,7 @@ public final class ActionMenuButton<T> extends MenuBarButton {
     private final SubMenu parent;
 
     private String label;
+    private ResourceCode iconCode;
     private GameImage stub, base, highlight;
 
     private boolean passing;
@@ -34,7 +36,8 @@ public final class ActionMenuButton<T> extends MenuBarButton {
         this.action = action;
         this.parent = parent;
 
-        this.label = LanguageData.retrieveUIText(action.getCode());
+        label = LanguageData.retrieveUIText(action.getCode());
+        iconCode = action.getIconCode();
 
         drawButtons();
         update(0d);
@@ -71,9 +74,11 @@ public final class ActionMenuButton<T> extends MenuBarButton {
 
     private void checkUpdatedLabel() {
         final String label = LanguageData.retrieveUIText(action.getCode());
+        final ResourceCode iconCode = action.getIconCode();
 
-        if (!label.equals(this.label)) {
+        if (!label.equals(this.label) || !iconCode.equals(this.iconCode)) {
             this.label = label;
+            this.iconCode = iconCode;
             drawButtons();
         }
     }

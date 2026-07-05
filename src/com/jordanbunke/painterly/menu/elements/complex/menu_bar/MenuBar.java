@@ -57,6 +57,8 @@ public final class MenuBar extends MenuElement {
                         .addProjectAction(FOCUS_BOX_AS_FOCUS_AREA)
                         .addProjectAction(RESET_FOCUS_AREA)
                         .addProjectAction(DELETE_ACTIVE_BOUNDS)
+                        .addSeparator()
+                        .addProjectAction(TOGGLE_TICK_MODE)
                         .build())
                 .addSubMenu(SubMenuData.init(RC_NAV_VIEW)
                         .addGlobalAction(TOGGLE_FULLSCREEN)
