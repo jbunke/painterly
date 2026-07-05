@@ -17,7 +17,6 @@ import java.util.Arrays;
 
 import static com.jordanbunke.painterly.theme.Colors.*;
 import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
-import static com.jordanbunke.painterly.theme.Colors.highlightOverlay;
 import static com.jordanbunke.painterly.theme.Graphics.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.ProgramFont.FONT_DEF;
@@ -223,13 +222,11 @@ public abstract class Theme {
                 cursorAtRight = cursorIndex == right;
 
         // setup
-        final Color
-                mainColor = valid ? /* TODO */ systemColor(DARK) : invalidText(),
-                backgroundColor = valid ? /* TODO */ systemColor(LIGHT) : invalidTextBG(),
-                borderColor = typing ? highlightOverlay() :
-                        (highlighted ? /* TODO */ systemColor(LIGHT) : mainColor),
-                affixColor = shiftRGB(mainColor, 0x40),
-                highlightOverlay = highlightOverlay();
+        final Color textColor = getTextboxTextColor(typing, valid, highlighted),
+                backgroundColor = getTextboxBackgroundColor(typing, valid, highlighted),
+                borderColor = getTextboxBorderColor(typing, valid, highlighted),
+                affixColor = getTextboxAffixColor(typing, valid, highlighted),
+                highlightOverlayColor = textboxHighlightOverlayColor();
 
         // text and cursor
 
@@ -245,13 +242,13 @@ public abstract class Theme {
                         .setColor(affixColor)
                         .addText(suffix).build().draw(),
                 preSelImage = formatter.realize()
-                        .setColor(mainColor)
+                        .setColor(textColor)
                         .addText(preSel).build().draw(),
                 selImage = formatter.realize()
-                        .setColor(mainColor)
+                        .setColor(textColor)
                         .addText(sel).build().draw(),
                 postSelImage = formatter.realize()
-                        .setColor(mainColor)
+                        .setColor(textColor)
                         .addText(postSel).build().draw();
 
         // background
@@ -275,14 +272,14 @@ public abstract class Theme {
             if (!cursorAtRight)
                 textPos = textPos.displaceX(2 * INC);
 
-            image.fillRectangle(highlightOverlay, textPos.x - INC, 0,
+            image.fillRectangle(highlightOverlayColor, textPos.x - INC, 0,
                     selImage.getWidth() + (2 * INC), h);
             image.draw(selImage, textPos.x, textPos.y);
             textPos = textPos.displaceX(selImage.getWidth() + INC);
         }
 
         // cursor
-        image.fillRectangle(mainColor,
+        image.fillRectangle(textColor,
                 textPos.x - (cursorAtRight ? 0
                         : selImage.getWidth() + (3 * INC)),
                 0, INC, h);
@@ -333,7 +330,7 @@ public abstract class Theme {
         // render ball
         ball.fill(ballFill);
         circleOnly(ball);
-        innerOutline(ball, ballBorder);
+        innerOutline(ball, ballFill, ballBorder);
 
         slider.draw(ball.submit(), ballX, 0);
 
@@ -366,6 +363,12 @@ public abstract class Theme {
         return sepImage.submit();
     }
 
+    public GameImage drawWorkspaceMenuBackground(final int w, final int h) {
+        final GameImage image = new GameImage(w, h);
+        image.fill(viewportBackgroundColor());
+        return image.submit();
+    }
+
     public GameImage drawMenuBarBackground(final int w, final int h) {
         return drawFilledDarkImage(w, h);
     }
@@ -391,16 +394,12 @@ public abstract class Theme {
 
     // TEXT POP-UPS
 
-    public GameImage drawDebugMessage(final String text) {
+    public GameImage drawLogMessage(final String text) {
         // TODO - temp implementation
         final Color textColor = debug();
-        final String[] lines = text.split("\n");
-        final GameImage[] lineImages = Arrays.stream(lines)
-                .map(l -> new ProgramFont.FontFormatter(FONT_DEF).realize()
-                        .setColor(textColor).addText(l).build().draw())
-                .toArray(GameImage[]::new);
+        final GameImage[] lines = splitTextLines(text, textColor);
         final int ls = lines.length,
-                w = Arrays.stream(lineImages)
+                w = Arrays.stream(lines)
                         .map(GameImage::getWidth)
                         .reduce(1, Math::max) + TOOLTIP_PADDING_X,
                 h = TOOLTIP_LINE_INC_Y * ls;
@@ -411,7 +410,7 @@ public abstract class Theme {
         tooltip.fill(/* TODO */ systemColor(DARK));
 
         for (int l = 0; l < ls; l++) {
-            final GameImage line = lineImages[l];
+            final GameImage line = lines[l];
             final int x = w - (line.getWidth() + TOOLTIP_PADDING_X / 2),
                     y = TOOLTIP_INITIAL_OFFSET_Y + (l * TOOLTIP_LINE_INC_Y);
             tooltip.draw(line, x, y);
@@ -421,35 +420,76 @@ public abstract class Theme {
     }
 
     public GameImage drawTooltip(final String text) {
-        // TODO - temp implementation
-        final Color textColor = /* TODO */ systemColor(DARK);
-        final String[] lines = text.split("\n");
-        final GameImage[] lineImages = Arrays.stream(lines)
-                .map(l -> new ProgramFont.FontFormatter(FONT_DEF).realize()
-                        .setColor(textColor).addText(l).build().draw())
-                .toArray(GameImage[]::new);
+        final Color textColor = tooltipTextColor(),
+                backgroundColor = tooltipBackgroundColor(),
+                borderColor = tooltipBorderColor();
+        final GameImage[] lines = splitTextLines(text, textColor);
         final int ls = lines.length,
-                w = Arrays.stream(lineImages)
+                w = Arrays.stream(lines)
                         .map(GameImage::getWidth)
                         .reduce(1, Math::max) + TOOLTIP_PADDING_X,
-                h = TOOLTIP_LINE_INC_Y * ls;
+                h = TOOLTIP_PADDING_Y + TOOLTIP_LINE_INC_Y * ls;
 
         final GameImage tooltip = new GameImage(w, h);
 
         // background
-        tooltip.fill(/* TODO */ systemColor(MID_LIGHT));
+        tooltip.fill(backgroundColor);
 
+        // render text
         for (int l = 0; l < ls; l++) {
-            final GameImage line = lineImages[l];
+            final GameImage line = lines[l];
             final int x = (w - line.getWidth()) / 2,
-                    y = TOOLTIP_INITIAL_OFFSET_Y + (l * TOOLTIP_LINE_INC_Y);
+                    y = (TOOLTIP_PADDING_Y / 2) +
+                            TOOLTIP_INITIAL_OFFSET_Y +
+                            (l * TOOLTIP_LINE_INC_Y);
             tooltip.draw(line, x, y);
         }
+
+        // border
+        tooltip.drawRectangle(borderColor, 2f, 0, 0, w, h);
+        smoothCorners(tooltip, borderColor);
 
         return tooltip.submit();
     }
 
     // COLOR DETERMINERS
+
+    Color getTextboxTextColor(
+            final boolean typing, final boolean valid,
+            final boolean highlighted
+    ) {
+        return valid ? validTextboxTextColor() : invalidTextboxTextColor();
+    }
+
+    Color getTextboxBackgroundColor(
+            final boolean typing, final boolean valid,
+            final boolean highlighted
+    ) {
+        return valid
+                ? validTextboxBackgroundColor()
+                : invalidTextboxBackgroundColor();
+    }
+
+    Color getTextboxBorderColor(
+            final boolean typing, final boolean valid,
+            final boolean highlighted
+    ) {
+        if (typing)
+            return typingTextboxBorderColor();
+        else if (highlighted)
+            return highlightedTextboxBorderColor();
+        else if (valid)
+            return validTextboxBorderColor();
+
+        return invalidTextboxBorderColor();
+    }
+
+    Color getTextboxAffixColor(
+            final boolean typing, final boolean valid,
+            final boolean highlighted
+    ) {
+        return valid ? validTextboxAffixColor() : invalidTextboxAffixColor();
+    }
 
     Color getScrollBarFillColor(final Button b) {
         if (b.isSelected() || b.isHighlighted())
@@ -536,7 +576,7 @@ public abstract class Theme {
     
     Color getProjectButtonSelectedAccentColor() {
         // TODO
-        return systemColor(LIGHT);
+        return systemColor(LIGHT_BG);
     }
 
     Color getDialogTopBarColor() {
@@ -559,12 +599,12 @@ public abstract class Theme {
 
     public Color subMenuSeparatorColor() {
         // TODO
-        return systemColor(LIGHT);
+        return systemColor(LIGHT_BG);
     }
 
     public Color dialogBoxTitleTextColor() {
         // TODO
-        return systemColor(LIGHT);
+        return systemColor(LIGHT_TEXT);
     }
 
     public Color viewportBackgroundColor() {
@@ -572,9 +612,79 @@ public abstract class Theme {
         return systemColor(MID);
     }
 
+    Color tooltipTextColor() {
+        // TODO
+        return systemColor(DARK);
+    }
+
+    Color tooltipBackgroundColor() {
+        // TODO
+        return systemColor(MID_LIGHT);
+    }
+
+    Color tooltipBorderColor() {
+        // TODO
+        return systemColor(DARK);
+    }
+
+    Color logMessageTextColor() {
+        // TODO
+        return null;
+    }
+
+    Color logMessageBackgroundColor() {
+        // TODO
+        return null;
+    }
+
+    Color validTextboxTextColor() {
+        return primaryTextColor();
+    }
+
+    Color invalidTextboxTextColor() {
+        return invalidText();
+    }
+
+    Color validTextboxBackgroundColor() {
+        return contrastUIAccentColor();
+    }
+
+    Color invalidTextboxBackgroundColor() {
+        return invalidTextBG();
+    }
+
+    Color validTextboxAffixColor() {
+        return stubTextColor();
+    }
+
+    Color invalidTextboxAffixColor() {
+        // TODO
+        return validTextboxAffixColor();
+    }
+
+    Color typingTextboxBorderColor() {
+        return highlightOverlay();
+    }
+
+    Color highlightedTextboxBorderColor() {
+        return contrastUIBackgroundColor();
+    }
+
+    Color validTextboxBorderColor() {
+        return primaryUIAccentColor();
+    }
+
+    Color invalidTextboxBorderColor() {
+        return invalidText();
+    }
+
+    Color textboxHighlightOverlayColor() {
+        return highlightOverlay();
+    }
+
     Color menuBackgroundColor() {
         // TODO
-        return systemColor(LIGHT);
+        return systemColor(LIGHT_BG);
     }
 
     Color menuBackgroundContrastColor() {
@@ -589,7 +699,7 @@ public abstract class Theme {
 
     Color primaryTextColor() {
         // TODO
-        return systemColor(LIGHT);
+        return systemColor(LIGHT_TEXT);
     }
 
     Color contrastTextColor() {
@@ -619,7 +729,7 @@ public abstract class Theme {
 
     Color contrastUIBackgroundColor() {
         // TODO
-        return systemColor(LIGHT);
+        return systemColor(LIGHT_BG);
     }
 
     Color contrastUIAccentColor() {

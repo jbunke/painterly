@@ -14,7 +14,7 @@ public final class LogMessage {
     public LogMessage(final LogChannel channel, final ResourceCode code) {
         this.channel = channel;
         final String text = LanguageData.retrieveUIText(code);
-        image = ThemeManager.get().drawDebugMessage(text);
+        image = ThemeManager.get().drawLogMessage(text);
 
         age = 0;
     }

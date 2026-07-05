@@ -11,12 +11,13 @@ public final class Colors {
             PURPLE = new Color(0xe000c0),
             TRANSPARENT = new Color(0, 0, 0, 0),
             VEIL = new Color(0xc0c0c0c0, true),
-            INVALID_TEXT = new Color(0xd04040),
-            INVALID_TEXT_BG = new Color(0xf0a0a0),
+            INVALID_TEXT_BG = new Color(0xd04040),
+            INVALID_TEXT = new Color(0xf0a0a0),
             HIGHLIGHT_OVERLAY = new Color(0x6080f0),
             BLACK = new Color(0x000000),
             WHITE = new Color(0xffffff),
-            LIGHT_GREY = new Color(0xc0c0c0),
+            LIGHTER_GREY = new Color(0xc0c0c0),
+            LIGHT_GREY = new Color(0xa0a0a0),
             GREY = new Color(0x808080),
             DARK_GREY = new Color(0x404040);
 
@@ -25,7 +26,8 @@ public final class Colors {
         MID_DARK(DARK_GREY),
         MID(GREY),
         MID_LIGHT(LIGHT_GREY),
-        LIGHT(WHITE);
+        LIGHT_TEXT(WHITE),
+        LIGHT_BG(LIGHTER_GREY);
 
         final Color defaultColor;
 

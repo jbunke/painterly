@@ -11,6 +11,7 @@ import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.text_button.TextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.Cursor;
+import com.jordanbunke.painterly.util.ProgramFont;
 import com.jordanbunke.painterly.util.ProgramFont.FontFormatter;
 
 import java.awt.*;
@@ -133,11 +134,10 @@ public final class Graphics {
     }
 
     public static GameImage drawKey(final String keyAsString) {
-        // TODO - temp implementation
-
-        final Color textColor = systemColor(LIGHT),
+        final Color textColor = systemColor(LIGHT_TEXT),
                 backgroundColor = systemColor(DARK),
-                accentColor = systemColor(MID_DARK);
+                shadowColor = systemColor(MID_DARK),
+                outlineColor = systemColor(MID_LIGHT);
 
         final GameImage textImage = new FontFormatter(FONT_DEF)
                 .setTextSize(1.0)
@@ -145,20 +145,22 @@ public final class Graphics {
                 .build().draw();
 
         final int w = textImage.getWidth() + (2 * KEY_SHORTCUT_TEXT_MARGIN_X),
-                h = textImage.getHeight() + KEY_SHORTCUT_DROP_SHADOW;
-        final GameImage key = new GameImage(w, h);
+                keyTopHeight = textImage.getHeight(),
+                h = keyTopHeight + KEY_SHORTCUT_DROP_SHADOW;
+        final GameImage key = new GameImage(w, h),
+                keyTop = new GameImage(w, keyTopHeight),
+                shadow = new GameImage(w, h);
 
-        key.fill(backgroundColor);
+        keyTop.fill(backgroundColor);
+        keyTop.drawRectangle(outlineColor, 2f, 0, 0, w, keyTopHeight);
+        smoothCorners(keyTop, outlineColor);
 
-        int shadowY = h - KEY_SHORTCUT_DROP_SHADOW;
-        key.fillRectangle(accentColor, 0, shadowY, w, KEY_SHORTCUT_DROP_SHADOW);
+        shadow.fill(shadowColor);
+        shadow.drawRectangle(outlineColor, 2f, 0, 0, w, h);
+        smoothCorners(shadow, outlineColor);
 
-        // round out drop shadow
-        keyShadowCurve(key, accentColor);
-
-        // clear corners
-        clearKeyCorners(key);
-
+        key.draw(shadow.submit());
+        key.draw(keyTop.submit());
         key.draw(textImage, KEY_SHORTCUT_TEXT_MARGIN_X, 0);
 
         return key.submit();
@@ -284,6 +286,13 @@ public final class Graphics {
 
     // HELPER
 
+    public static GameImage[] splitTextLines(final String text, final Color textColor) {
+        return Arrays.stream(text.split("\n"))
+                .map(l -> new ProgramFont.FontFormatter(FONT_DEF).realize()
+                        .setColor(textColor).addText(l).build().draw())
+                .toArray(GameImage[]::new);
+    }
+
     public static GameImage blankCanvas(final int width, final int height) {
         final GameImage canvas = new GameImage(width, height);
         canvas.fill(Colors.white());
@@ -335,16 +344,40 @@ public final class Graphics {
     }
 
     public static void innerOutline(
-            final GameImage image, final Color outlineColor
+            final GameImage image, final Color match, final Color outlineColor
     ) {
         final int oc = outlineColor.getRGB(), w = image.getWidth(), h = image.getHeight();
+        final GameImage stampImage = new GameImage(w, h);
 
         for (int x = 0; x < w; x++)
             for (int y = 0; y < h; y++)
-                if (notTransparentWithTransparentNeighbor(image, x, y))
-                    image.setRGB(x, y, oc);
+                if (edgeOfContiguousColor(image, x, y, match))
+                    stampImage.setRGB(x, y, oc);
+
+        image.draw(stampImage.submit());
     }
 
+    private static boolean edgeOfContiguousColor(
+            final GameImage image, final int x, final int y, final Color c
+    ) {
+        return colorAtPixel(image, x, y, c) &&
+                !(colorAtPixel(image, x - 1, y, c) &&
+                        colorAtPixel(image, x + 1, y, c) &&
+                        colorAtPixel(image, x, y - 1, c) &&
+                        colorAtPixel(image, x, y + 1, c));
+    }
+
+    private static boolean colorAtPixel(
+            final GameImage image, final int x, final int y, final Color c
+    ) {
+        final int w = image.getWidth(), h = image.getHeight();
+        if (x < 0 || x >= w || y < 0 || y >= h)
+            return false;
+
+        return c.equals(image.getColorAt(x, y));
+    }
+
+    @SuppressWarnings("unused")
     private static boolean notTransparentWithTransparentNeighbor(
             final GameImage image, final int x, final int y
     ) {

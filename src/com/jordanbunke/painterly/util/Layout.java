@@ -77,7 +77,8 @@ public final class Layout {
             TEXT_BUTTON_TEXT_OFFSET_X = 6,
             TEXT_BUTTON_TEXT_OFFSET_Y = 5,
             TOOLTIP_LINE_INC_Y = 24,
-            TOOLTIP_PADDING_X = 8,
+            TOOLTIP_PADDING_X = 16,
+            TOOLTIP_PADDING_Y = 16,
             TOOLTIP_INITIAL_OFFSET_Y = 2;
 
     public static final double

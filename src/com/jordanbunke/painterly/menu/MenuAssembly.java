@@ -109,6 +109,14 @@ public final class MenuAssembly {
         final MenuBuilder mb = new MenuBuilder();
         final ScreenBox sb = PROJECT_VIEWPORT;
 
+        final int x = sb.x.get(), y = sb.y.get(),
+                w = sb.width.get(), h = sb.height.get();
+
+        final StaticMenuElement background =
+                new StaticMenuElement(new Coord2D(x, y), LEFT_TOP,
+                        ThemeManager.get().drawWorkspaceMenuBackground(w, h));
+        mb.add(background);
+
         final SimpleLabel noProjectsOpenLabel = SimpleLabel.init(
                 RC_NO_PROJECTS_OPEN, sb.at(0.5, 0.5))
                 .setAnchor(CENTRAL_BOTTOM).build();
