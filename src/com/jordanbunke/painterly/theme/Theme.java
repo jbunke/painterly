@@ -363,10 +363,14 @@ public abstract class Theme {
         return sepImage.submit();
     }
 
-    public GameImage drawWorkspaceMenuBackground(final int w, final int h) {
+    public GameImage drawMenuBackground(final int w, final int h) {
         final GameImage image = new GameImage(w, h);
-        image.fill(viewportBackgroundColor());
+        image.fill(menuBackgroundColor());
         return image.submit();
+    }
+
+    public GameImage drawWorkspaceMenuBackground(final int w, final int h) {
+        return drawMenuBackground(w, h);
     }
 
     public GameImage drawMenuBarBackground(final int w, final int h) {
@@ -684,7 +688,7 @@ public abstract class Theme {
 
     Color menuBackgroundColor() {
         // TODO
-        return systemColor(LIGHT_BG);
+        return systemColor(MID);
     }
 
     Color menuBackgroundContrastColor() {

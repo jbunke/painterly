@@ -35,8 +35,13 @@ public final class MenuAssembly {
 
     public static Menu mainMenu() {
         final MenuBuilder mb = new MenuBuilder();
+        final ScreenBox sb = SCREEN;
 
-        // TODO - background element
+        @SuppressWarnings("unused")
+        final int x = sb.x.get(), y = sb.y.get(),
+                w = sb.width.get(), h = sb.height.get();
+
+        addScreenMenuBackground(mb);
 
         final int MARGIN = 20;
 
@@ -45,17 +50,15 @@ public final class MenuAssembly {
                 // common
                 builder.setAlignment(CENTER).setAnchor(LEFT_CENTRAL)
                         .setButtonType(ButtonType.STANDARD)
-                        .setWidth(SCREEN.ofWidth(0.2))
-                        .setPosition(new Coord2D(
-                                SCREEN.offsetX(MARGIN),
-                                SCREEN.atY(0.5) +
-                                        (i * (builder.getHeight() + TEXT_BUTTON_INTERVAL_S_Y))
-                        )),
+                        .setWidth(sb.ofWidth(0.2))
+                        .setPosition(new Coord2D(sb.offsetX(MARGIN),
+                                sb.atY(0.5) +
+                                        (i * (builder.getHeight() + TEXT_BUTTON_INTERVAL_S_Y)))),
                 // elements
                 SimpleTextButton.init(RC_START, new Coord2D(), ProgramState::setWorkspace),
-                SimpleTextButton.init(RC_ABOUT, new Coord2D(), () -> {})
+                SimpleTextButton.init(RC_ABOUT, new Coord2D(), /* TODO */ () -> {})
                         .setTooltipCode(RC_ABOUT),
-                SimpleTextButton.init(RC_PROGRAM_SETTINGS, new Coord2D(), () -> {})
+                SimpleTextButton.init(RC_PROGRAM_SETTINGS, new Coord2D(), /* TODO */ () -> {})
                         .setTooltipCode(RC_PROGRAM_SETTINGS),
                 SimpleTextButton.init(RC_QUIT, new Coord2D(), Painterly::quitProgram));
 
@@ -64,7 +67,7 @@ public final class MenuAssembly {
         // version and credits
         final SimpleLabel programLabel = SimpleLabel.initLiteral(
                 ProgramInfo.formatVersion(),
-                        new Coord2D(MARGIN, SCREEN.offsetY(SCREEN.height.get() - MARGIN)))
+                        new Coord2D(MARGIN, sb.offsetY(h - MARGIN)))
                 .setAnchor(LEFT_BOTTOM)
                 .setOrientation(Text.Orientation.LEFT)
                 .addInstruction(tb -> tb.addLineBreak()
@@ -143,7 +146,7 @@ public final class MenuAssembly {
     public static Menu loading(final ResourceCode code) {
         final MenuBuilder mb = new MenuBuilder();
 
-        // TODO - potential background elements
+        addScreenMenuBackground(mb);
 
         mb.add(new LoadingLabel(code));
 
@@ -151,6 +154,18 @@ public final class MenuAssembly {
     }
 
     // HELPER
+
+    private static void addScreenMenuBackground(final MenuBuilder mb) {
+        final ScreenBox sb = SCREEN;
+
+        final int x = sb.x.get(), y = sb.y.get(),
+                w = sb.width.get(), h = sb.height.get();
+
+        final StaticMenuElement background =
+                new StaticMenuElement(new Coord2D(x, y), LEFT_TOP,
+                        ThemeManager.get().drawMenuBackground(w, h));
+        mb.add(background);
+    }
 
     @SafeVarargs
     private static <B extends MenuElementBuilder<?>> void addMenuElements(

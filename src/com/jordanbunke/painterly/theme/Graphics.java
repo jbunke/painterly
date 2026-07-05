@@ -95,7 +95,6 @@ public final class Graphics {
     public static GameImage drawCheckbox(
             final boolean highlighted, final boolean checked
     ) {
-        // TODO - review
         final GameImage icon = readIcon(checked
                 ? RC_CHECKED_TRUE : RC_CHECKED_FALSE);
 
