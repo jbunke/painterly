@@ -19,139 +19,148 @@ import static com.jordanbunke.delta_time.events.Key.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
-    EXPORT(RC_EXPORT, true, false /* TODO */,
-            new KeyboardShortcut(true, false, E),
-            p -> p.saveManager.export()),
-    SAVE(RC_SAVE, false /* TODO */, true,
-            new KeyboardShortcut(true, false, S),
-            p -> p.saveManager.save()),
-    SAVE_AS(RC_SAVE_AS, false /* TODO */, true,
-            new KeyboardShortcut(true, true, S),
-            /* TODO */ p -> {}),
-    TOGGLE_SIM(RC_TOGGLE_SIM, RC_NA,
-            p -> p.isPainting() ? RC_SIM_PAUSE : RC_SIM_RESUME,
-            KeyboardShortcut.single(SPACE),
-            Project::toggleSimulation),
-    TOGGLE_SOURCE(RC_TOGGLE_SOURCE, KeyboardShortcut.single(ENTER),
-            p -> p.canvas.toggleShowSource()),
-    RESET_POSITIONING(RC_RESET_POS, new KeyboardShortcut(true, false, ENTER),
-            p -> Viewport.get().getPositioning().reset()),
-    RESET_FOCUS_AREA(RC_RESET_FOCUS_AREA, false /* TODO */, true,
-            KeyboardShortcut.single(BACKSPACE),
-            p -> p.focusManager.resetFocusArea()),
-    FOCUS_BOX_AS_FOCUS_AREA(RC_FOCUS_BOX_AS_FOCUS_AREA, true, true,
-            KeyboardShortcut.single(Q),
-            p -> p.focusManager.focusBoxAsNewFocusArea()),
-    CLEAR_FOCUS_BOXES(RC_CLEAR_FOCUS_BOXES, false /* TODO */, true,
-            KeyboardShortcut.single(A),
-            p -> p.focusManager.clearFocusBoxes()),
-    DELETE_ACTIVE_BOUNDS(RC_DELETE_ACTIVE_BOUNDS, true, true,
-            KeyboardShortcut.single(DELETE),
-            p -> DialogManager.set(
-                    () -> DialogAssembly.aysDeleteActiveBounds(p))),
+    EXPORT(new Builder(RC_EXPORT)
+            .inheritTooltipCode()
+            // TODO - .inheritIconCode()
+            .setShortcut(new KeyboardShortcut(true, false, E))
+            .setBehaviour(p -> p.saveManager.export())),
+    SAVE(new Builder(RC_SAVE)
+            // TODO - .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(new KeyboardShortcut(true, false, S))
+            .setBehaviour(p -> p.saveManager.save())),
+    SAVE_AS(new Builder(RC_SAVE_AS)
+            // TODO - .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(new KeyboardShortcut(true, true, S))
+            .setBehaviour(/* TODO */ p -> {})),
+    TOGGLE_SIM(new Builder(RC_TOGGLE_SIM)
+            .setIconCodeFunction(p -> p.isPainting() ? RC_SIM_PAUSE : RC_SIM_RESUME)
+            .setShortcut(KeyboardShortcut.single(SPACE))
+            .setBehaviour(Project::toggleSimulation)),
+    TOGGLE_SOURCE(new Builder(RC_TOGGLE_SOURCE)
+            .setShortcut(KeyboardShortcut.single(ENTER))
+            .setBehaviour(p -> p.canvas.toggleShowSource())),
+    RESET_POSITIONING(new Builder(RC_RESET_POS)
+            .setShortcut(new KeyboardShortcut(true, false, ENTER))
+            .setBehaviour(p -> Viewport.get().getPositioning().reset())),
+    RESET_FOCUS_AREA(new Builder(RC_RESET_FOCUS_AREA)
+            // TODO - .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(BACKSPACE))
+            .setBehaviour(p -> p.focusManager.resetFocusArea())
+            .setPrecondition(p -> !p.focusManager.isWholeCanvas())),
+    FOCUS_BOX_AS_FOCUS_AREA(new Builder(RC_FOCUS_BOX_AS_FOCUS_AREA)
+            .inheritTooltipCode().inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(Q))
+            .setBehaviour(p -> p.focusManager.focusBoxAsNewFocusArea())
+            .setPrecondition(p -> !p.focusManager.isEntireArea())),
+    CLEAR_FOCUS_BOXES(new Builder(RC_CLEAR_FOCUS_BOXES)
+            // TODO - .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(A))
+            .setBehaviour(p -> p.focusManager.clearFocusBoxes())
+            .setPrecondition(p -> !p.focusManager.isEntireArea())),
+    DELETE_ACTIVE_BOUNDS(new Builder(RC_DELETE_ACTIVE_BOUNDS)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(DELETE))
+            .setBehaviour(p -> DialogManager.set(
+                    () -> DialogAssembly.aysDeleteActiveBounds(p)))),
     // similarity display setters
-    SET_DISPLAY_FOCUS(RC_DISPLAY_FOCUS, false, true, null,
-            p -> p.progressManager.setDisplayToFocus()),
-    SET_DISPLAY_GLOBAL(RC_DISPLAY_GLOBAL, false, true, null,
-            p -> p.progressManager.setDisplayToGlobal()),
+    SET_DISPLAY_FOCUS(new Builder(RC_DISPLAY_FOCUS)
+            .inheritIconCode()
+            .setBehaviour(p -> p.progressManager.setDisplayToFocus())),
+    SET_DISPLAY_GLOBAL(new Builder(RC_DISPLAY_GLOBAL)
+            .inheritIconCode()
+            .setBehaviour(p -> p.progressManager.setDisplayToGlobal())),
     // tick mode setters
-    TOGGLE_TICK_MODE(RC_TOGGLE_TICK_MODE, /* TODO */ RC_NA,
-            p -> p.strokeManager.isTickMode() == StrokeManager.ATTEMPTED
-                    ? RC_TICK_MODE_ATTEMPTED : RC_TICK_MODE_COMPLETED,
-            KeyboardShortcut.single(S),
-            p -> p.strokeManager.toggleTickMode()),
-    SET_TICK_MODE_ATTEMPTED(RC_TICK_MODE_ATTEMPTED, true, true, null,
-            p -> p.strokeManager.setTickModeToAttempted()),
-    SET_TICK_MODE_COMPLETED(RC_TICK_MODE_COMPLETED, true, true, null,
-            p -> p.strokeManager.setTickModeToCompleted()),
+    TOGGLE_TICK_MODE(new Builder(RC_TOGGLE_TICK_MODE)
+            // TODO - .setTooltipCode()
+            .setIconCodeFunction(p -> p.strokeManager.isTickMode() == StrokeManager.ATTEMPTED
+                    ? RC_TICK_MODE_ATTEMPTED : RC_TICK_MODE_COMPLETED)
+            .setShortcut(KeyboardShortcut.single(S))
+            .setBehaviour(p -> p.strokeManager.toggleTickMode())),
+    SET_TICK_MODE_ATTEMPTED(new Builder(RC_TICK_MODE_ATTEMPTED)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setBehaviour(p -> p.strokeManager.setTickModeToAttempted())),
+    SET_TICK_MODE_COMPLETED(new Builder(RC_TICK_MODE_COMPLETED)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setBehaviour(p -> p.strokeManager.setTickModeToCompleted())),
     // focus box augmentation
-    INC_DIVS_X(RC_NA, new KeyboardShortcut(false, true, RIGHT_ARROW),
-            p -> p.focusManager.augmentDivsX(1)),
-    DEC_DIVS_X(RC_NA, new KeyboardShortcut(false, true, LEFT_ARROW),
-            p -> p.focusManager.augmentDivsX(-1)),
-    INC_DIVS_Y(RC_NA, new KeyboardShortcut(false, true, UP_ARROW),
-            p -> p.focusManager.augmentDivsY(1)),
-    DEC_DIVS_Y(RC_NA, new KeyboardShortcut(false, true, DOWN_ARROW),
-            p -> p.focusManager.augmentDivsY(-1)),
+    INC_DIVS_X(new Builder(RC_NA)
+            .setShortcut(new KeyboardShortcut(false, true, RIGHT_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentDivsX(1))),
+    DEC_DIVS_X(new Builder(RC_NA)
+            .setShortcut(new KeyboardShortcut(false, true, LEFT_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentDivsX(-1))),
+    INC_DIVS_Y(new Builder(RC_NA)
+            .setShortcut(new KeyboardShortcut(false, true, UP_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentDivsY(1))),
+    DEC_DIVS_Y(new Builder(RC_NA)
+            .setShortcut(new KeyboardShortcut(false, true, DOWN_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentDivsY(-1))),
     // free focus box navigation
-    INC_X(RC_NA, KeyboardShortcut.single(RIGHT_ARROW),
-            p -> p.focusManager.augmentX(1)),
-    DEC_X(RC_NA, KeyboardShortcut.single(LEFT_ARROW),
-            p -> p.focusManager.augmentX(-1)),
-    INC_Y(RC_NA, KeyboardShortcut.single(DOWN_ARROW),
-            p -> p.focusManager.augmentY(1)),
-    DEC_Y(RC_NA, KeyboardShortcut.single(UP_ARROW),
-            p -> p.focusManager.augmentY(-1)),
+    INC_X(new Builder(RC_NA)
+            .setShortcut(KeyboardShortcut.single(RIGHT_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentX(1))),
+    DEC_X(new Builder(RC_NA)
+            .setShortcut(KeyboardShortcut.single(LEFT_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentX(-1))),
+    INC_Y(new Builder(RC_NA)
+            .setShortcut(KeyboardShortcut.single(DOWN_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentY(1))),
+    DEC_Y(new Builder(RC_NA)
+            .setShortcut(KeyboardShortcut.single(UP_ARROW))
+            .setBehaviour(p -> p.focusManager.augmentY(-1))),
     // focus box mode setters
-    SET_FB_FREE(RC_FB_FREE, true, true,
-            KeyboardShortcut.single(L),
-            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FREE)),
-    SET_FB_RANDOM(RC_FB_RANDOM, true, true,
-            KeyboardShortcut.single(R),
-            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.RANDOM)),
-    SET_FB_FORWARDS(RC_FB_FORWARDS, true, true,
-            KeyboardShortcut.single(F),
-            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FORWARDS)),
-    SET_FB_BACKWARDS(RC_FB_BACKWARDS, true, true,
-            KeyboardShortcut.single(D),
-            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.BACKWARDS)),
-    SET_FB_WORST(RC_FB_WORST, true, true,
-            KeyboardShortcut.single(W),
-            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.WORST)),
-    SET_FB_PRIORITIZE_WORST(RC_FB_PRIORITIZE_WORST, true, true,
-            KeyboardShortcut.single(E),
-            p -> p.focusManager.setFocusBoxMode(FocusBoxMode.PRIORITIZE_WORST)),
+    SET_FB_FREE(new Builder(RC_FB_FREE)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(L))
+            .setBehaviour(p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FREE))),
+    SET_FB_RANDOM(new Builder(RC_FB_RANDOM)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(R))
+            .setBehaviour(p -> p.focusManager.setFocusBoxMode(FocusBoxMode.RANDOM))),
+    SET_FB_FORWARDS(new Builder(RC_FB_FORWARDS)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(F))
+            .setBehaviour(p -> p.focusManager.setFocusBoxMode(FocusBoxMode.FORWARDS))),
+    SET_FB_BACKWARDS(new Builder(RC_FB_BACKWARDS)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(D))
+            .setBehaviour(p -> p.focusManager.setFocusBoxMode(FocusBoxMode.BACKWARDS))),
+    SET_FB_WORST(new Builder(RC_FB_WORST)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(W))
+            .setBehaviour(p -> p.focusManager.setFocusBoxMode(FocusBoxMode.WORST))),
+    SET_FB_PRIORITIZE_WORST(new Builder(RC_FB_PRIORITIZE_WORST)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(E))
+            .setBehaviour(p -> p.focusManager.setFocusBoxMode(FocusBoxMode.PRIORITIZE_WORST))),
     ;
-
-    static {
-        // Populate preconditions
-        FOCUS_BOX_AS_FOCUS_AREA.precondition =
-                p -> !p.focusManager.isEntireArea();
-        CLEAR_FOCUS_BOXES.precondition =
-                p -> !p.focusManager.isEntireArea();
-        RESET_FOCUS_AREA.precondition =
-                p -> !p.focusManager.isWholeCanvas();
-        // TODO
-    }
 
     private final KeyboardShortcut shortcut;
     private final Consumer<Project> behaviour;
     private final ResourceCode code, tooltipCode;
-
     private final Function<Project, ResourceCode> iconCodeFunction;
-    private Predicate<Project> precondition;
+    private final Predicate<Project> precondition;
 
-    ProjectAction(
-            final ResourceCode code, final ResourceCode tooltipCode,
-            final Function<Project, ResourceCode> iconCodeFunction,
-            final KeyboardShortcut shortcut,
-            final Consumer<Project> behaviour
-    ) {
-        this.code = code;
-        this.shortcut = shortcut;
-        this.behaviour = behaviour;
-
-        this.tooltipCode = tooltipCode;
-        this.iconCodeFunction = iconCodeFunction;
-        precondition = null;
-    }
-
-    ProjectAction(
-            final ResourceCode code,
-            final boolean inheritTooltip, final boolean inheritIcon,
-            final KeyboardShortcut shortcut,
-            final Consumer<Project> behaviour
-    ) {
-        this(code, inheritTooltip ? code : RC_NA,
-                inheritIcon ? p -> code : p -> RC_NA, shortcut, behaviour);
-    }
-
-    ProjectAction(
-            final ResourceCode code,
-            final KeyboardShortcut shortcut,
-            final Consumer<Project> behaviour
-    ) {
-        this(code, false, false, shortcut, behaviour);
+    ProjectAction(Builder builder) {
+        this.code = builder.code;
+        this.shortcut = builder.shortcut;
+        this.behaviour = builder.behaviour;
+        this.tooltipCode = builder.tooltipCode;
+        this.iconCodeFunction = builder.iconCodeFunction;
+        this.precondition = builder.precondition;
     }
 
     @Override
@@ -195,6 +204,63 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             return iconCodeFunction.apply(defaultFetch());
         } catch (NullPointerException npe) {
             return RC_NA;
+        }
+    }
+
+    static class Builder {
+        final ResourceCode code;
+
+        KeyboardShortcut shortcut;
+        ResourceCode tooltipCode;
+        Function<Project, ResourceCode> iconCodeFunction;
+
+        Consumer<Project> behaviour;
+        Predicate<Project> precondition;
+
+        Builder(final ResourceCode code) {
+            this.code = code;
+
+            shortcut = null;
+            tooltipCode = RC_NA;
+            iconCodeFunction = p -> RC_NA;
+
+            behaviour = p -> {};
+            precondition = null;
+        }
+
+        Builder setShortcut(final KeyboardShortcut shortcut) {
+            this.shortcut = shortcut;
+            return this;
+        }
+
+        Builder setTooltipCode(final ResourceCode tooltipCode) {
+            this.tooltipCode = tooltipCode;
+            return this;
+        }
+
+        Builder inheritTooltipCode() {
+            return setTooltipCode(code);
+        }
+
+        Builder setIconCodeFunction(
+                final Function<Project, ResourceCode> iconCodeFunction
+        ) {
+            this.iconCodeFunction = iconCodeFunction;
+            return this;
+        }
+
+        Builder inheritIconCode() {
+            return setIconCodeFunction(p -> code);
+        }
+
+        Builder setBehaviour(final Consumer<Project> behaviour) {
+            this.behaviour = behaviour;
+            return this;
+        }
+
+        Builder setPrecondition(final Predicate<Project> precondition) {
+            this.precondition = precondition;
+            return this;
         }
     }
 }
