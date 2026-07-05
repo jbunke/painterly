@@ -80,7 +80,7 @@ public final class HorzNonScrollSlider extends Slider {
         if (isSliding())
             Cursor.force(Cursor.HORZ_SCROLL);
         else if (isHighlighted())
-            Cursor.ping(Cursor.HORZ_SCROLL);
+            Cursor.ping(Cursor.POINTER);
     }
 
     public static class Builder implements MenuElementBuilder<HorzNonScrollSlider> {

@@ -28,7 +28,6 @@ import java.util.function.Supplier;
 import static com.jordanbunke.painterly.events.actions.GlobalAction.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.theme.Colors.*;
-import static com.jordanbunke.painterly.theme.Colors.SystemColor.*;
 import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.SCREEN;
 
@@ -323,7 +322,7 @@ public final class PopUpDialog extends MenuElementContainer {
                                 me.incrementY(elementOffset.y);
                             })
                             .map(Scrollable::new).toArray(Scrollable[]::new),
-                    contentBottom + elementOffset.y, 0);
+                    contentBottom + elementOffset.y + DIALOG_CONTENT_BOTTOM_BUFFER_HEIGHT, 0);
 
             return new PopUpDialog(width, height, precondition, onOK,
                     titleLabel, scrollBox,
@@ -351,7 +350,8 @@ public final class PopUpDialog extends MenuElementContainer {
         }
 
         private void calculateHeightFromContents() {
-            final int buffer = DIALOG_CONTENT_TOP_OFFSET_Y + dialogBottomHeight(),
+            final int buffer = DIALOG_CONTENT_TOP_OFFSET_Y +
+                    DIALOG_CONTENT_BOTTOM_BUFFER_HEIGHT + dialogBottomHeight(),
                     prospectiveHeight = Math.max(contentBottom, DIALOG_CONTENT_MIN_HEIGHT) + buffer,
                     maxHeight = maxDialogHeight();
 

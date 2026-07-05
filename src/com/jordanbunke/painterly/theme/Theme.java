@@ -29,16 +29,27 @@ public abstract class Theme {
         final GameImage image = new GameImage(width, height);
         final Color bgColor = getDialogBackgroundColor(),
                 topBarColor = getDialogTopBarColor(),
+                bottomBarColor = getDialogBottomBarColor(),
                 borderColor = getDialogBorderColor();
+        final int topBarHeight = dialogTitleStripeHeight(),
+                bottomBarHeight = dialogBottomHeight(),
+                bottomBarY = height - bottomBarHeight;
 
         // background
         image.fill(bgColor);
 
         // top bar
-        image.fillRectangle(topBarColor, 0, 0, width, dialogTitleStripeHeight());
+        image.fillRectangle(topBarColor, 0, 0, width, topBarHeight);
+        image.drawLine(borderColor, 1f, 0, topBarHeight - 1, width, topBarHeight - 1);
+
+        // bottom bar
+        image.fillRectangle(bottomBarColor, 0, bottomBarY, width, bottomBarHeight);
+        image.drawLine(borderColor, 1f, 0, bottomBarY, width, bottomBarY);
 
         // border
         image.drawRectangle(borderColor, 2f, 0, 0, width, height);
+
+        smoothCorners(image, borderColor);
 
         return image.submit();
     }
@@ -148,39 +159,35 @@ public abstract class Theme {
         if (tb.isSelected()) {
             final Color accentColor = getProjectButtonSelectedAccentColor();
             
-            final int INDICATOR_HEIGHT = 4;
-            button.fillRectangle(accentColor, 0, 
-                    h - INDICATOR_HEIGHT, w, INDICATOR_HEIGHT);
+            final int INDICATOR_HEIGHT = 3, INDICATOR_X = 3;
+            button.fillRectangle(accentColor,
+                    INDICATOR_X, h - INDICATOR_HEIGHT,
+                    w - (2 * INDICATOR_X), INDICATOR_HEIGHT);
         }
 
         return button.submit();
     }
 
     public GameImage drawNavbarSubMenuButton(final TextButton tb) {
-        // TODO - unique visuals
-        return drawTextButton(tb);
+        final Color textColor = getTextButtonTextColor(tb),
+                bgColor = getTextButtonBackgroundColor(tb);
+
+        final int w = tb.getWidth(), h = tb.getHeight();
+        final GameImage button = new GameImage(w, h);
+
+        // background
+        button.fill(bgColor);
+
+        // draw text
+        stampText(button, tb, textColor, false);
+
+        return button.submit();
     }
 
     public GameImage drawTextButton(final TextButton tb) {
-        // TODO - temp implementation
-
-        final ButtonType type = tb.getButtonType();
-        final boolean highlight = tb.isHighlighted();
-
-        final Color textColor, bgColor, accentColor;
-
-        switch (type) {
-            case STUB -> {
-                bgColor = transparent();
-                accentColor = /* TODO */ systemColor(MID_DARK);
-                textColor = /* TODO */ systemColor(MID_DARK);
-            }
-            default -> {
-                bgColor = /* TODO */ systemColor(highlight ? MID_DARK : DARK);
-                accentColor = /* TODO */ systemColor(highlight ? MID_LIGHT : MID);
-                textColor = /* TODO */ systemColor(LIGHT);
-            }
-        }
+        final Color textColor = getTextButtonTextColor(tb),
+                bgColor = getTextButtonBackgroundColor(tb),
+                borderColor = getTextButtonBorderColor(tb);
 
         final int w = tb.getWidth(), h = tb.getHeight();
         final GameImage button = new GameImage(w, h);
@@ -192,7 +199,8 @@ public abstract class Theme {
         stampText(button, tb, textColor, false);
 
         // border
-        button.drawRectangle(accentColor, 4f, 0, 0, w, h);
+        button.drawRectangle(borderColor, 2f, 0, 0, w, h);
+        smoothCorners(button, borderColor);
 
         return button.submit();
     }
@@ -203,8 +211,8 @@ public abstract class Theme {
             final int cursorIndex, final int selectionIndex,
             final boolean valid, final boolean highlighted, final boolean typing
     ) {
-        // TODO - temp implementation; copied from TDSM
-        final GameImage image = new GameImage(dims.width(), dims.height());
+        final int w = dims.width(), h = dims.height();
+        final GameImage image = new GameImage(w, h);
 
         // pre-processing
         final int left = Math.min(cursorIndex, selectionIndex),
@@ -218,7 +226,7 @@ public abstract class Theme {
         final Color
                 mainColor = valid ? /* TODO */ systemColor(DARK) : invalidText(),
                 backgroundColor = valid ? /* TODO */ systemColor(LIGHT) : invalidTextBG(),
-                outlineColor = typing ? highlightOverlay() :
+                borderColor = typing ? highlightOverlay() :
                         (highlighted ? /* TODO */ systemColor(LIGHT) : mainColor),
                 affixColor = shiftRGB(mainColor, 0x40),
                 highlightOverlay = highlightOverlay();
@@ -255,43 +263,43 @@ public abstract class Theme {
         // possible prefix
         image.draw(prefixImage, textPos.x, textPos.y);
         if (!prefix.isEmpty())
-            textPos = textPos.displace(prefixImage.getWidth() + INC, 0);
+            textPos = textPos.displaceX(prefixImage.getWidth() + INC);
 
         // main text prior to possible selection
         image.draw(preSelImage, textPos.x, textPos.y);
         if (!preSel.isEmpty())
-            textPos = textPos.displace(preSelImage.getWidth() + INC, 0);
+            textPos = textPos.displaceX(preSelImage.getWidth() + INC);
 
         // possible selection text
         if (hasSelection) {
             if (!cursorAtRight)
-                textPos = textPos.displace(2 * INC, 0);
+                textPos = textPos.displaceX(2 * INC);
 
-            image.draw(selImage, textPos.x, textPos.y);
             image.fillRectangle(highlightOverlay, textPos.x - INC, 0,
-                    selImage.getWidth() + (2 * INC), image.getHeight());
-            textPos = textPos.displace(selImage.getWidth() + INC, 0);
+                    selImage.getWidth() + (2 * INC), h);
+            image.draw(selImage, textPos.x, textPos.y);
+            textPos = textPos.displaceX(selImage.getWidth() + INC);
         }
 
         // cursor
         image.fillRectangle(mainColor,
                 textPos.x - (cursorAtRight ? 0
                         : selImage.getWidth() + (3 * INC)),
-                0, INC, image.getHeight());
+                0, INC, h);
         if (cursorAtRight)
-            textPos = textPos.displace(2 * INC, 0);
+            textPos = textPos.displaceX(2 * INC);
 
         // main text following possible selection
         image.draw(postSelImage, textPos.x, textPos.y);
         if (!postSel.isEmpty())
-            textPos = textPos.displace(postSelImage.getWidth() + INC, 0);
+            textPos = textPos.displaceX(postSelImage.getWidth() + INC);
 
         // possible suffix
         image.draw(suffixImage, textPos.x, textPos.y);
 
-        // outline
-        image.drawRectangle(outlineColor, 2f, 0, 0,
-                image.getWidth(), image.getHeight());
+        // border
+        image.drawRectangle(borderColor, 2f, 0, 0, w, h);
+        smoothCorners(image, borderColor);
 
         return image.submit();
     }
@@ -299,33 +307,33 @@ public abstract class Theme {
     public GameImage drawHorzSlider(
             final int w, final int h, final double fractionX, final Button b
     ) {
-        // TODO - temp
         final GameImage slider = new GameImage(w, h);
 
         final int shellHeight = SLIDER_SHELL_HEIGHT,
                 shellY = (SLIDER_HEIGHT - shellHeight) / 2,
                 bd = SLIDER_BALL_DIM, range = w - bd,
+                shellOffsetX = bd / 2,
                 ballX = (int)(fractionX * range);
 
-        slider.fillRectangle(/* TODO */ systemColor(LIGHT), 0, shellY, w, shellHeight);
-        slider.drawRectangle(/* TODO */ systemColor(MID_DARK), 2f, 0, shellY, w, shellHeight);
+        final Color sliderFillColor = contrastUIBackgroundColor(),
+                sliderBorderColor = contrastUIAccentColor();
+
+        // render shell
+        final GameImage sliderShell = new GameImage(range, shellHeight);
+        sliderShell.fill(sliderFillColor);
+        sliderShell.drawRectangle(sliderBorderColor, 2f, 0, 0, range, shellHeight);
+        smoothCorners(sliderShell, sliderBorderColor);
+
+        slider.draw(sliderShell.submit(), shellOffsetX, shellY);
 
         final GameImage ball = new GameImage(bd, bd);
-        final Color ballBorder, ballFill;
+        final Color ballBorder = getSliderBallBorderColor(b),
+                ballFill = getSliderBallFillColor(b);
 
-        if (b.isSelected()) {
-            ballFill = /* TODO */ systemColor(MID_LIGHT);
-            ballBorder = /* TODO */ systemColor(LIGHT);
-        } else if (b.isHighlighted()) {
-            ballFill = /* TODO */ systemColor(MID);
-            ballBorder = /* TODO */ systemColor(MID_LIGHT);
-        } else {
-            ballFill = /* TODO */ systemColor(MID);
-            ballBorder = /* TODO */ systemColor(MID_DARK);
-        }
-
+        // render ball
         ball.fill(ballFill);
-        ball.drawRectangle(ballBorder, 2f, 0, 0, bd, bd);
+        circleOnly(ball);
+        innerOutline(ball, ballBorder);
 
         slider.draw(ball.submit(), ballX, 0);
 
@@ -336,22 +344,17 @@ public abstract class Theme {
             final int w, final int h, final int barH,
             final int barY, final Button b
     ) {
-        // TODO - copied from TDSM -- review
-
         final GameImage scrollSpace = new GameImage(w, h),
                 scrollBar = new GameImage(w, barH);
 
-        final Color c = b.outcomes(/* TODO */ systemColor(LIGHT),
-                /* TODO */ systemColor(MID_LIGHT), /* TODO */ systemColor(MID_DARK)),
-                accent = b.outcomes(/* TODO */ systemColor(MID_LIGHT),
-                        /* TODO */ systemColor(MID_DARK), /* TODO */ systemColor(DARK));
+        final Color fillColor = getScrollBarFillColor(b),
+                borderColor = getScrollBarBorderColor(b);
 
-        scrollBar.fill(c);
-        scrollBar.drawLine(accent, 1f, 0, barH - 2, w, barH - 2);
-        scrollBar.drawRectangle(/* TODO */ systemColor(DARK), 1f, 0, 0, w - 1, barH - 1);
-        // TODO - clearCorners(scrollBar);
+        scrollBar.fill(fillColor);
+        scrollBar.drawRectangle(borderColor, 2f, 0, 0, w, barH);
+        smoothCorners(scrollBar, borderColor);
 
-        scrollSpace.draw(scrollBar, 0, barY);
+        scrollSpace.draw(scrollBar.submit(), 0, barY);
 
         return scrollSpace.submit();
     }
@@ -448,8 +451,58 @@ public abstract class Theme {
 
     // COLOR DETERMINERS
 
+    Color getScrollBarFillColor(final Button b) {
+        if (b.isSelected() || b.isHighlighted())
+            return primaryUIAccentColor();
+
+        return neutralUIElementColor();
+    }
+
+    Color getScrollBarBorderColor(final Button b) {
+        return primaryUIBackgroundColor();
+    }
+
+    Color getSliderBallFillColor(final Button b) {
+        if (b.isSelected() || b.isHighlighted())
+            return primaryUIAccentColor();
+
+        return neutralUIElementColor();
+    }
+
+    Color getSliderBallBorderColor(final Button b) {
+        if (b.isSelected())
+            return contrastUIBackgroundColor();
+
+        return primaryUIBackgroundColor();
+    }
+
+    Color getTextButtonTextColor(final TextButton tb) {
+        if (tb.getButtonType() == ButtonType.STUB)
+            return stubTextColor();
+
+        return primaryTextColor();
+    }
+
+    Color getTextButtonBackgroundColor(final TextButton tb) {
+        if (tb.getButtonType() == ButtonType.STUB)
+            return transparent();
+        else if (tb.isHighlighted())
+            return highlightUIBackgroundColor();
+
+        return primaryUIBackgroundColor();
+    }
+
+    Color getTextButtonBorderColor(final TextButton tb) {
+        if (tb.getButtonType() == ButtonType.STUB)
+            return stubTextColor();
+        else if (tb.isHighlighted())
+            return primaryTextColor();
+
+        return stubTextColor();
+    }
+
     Color getSubMenuButtonTextColor(final TextButton tb, final boolean stub) {
-        return stub ? stubTextColor() : lightTextColor();
+        return stub ? stubTextColor() : primaryTextColor();
     }
 
     Color getSubMenuButtonBackgroundColor(final TextButton tb, final boolean stub) {
@@ -459,7 +512,7 @@ public abstract class Theme {
     }
 
     Color getContextBarElementTextColor(final TextButton tb) {
-        return tb.isSelected() ? darkTextColor() : lightTextColor();
+        return tb.isSelected() ? contrastTextColor() : primaryTextColor();
     }
 
     Color getContextBarElementBackgroundColor(final TextButton tb) {
@@ -472,7 +525,7 @@ public abstract class Theme {
     }
 
     Color getProjectButtonTextColor(final TextButton tb) {
-        return lightTextColor();
+        return primaryTextColor();
     }
     
     Color getProjectButtonBackgroundColor(final TextButton tb) {
@@ -487,6 +540,10 @@ public abstract class Theme {
     }
 
     Color getDialogTopBarColor() {
+        return menuBackgroundContrastColor();
+    }
+
+    Color getDialogBottomBarColor() {
         return menuBackgroundContrastColor();
     }
 
@@ -527,15 +584,15 @@ public abstract class Theme {
 
     Color menuBorderColor() {
         // TODO
-        return systemColor(MID_DARK);
+        return systemColor(DARK);
     }
 
-    Color lightTextColor() {
+    Color primaryTextColor() {
         // TODO
         return systemColor(LIGHT);
     }
 
-    Color darkTextColor() {
+    Color contrastTextColor() {
         // TODO
         return systemColor(DARK);
     }
@@ -555,8 +612,23 @@ public abstract class Theme {
         return systemColor(DARK);
     }
 
+    Color primaryUIAccentColor() {
+        // TODO
+        return systemColor(MID_LIGHT);
+    }
+
     Color contrastUIBackgroundColor() {
         // TODO
         return systemColor(LIGHT);
+    }
+
+    Color contrastUIAccentColor() {
+        // TODO
+        return systemColor(MID_DARK);
+    }
+
+    Color neutralUIElementColor() {
+        // TODO
+        return systemColor(MID);
     }
 }

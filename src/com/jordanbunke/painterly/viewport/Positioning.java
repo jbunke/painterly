@@ -11,7 +11,7 @@ import com.jordanbunke.painterly.tool.ToolManager;
  * in the viewport screen box
  * */
 public final class Positioning {
-    private static final double MIN_FTSR = 0.95, MAX_FTSR = 20d,
+    private static final double MIN_FTSR = 0.475, DEF_FTSR = 0.95, MAX_FTSR = 20d,
             MIDDLE = 0.5, MIN_ANCHOR = 0d, MAX_ANCHOR = 1d,
             SCROLL_ZOOM_RATE = 1.1, CLICK_ZOOM_RATE = 1.3;
     public static final Coord2D INVALID = new Coord2D(-1, -1);
@@ -19,7 +19,7 @@ public final class Positioning {
     private double fitToScreenRatio, anchorRatioX, anchorRatioY;
 
     public Positioning() {
-        fitToScreenRatio = MIN_FTSR;
+        fitToScreenRatio = DEF_FTSR;
         anchorRatioX = MIDDLE;
         anchorRatioY = MIDDLE;
     }
@@ -122,7 +122,7 @@ public final class Positioning {
     }
 
     public void reset() {
-        fitToScreenRatio = MIN_FTSR;
+        fitToScreenRatio = DEF_FTSR;
         setAnchor(MIDDLE, MIDDLE);
     }
 

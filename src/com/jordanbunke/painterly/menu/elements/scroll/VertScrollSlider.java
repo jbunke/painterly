@@ -73,6 +73,6 @@ public final class VertScrollSlider extends Slider {
         if (isSliding())
             Cursor.force(Cursor.VERT_SCROLL);
         else if (isHighlighted())
-            Cursor.ping(Cursor.VERT_SCROLL);
+            Cursor.ping(Cursor.POINTER);
     }
 }

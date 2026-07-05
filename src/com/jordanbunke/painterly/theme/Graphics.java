@@ -293,6 +293,78 @@ public final class Graphics {
         return canvas.submit();
     }
 
+    public static void smoothCorners(
+            final GameImage image, final Color borderColor
+    ) {
+        final int GAP_W = 2, GAP_H = 2,
+                w = image.getWidth(), h = image.getHeight(),
+                transparent = transparent().getRGB();
+
+        for (int x = 0; x < GAP_W; x++) {
+            for (int y = 0; y < GAP_H; y++) {
+                final boolean replace = x == GAP_W - 1 && y == GAP_H - 1;
+                final int c = replace ? borderColor.getRGB() : transparent;
+
+                image.setRGB(x, y, c);
+                image.setRGB(w - (1 + x), y, c);
+                image.setRGB(x, h - (1 + y), c);
+                image.setRGB(w - (1 + x), h - (1 + y), c);
+            }
+        }
+    }
+
+    public static void circleOnly(final GameImage image) {
+        final int w = image.getWidth(), h = image.getHeight();
+
+        if (w != h)
+            return;
+
+        final int r = w / 2, transparent = transparent().getRGB();
+        final double mp = r - 0.5;
+
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                final double d = Math.sqrt(
+                        Math.pow(Math.abs(x - mp), 2) +
+                                Math.pow(Math.abs(y - mp), 2));
+
+                if (d > r)
+                    image.setRGB(x, y, transparent);
+            }
+        }
+    }
+
+    public static void innerOutline(
+            final GameImage image, final Color outlineColor
+    ) {
+        final int oc = outlineColor.getRGB(), w = image.getWidth(), h = image.getHeight();
+
+        for (int x = 0; x < w; x++)
+            for (int y = 0; y < h; y++)
+                if (notTransparentWithTransparentNeighbor(image, x, y))
+                    image.setRGB(x, y, oc);
+    }
+
+    private static boolean notTransparentWithTransparentNeighbor(
+            final GameImage image, final int x, final int y
+    ) {
+        return !transparentOrOOB(image, x, y) &&
+                (transparentOrOOB(image, x - 1, y) ||
+                        transparentOrOOB(image, x + 1, y) ||
+                        transparentOrOOB(image, x, y - 1) ||
+                        transparentOrOOB(image, x, y + 1));
+    }
+
+    private static boolean transparentOrOOB(
+            final GameImage image, final int x, final int y
+    ) {
+        final int w = image.getWidth(), h = image.getHeight();
+        if (x < 0 || x >= w || y < 0 || y >= h)
+            return true;
+
+        return image.getColorAt(x, y).getAlpha() == 0;
+    }
+
     public static int standardTextWidth(final String text) {
         return new FontFormatter(FONT_DEF).realize().addText(text)
                 .build().draw().getWidth();
