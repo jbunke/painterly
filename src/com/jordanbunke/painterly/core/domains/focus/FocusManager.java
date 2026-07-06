@@ -220,7 +220,7 @@ public final class FocusManager {
 
                 StringVariableMap.post(PW_RANK, String.valueOf(divisions - index));
                 StringVariableMap.post(PW_DIVISIONS, String.valueOf(divisions));
-                LogManager.log(new LogMessage(PRIORITIZE_WORST_DECISIONS,
+                LogManager.log(new LogMessage(FOCUS_BOX_REASONING,
                         RC_LOG_PRIORITIZE_WORST));
             }
         }

@@ -44,6 +44,11 @@ public enum ResourceCode {
     RC_CB_STROKES_ATTEMPTED,
     RC_CB_STROKES_COMPLETED,
 
+    // Log channel ID
+    RC_CHANNEL_ID_FOCUS_BOX_REASONING,
+    RC_CHANNEL_ID_INTERVAL_STATS,
+    RC_CHANNEL_ID_SAVE_EXPORT,
+
     // Log channel actions
     RC_CHANNEL_TOGGLE_ALL,
     RC_CHANNEL_TOGGLE_FPS,

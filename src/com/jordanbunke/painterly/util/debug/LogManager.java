@@ -34,6 +34,7 @@ public final class LogManager {
             final LogChannel channel, final boolean status
     ) {
         channelMap.put(channel, status);
+        channel.onSet.accept(status);
     }
 
     public static void toggleGlobalOff() {
@@ -56,7 +57,7 @@ public final class LogManager {
     }
 
     public static void log(final LogMessage message) {
-        if (channelMap.getOrDefault(message.channel, false))
+        if (!globalOff && channelMap.getOrDefault(message.channel, false))
             messageLog.add(0, message);
     }
 

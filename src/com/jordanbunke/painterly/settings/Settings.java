@@ -33,7 +33,8 @@ public final class Settings {
         SET_ID_THEME,
         SET_ID_DEFAULT_INTERVAL_TARGET,
         SET_ID_AUTOSAVE_ON_BY_DEFAULT,
-        // TODO - additional settings
+        SET_ID_LOG_CHANNEL_FOCUS_BOX_REASONING_OBD,
+        SET_ID_LOG_CHANNEL_INTERVAL_STATS_OBD,
         ;
 
         private static final String prefix = "SET_ID_";
@@ -102,7 +103,12 @@ public final class Settings {
                 Integer::parseInt, 50));
         addSetting(new Setting<>(Boolean.class, SET_ID_AUTOSAVE_ON_BY_DEFAULT,
                 Boolean::parseBoolean, true));
-        // TODO - initialize additional settings
+        addSetting(new Setting<>(Boolean.class,
+                SET_ID_LOG_CHANNEL_FOCUS_BOX_REASONING_OBD,
+                Boolean::parseBoolean, true));
+        addSetting(new Setting<>(Boolean.class,
+                SET_ID_LOG_CHANNEL_INTERVAL_STATS_OBD,
+                Boolean::parseBoolean, true));
     }
 
     private static <T> void addSetting(final Setting<T> setting) {

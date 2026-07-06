@@ -17,8 +17,6 @@ public final class DevBuild {
         for (String arg : args)
             switch (arg) {
                 case FLAG_OVERWRITE -> RuntimeSettings.setOverwrite(true);
-                case FLAG_FPS -> RuntimeSettings.setFPS(true);
-                case FLAG_CAN_DEBUG -> RuntimeSettings.setCanDebug(true);
                 // TODO - additional cases
             }
     }
