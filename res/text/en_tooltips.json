@@ -19,7 +19,7 @@
     "dialog_contains_invalid_character" : "Contains one or more invalid characters",
     "dialog_must_be_gr_eq_1" : "Must be greater than or equal to 1",
     "dialog_variable_cannot_be_null" : "Undefined",
-    "export" : "Exports the painting as a PNG image to the project's save folder.\nThe completed stroke count is appended to the file name.",
+    "export" : "Exports the painting as a PNG image to the project's save folder.\nThe number of completed strokes is appended to the file name.",
     "fb_backwards" : "Right-to-left, bottom-to-top",
     "fb_free" : "No automatic movement between intervals;\nonly manual movement with the arrow keys",
     "fb_forwards" : "Left-to-right, top-to-bottom",

@@ -26,104 +26,85 @@ import static com.jordanbunke.painterly.tool.ToolManager.ToolEnum.*;
 
 public enum GlobalAction
         implements IAction<Runnable>, ISubMenuEntry {
-    MAIN_MENU(RC_NAV_MAIN_MENU, null,
-            () -> ProgramState.setMenu(MenuAssembly::mainMenu)),
-    QUIT_PROGRAM(RC_NAV_QUIT_PROGRAM, null,
-            () -> DialogManager.set(DialogAssembly::aysQuit)),
-    DIALOG_CLOSE(KeyboardShortcut.single(ESCAPE), DialogManager::close),
-    DIALOG_OK(KeyboardShortcut.single(ENTER), () -> DialogManager.get().ok()),
-    TOGGLE_FULLSCREEN(RC_TOGGLE_FULLSCREEN, KeyboardShortcut.single(ESCAPE),
-            Layout::toggleFullscreen),
-    NEW_PROJECT(RC_NEW_PROJECT, true, true,
-            new KeyboardShortcut(true, false, N), () -> {
-        NewProject.get().softReset();
-        DialogManager.set(DialogAssembly::newProject);
-    }),
-    OPEN_PROJECT(RC_OPEN_PROJECT, true, true,
-            new KeyboardShortcut(true, false, O),
-            SaveLoader::openProject),
-    TOGGLE_RECENT_STROKE_VISUALIZATION(RC_NA /* TODO */,
-            new KeyboardShortcut(false, true, P),
-            () -> LogManager.toggleChannelStatus(LogChannel.RECENT_STROKE_ATTEMPTS)),
-    TOGGLE_FPS_INDICATOR(RC_NA /* TODO */,
-            new KeyboardShortcut(false, true, F),
-            () -> LogManager.toggleChannelStatus(LogChannel.FPS)),
-    SET_TOOL_DRAW_FOCUS_AREA(RC_TOOL_DRAW_FOCUS_AREA, true, true,
-            KeyboardShortcut.single(X),
-            () -> ToolManager.setCurrentTool(DRAW_FOCUS_AREA)),
-    SET_TOOL_FOCUS_BOX_SELECT(RC_TOOL_FOCUS_BOX_SELECT, true, true,
-            KeyboardShortcut.single(B),
-            () -> ToolManager.setCurrentTool(FOCUS_BOX_SELECT)),
-    SET_TOOL_HAND(RC_TOOL_HAND, true, true,
-            KeyboardShortcut.single(H),
-            () -> ToolManager.setCurrentTool(HAND)),
-    SET_TOOL_MOVE_FOCUS_AREA(RC_TOOL_MOVE_FOCUS_AREA, true, true,
-            KeyboardShortcut.single(M),
-            () -> ToolManager.setCurrentTool(MOVE_FOCUS_AREA)),
-    SET_TOOL_ZOOM(RC_TOOL_ZOOM, true, true,
-            KeyboardShortcut.single(Z),
-            () -> ToolManager.setCurrentTool(ZOOM)),
+    MAIN_MENU(new Builder(RC_NAV_MAIN_MENU)
+            .setBehaviour(() -> ProgramState.setMenu(MenuAssembly::mainMenu))),
+    QUIT_PROGRAM(new Builder(RC_NAV_QUIT_PROGRAM)
+            .setBehaviour(() -> DialogManager.set(DialogAssembly::aysQuit))),
+    DIALOG_CLOSE(new Builder(RC_NA)
+            .setShortcut(KeyboardShortcut.single(ESCAPE))
+            .setBehaviour(DialogManager::close)
+            .setPrecondition(DialogManager::has)),
+    DIALOG_OK(new Builder(RC_NA)
+            .setShortcut(KeyboardShortcut.single(ENTER))
+            .setBehaviour(() -> DialogManager.get().ok())
+            .setPrecondition(() -> DialogManager.has() &&
+                    DialogManager.get().validate())),
+    TOGGLE_FULLSCREEN(new Builder(RC_TOGGLE_FULLSCREEN)
+            .setShortcut(KeyboardShortcut.single(ESCAPE))
+            .setBehaviour(Layout::toggleFullscreen)
+            .setPrecondition(() -> !DialogManager.has())),
+    NEW_PROJECT(new Builder(RC_NEW_PROJECT)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(new KeyboardShortcut(true, false, N))
+            .setBehaviour(() -> {
+                NewProject.get().softReset();
+                DialogManager.set(DialogAssembly::newProject);
+            })
+            .setPrecondition(() -> ProjectManager.get().canAddProject())),
+    OPEN_PROJECT(new Builder(RC_OPEN_PROJECT)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(new KeyboardShortcut(true, false, O))
+            .setBehaviour(SaveLoader::openProject)
+            .setPrecondition(() -> ProjectManager.get().canAddProject())),
+    TOGGLE_RECENT_STROKE_VISUALIZATION(new Builder(RC_NA /* TODO */)
+            .setShortcut(new KeyboardShortcut(false, true, P))
+            .setBehaviour(() -> LogManager.toggleChannelStatus(
+                    LogChannel.RECENT_STROKE_ATTEMPTS))),
+    TOGGLE_FPS_INDICATOR(new Builder(RC_NA /* TODO */)
+            .setShortcut(new KeyboardShortcut(false, true, F))
+            .setBehaviour(() -> LogManager.toggleChannelStatus(LogChannel.FPS))),
+    SET_TOOL_DRAW_FOCUS_AREA(new Builder(RC_TOOL_DRAW_FOCUS_AREA)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(X))
+            .setBehaviour(() -> ToolManager.setCurrentTool(DRAW_FOCUS_AREA))),
+    SET_TOOL_FOCUS_BOX_SELECT(new Builder(RC_TOOL_FOCUS_BOX_SELECT)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(B))
+            .setBehaviour(() -> ToolManager.setCurrentTool(FOCUS_BOX_SELECT))),
+    SET_TOOL_HAND(new Builder(RC_TOOL_HAND)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(H))
+            .setBehaviour(() -> ToolManager.setCurrentTool(HAND))),
+    SET_TOOL_MOVE_FOCUS_AREA(new Builder(RC_TOOL_MOVE_FOCUS_AREA)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(M))
+            .setBehaviour(() -> ToolManager.setCurrentTool(MOVE_FOCUS_AREA))),
+    SET_TOOL_ZOOM(new Builder(RC_TOOL_ZOOM)
+            .inheritTooltipCode()
+            .inheritIconCode()
+            .setShortcut(KeyboardShortcut.single(Z))
+            .setBehaviour(() -> ToolManager.setCurrentTool(ZOOM))),
     ;
-
-    static {
-        // Populate icon codes for actions with icons
-        // TODO
-
-        // Populate preconditions
-        DIALOG_CLOSE.precondition = DialogManager::has;
-        DIALOG_OK.precondition = () -> DialogManager.has() &&
-                DialogManager.get().validate();
-        TOGGLE_FULLSCREEN.precondition = () -> !DialogManager.has();
-        NEW_PROJECT.precondition = () -> ProjectManager.get().canAddProject();
-        OPEN_PROJECT.precondition = () -> ProjectManager.get().canAddProject();
-        // TODO
-    }
 
     private final KeyboardShortcut shortcut;
     private final Runnable behaviour;
     private final ResourceCode code, tooltipCode;
+    private final Supplier<ResourceCode> iconCodeGetter;
+    private final Supplier<Boolean> precondition;
 
-    private ResourceCode iconCode;
-    private Supplier<Boolean> precondition;
-
-    GlobalAction(
-            final ResourceCode code,
-            final ResourceCode tooltipCode, final ResourceCode iconCode,
-            final KeyboardShortcut shortcut,
-            final Runnable behaviour
-    ) {
-        this.code = code;
-        this.shortcut = shortcut;
-        this.behaviour = behaviour;
-
-        this.tooltipCode = tooltipCode;
-        this.iconCode = iconCode;
-        precondition = null;
-    }
-
-    GlobalAction(
-            final ResourceCode code,
-            final boolean inheritTooltip, final boolean inheritIcon,
-            final KeyboardShortcut shortcut,
-            final Runnable behaviour
-    ) {
-        this(code, inheritTooltip ? code : RC_NA,
-                inheritIcon ? code : RC_NA, shortcut, behaviour);
-    }
-
-    GlobalAction(
-            final ResourceCode code,
-            final KeyboardShortcut shortcut,
-            final Runnable behaviour
-    ) {
-        this(code, false, false, shortcut, behaviour);
-    }
-
-    GlobalAction(
-            final KeyboardShortcut shortcut,
-            final Runnable behaviour
-    ) {
-        this(RC_NA, shortcut, behaviour);
+    GlobalAction(Builder builder) {
+        this.code = builder.code;
+        this.shortcut = builder.shortcut;
+        this.behaviour = builder.behaviour;
+        this.tooltipCode = builder.tooltipCode;
+        this.iconCodeGetter = builder.iconCodeGetter;
+        this.precondition = builder.precondition;
     }
 
     public boolean tryForMatchingKeyStroke(final InputEventLogger eventLogger) {
@@ -173,6 +154,63 @@ public enum GlobalAction
 
     @Override
     public ResourceCode getIconCode() {
-        return iconCode;
+        return iconCodeGetter.get();
+    }
+
+    static class Builder {
+        final ResourceCode code;
+
+        KeyboardShortcut shortcut;
+        ResourceCode tooltipCode;
+        Supplier<ResourceCode> iconCodeGetter;
+
+        Runnable behaviour;
+        Supplier<Boolean> precondition;
+
+        Builder(final ResourceCode code) {
+            this.code = code;
+
+            shortcut = null;
+            tooltipCode = RC_NA;
+            iconCodeGetter = () -> RC_NA;
+
+            behaviour = () -> {};
+            precondition = null;
+        }
+
+        Builder setShortcut(final KeyboardShortcut shortcut) {
+            this.shortcut = shortcut;
+            return this;
+        }
+
+        Builder setTooltipCode(final ResourceCode tooltipCode) {
+            this.tooltipCode = tooltipCode;
+            return this;
+        }
+
+        Builder inheritTooltipCode() {
+            return setTooltipCode(code);
+        }
+
+        Builder setIconCodeGetter(
+                final Supplier<ResourceCode> iconCodeGetter
+        ) {
+            this.iconCodeGetter = iconCodeGetter;
+            return this;
+        }
+
+        Builder inheritIconCode() {
+            return setIconCodeGetter(() -> code);
+        }
+
+        Builder setBehaviour(final Runnable behaviour) {
+            this.behaviour = behaviour;
+            return this;
+        }
+
+        Builder setPrecondition(final Supplier<Boolean> precondition) {
+            this.precondition = precondition;
+            return this;
+        }
     }
 }
