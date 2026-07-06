@@ -66,6 +66,10 @@ public enum ResourceCode {
     RC_DIALOG_VARIABLE_CANNOT_BE_NULL,
     RC_DISPLAY_FOCUS,
     RC_DISPLAY_GLOBAL,
+    RC_EDIT_PROJECT_SETTINGS,
+
+    // Edit project settings dialog
+    RC_EPS_VALIDATED_FOLDER,
 
     // Error codes
     RC_ERR_COULD_NOT_PARSE_SPEC_AS_JSON,
@@ -136,6 +140,10 @@ public enum ResourceCode {
     RC_QUIT,
     RC_RESET_FOCUS_AREA, // TODO - also: tooltip?
     RC_RESET_POS,
+
+    // Save as dialog
+    RC_SA_VALIDATED_FOLDER,
+
     RC_SAVE,
     RC_SAVE_AS,
     RC_START,

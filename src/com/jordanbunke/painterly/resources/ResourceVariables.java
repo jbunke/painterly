@@ -3,7 +3,9 @@ package com.jordanbunke.painterly.resources;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.domains.interval.ProgressManager;
+import com.jordanbunke.painterly.dialog.data.menus.EditProjectSettings;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
+import com.jordanbunke.painterly.dialog.data.menus.SaveAs;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.tool.ToolManager;
 import com.jordanbunke.painterly.util.Constants;
@@ -37,6 +39,8 @@ public enum ResourceVariables {
     RV_DIVS_Y(p -> ResourceValue.ofString(
             String.valueOf(p.focusManager.getDivsY())),
             RC_UNKNOWABLE.asValue()),
+    RV_EPS_FOLDER(() ->
+            ResourceValue.ofString(EditProjectSettings.get().raFolder())),
     RV_FILE_PAINTING(() -> ResourceValue.ofString(
             Constants.PAINTING_FILENAME)),
     RV_FILE_SOURCE(() -> ResourceValue.ofString(
@@ -84,6 +88,8 @@ public enum ResourceVariables {
             ResourceValue.ofString(NewProject.get().raWidth())),
     RV_NPD_H(() ->
             ResourceValue.ofString(NewProject.get().raHeight())),
+    RV_SA_FOLDER(() ->
+            ResourceValue.ofString(SaveAs.get().raFolder())),
     RV_SIM_ACTION_STATUS(p -> (p.isPainting()
             ? RC_SIM_PAUSE : RC_SIM_RESUME).asValue(),
             RC_SIM_RESUME.asValue()),

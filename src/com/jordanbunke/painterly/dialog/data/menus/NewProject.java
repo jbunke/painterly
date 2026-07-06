@@ -17,7 +17,6 @@ import com.jordanbunke.painterly.util.Constants;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_AUTOSAVE_ON_BY_DEFAULT;
@@ -39,8 +38,9 @@ public final class NewProject extends DialogVariableSet {
     }
 
     private NewProject() {
-        name = new DialogVariable<>(() -> "", this::validName);
-        folder = new DialogVariable<>(() -> null, false, this::validFolder);
+        name = new DialogVariable<>(() -> "", Validator::validName);
+        folder = new DialogVariable<>(() -> null, false,
+                path -> Validator.validFolder(path, RC_NPD_VALIDATED_FOLDER));
         sourceImage = new DialogVariable<>(() -> null, this::validSourceImage);
         scaleFactor = new DialogVariable<>(() -> 1d, this::validScaleFactor);
         autosave = new DialogVariable<>(
@@ -48,7 +48,7 @@ public final class NewProject extends DialogVariableSet {
                 Validator::always);
         autosaveFrequency = new DialogVariable<>(
                 () -> Constants.DEF_AUTOSAVE_FREQUENCY,
-                this::validAutosaveFrequency);
+                Validator::validAutosaveFrequency);
     }
 
     public static NewProject get() {
@@ -110,28 +110,6 @@ public final class NewProject extends DialogVariableSet {
 
     // validators
 
-    private Pair<Boolean, ResourceCode> validName(
-            final String name
-    ) {
-        if (name == null || name.isEmpty())
-            return new Pair<>(false, RC_DIALOG_CANNOT_BE_EMPTY);
-        else if (name.trim().isEmpty())
-            return new Pair<>(false, RC_DIALOG_CANNOT_BE_ONLY_WHITESPACE);
-        else if (nameContainsIllegalChar(name))
-            return new Pair<>(false, RC_DIALOG_CONTAINS_INVALID_CHARACTER);
-
-        return new Pair<>(true, RC_NA);
-    }
-
-    private Pair<Boolean, ResourceCode> validFolder(
-            final Path folder
-    ) {
-        if (folder == null)
-            return new Pair<>(false, RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
-
-        return new Pair<>(true, RC_NPD_VALIDATED_FOLDER);
-    }
-
     private Pair<Boolean, ResourceCode> validSourceImage(
             final GameImage sourceImage
     ) {
@@ -139,19 +117,6 @@ public final class NewProject extends DialogVariableSet {
             return new Pair<>(false, RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
 
         return new Pair<>(true, RC_NPD_VALIDATED_SRC_IMAGE);
-    }
-
-    private Pair<Boolean, ResourceCode> validAutosaveFrequency(
-            final Integer autosaveFrequency
-    ) {
-        if (autosaveFrequency == null)
-            return new Pair<>(false, RC_DIALOG_CANNOT_READ_INT);
-        else if (autosaveFrequency < Constants.MIN_AUTOSAVE_FREQUENCY)
-            return new Pair<>(false, RC_NA /* TODO */);
-        else if (autosaveFrequency > Constants.MAX_AUTOSAVE_FREQUENCY)
-            return new Pair<>(false, RC_NA /* TODO */);
-
-        return new Pair<>(true, RC_NA);
     }
 
     private Pair<Boolean, ResourceCode> validScaleFactor(
@@ -201,17 +166,5 @@ public final class NewProject extends DialogVariableSet {
 
     public String raHeight() {
         return String.valueOf((int)(sourceImage.get().getHeight() * scaleFactor.get()));
-    }
-
-    // helper
-
-    // TODO - if reused, move to utility class
-    private static boolean nameContainsIllegalChar(final String name) {
-        final Set<Character> ILLEGAL_CHAR_SET = Set.of(
-                '/', '\\', ':', '*', '?', '"', '<', '>', '|', '{', '}');
-
-        return ILLEGAL_CHAR_SET.stream()
-                .map(c -> name.indexOf(c) >= 0)
-                .reduce((a, b) -> a || b).orElse(false);
     }
 }

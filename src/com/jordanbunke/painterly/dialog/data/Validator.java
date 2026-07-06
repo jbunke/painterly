@@ -2,10 +2,13 @@ package com.jordanbunke.painterly.dialog.data;
 
 import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.util.Constants;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
+import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Set;
 
 @FunctionalInterface
 public interface Validator<T> {
@@ -22,6 +25,50 @@ public interface Validator<T> {
     }
 
     static Pair<Boolean, ResourceCode> always(final Object o) {
+        return new Pair<>(true, RC_NA);
+    }
+
+    static Pair<Boolean, ResourceCode> validName(
+            final String name
+    ) {
+        if (name == null || name.isEmpty())
+            return new Pair<>(false, RC_DIALOG_CANNOT_BE_EMPTY);
+        else if (name.trim().isEmpty())
+            return new Pair<>(false, RC_DIALOG_CANNOT_BE_ONLY_WHITESPACE);
+        else if (nameContainsIllegalChar(name))
+            return new Pair<>(false, RC_DIALOG_CONTAINS_INVALID_CHARACTER);
+
+        return new Pair<>(true, RC_NA);
+    }
+
+    private static boolean nameContainsIllegalChar(final String name) {
+        final Set<Character> ILLEGAL_CHAR_SET = Set.of(
+                '/', '\\', ':', '*', '?', '"', '<', '>', '|', '{', '}');
+
+        return ILLEGAL_CHAR_SET.stream()
+                .map(c -> name.indexOf(c) >= 0)
+                .reduce((a, b) -> a || b).orElse(false);
+    }
+
+    static Pair<Boolean, ResourceCode> validFolder(
+            final Path folder, final ResourceCode folderResolutionCode
+    ) {
+        if (folder == null)
+            return new Pair<>(false, RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
+
+        return new Pair<>(true, folderResolutionCode);
+    }
+
+    static Pair<Boolean, ResourceCode> validAutosaveFrequency(
+            final Integer autosaveFrequency
+    ) {
+        if (autosaveFrequency == null)
+            return new Pair<>(false, RC_DIALOG_CANNOT_READ_INT);
+        else if (autosaveFrequency < Constants.MIN_AUTOSAVE_FREQUENCY)
+            return new Pair<>(false, RC_NA /* TODO */);
+        else if (autosaveFrequency > Constants.MAX_AUTOSAVE_FREQUENCY)
+            return new Pair<>(false, RC_NA /* TODO */);
+
         return new Pair<>(true, RC_NA);
     }
 

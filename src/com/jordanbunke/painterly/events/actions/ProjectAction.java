@@ -4,6 +4,8 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
 import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
+import com.jordanbunke.painterly.dialog.data.menus.EditProjectSettings;
+import com.jordanbunke.painterly.dialog.data.menus.SaveAs;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
@@ -25,15 +27,26 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setShortcut(new KeyboardShortcut(true, false, E))
             .setBehaviour(p -> p.saveManager.export())),
     SAVE(new Builder(RC_SAVE)
-            // TODO - .inheritTooltipCode()
+            .inheritTooltipCode()
             .inheritIconCode()
             .setShortcut(new KeyboardShortcut(true, false, S))
             .setBehaviour(p -> p.saveManager.save())),
     SAVE_AS(new Builder(RC_SAVE_AS)
-            // TODO - .inheritTooltipCode()
+            .inheritTooltipCode()
             .inheritIconCode()
             .setShortcut(new KeyboardShortcut(true, true, S))
-            .setBehaviour(/* TODO */ p -> {})),
+            .setBehaviour(p -> {
+                SaveAs.get().softReset();
+                DialogManager.set(DialogAssembly::saveAs);
+            })),
+    EDIT_PROJECT_SETTINGS(new Builder(RC_EDIT_PROJECT_SETTINGS)
+            .inheritTooltipCode()
+            // TODO - .inheritIconCode()
+            .setShortcut(new KeyboardShortcut(false, true, S))
+            .setBehaviour(p -> {
+                EditProjectSettings.get().softReset();
+                DialogManager.set(DialogAssembly::editProjectSettings);
+            })),
     TOGGLE_SIM(new Builder(RC_TOGGLE_SIM)
             .setIconCodeFunction(p -> p.isPainting() ? RC_SIM_PAUSE : RC_SIM_RESUME)
             .setShortcut(KeyboardShortcut.single(SPACE))
@@ -45,7 +58,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setShortcut(new KeyboardShortcut(true, false, ENTER))
             .setBehaviour(p -> Viewport.get().getPositioning().reset())),
     RESET_FOCUS_AREA(new Builder(RC_RESET_FOCUS_AREA)
-            // TODO - .inheritTooltipCode()
+            .inheritTooltipCode()
             .inheritIconCode()
             .setShortcut(KeyboardShortcut.single(BACKSPACE))
             .setBehaviour(p -> p.focusManager.resetFocusArea())
@@ -56,7 +69,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setBehaviour(p -> p.focusManager.focusBoxAsNewFocusArea())
             .setPrecondition(p -> !p.focusManager.isEntireArea())),
     CLEAR_FOCUS_BOXES(new Builder(RC_CLEAR_FOCUS_BOXES)
-            // TODO - .inheritTooltipCode()
+            .inheritTooltipCode()
             .inheritIconCode()
             .setShortcut(KeyboardShortcut.single(A))
             .setBehaviour(p -> p.focusManager.clearFocusBoxes())
@@ -76,7 +89,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setBehaviour(p -> p.progressManager.setDisplayToGlobal())),
     // tick mode setters
     TOGGLE_TICK_MODE(new Builder(RC_TOGGLE_TICK_MODE)
-            // TODO - .setTooltipCode()
+            .setTooltipCode(RC_TOGGLE_TICK_MODE)
             .setIconCodeFunction(p -> p.strokeManager.isTickMode() == StrokeManager.ATTEMPTED
                     ? RC_TICK_MODE_ATTEMPTED : RC_TICK_MODE_COMPLETED)
             .setShortcut(KeyboardShortcut.single(S))

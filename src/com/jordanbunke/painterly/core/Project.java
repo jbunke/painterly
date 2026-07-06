@@ -94,8 +94,16 @@ public final class Project {
         return name;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     public Path getFolder() {
         return folder;
+    }
+
+    public void setFolder(final Path folder) {
+        this.folder = folder;
     }
 
     public static class Builder {

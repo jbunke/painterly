@@ -32,4 +32,15 @@ public final class ProjectUtils {
                 f.accept(p, t);
         };
     }
+
+    public static Runnable doIfHasProject(
+            final Consumer<Project> f
+    ) {
+        return () -> {
+            final Project p = ProjectManager.get().getProject();
+
+            if (p != null)
+                f.accept(p);
+        };
+    }
 }

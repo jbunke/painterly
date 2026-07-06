@@ -48,6 +48,7 @@ public final class MenuBar extends MenuElement {
                         .addSeparator()
                         .addProjectAction(SAVE)
                         .addProjectAction(SAVE_AS)
+                        .addProjectAction(EDIT_PROJECT_SETTINGS)
                         .addProjectAction(EXPORT)
                         .build())
                 .addSubMenu(SubMenuData.init(RC_NAV_EDIT)

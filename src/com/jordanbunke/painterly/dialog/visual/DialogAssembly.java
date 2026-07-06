@@ -7,8 +7,7 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
-import com.jordanbunke.painterly.dialog.data.menus.DialogVariableSet;
-import com.jordanbunke.painterly.dialog.data.menus.NewProject;
+import com.jordanbunke.painterly.dialog.data.menus.*;
 import com.jordanbunke.painterly.menu.elements.icon_button.Checkbox;
 import com.jordanbunke.painterly.menu.elements.icon_button.FeedbackElement;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
@@ -24,6 +23,82 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public final class DialogAssembly {
     // TODO
+
+    public static PopUpDialog editProjectSettings() {
+        return projectVariables(EditProjectSettings.get(),
+                RC_EDIT_PROJECT_SETTINGS);
+    }
+
+    public static PopUpDialog saveAs() {
+        return projectVariables(SaveAs.get(), RC_SAVE_AS);
+    }
+
+    private static PopUpDialog projectVariables(
+            final ProjectVariables varSet, final ResourceCode titleCode
+    ) {
+        final PopUpDialog.Builder db = PopUpDialog.init(titleCode)
+                .setHeightFromContents();
+
+        // lead label menu elements
+        final SimpleLabel
+                projectNameLabel = leadLabel(RC_NPD_PROJECT_NAME),
+                folderLabel = leadLabel(RC_NPD_FOLDER),
+                autosaveLabel = leadLabel(RC_NPD_AUTOSAVE),
+                autosaveFrequencyLabel = leadLabel(RC_NPD_AUTOSAVE_FREQUENCY);
+
+        // dialog realization
+        final DialogElement
+                projectNameLabelDE = leadLabelForDialog(db, projectNameLabel),
+                folderLabelDE = leadLabelForDialog(db,
+                        folderLabel,
+                        deb -> deb.setRow(1)),
+                autosaveLabelDE = leadLabelForDialog(db,
+                        autosaveLabel,
+                        deb -> deb.setRow(2)),
+                autosaveFrequencyLabelDE = leadLabelForDialog(db,
+                        autosaveFrequencyLabel,
+                        deb -> deb.setRow(3));
+
+        db.addElements(projectNameLabelDE, folderLabelDE,
+                autosaveLabelDE, autosaveFrequencyLabelDE);
+
+        final DialogElement
+                projectNameTextbox = forDialog(
+                Textbox.init(projectNameLabel.followTB())
+                        .setDialogVariableEndpoint(varSet.name, s -> s)
+                        .build()),
+                projectNameFeedback = feedbackAfterInteraction(
+                        projectNameTextbox, varSet.name),
+                folderButton = forDialog(
+                        SimpleTextButton.init(RC_NPD_CHOOSE_FOLDER,
+                                folderLabel.followTB(),
+                                varSet::chooseFolder).build()),
+                folderFeedback = feedbackAfterInteraction(
+                        folderButton, varSet.folder),
+                autosaveCheckbox = forDialog(
+                        Checkbox.init(autosaveLabel.followIcon())
+                                .setDialogVariableEndpoint(varSet.autosave)
+                                .build()),
+                autosaveFrequencyTextbox = forDialog(
+                        Textbox.init(autosaveFrequencyLabel.followTB())
+                                .setDialogVariableEndpoint(varSet.autosaveFrequency,
+                                        Validator::nullableParseInt)
+                                .setPrefix(RC_NPD_AUTOSAVE_FREQUENCY_PREFIX)
+                                .setSuffix(RC_NPD_AUTOSAVE_FREQUENCY_SUFFIX)
+                                .setWidthRelative(1.5)
+                                .setMaxLength(String.valueOf(Constants.MAX_AUTOSAVE_FREQUENCY).length())
+                                .build()),
+                autosaveFrequencyFeedback = feedbackAfterInteraction(
+                        autosaveFrequencyTextbox, varSet.autosaveFrequency);
+
+        db.addElements(projectNameTextbox, projectNameFeedback,
+                folderButton, folderFeedback,
+                autosaveCheckbox,
+                autosaveFrequencyTextbox, autosaveFrequencyFeedback);
+
+        return buildDialogForVariableSet(db, varSet);
+    }
+
     public static PopUpDialog newProject() {
         final NewProject np = NewProject.get();
         final PopUpDialog.Builder db = PopUpDialog.init(RC_NEW_PROJECT)
