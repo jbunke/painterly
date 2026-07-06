@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.events.actions;
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
+import com.jordanbunke.painterly.dialog.data.menus.UpdateChannelStatus;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
@@ -59,6 +60,13 @@ public enum GlobalAction
             .setBehaviour(SaveLoader::openProject)
             .setPrecondition(() -> ProjectManager.get().canAddProject())),
     // Message log and debug toggles
+    UPDATE_CHANNEL_STATUS(new Builder(RC_CHANNEL_UPDATE_STATUS)
+            .inheritTooltipCode()
+            .setShortcut(new KeyboardShortcut(false, true, D))
+            .setBehaviour(() -> {
+                UpdateChannelStatus.get().softReset();
+                DialogManager.set(DialogAssembly::updateChannelStatus);
+            })),
     TOGGLE_LOG_GLOBAL_OFF(new Builder(RC_CHANNEL_TOGGLE_ALL)
             .setShortcut(new KeyboardShortcut(false, true, L))
             .setBehaviour(LogManager::toggleGlobalOff)),

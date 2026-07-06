@@ -16,6 +16,7 @@ import com.jordanbunke.painterly.menu.elements.textbox.Textbox;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.Constants;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.jordanbunke.painterly.util.Layout.*;
@@ -23,6 +24,39 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public final class DialogAssembly {
     // TODO
+
+    public static PopUpDialog updateChannelStatus() {
+        final UpdateChannelStatus ucs = UpdateChannelStatus.get();
+        final PopUpDialog.Builder db = PopUpDialog.init(RC_CHANNEL_UPDATE_STATUS)
+                .setSizeFromContents();
+
+        final List<DialogVariable<Boolean>> variables = ucs.getVariables();
+        final int l = variables.size();
+
+        // lead label menu elements
+        final SimpleLabel[] labels = variables.stream()
+                .map(v -> leadLabel(
+                        ucs.logChannelForVariable(v).channelCode))
+                .toArray(SimpleLabel[]::new);
+
+        // dialog realization
+        final DialogElement[] labelDEs = IntStream.range(0, l)
+                .mapToObj(i -> leadLabelForDialog(db, labels[i],
+                        deb -> deb.setRow(i)))
+                .toArray(DialogElement[]::new);
+
+        db.addElements(labelDEs);
+
+        final DialogElement[] checkboxes = IntStream.range(0, l)
+                .mapToObj(i -> forDialog(
+                        Checkbox.init(labels[i].followIcon())
+                                .setDialogVariableEndpoint(variables.get(i))
+                                .build())).toArray(DialogElement[]::new);
+
+        db.addElements(checkboxes);
+
+        return buildDialogForVariableSet(db, ucs);
+    }
 
     public static PopUpDialog editProjectSettings() {
         return projectVariables(EditProjectSettings.get(),

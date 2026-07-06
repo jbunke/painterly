@@ -67,7 +67,7 @@ public final class MenuBar extends MenuElement {
                         .addProjectAction(TOGGLE_SOURCE)
                         .addProjectAction(RESET_POSITIONING)
                         .addSeparator()
-                        // TODO - message log channels dialog menu
+                        .addGlobalAction(UPDATE_CHANNEL_STATUS)
                         .addGlobalAction(TOGGLE_LOG_GLOBAL_OFF)
                         .addGlobalAction(TOGGLE_RECENT_STROKES_VIS)
                         .addGlobalAction(TOGGLE_FPS_INDICATOR)

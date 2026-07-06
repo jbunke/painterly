@@ -9,6 +9,7 @@
     "cb_similarity" : "RGB similarity of the painting to the source image ($sim_scope)",
     "cb_strokes_attempted" : "Strokes attempted",
     "cb_strokes_completed" : "Strokes completed",
+    "channel_update_status" : "Switch message log channels on or off\nto only see the messages you want",
     "clear_focus_boxes" : "Clears focus box divisions from the focus area",
     "close_project" : "Close project",
     "delete_active_bounds" : "Wipes all brush strokes from\nthe active sampling bounds:\nbe that the focus box, focus area,\nor the entire canvas",
