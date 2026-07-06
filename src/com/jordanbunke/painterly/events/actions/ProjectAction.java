@@ -57,6 +57,11 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     RESET_POSITIONING(new Builder(RC_RESET_POS)
             .setShortcut(new KeyboardShortcut(true, false, ENTER))
             .setBehaviour(p -> Viewport.get().getPositioning().reset())),
+    FIT_TO_FOCUS_AREA(new Builder(RC_FIT_TO_FOCUS_AREA)
+            .setShortcut(new KeyboardShortcut(true, true, ENTER))
+            .setBehaviour(p ->
+                    Viewport.get().getPositioning().fitToFocusArea(p))
+            .setPrecondition(p -> !p.focusManager.isWholeCanvas())),
     RESET_FOCUS_AREA(new Builder(RC_RESET_FOCUS_AREA)
             .inheritTooltipCode()
             .inheritIconCode()

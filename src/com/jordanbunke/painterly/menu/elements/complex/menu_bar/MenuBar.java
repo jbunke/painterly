@@ -66,6 +66,7 @@ public final class MenuBar extends MenuElement {
                         .addSeparator()
                         .addProjectAction(TOGGLE_SOURCE)
                         .addProjectAction(RESET_POSITIONING)
+                        .addProjectAction(FIT_TO_FOCUS_AREA)
                         .addSeparator()
                         .addGlobalAction(UPDATE_CHANNEL_STATUS)
                         .addGlobalAction(TOGGLE_LOG_GLOBAL_OFF)

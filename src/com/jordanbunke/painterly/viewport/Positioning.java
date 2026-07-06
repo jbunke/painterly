@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.painterly.core.Project;
+import com.jordanbunke.painterly.core.paint.RectBounds;
 import com.jordanbunke.painterly.tool.ToolManager;
 
 /**
@@ -88,11 +89,9 @@ public final class Positioning {
         final double oldRatio = fitToScreenRatio;
 
         if (in)
-            fitToScreenRatio *= zoomRate;
+            setFitToScreenRatio(fitToScreenRatio * zoomRate);
         else
-            fitToScreenRatio /= zoomRate;
-
-        fitToScreenRatio = MathPlus.bounded(MIN_FTSR, fitToScreenRatio, MAX_FTSR);
+            setFitToScreenRatio(fitToScreenRatio / zoomRate);
 
         if (adjustAnchor && isTargetPixelValid(targetPixel, p))
             adjustAnchorAfterZoom(oldRatio, targetPixel, p);
@@ -121,9 +120,35 @@ public final class Positioning {
         this.anchorRatioY = MathPlus.bounded(MIN_ANCHOR, anchorRatioY, MAX_ANCHOR);
     }
 
+    private void setFitToScreenRatio(final double fitToScreenRatio) {
+        this.fitToScreenRatio = MathPlus.bounded(
+                MIN_FTSR, fitToScreenRatio, MAX_FTSR);
+    }
+
     public void reset() {
-        fitToScreenRatio = DEF_FTSR;
+        setFitToScreenRatio(DEF_FTSR);
         setAnchor(MIDDLE, MIDDLE);
+    }
+
+    public void fitToFocusArea(final Project p) {
+        if (p.focusManager.isWholeCanvas()) {
+            reset();
+            return;
+        }
+
+        final RectBounds focusArea = p.focusManager.getFocusArea();
+        final int pw = p.width, ph = p.height,
+                fx = focusArea.left(), fy = focusArea.top(),
+                fw = focusArea.width(), fh = focusArea.height(),
+                mx = fx + (fw / 2), my = fy + (fh / 2);
+        final double anchorRatioX = mx / (double) pw,
+                anchorRatioY = my / (double) ph,
+                fitRatioX = (pw / (double) fw) * DEF_FTSR,
+                fitRatioY = (ph / (double) fh) * DEF_FTSR,
+                fitToScreenRatio = Math.min(fitRatioX, fitRatioY);
+
+        setFitToScreenRatio(fitToScreenRatio);
+        setAnchor(anchorRatioX, anchorRatioY);
     }
 
     public double getAnchorRatioX() {

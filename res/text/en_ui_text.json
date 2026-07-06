@@ -45,6 +45,7 @@
     "fb_prioritize_worst" : "Prioritize worst",
     "fb_random" : "Random",
     "fb_worst" : "Worst",
+    "fit_to_focus_area" : "Fit to focus area",
     "focus_box_as_focus_area" : "Focus box as new focus area",
     "load_init_project" : "Initializing project",
     "load_load_project" : "Loading project",

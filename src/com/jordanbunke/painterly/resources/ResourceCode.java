@@ -20,8 +20,6 @@ public enum ResourceCode {
     RC_HIGHLIGHT,
     RC_ICON,
 
-    // Tooltips
-
     // UI text
     RC_ABOUT, // also: tooltip
 
@@ -98,7 +96,8 @@ public enum ResourceCode {
     RC_FB_RANDOM,
     RC_FB_WORST,
 
-    RC_FOCUS_BOX_AS_FOCUS_AREA, // also: tooltip?
+    RC_FIT_TO_FOCUS_AREA,
+    RC_FOCUS_BOX_AS_FOCUS_AREA,
 
     // Loading messages
     RC_LOAD_INIT_PROJECT,
@@ -120,7 +119,6 @@ public enum ResourceCode {
     RC_NAV_PROJECT,
     RC_NAV_QUIT_PROGRAM,
     RC_NAV_VIEW,
-    /* TODO */
 
     RC_NEW_PROJECT, // also: tooltip,
     RC_NO_PROJECTS_OPEN,
@@ -144,7 +142,7 @@ public enum ResourceCode {
     RC_PROGRAM_SETTINGS, // also: tooltip,
     RC_PROJECT_ZIP_DESCRIPTION,
     RC_QUIT,
-    RC_RESET_FOCUS_AREA, // TODO - also: tooltip?
+    RC_RESET_FOCUS_AREA,
     RC_RESET_POS,
 
     // Save as dialog
@@ -154,11 +152,11 @@ public enum ResourceCode {
     RC_SAVE_AS,
     RC_START,
     RC_UPLOAD,
-    RC_TICK_MODE_ATTEMPTED, // TODO - also: tooltip
-    RC_TICK_MODE_COMPLETED, // TODO - also: tooltip
+    RC_TICK_MODE_ATTEMPTED,
+    RC_TICK_MODE_COMPLETED,
     RC_TOGGLE_FULLSCREEN,
-    RC_TOGGLE_SIM, // TODO - UI text
-    RC_TOGGLE_TICK_MODE, // TODO - also: tooltip
+    RC_TOGGLE_SIM,
+    RC_TOGGLE_TICK_MODE,
     RC_TOGGLE_SOURCE,
 
     // Tools
