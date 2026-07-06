@@ -144,7 +144,7 @@ public final class Viewport implements ProgramContext {
 
         canvas.draw(draw(p), x, y);
 
-        if (LogManager.isChannelActive(LogChannel.RECENT_STROKE_ATTEMPTS))
+        if (LogManager.isChannelActive(LogChannel.RECENT_STROKES))
             canvas.draw(debugDraw(p), x, y);
     }
 

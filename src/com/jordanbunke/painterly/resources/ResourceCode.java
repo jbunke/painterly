@@ -44,6 +44,11 @@ public enum ResourceCode {
     RC_CB_STROKES_ATTEMPTED,
     RC_CB_STROKES_COMPLETED,
 
+    // Log channel actions
+    RC_CHANNEL_TOGGLE_ALL,
+    RC_CHANNEL_TOGGLE_FPS,
+    RC_CHANNEL_TOGGLE_RECENT_STROKES,
+
     RC_CLEAR_FOCUS_BOXES,
     RC_CLOSE_PROJECT,
     RC_COPYRIGHT,
@@ -150,11 +155,14 @@ public enum ResourceCode {
     RC_TOOL_ZOOM,
 
     // Values
-    // TODO - variable output possibilities - make language-dependent _values json files
     RC_MEASURING_ACCEPTED,
     RC_MEASURING_ATTEMPTED,
     RC_EXIT_FULLSCREEN,
     RC_FULLSCREEN,
+    RC_OFF,
+    RC_ON,
+    RC_DISABLED,
+    RC_ENABLED,
     RC_SCOPE_FOCUS_AREA,
     RC_SCOPE_GLOBAL,
     RC_SIM_PAUSE,

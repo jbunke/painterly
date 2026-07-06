@@ -36,6 +36,10 @@ public final class LogManager {
         channelMap.put(channel, status);
     }
 
+    public static void toggleGlobalOff() {
+        setGlobalOff(!globalOff);
+    }
+
     public static void setGlobalOff(final boolean globalOff) {
         LogManager.globalOff = globalOff;
 

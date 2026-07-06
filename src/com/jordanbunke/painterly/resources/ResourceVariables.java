@@ -10,17 +10,25 @@ import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.ProjectUtils;
+import com.jordanbunke.painterly.util.debug.LogManager;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.resources.StringVariableMap.ID.*;
+import static com.jordanbunke.painterly.util.debug.LogChannel.*;
 
 public enum ResourceVariables {
     RV_ACCEPTED_OR_ATTEMPTED(p -> (p.strokeManager.isTickMode()
             ? RC_MEASURING_ATTEMPTED : RC_MEASURING_ACCEPTED).asValue(),
             RC_UNKNOWN.asValue()),
+    RV_CHANNEL_STATUS_ALL(() -> (LogManager.isGlobalOff()
+            ? RC_ENABLED : RC_DISABLED).asValue()),
+    RV_CHANNEL_STATUS_FPS(() -> (LogManager.isChannelActive(FPS)
+            ? RC_OFF : RC_ON).asValue()),
+    RV_CHANNEL_STATUS_RS(() -> (LogManager.isChannelActive(RECENT_STROKES)
+            ? RC_OFF : RC_ON).asValue()),
     RV_CURRENT_TOOL(() -> ResourceValue.ofString(
             LanguageData.retrieveUIText(ToolManager.getCurrentAction().getCode()))),
     RV_DIVS_X(p -> ResourceValue.ofString(

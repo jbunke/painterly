@@ -58,13 +58,18 @@ public enum GlobalAction
             .setShortcut(new KeyboardShortcut(true, false, O))
             .setBehaviour(SaveLoader::openProject)
             .setPrecondition(() -> ProjectManager.get().canAddProject())),
-    TOGGLE_RECENT_STROKE_VISUALIZATION(new Builder(RC_NA /* TODO */)
+    // Message log and debug toggles
+    TOGGLE_LOG_GLOBAL_OFF(new Builder(RC_CHANNEL_TOGGLE_ALL)
+            .setShortcut(new KeyboardShortcut(false, true, L))
+            .setBehaviour(LogManager::toggleGlobalOff)),
+    TOGGLE_RECENT_STROKES_VIS(new Builder(RC_CHANNEL_TOGGLE_RECENT_STROKES)
             .setShortcut(new KeyboardShortcut(false, true, P))
             .setBehaviour(() -> LogManager.toggleChannelStatus(
-                    LogChannel.RECENT_STROKE_ATTEMPTS))),
-    TOGGLE_FPS_INDICATOR(new Builder(RC_NA /* TODO */)
+                    LogChannel.RECENT_STROKES))),
+    TOGGLE_FPS_INDICATOR(new Builder(RC_CHANNEL_TOGGLE_FPS)
             .setShortcut(new KeyboardShortcut(false, true, F))
             .setBehaviour(() -> LogManager.toggleChannelStatus(LogChannel.FPS))),
+    // Tool setters
     SET_TOOL_DRAW_FOCUS_AREA(new Builder(RC_TOOL_DRAW_FOCUS_AREA)
             .inheritTooltipCode()
             .inheritIconCode()

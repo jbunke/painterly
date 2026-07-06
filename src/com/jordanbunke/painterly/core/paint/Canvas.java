@@ -52,7 +52,7 @@ public final class Canvas {
 
         stroke.setAccepted(accepted);
 
-        if (LogManager.isChannelActive(LogChannel.RECENT_STROKE_ATTEMPTS))
+        if (LogManager.isChannelActive(LogChannel.RECENT_STROKES))
             project.debugData.addStroke(stroke);
 
         return accepted;

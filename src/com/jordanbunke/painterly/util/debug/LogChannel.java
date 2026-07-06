@@ -5,7 +5,7 @@ public enum LogChannel {
     SAVE_EXPORT(true),
     INTERVAL_STATS(true),
     FPS(false),
-    RECENT_STROKE_ATTEMPTS(false)
+    RECENT_STROKES(false)
     ;
 
     public final boolean defaultValue;
