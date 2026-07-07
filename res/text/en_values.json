@@ -8,7 +8,7 @@
     "disabled" : "disabled",
     "enabled" : "enabled",
     "scope_focus_area" : "focus area",
-    "scope_global" : "global",
+    "scope_global" : "entire canvas",
     "sim_pause" : "Pause painting",
     "sim_resume" : "Resume painting",
     "unknowable" : "---",

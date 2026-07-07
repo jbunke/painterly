@@ -69,9 +69,8 @@ public final class Project {
     }
 
     public void update() {
-        // TODO - temp
-
-        if (painting) attemptStroke();
+        if (painting)
+            attemptStroke();
     }
 
     private void attemptStroke() {
@@ -128,8 +127,7 @@ public final class Project {
             this.folder = folder;
             this.sourceImage = sourceImage;
 
-            // TODO - throw exception if invalid
-            scaleFactor = 1.0; // TODO - setting?
+            scaleFactor = 1.0;
             width = 0;
             height = 0;
             strokesCompleted = 0;

@@ -1,7 +1,13 @@
 package com.jordanbunke.painterly.algo;
 
+import com.jordanbunke.delta_time.utility.math.RNG;
+
 public final class CircleMath {
     public static final double CIRCLE = 2 * Math.PI;
+
+    public static double randomAngle() {
+        return fractionOfCircle(RNG.randomInRange(0.0, 1.0));
+    }
 
     public static double fractionOfCircle(final double ratio) {
         return ratio * CIRCLE;
@@ -18,5 +24,15 @@ public final class CircleMath {
             angle += CIRCLE;
 
         return angle;
+    }
+
+    public static double angleDifference(final double a, final double b) {
+        double diff = normalizeAngle(a - b);
+
+        if (diff > fractionOfCircle(0.5)) {
+            diff -= CIRCLE;
+        }
+
+        return diff;
     }
 }

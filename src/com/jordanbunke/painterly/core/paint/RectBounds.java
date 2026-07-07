@@ -12,6 +12,10 @@ public record RectBounds(int left, int right, int top, int bottom) {
         return bottom - top;
     }
 
+    public double diagonal() {
+        return Math.sqrt(Math.pow(width(), 2) + Math.pow(height(), 2));
+    }
+
     public Coord2D topLeft() {
         return new Coord2D(left, top);
     }

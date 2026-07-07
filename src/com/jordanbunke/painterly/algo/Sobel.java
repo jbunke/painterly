@@ -26,12 +26,6 @@ public final class Sobel {
         return convolution(intensity(source));
     }
 
-    private static double normalizeGradientPixel(final Color g) {
-        final int intensity = g.getRed();
-
-        return (intensity * (2 / 255.)) - 1d;
-    }
-
     private static int[][] intensity(final GameImage source) {
         final int w = source.getWidth(), h = source.getHeight();
         final int[][] intensity = new int[w][h];
@@ -121,27 +115,5 @@ public final class Sobel {
     ) {
         final GameImage sobel = p.canvas.getSobel();
         return sobel.getColorAt(x, y);
-    }
-
-    /**
-     * TODO - Generic kernel convolution method that should eventually
-     *        be finished and extracted to a utility library
-     * */
-    @SuppressWarnings("unused")
-    private static GameImage kernelConvolution(
-            final int[][] input, final Kernel kernel
-    ) {
-        final int borderX = kernel.width / 2, borderY = kernel.height / 2;
-        final int w = input.length, h = input[0].length;
-
-        for (int x = borderX; x < w - borderX; x++) {
-            for (int y = borderY; y < h - borderY; y++) {
-                // TODO
-            }
-        }
-
-        // TODO
-
-        return GameImage.dummy();
     }
 }

@@ -1,22 +1,20 @@
 package com.jordanbunke.painterly.core.paint;
 
-import com.jordanbunke.painterly.algo.CircleMath;
-import com.jordanbunke.painterly.algo.Sobel;
+import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.color_proc.ColorAlgo;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
-import com.jordanbunke.delta_time.utility.math.MathPlus;
-import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.core.Project;
-import com.jordanbunke.painterly.util.Constants;
+import com.jordanbunke.painterly.core.paint.painter.IPainter;
+import com.jordanbunke.painterly.core.paint.painter.PainterManager;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public final class PaintEngine {
     public static BrushStroke draw(final Project p, final GameImage copy) {
-        final Coord2D strokePos = p.focusManager.strokePosition();
-        final BrushStroke stroke = stroke(p, strokePos);
-        final Color color = color(p, stroke);
+        final BrushStroke stroke = computeStroke(p);
+        final Color color = PainterManager.get().color(p, stroke);
 
         draw(copy, stroke, color);
         return stroke;
@@ -25,119 +23,72 @@ public final class PaintEngine {
     private static void draw(
             final GameImage canvas, final BrushStroke stroke, final Color color
     ) {
-        // TODO - naive implementation
-        canvas.drawLine(color, stroke.breadth,
-                stroke.position.x, stroke.position.y,
-                stroke.endPosition.x, stroke.endPosition.y);
+        final IPainter painter = PainterManager.get();
+
+        final GameImage texture = painter.brushTexture(stroke, color);
+        final int tw = texture.getWidth(), th = texture.getHeight(),
+                l = stroke.points.length;
+
+        for (int i = 0; i < l; i++) {
+            final StrokePoint point = stroke.points[i];
+            final double progress = i / (double) l,
+                    bm = painter.breadthMultiplier(progress, stroke),
+                    breadth = stroke.breadth * bm,
+                    scale = breadth / (double) th;
+
+            final GameImage textureAtPoint =
+                    painter.textureAtPoint(progress, texture);
+
+            final AffineTransform tx = new AffineTransform();
+
+            tx.translate(point.x, point.y);
+            tx.rotate(point.angle);
+            tx.scale(scale, scale);
+            tx.translate(-tw / 2.0, -th / 2.0);
+
+            canvas.draw(textureAtPoint, tx);
+        }
     }
 
-    private static BrushStroke stroke(
-            final Project p, final Coord2D strokePos
-    ) {
-        // TODO - naive implementation
-        final BrushStroke.Builder strokeBuilder = BrushStroke.init(strokePos);
+    private static BrushStroke computeStroke(final Project p) {
+        final IPainter painter = PainterManager.get();
 
-        // TODO
+        final Coord2D strokePos = p.focusManager.strokePosition();
+        final Pair<Boolean, Double> sobelResult =
+                painter.strokeAngle(p, strokePos);
+        final double initialAngle = sobelResult.b();
+        final int length = painter.strokeLength(p, sobelResult.a());
+        final double breadth =
+                painter.strokeBreadth(p, strokePos, length, sobelResult.a());
 
-        strokeAngle(p, strokeBuilder);
-        strokeBreadth(p, strokeBuilder);
-        strokeLength(p, strokeBuilder);
-
-        return strokeBuilder.build();
+        return populateStrokePoints(p, strokePos,
+                length, breadth, initialAngle);
     }
 
-    private static void strokeAngle(
-            final Project p, final BrushStroke.Builder strokeBuilder
+    private static BrushStroke populateStrokePoints(
+            final Project p,
+            final Coord2D strokePos, final int length,
+            final double breadth, final double initialAngle
     ) {
-        final Coord2D pos = sourcePosition(p, strokeBuilder.position);
-        final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
-                edgeDirection = Sobel.edgeDirection(pos.x, pos.y, p),
-                sampleProb = intensity * Constants.MAX_ANGLE_SAMPLE_PROB;
+        final StrokePoint initial = new StrokePoint(
+                strokePos.x, strokePos.y, initialAngle);
+        final BrushStroke.Builder strokeBuilder =
+                new BrushStroke.Builder(initial, breadth);
 
-        double angle;
+        final IPainter painter = PainterManager.get();
+        double angle = initial.angle,
+                x = initial.x, y = initial.y;
 
-        if (RNG.prob(sampleProb)) {
-            // sample angle from edge direction at initial point
-            final double variance = RNG.randomInRange(
-                    -Constants.MAX_ANGLE_VARIANCE,
-                    Constants.MAX_ANGLE_VARIANCE);
-            angle = CircleMath.augmentAngle(edgeDirection, variance);
+        for (int i = 0; i < length; i++) {
+            x += Math.cos(angle);
+            y += Math.sin(angle);
+            angle = painter.nextAngle(p, x, y, angle, initialAngle, i, length);
 
-            strokeBuilder.setAlongEdge(true);
-        } else {
-            // random direction
-            angle = RNG.randomInRange(0, CircleMath.CIRCLE);
+            final StrokePoint point = new StrokePoint(x, y, angle);
+            strokeBuilder.addPoint(point);
         }
 
-        strokeBuilder.setAngle(angle);
-    }
-
-    /**
-     * Stroke length is influenced by similarity, canvas size, art style
-     * */
-    private static void strokeLength(
-            final Project p, final BrushStroke.Builder strokeBuilder
-    ) {
-        // TODO
-
-        final double diagonal = diagonal(p),
-                similarity = p.progressManager.getGlobalSimilarity(),
-                simComp = Math.max(1 - Math.pow(similarity, 1.5),
-                        Constants.MIN_STROKE_LENGTH_MULTIPLIER),
-                sizeComp = diagonal *
-                        Constants.MAX_STROKE_LENGTH_SIZE_RATIO,
-                rndComp = RNG.randomInRange(0.2, 1d),
-                length = simComp * sizeComp * rndComp;
-
-        strokeBuilder.setLength((int) length);
-    }
-
-    /**
-     * Stroke breadth is influenced by similarity, Sobel, canvas size, art style
-     * */
-    private static void strokeBreadth(
-            final Project p, final BrushStroke.Builder strokeBuilder
-    ) {
-        final Coord2D pos = sourcePosition(p, strokeBuilder.position);
-        final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
-                diagonal = diagonal(p),
-                similarity = p.progressManager.getGlobalSimilarity(),
-                simComp = 1 - Math.pow(similarity, 4d),
-                sizeComp = Math.pow(diagonal, 0.67),
-                rndComp = RNG.randomInRange(0.8, 1d);
-
-        double breadth = MathPlus.bounded(Constants.MIN_STROKE_BREADTH,
-                simComp * sizeComp * rndComp, sizeComp);
-
-        if (intensity > Constants.LINE_SOBEL_THRESHOLD &&
-                RNG.prob(Constants.LINE_BREADTH_PROB))
-            breadth *= Constants.LINE_BREADTH_MULTIPLIER;
-
-        strokeBuilder.setBreadth((float) breadth);
-    }
-
-    private static Color color(
-            final Project p, final BrushStroke stroke
-    ) {
-        // TODO - naive implementation; don't hate it though
-
-        final Coord2D sourcePos = sourcePosition(p, stroke.position);
-
-        final int sampleX = MathPlus.bounded(0,
-                smudge(sourcePos.x, stroke.length),
-                (int)(p.width / p.scaleFactor) - 1),
-                sampleY = MathPlus.bounded(0,
-                        smudge(sourcePos.y, stroke.length),
-                        (int)(p.height / p.scaleFactor) - 1);
-
-        return p.getSourceImage().getColorAt(sampleX, sampleY);
-    }
-
-    private static Coord2D sourcePosition(
-            final Project p, final Coord2D position
-    ) {
-        return new Coord2D((int)(position.x / p.scaleFactor),
-                (int)(position.y / p.scaleFactor));
+        return strokeBuilder.build(p);
     }
 
     public static double similarity(
@@ -158,15 +109,5 @@ public final class PaintEngine {
 
     private static double colorSimilarity(final Color a, final Color b) {
         return 1d - ColorAlgo.diffRGB(a, b);
-    }
-
-    private static double diagonal(final Project p) {
-        final RectBounds bounds = p.focusManager.getFocusArea();
-        return Math.sqrt(Math.pow(bounds.width(), 2) +
-                Math.pow(bounds.height(), 2));
-    }
-
-    private static int smudge(final int num, final int max) {
-        return (num - ((max + 1) / 2)) + RNG.randomInRange(0, max);
     }
 }
