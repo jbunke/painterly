@@ -11,7 +11,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.paint.BrushStroke;
-import com.jordanbunke.painterly.core.paint.RectBounds;
+import com.jordanbunke.painterly.core.paint.StrokePoint;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.theme.ThemeManager;
 import com.jordanbunke.painterly.tool.ToolManager;
@@ -170,28 +170,17 @@ public final class Viewport implements ProgramContext {
 
             for (BrushStroke stroke : recent) {
                 final Color successColor = stroke.wasAccepted()
-                        ? Colors.success() : Colors.failure(),
-                        edgeColor = stroke.alongEdge
-                                ? Colors.purple() : successColor;
-                final RectBounds box = stroke.affectedArea(p.width, p.height);
+                        ? Colors.success() : Colors.failure();
 
-                // TODO - change once stroke is spline
+                final StrokePoint[] points = stroke.points;
+                for (int i = 0; i < points.length - 1; i++) {
+                    final Coord2D a = points[i].coord, b = points[i + 1].coord,
+                            ra = projectPosition(a.x, a.y, p.width, p.height, x, y, w, h),
+                            rb = projectPosition(b.x, b.y, p.width, p.height, x, y, w, h);
 
-                final Coord2D tl = projectPosition(box.left(),
-                        box.top(), p.width, p.height, x, y, w, h),
-                        br = projectPosition(box.right(),
-                                box.bottom(), p.width, p.height, x, y, w, h),
-                        start = projectPosition(stroke.position.x,
-                                stroke.position.y, p.width, p.height,
-                                x, y, w, h),
-                        end = projectPosition(stroke.endPosition.x,
-                                stroke.endPosition.y, p.width, p.height,
-                                x, y, w, h);
-
-                debugOverlay.drawRectangle(successColor, 2f,
-                        tl.x, tl.y, br.x - tl.x, br.y - tl.y);
-                debugOverlay.drawLine(edgeColor, 2f,
-                        start.x, start.y, end.x, end.y);
+                    debugOverlay.drawLine(successColor, 2f,
+                            ra.x, ra.y, rb.x, rb.y);
+                }
             }
         });
 

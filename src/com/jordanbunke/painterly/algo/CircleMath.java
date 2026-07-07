@@ -19,4 +19,14 @@ public final class CircleMath {
 
         return angle;
     }
+
+    public static double angleDifference(final double a, final double b) {
+        double diff = normalizeAngle(a - b);
+
+        if (diff > fractionOfCircle(0.5)) {
+            diff -= CIRCLE;
+        }
+
+        return diff;
+    }
 }

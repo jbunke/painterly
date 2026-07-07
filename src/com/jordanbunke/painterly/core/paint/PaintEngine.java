@@ -14,8 +14,7 @@ import java.awt.*;
 
 public final class PaintEngine {
     public static BrushStroke draw(final Project p, final GameImage copy) {
-        final Coord2D strokePos = p.focusManager.strokePosition();
-        final BrushStroke stroke = stroke(p, strokePos);
+        final BrushStroke stroke = computeStroke(p);
         final Color color = color(p, stroke);
 
         draw(copy, stroke, color);
@@ -26,59 +25,90 @@ public final class PaintEngine {
             final GameImage canvas, final BrushStroke stroke, final Color color
     ) {
         // TODO - naive implementation
-        canvas.drawLine(color, stroke.breadth,
-                stroke.position.x, stroke.position.y,
-                stroke.endPosition.x, stroke.endPosition.y);
+        final StrokePoint[] points = stroke.points;
+        for (int i = 0; i < points.length - 1; i++) {
+            final Coord2D a = points[i].coord, b = points[i + 1].coord;
+
+            canvas.drawLine(color, stroke.breadth, a.x, a.y, b.x, b.y);
+        }
     }
 
-    private static BrushStroke stroke(
+    private static BrushStroke computeStroke(final Project p) {
+        final Coord2D strokePos = p.focusManager.strokePosition();
+        final double breadth = strokeBreadth(p, strokePos),
+                initialAngle = strokeAngle(p, strokePos);
+        final int length = strokeLength(p);
+
+        return populateStrokePoints(p, strokePos,
+                length, breadth, initialAngle);
+    }
+
+    private static BrushStroke populateStrokePoints(
+            final Project p,
+            final Coord2D strokePos, final int length,
+            final double breadth, final double initialAngle
+    ) {
+        // TODO - revise
+        final StrokePoint initial = new StrokePoint(
+                strokePos.x, strokePos.y, initialAngle);
+        final BrushStroke.Builder strokeBuilder =
+                new BrushStroke.Builder(initial);
+
+        double angle = initial.angle,
+                dxAngle = CircleMath.fractionOfCircle(
+                        RNG.randomInRange(-0.02, 0.02)),
+                x = initial.x, y = initial.y;
+
+        for (int i = 0; i < length; i++) {
+            x += Math.cos(angle);
+            y -= Math.sin(angle);
+            angle = nextAngle(p, angle, dxAngle);
+
+            final StrokePoint point = new StrokePoint(x, y, angle);
+            strokeBuilder.addPoint(point);
+        }
+
+        // TODO - revise
+        return strokeBuilder.setBreadth((float) breadth)
+                .build();
+    }
+
+    private static double nextAngle(
+            final Project p, final double lastAngle, final double dxAngle
+    ) {
+        // TODO - check Sobel to see if edge can be followed
+        return CircleMath.normalizeAngle(lastAngle + dxAngle);
+    }
+
+    private static double strokeAngle(
             final Project p, final Coord2D strokePos
     ) {
-        // TODO - naive implementation
-        final BrushStroke.Builder strokeBuilder = BrushStroke.init(strokePos);
-
-        // TODO
-
-        strokeAngle(p, strokeBuilder);
-        strokeBreadth(p, strokeBuilder);
-        strokeLength(p, strokeBuilder);
-
-        return strokeBuilder.build();
-    }
-
-    private static void strokeAngle(
-            final Project p, final BrushStroke.Builder strokeBuilder
-    ) {
-        final Coord2D pos = sourcePosition(p, strokeBuilder.position);
+        final Coord2D pos = sourcePosition(p, strokePos);
         final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
                 edgeDirection = Sobel.edgeDirection(pos.x, pos.y, p),
                 sampleProb = intensity * Constants.MAX_ANGLE_SAMPLE_PROB;
-
-        double angle;
 
         if (RNG.prob(sampleProb)) {
             // sample angle from edge direction at initial point
             final double variance = RNG.randomInRange(
                     -Constants.MAX_ANGLE_VARIANCE,
                     Constants.MAX_ANGLE_VARIANCE);
-            angle = CircleMath.augmentAngle(edgeDirection, variance);
 
-            strokeBuilder.setAlongEdge(true);
+            // TODO - strokeBuilder.setAlongEdge(true);
+            return CircleMath.augmentAngle(edgeDirection, variance);
         } else {
             // random direction
-            angle = RNG.randomInRange(0, CircleMath.CIRCLE);
+            return RNG.randomInRange(0, CircleMath.CIRCLE);
         }
-
-        strokeBuilder.setAngle(angle);
     }
 
     /**
      * Stroke length is influenced by similarity, canvas size, art style
      * */
-    private static void strokeLength(
-            final Project p, final BrushStroke.Builder strokeBuilder
+    private static int strokeLength(
+            final Project p
     ) {
-        // TODO
+        // TODO - revise; art style component
 
         final double diagonal = diagonal(p),
                 similarity = p.progressManager.getGlobalSimilarity(),
@@ -89,16 +119,18 @@ public final class PaintEngine {
                 rndComp = RNG.randomInRange(0.2, 1d),
                 length = simComp * sizeComp * rndComp;
 
-        strokeBuilder.setLength((int) length);
+        return (int) Math.round(length);
     }
 
     /**
      * Stroke breadth is influenced by similarity, Sobel, canvas size, art style
      * */
-    private static void strokeBreadth(
-            final Project p, final BrushStroke.Builder strokeBuilder
+    private static double strokeBreadth(
+            final Project p, final Coord2D strokePos
     ) {
-        final Coord2D pos = sourcePosition(p, strokeBuilder.position);
+        // TODO - revise; art style component
+
+        final Coord2D pos = sourcePosition(p, strokePos);
         final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
                 diagonal = diagonal(p),
                 similarity = p.progressManager.getGlobalSimilarity(),
@@ -113,7 +145,7 @@ public final class PaintEngine {
                 RNG.prob(Constants.LINE_BREADTH_PROB))
             breadth *= Constants.LINE_BREADTH_MULTIPLIER;
 
-        strokeBuilder.setBreadth((float) breadth);
+        return breadth;
     }
 
     private static Color color(
@@ -121,13 +153,13 @@ public final class PaintEngine {
     ) {
         // TODO - naive implementation; don't hate it though
 
-        final Coord2D sourcePos = sourcePosition(p, stroke.position);
+        final Coord2D sourcePos = sourcePosition(p, stroke.from());
 
         final int sampleX = MathPlus.bounded(0,
-                smudge(sourcePos.x, stroke.length),
+                smudge(sourcePos.x, stroke.length()),
                 (int)(p.width / p.scaleFactor) - 1),
                 sampleY = MathPlus.bounded(0,
-                        smudge(sourcePos.y, stroke.length),
+                        smudge(sourcePos.y, stroke.length()),
                         (int)(p.height / p.scaleFactor) - 1);
 
         return p.getSourceImage().getColorAt(sampleX, sampleY);

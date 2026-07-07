@@ -2,53 +2,49 @@ package com.jordanbunke.painterly.core.paint;
 
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 
-// TODO - all temp
+import java.util.LinkedList;
+import java.util.List;
+
 public final class BrushStroke {
-    public final Coord2D position, endPosition;
-    public final double angle;
+    // public final Coord2D position, endPosition;
+    public final StrokePoint[] points;
     public final float breadth;
-    public final int length;
 
     // metadata
-    public final boolean alongEdge;
+    // public final boolean alongEdge;
     private boolean accepted;
 
-    // TODO
-
     private BrushStroke(
-            final Coord2D position,
-            final double angle, final boolean alongEdge,
-            final float breadth, final int length
+            final StrokePoint[] points, final float breadth
     ) {
-        this.position = position;
-        this.angle = angle;
-        this.alongEdge = alongEdge;
+        this.points = points;
         this.breadth = breadth;
-        this.length = length;
-
-        endPosition = position.displace(
-                (int) (Math.cos(angle) * length),
-                (int) (Math.sin(angle) * length));
     }
 
-    public static Builder init(final Coord2D position) {
-        return new Builder(position);
+    public Coord2D from() {
+        return points[0].coord;
     }
 
-    /** TODO */
+    public int length() {
+        return points.length;
+    }
+
     public RectBounds affectedArea(
             final int canvasWidth, final int canvasHeight
     ) {
-        final int r = (int) Math.ceil(breadth),
-                x1 = position.x, x2 = endPosition.x,
-                y1 = position.y, y2 = endPosition.y;
+        final RectBounds.Builder rbb = new RectBounds.Builder();
 
-        return new RectBounds.Builder()
-                .updateLeft(Math.min(x1, x2) - r)
-                .updateRight(Math.max(x1, x2) + r)
-                .updateTop(Math.min(y1, y2) - r)
-                .updateBottom(Math.max(y1, y2) + r)
-                .constrainLeft(0).constrainTop(0)
+        // TODO - based on rendering, r should be breadth / 2
+        final int r = (int) Math.ceil(breadth);
+
+        for (StrokePoint point : points) {
+            rbb.updateLeft(point.roundedX - r)
+                    .updateRight(point.roundedX + r)
+                    .updateTop(point.roundedY - r)
+                    .updateBottom(point.roundedY + r);
+        }
+
+        return rbb.constrainLeft(0).constrainTop(0)
                 .constrainRight(canvasWidth).constrainBottom(canvasHeight)
                 .build();
     }
@@ -62,32 +58,19 @@ public final class BrushStroke {
     }
 
     public static class Builder {
-        public final Coord2D position;
+        public final List<StrokePoint> points;
 
-        private double angle;
-        private boolean alongEdge;
         private float breadth;
-        private int length;
 
-        public Builder(final Coord2D position) {
-            this.position = position;
+        public Builder(final StrokePoint initial) {
+            this.points = new LinkedList<>();
+            points.add(initial);
 
-            // TODO
-            angle = 0d;
-            alongEdge = false;
             breadth = 2f;
-            length = 10;
         }
 
-        // TODO - temp setters
-
-        public Builder setAngle(final double angle) {
-            this.angle = angle;
-            return this;
-        }
-
-        public Builder setAlongEdge(final boolean alongEdge) {
-            this.alongEdge = alongEdge;
+        public Builder addPoint(final StrokePoint point) {
+            points.add(point);
             return this;
         }
 
@@ -96,15 +79,8 @@ public final class BrushStroke {
             return this;
         }
 
-        public Builder setLength(final int length) {
-            this.length = length;
-            return this;
-        }
-
         public BrushStroke build() {
-            // TODO
-            return new BrushStroke(position,
-                    angle, alongEdge, breadth, length);
+            return new BrushStroke(points.toArray(StrokePoint[]::new), breadth);
         }
     }
 }
