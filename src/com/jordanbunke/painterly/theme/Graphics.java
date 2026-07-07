@@ -17,7 +17,6 @@ import com.jordanbunke.painterly.util.ProgramFont.FontFormatter;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.function.Function;
 
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 import static com.jordanbunke.painterly.theme.Colors.*;
@@ -375,38 +374,5 @@ public final class Graphics {
         final GameImage highlight = new GameImage(HIGHLIGHT);
         highlight.draw(icon);
         return highlight.submit();
-    }
-
-    public static GameImage pixelWiseTransformation(
-            final GameImage input, final Function<Color, Color> f
-    ) {
-        final GameImage output = new GameImage(input);
-
-        final int w = output.getWidth(), h = output.getHeight();
-
-        for (int x = 0; x < w; x++)
-            for (int y = 0; y < h; y++)
-                output.setRGB(x, y, f.apply(input.getColorAt(x, y)).getRGB());
-
-        return output.submit();
-    }
-
-    public static Color greyscale(final Color in) {
-        final int avg = (in.getRed() + in.getGreen() + in.getBlue()) / 3;
-        return new Color(avg, avg, avg, in.getAlpha());
-    }
-
-    public static Color shiftRGB(final Color base, final int shift) {
-        return new Color(
-                shiftChannel(base.getRed(), Math.abs(shift)),
-                shiftChannel(base.getGreen(), Math.abs(shift)),
-                shiftChannel(base.getBlue(), Math.abs(shift)));
-    }
-
-    private static int shiftChannel(final int c, final int shift) {
-        final int MIDDLE = 0x80;
-        final boolean increase = Math.signum((double) (MIDDLE - c)) >= 0.0;
-
-        return c + (increase ? shift : -shift);
     }
 }

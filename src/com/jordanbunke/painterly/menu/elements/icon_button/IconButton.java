@@ -7,6 +7,7 @@ import com.jordanbunke.delta_time.menu.menu_elements.invisible.ThinkingMenuEleme
 import com.jordanbunke.delta_time.menu.menu_elements.visual.StaticMenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.algo.Recoloring;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.theme.Graphics;
@@ -98,8 +99,8 @@ public final class IconButton extends SimpleMenuButton {
         public ThinkingMenuElement buildForWhen(
                 final Supplier<Boolean> precondition
         ) {
-            final GameImage greyedOut = Graphics.pixelWiseTransformation(
-                    Graphics.readIcon(code), Graphics::greyscale);
+            final GameImage greyedOut = Recoloring.pixelWiseTransformation(
+                    Graphics.readIcon(code), Recoloring::greyscale);
 
             final StaticMenuElement stub =
                     new StaticMenuElement(position, anchor, greyedOut);

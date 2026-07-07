@@ -172,11 +172,24 @@ public final class Viewport implements ProgramContext {
                 final Color successColor = stroke.wasAccepted()
                         ? Colors.success() : Colors.failure();
 
+                // TODO - temp
+                final Coord2D tl = stroke.affectedArea.topLeft(),
+                        br = stroke.affectedArea.bottomRight(),
+                        rtl = projectPosition(tl.x, tl.y,
+                                p.width, p.height, x, y, w, h),
+                        rbr = projectPosition(br.x, br.y,
+                                p.width, p.height, x, y, w, h);
+
+                debugOverlay.drawRectangle(successColor, 2f,
+                        rtl.x, rtl.y, rbr.x - rtl.x, rbr.y - rtl.y);
+
                 final StrokePoint[] points = stroke.points;
                 for (int i = 0; i < points.length - 1; i++) {
                     final Coord2D a = points[i].coord, b = points[i + 1].coord,
-                            ra = projectPosition(a.x, a.y, p.width, p.height, x, y, w, h),
-                            rb = projectPosition(b.x, b.y, p.width, p.height, x, y, w, h);
+                            ra = projectPosition(a.x, a.y,
+                                    p.width, p.height, x, y, w, h),
+                            rb = projectPosition(b.x, b.y,
+                                    p.width, p.height, x, y, w, h);
 
                     debugOverlay.drawLine(successColor, 2f,
                             ra.x, ra.y, rb.x, rb.y);

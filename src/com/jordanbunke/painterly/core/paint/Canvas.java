@@ -37,13 +37,11 @@ public final class Canvas {
     public boolean attemptStroke() {
         final GameImage copy = new GameImage(painting);
         final BrushStroke stroke = PaintEngine.draw(project, copy);
-        final RectBounds strokeBounds =
-                stroke.affectedArea(copy.getWidth(), copy.getHeight());
 
         // 4: reference similarity comparison
         final double
-                oldSim = PaintEngine.similarity(scaledSource, painting, strokeBounds),
-                newSim = PaintEngine.similarity(scaledSource, copy, strokeBounds);
+                oldSim = PaintEngine.similarity(scaledSource, painting, stroke.affectedArea),
+                newSim = PaintEngine.similarity(scaledSource, copy, stroke.affectedArea);
 
         final boolean accepted = newSim > oldSim;
 

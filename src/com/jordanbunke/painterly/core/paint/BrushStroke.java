@@ -1,24 +1,26 @@
 package com.jordanbunke.painterly.core.paint;
 
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.core.Project;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public final class BrushStroke {
-    // public final Coord2D position, endPosition;
     public final StrokePoint[] points;
-    public final float breadth;
+    public final double breadth;
+    public final RectBounds affectedArea;
 
     // metadata
-    // public final boolean alongEdge;
     private boolean accepted;
 
     private BrushStroke(
-            final StrokePoint[] points, final float breadth
+            final StrokePoint[] points, final double breadth,
+            final RectBounds affectedArea
     ) {
         this.points = points;
         this.breadth = breadth;
+        this.affectedArea = affectedArea;
     }
 
     public Coord2D from() {
@@ -27,26 +29,6 @@ public final class BrushStroke {
 
     public int length() {
         return points.length;
-    }
-
-    public RectBounds affectedArea(
-            final int canvasWidth, final int canvasHeight
-    ) {
-        final RectBounds.Builder rbb = new RectBounds.Builder();
-
-        // TODO - based on rendering, r should be breadth / 2
-        final int r = (int) Math.ceil(breadth);
-
-        for (StrokePoint point : points) {
-            rbb.updateLeft(point.roundedX - r)
-                    .updateRight(point.roundedX + r)
-                    .updateTop(point.roundedY - r)
-                    .updateBottom(point.roundedY + r);
-        }
-
-        return rbb.constrainLeft(0).constrainTop(0)
-                .constrainRight(canvasWidth).constrainBottom(canvasHeight)
-                .build();
     }
 
     public void setAccepted(final boolean accepted) {
@@ -58,29 +40,42 @@ public final class BrushStroke {
     }
 
     public static class Builder {
-        public final List<StrokePoint> points;
+        private final List<StrokePoint> points;
+        private final double breadth;
+        private final RectBounds.Builder rbb;
 
-        private float breadth;
-
-        public Builder(final StrokePoint initial) {
+        public Builder(final StrokePoint initial, final double breadth) {
             this.points = new LinkedList<>();
             points.add(initial);
 
-            breadth = 2f;
+            this.breadth = breadth;
+
+            rbb = new RectBounds.Builder();
+        }
+
+        private void updateBounds(final StrokePoint point) {
+            final int r = (int) Math.ceil(breadth);
+
+            rbb.updateLeft(point.roundedX - r)
+                    .updateRight(point.roundedX + r)
+                    .updateTop(point.roundedY - r)
+                    .updateBottom(point.roundedY + r);
         }
 
         public Builder addPoint(final StrokePoint point) {
             points.add(point);
+            updateBounds(point);
             return this;
         }
 
-        public Builder setBreadth(final float breadth) {
-            this.breadth = breadth;
-            return this;
-        }
+        public BrushStroke build(final Project p) {
+            final RectBounds affectedArea = rbb
+                    .constrainLeft(0).constrainTop(0)
+                    .constrainRight(p.width).constrainBottom(p.height)
+                    .build();
 
-        public BrushStroke build() {
-            return new BrushStroke(points.toArray(StrokePoint[]::new), breadth);
+            return new BrushStroke(points.toArray(StrokePoint[]::new),
+                    breadth, affectedArea);
         }
     }
 }
