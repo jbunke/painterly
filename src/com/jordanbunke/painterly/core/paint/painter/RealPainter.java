@@ -14,8 +14,9 @@ import com.jordanbunke.painterly.core.paint.texture.SimpleTexture;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.function.Function;
 
-import static com.jordanbunke.painterly.algo.Recoloring.tintGreyscaleTexture;
+import static com.jordanbunke.painterly.algo.Recoloring.*;
 
 public final class RealPainter implements IPainter {
     private static final RealPainter INSTANCE;
@@ -38,10 +39,20 @@ public final class RealPainter implements IPainter {
             SHORT_MCDA_DELTA_ANGLE = CircleMath.fractionOfCircle(1 / 32.),
             LONG_MCDA_DELTA_ANGLE = CircleMath.fractionOfCircle(0.25),
             LINE_CONTINUATION_THRESHOLD = 0.5,
-            REVERSE_DELTA_ANGLE_PROB = 0.01;
+            REVERSE_DELTA_ANGLE_PROB = 0.01,
+            BREADTH_TAPER_OFF_PROB = 0.2,
+            BREADTH_TAPER_OFF_MAX_THRESHOLD = MIN_BREADTH * 4,
+            LATEST_TAPER_ONSET = 0.5,
+            MAX_TAPER_FINAL_RATIO = 0.8,
+            MIN_PRESSURE = 0.4, MAX_PRESSURE = 0.7,
+            INCREASE_PRESSURE_PROB = 0.3;
 
     // TODO - temp
     private final GameImage example;
+
+    private boolean taperOff;
+    private double taperOnset, taperFinalRatio;
+    private Function<Double, Double> pressureFunction;
 
     static {
         INSTANCE = new RealPainter();
@@ -50,6 +61,7 @@ public final class RealPainter implements IPainter {
     private RealPainter() {
         // TODO
         example = TextureGenerator.flatTexture();
+        pressureFunction = p -> p;
     }
 
     public static RealPainter get() {
@@ -58,7 +70,15 @@ public final class RealPainter implements IPainter {
 
     @Override
     public ITexture brushTexture(final BrushStroke stroke, final Color tintColor) {
-        // TODO
+        // variable updates for new stroke
+
+        // breadth tapering
+        updateBreadthTapering(stroke);
+
+        // pressure
+        updatePressureFunction(stroke);
+
+        // TODO - produce texture
         final GameImage image =
                 tintGreyscaleTexture(example, tintColor, 128);
         return new SimpleTexture(image, true);
@@ -66,14 +86,19 @@ public final class RealPainter implements IPainter {
 
     @Override
     public double breadthMultiplier(final double progress, final BrushStroke stroke) {
-        // TODO
-        return 1;
+        if (taperOff)
+            return MathPlus.lerp(progress, taperOnset, 1.0,
+                    1.0, taperFinalRatio, true);
+
+        return 1.0;
     }
 
     @Override
     public GameImage realizeTexture(final double progress, final ITexture texture) {
-        // TODO
-        return texture.realize(progress);
+        final double pressure = pressureFunction.apply(progress);
+        final GameImage realTexture = texture.realize(progress);
+        return pixelWiseTransformation(realTexture,
+                c -> reduceOpacity(c, pressure));
     }
 
     @Override
@@ -208,6 +233,44 @@ public final class RealPainter implements IPainter {
 
         return sourceImage.getColorAt(
                 sourcePosArray[i].x, sourcePosArray[i].y);
+    }
+
+    // VARIABLE UPDATERS
+
+    private void updateBreadthTapering(final BrushStroke stroke) {
+        taperOff = stroke.breadth <= BREADTH_TAPER_OFF_MAX_THRESHOLD &&
+                RNG.prob(BREADTH_TAPER_OFF_PROB);
+        if (taperOff) {
+            taperOnset = RNG.randomInRange(0.0, LATEST_TAPER_ONSET);
+            taperFinalRatio = RNG.randomInRange(0.0, MAX_TAPER_FINAL_RATIO);
+        }
+    }
+
+    private void updatePressureFunction(final BrushStroke stroke) {
+        final int length = stroke.length();
+
+        if (taperOff)
+            pressureFunction = this::decreasePressure;
+        else if (length >= LONG_LTB_LENGTH_THRESHOLD &&
+                RNG.prob(INCREASE_PRESSURE_PROB))
+            pressureFunction = this::increasePressure;
+        else {
+            final double pressure =
+                    RNG.randomInRange(MIN_PRESSURE, MAX_PRESSURE);
+            pressureFunction = p -> pressure;
+        }
+    }
+
+    // PRESSURE FUNCTIONS
+
+    private double increasePressure(final double progress) {
+        return MathPlus.lerp(progress, 0, 1,
+                MIN_PRESSURE, MAX_PRESSURE, true);
+    }
+
+    private double decreasePressure(final double progress) {
+        return MathPlus.lerp(progress, 0, 1,
+                MAX_PRESSURE, MIN_PRESSURE, true);
     }
 
     // HELPER
