@@ -149,7 +149,7 @@ public final class PopUpDialog extends MenuElementContainer {
             contentBottom = 0;
 
             onlyInformation = false;
-            okText = LanguageData.retrieveUIText(RC_DIALOG_DEFAULT_OK);
+            okText = LanguageData.retrieveUIText(RC_DIALOG_UI_DEFAULT_OK);
             precondition = () -> true;
             onOK = DialogManager::close;
         }
@@ -294,7 +294,7 @@ public final class PopUpDialog extends MenuElementContainer {
             final List<MenuElement> resolutionButtons = new LinkedList<>();
 
             final SimpleTextButton cancelCloseButton = SimpleTextButton.init(
-                    onlyInformation ? RC_DIALOG_CLOSE : RC_DIALOG_CANCEL,
+                    onlyInformation ? RC_DIALOG_UI_CLOSE : RC_DIALOG_UI_CANCEL,
                     bottomRight, DialogManager::close)
                     .setWidth(DIALOG_RESOLUTION_BUTTON_WIDTH)
                     .setAnchor(Anchor.RIGHT_BOTTOM)

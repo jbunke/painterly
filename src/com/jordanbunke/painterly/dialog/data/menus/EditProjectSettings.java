@@ -1,7 +1,6 @@
 package com.jordanbunke.painterly.dialog.data.menus;
 
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
-import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.ProjectUtils;
 
 public final class EditProjectSettings extends ProjectVariables {
@@ -12,7 +11,7 @@ public final class EditProjectSettings extends ProjectVariables {
     }
 
     private EditProjectSettings() {
-        super(ResourceCode.RC_EPS_VALIDATED_FOLDER);
+        super();
     }
 
     public static EditProjectSettings get() {

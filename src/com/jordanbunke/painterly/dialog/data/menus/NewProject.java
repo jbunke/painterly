@@ -40,7 +40,8 @@ public final class NewProject extends DialogVariableSet {
     private NewProject() {
         name = new DialogVariable<>(() -> "", Validator::validName);
         folder = new DialogVariable<>(() -> null, false,
-                path -> Validator.validFolder(path, RC_NPD_VALIDATED_FOLDER));
+                path -> Validator.validFolder(path,
+                        RC_DIALOG_FB_NPD_VALIDATED_FOLDER));
         sourceImage = new DialogVariable<>(() -> null, this::validSourceImage);
         scaleFactor = new DialogVariable<>(() -> 1d, this::validScaleFactor);
         autosave = new DialogVariable<>(
@@ -114,21 +115,21 @@ public final class NewProject extends DialogVariableSet {
             final GameImage sourceImage
     ) {
         if (sourceImage == null)
-            return new Pair<>(false, RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
+            return new Pair<>(false, RC_DIALOG_FB_VARIABLE_CANNOT_BE_NULL);
 
-        return new Pair<>(true, RC_NPD_VALIDATED_SRC_IMAGE);
+        return new Pair<>(true, RC_DIALOG_FB_NPD_VALIDATED_SRC_IMAGE);
     }
 
     private Pair<Boolean, ResourceCode> validScaleFactor(
             final Double scaleFactor
     ) {
         if (scaleFactor == null)
-            return new Pair<>(false, RC_DIALOG_CANNOT_READ_DOUBLE);
+            return new Pair<>(false, RC_DIALOG_FB_CANNOT_READ_DOUBLE);
         else if (scaleFactor < 1d)
-            return new Pair<>(false, RC_DIALOG_MUST_BE_GR_EQ_1);
+            return new Pair<>(false, RC_DIALOG_FB_MUST_BE_GR_EQ_1);
         else if (!sourceImage.passing())
             return new Pair<>(false,
-                    RC_DIALOG_CANNOT_VALIDATE_SCALE_FACTOR_WITHOUT_IMAGE);
+                    RC_DIALOG_FB_CANNOT_VALIDATE_SCALE_FACTOR_WITHOUT_IMAGE);
         else {
             final GameImage refImage = sourceImage.get();
             final int w = (int)(refImage.getWidth() * scaleFactor),
@@ -138,7 +139,7 @@ public final class NewProject extends DialogVariableSet {
             if (pixels > Constants.MAX_CANVAS_PIXELS)
                 return new Pair<>(false, RC_NA /* TODO */);
 
-            return new Pair<>(true, RC_NPD_VALIDATED_SCALE_FACTOR);
+            return new Pair<>(true, RC_DIALOG_FB_NPD_VALIDATED_SCALE_FACTOR);
         }
     }
 

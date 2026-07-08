@@ -79,10 +79,10 @@ public final class DialogAssembly {
 
         // lead label menu elements
         final SimpleLabel
-                projectNameLabel = leadLabel(RC_NPD_PROJECT_NAME),
-                folderLabel = leadLabel(RC_NPD_FOLDER),
-                autosaveLabel = leadLabel(RC_NPD_AUTOSAVE),
-                autosaveFrequencyLabel = leadLabel(RC_NPD_AUTOSAVE_FREQUENCY);
+                projectNameLabel = leadLabel(RC_DIALOG_TX_PROJECT_NAME),
+                folderLabel = leadLabel(RC_DIALOG_TX_SAVE_FOLDER),
+                autosaveLabel = leadLabel(RC_DIALOG_TX_AUTOSAVE),
+                autosaveFrequencyLabel = leadLabel(RC_DIALOG_TX_AUTOSAVE_FREQUENCY);
 
         // dialog realization
         final DialogElement
@@ -103,31 +103,35 @@ public final class DialogAssembly {
         final DialogElement
                 projectNameTextbox = forDialog(
                 Textbox.init(projectNameLabel.followTB())
-                        .setDialogVariableEndpoint(varSet.name, s -> s)
+                        .setDialogVariableEndpoint(
+                                ProjectVariables.name, s -> s)
                         .build()),
                 projectNameFeedback = feedbackAfterInteraction(
-                        projectNameTextbox, varSet.name),
+                        projectNameTextbox, ProjectVariables.name),
                 folderButton = forDialog(
-                        SimpleTextButton.init(RC_NPD_CHOOSE_FOLDER,
+                        SimpleTextButton.init(RC_DIALOG_UI_CHOOSE_FOLDER,
                                 folderLabel.followTB(),
-                                varSet::chooseFolder).build()),
+                                ProjectVariables::chooseFolder).build()),
                 folderFeedback = feedbackAfterInteraction(
-                        folderButton, varSet.folder),
+                        folderButton, ProjectVariables.folder),
                 autosaveCheckbox = forDialog(
                         Checkbox.init(autosaveLabel.followIcon())
-                                .setDialogVariableEndpoint(varSet.autosave)
+                                .setDialogVariableEndpoint(
+                                        ProjectVariables.autosave)
                                 .build()),
                 autosaveFrequencyTextbox = forDialog(
                         Textbox.init(autosaveFrequencyLabel.followTB())
-                                .setDialogVariableEndpoint(varSet.autosaveFrequency,
+                                .setDialogVariableEndpoint(
+                                        ProjectVariables.autosaveFrequency,
                                         Validator::nullableParseInt)
-                                .setPrefix(RC_NPD_AUTOSAVE_FREQUENCY_PREFIX)
-                                .setSuffix(RC_NPD_AUTOSAVE_FREQUENCY_SUFFIX)
+                                .setPrefix(RC_DIALOG_TX_AUTOSAVE_FREQUENCY_PREFIX)
+                                .setSuffix(RC_DIALOG_TX_AUTOSAVE_FREQUENCY_SUFFIX)
                                 .setWidthRelative(1.5)
                                 .setMaxLength(String.valueOf(Constants.MAX_AUTOSAVE_FREQUENCY).length())
                                 .build()),
                 autosaveFrequencyFeedback = feedbackAfterInteraction(
-                        autosaveFrequencyTextbox, varSet.autosaveFrequency);
+                        autosaveFrequencyTextbox,
+                        ProjectVariables.autosaveFrequency);
 
         db.addElements(projectNameTextbox, projectNameFeedback,
                 folderButton, folderFeedback,
@@ -144,12 +148,12 @@ public final class DialogAssembly {
 
         // lead label menu elements
         final SimpleLabel
-                projectNameLabel = leadLabel(RC_NPD_PROJECT_NAME),
-                folderLabel = leadLabel(RC_NPD_FOLDER),
-                refImageLabel = leadLabel(RC_NPD_SOURCE_IMAGE),
-                scaleFactorLabel = leadLabel(RC_NPD_SCALE_FACTOR),
-                autosaveLabel = leadLabel(RC_NPD_AUTOSAVE),
-                autosaveFrequencyLabel = leadLabel(RC_NPD_AUTOSAVE_FREQUENCY);
+                projectNameLabel = leadLabel(RC_DIALOG_TX_PROJECT_NAME),
+                folderLabel = leadLabel(RC_DIALOG_TX_SAVE_FOLDER),
+                refImageLabel = leadLabel(RC_DIALOG_TX_SOURCE_IMAGE),
+                scaleFactorLabel = leadLabel(RC_DIALOG_TX_SCALE_FACTOR),
+                autosaveLabel = leadLabel(RC_DIALOG_TX_AUTOSAVE),
+                autosaveFrequencyLabel = leadLabel(RC_DIALOG_TX_AUTOSAVE_FREQUENCY);
 
         // dialog realization
         final DialogElement
@@ -183,7 +187,7 @@ public final class DialogAssembly {
                 projectNameFeedback = feedbackAfterInteraction(
                         projectNameTextbox, np.name),
                 folderButton = forDialog(
-                        SimpleTextButton.init(RC_NPD_CHOOSE_FOLDER,
+                        SimpleTextButton.init(RC_DIALOG_UI_CHOOSE_FOLDER,
                                 folderLabel.followTB(),
                                 np::chooseFolder).build()),
                 folderFeedback = feedbackAfterInteraction(
@@ -210,8 +214,8 @@ public final class DialogAssembly {
                         Textbox.init(autosaveFrequencyLabel.followTB())
                                 .setDialogVariableEndpoint(np.autosaveFrequency,
                                         Validator::nullableParseInt)
-                                .setPrefix(RC_NPD_AUTOSAVE_FREQUENCY_PREFIX)
-                                .setSuffix(RC_NPD_AUTOSAVE_FREQUENCY_SUFFIX)
+                                .setPrefix(RC_DIALOG_TX_AUTOSAVE_FREQUENCY_PREFIX)
+                                .setSuffix(RC_DIALOG_TX_AUTOSAVE_FREQUENCY_SUFFIX)
                                 .setWidthRelative(1.5)
                                 .setMaxLength(String.valueOf(Constants.MAX_AUTOSAVE_FREQUENCY).length())
                                 .build()),

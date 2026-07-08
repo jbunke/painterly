@@ -2,7 +2,6 @@ package com.jordanbunke.painterly.dialog.data.menus;
 
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
-import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.ProjectUtils;
 
 public final class DuplicateProject extends ProjectVariables {
@@ -13,7 +12,7 @@ public final class DuplicateProject extends ProjectVariables {
     }
 
     private DuplicateProject() {
-        super(ResourceCode.RC_DP_VALIDATED_FOLDER);
+        super();
     }
 
     public static DuplicateProject get() {

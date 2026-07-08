@@ -16,7 +16,7 @@ public interface Validator<T> {
 
     static Pair<Boolean, ResourceCode> nonNull(final Object o) {
         final boolean pass = Objects.nonNull(o);
-        return new Pair<>(pass, pass ? RC_NA : RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
+        return new Pair<>(pass, pass ? RC_NA : RC_DIALOG_FB_VARIABLE_CANNOT_BE_NULL);
     }
 
     @SuppressWarnings("unused")
@@ -32,11 +32,11 @@ public interface Validator<T> {
             final String name
     ) {
         if (name == null || name.isEmpty())
-            return new Pair<>(false, RC_DIALOG_CANNOT_BE_EMPTY);
+            return new Pair<>(false, RC_DIALOG_FB_CANNOT_BE_EMPTY);
         else if (name.trim().isEmpty())
-            return new Pair<>(false, RC_DIALOG_CANNOT_BE_ONLY_WHITESPACE);
+            return new Pair<>(false, RC_DIALOG_FB_CANNOT_BE_ONLY_WHITESPACE);
         else if (nameContainsIllegalChar(name))
-            return new Pair<>(false, RC_DIALOG_CONTAINS_INVALID_CHARACTER);
+            return new Pair<>(false, RC_DIALOG_FB_CONTAINS_INVALID_CHARACTER);
 
         return new Pair<>(true, RC_NA);
     }
@@ -54,7 +54,7 @@ public interface Validator<T> {
             final Path folder, final ResourceCode folderResolutionCode
     ) {
         if (folder == null)
-            return new Pair<>(false, RC_DIALOG_VARIABLE_CANNOT_BE_NULL);
+            return new Pair<>(false, RC_DIALOG_FB_VARIABLE_CANNOT_BE_NULL);
 
         return new Pair<>(true, folderResolutionCode);
     }
@@ -63,7 +63,7 @@ public interface Validator<T> {
             final Integer autosaveFrequency
     ) {
         if (autosaveFrequency == null)
-            return new Pair<>(false, RC_DIALOG_CANNOT_READ_INT);
+            return new Pair<>(false, RC_DIALOG_FB_CANNOT_READ_INT);
         else if (autosaveFrequency < Constants.MIN_AUTOSAVE_FREQUENCY)
             return new Pair<>(false, RC_NA /* TODO */);
         else if (autosaveFrequency > Constants.MAX_AUTOSAVE_FREQUENCY)

@@ -18,18 +18,19 @@ import static com.jordanbunke.painterly.util.ProjectUtils.*;
 public sealed abstract class ProjectVariables
         extends DialogVariableSet
         permits DuplicateProject, EditProjectSettings, SaveAs {
-    public final DialogVariable<String> name;
-    public final DialogVariable<Path> folder;
-    public final DialogVariable<Boolean> autosave;
-    public final DialogVariable<Integer> autosaveFrequency;
+    public static final DialogVariable<String> name;
+    public static final DialogVariable<Path> folder;
+    public static final DialogVariable<Boolean> autosave;
+    public static final DialogVariable<Integer> autosaveFrequency;
 
-    ProjectVariables(final ResourceCode folderResolutionCode) {
+    static {
         name = new DialogVariable<>(wrapGetter(
                 Project::getName, ""),
                 Validator::validName);
         folder = new DialogVariable<>(wrapGetter(
                 Project::getFolder, null),
-                path -> Validator.validFolder(path, folderResolutionCode));
+                path -> Validator.validFolder(path,
+                        ResourceCode.RC_DIALOG_FB_PV_VALIDATED_FOLDER));
         autosave = new DialogVariable<>(wrapGetter(
                 p -> p.saveManager.isAutosave(),
                 Settings.get(SET_ID_AUTOSAVE_ON_BY_DEFAULT, Boolean.class)),
@@ -40,6 +41,8 @@ public sealed abstract class ProjectVariables
                 Validator::validAutosaveFrequency);
     }
 
+    ProjectVariables() {}
+
     @Override
     DialogVariable<?>[] getAllVariables() {
         return new DialogVariable[] {
@@ -49,7 +52,7 @@ public sealed abstract class ProjectVariables
 
     // logic
 
-    public void chooseFolder() {
+    public static void chooseFolder() {
         FileIO.setDialogToFoldersOnly();
         final Optional<File> opened = FileIO.openFileFromSystem();
 
@@ -61,7 +64,7 @@ public sealed abstract class ProjectVariables
 
     // resource variable accessors
 
-    public String raFolder() {
+    public static String raFolder() {
         return String.valueOf(folder.get());
     }
 }

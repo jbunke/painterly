@@ -1,7 +1,6 @@
 package com.jordanbunke.painterly.dialog.data.menus;
 
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
-import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.ProjectUtils;
 
 public final class SaveAs extends ProjectVariables {
@@ -12,7 +11,7 @@ public final class SaveAs extends ProjectVariables {
     }
 
     private SaveAs() {
-        super(ResourceCode.RC_SA_VALIDATED_FOLDER);
+        super();
     }
 
     public static SaveAs get() {
