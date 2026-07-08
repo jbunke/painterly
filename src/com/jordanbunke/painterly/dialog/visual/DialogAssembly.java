@@ -58,6 +58,10 @@ public final class DialogAssembly {
         return buildDialogForVariableSet(db, ucs);
     }
 
+    public static PopUpDialog duplicateProject() {
+        return projectVariables(DuplicateProject.get(), RC_DUPLICATE_PROJECT);
+    }
+
     public static PopUpDialog editProjectSettings() {
         return projectVariables(EditProjectSettings.get(),
                 RC_EDIT_PROJECT_SETTINGS);

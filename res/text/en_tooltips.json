@@ -21,6 +21,8 @@
     "dialog_contains_invalid_character" : "Contains one or more invalid characters",
     "dialog_must_be_gr_eq_1" : "Must be greater than or equal to 1",
     "dialog_variable_cannot_be_null" : "Undefined",
+    "dp_validated_folder" : "$dp_folder",
+    "duplicate_project" : "Create a new $program_name project from\nthe attributes of the current project",
     "edit_project_settings" : "Edit project settings including name and save folder\n---\n\"Save project as...\" without the save operation",
     "eps_validated_folder" : "$eps_folder",
     "export" : "Exports the painting as a PNG image to the project's save folder.\nThe number of completed strokes is appended to the file name.",

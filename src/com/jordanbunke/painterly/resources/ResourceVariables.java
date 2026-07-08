@@ -3,6 +3,7 @@ package com.jordanbunke.painterly.resources;
 import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.domains.interval.ProgressManager;
+import com.jordanbunke.painterly.dialog.data.menus.DuplicateProject;
 import com.jordanbunke.painterly.dialog.data.menus.EditProjectSettings;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.dialog.data.menus.SaveAs;
@@ -39,6 +40,8 @@ public enum ResourceVariables {
     RV_DIVS_Y(p -> ResourceValue.ofString(
             String.valueOf(p.focusManager.getDivsY())),
             RC_UNKNOWABLE.asValue()),
+    RV_DP_FOLDER(() ->
+            ResourceValue.ofString(DuplicateProject.get().raFolder())),
     RV_EPS_FOLDER(() ->
             ResourceValue.ofString(EditProjectSettings.get().raFolder())),
     RV_FILE_PAINTING(() -> ResourceValue.ofString(

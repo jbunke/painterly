@@ -30,6 +30,7 @@
     "dialog_default_ok" : "Confirm",
     "display_focus" : "Focus area similarity",
     "display_global" : "Entire canvas similarity",
+    "duplicate_project" : "Duplicate project...",
     "edit_project_settings" : "Edit project settings...",
     "err_could_not_parse_spec_as_json" : "Could not parse \"$file_spec\" in the uploaded ZIP as a JSON file.",
     "err_could_not_read_folder_from_spec" : "Could not read a valid folder path from \"$file_spec\" inside the uploaded ZIP.",

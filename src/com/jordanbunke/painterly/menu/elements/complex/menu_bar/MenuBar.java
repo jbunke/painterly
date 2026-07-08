@@ -45,6 +45,7 @@ public final class MenuBar extends MenuElement {
                 .addSubMenu(SubMenuData.init(RC_NAV_PROJECT)
                         .addGlobalAction(NEW_PROJECT)
                         .addGlobalAction(OPEN_PROJECT)
+                        .addProjectAction(DUPLICATE_PROJECT)
                         .addSeparator()
                         .addProjectAction(SAVE)
                         .addProjectAction(SAVE_AS)

@@ -17,7 +17,7 @@ import static com.jordanbunke.painterly.util.ProjectUtils.*;
 
 public sealed abstract class ProjectVariables
         extends DialogVariableSet
-        permits EditProjectSettings, SaveAs {
+        permits DuplicateProject, EditProjectSettings, SaveAs {
     public final DialogVariable<String> name;
     public final DialogVariable<Path> folder;
     public final DialogVariable<Boolean> autosave;

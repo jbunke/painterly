@@ -4,6 +4,7 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
 import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
+import com.jordanbunke.painterly.dialog.data.menus.DuplicateProject;
 import com.jordanbunke.painterly.dialog.data.menus.EditProjectSettings;
 import com.jordanbunke.painterly.dialog.data.menus.SaveAs;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
@@ -46,6 +47,14 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setBehaviour(p -> {
                 EditProjectSettings.get().softReset();
                 DialogManager.set(DialogAssembly::editProjectSettings);
+            })),
+    DUPLICATE_PROJECT(new Builder(RC_DUPLICATE_PROJECT)
+            .inheritTooltipCode()
+            // TODO - .inheritIconCode()
+            .setShortcut(new KeyboardShortcut(true, false, D))
+            .setBehaviour(p -> {
+                DuplicateProject.get().softReset();
+                DialogManager.set(DialogAssembly::duplicateProject);
             })),
     TOGGLE_SIM(new Builder(RC_TOGGLE_SIM)
             .setIconCodeFunction(p -> p.isPainting() ? RC_SIM_PAUSE : RC_SIM_RESUME)
