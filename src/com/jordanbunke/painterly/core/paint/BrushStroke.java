@@ -54,7 +54,7 @@ public final class BrushStroke {
         }
 
         private void updateBounds(final StrokePoint point) {
-            final int r = (int) Math.ceil(breadth);
+            final int r = (int) Math.ceil(breadth / 2.0) + 2;
 
             rbb.updateLeft(point.roundedX - r)
                     .updateRight(point.roundedX + r)

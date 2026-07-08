@@ -2,16 +2,19 @@ package com.jordanbunke.painterly.core.paint.painter;
 
 import com.jordanbunke.color_proc.ColorProc;
 import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.delta_time.utility.math.MathPlus;
 import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.core.paint.texture.BristleTexture.Bristle;
 
 import java.awt.*;
 
 public final class TextureGenerator {
+    public static final int CH = 0x80;
+
     private static final int STANDARD_TEXTURE_W = 50,
             STANDARD_TEXTURE_H = 100;
     private static final Color GREY = new Color(0x808080);
-    private static final int CH = 0x80;
+    private static final double NOISE_MULTIPLIER = 1.03;
 
     public static GameImage bristleTexture(
             final Bristle... bristles
@@ -22,8 +25,12 @@ public final class TextureGenerator {
         for (Bristle b : bristles) {
             final int x = (int) (b.x * w),
                     y = (int) (b.y * h),
-                    alpha = (int) Math.round(b.length * ColorProc.RGB_SCALE);
-            final Color c = new Color(CH, CH, CH, alpha);
+                    alpha = (int) MathPlus.lerp(b.length,
+                            Bristle.OFF_THRESHOLD,
+                            Bristle.FULL_PRESSURE_THRESHOLD,
+                            0.0, ColorProc.RGB_SCALE, true),
+                    v = (int) Math.round(RNG.factor(NOISE_MULTIPLIER) * CH);
+            final Color c = new Color(v, v, v, alpha);
 
             texture.setRGB(x, y, c.getRGB());
         }

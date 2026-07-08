@@ -1,7 +1,7 @@
 package com.jordanbunke.painterly.core.paint.painter;
 
 public enum Painter {
-    DEFAULT(RealPainter.get()),
+    DEFAULT(DefaultPainter.get()),
     ;
 
     final IPainter painter;

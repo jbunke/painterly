@@ -5,11 +5,16 @@ import com.jordanbunke.delta_time.utility.math.RNG;
 import com.jordanbunke.painterly.algo.CircleMath;
 import com.jordanbunke.painterly.core.paint.painter.TextureGenerator;
 
+import java.awt.*;
 import java.util.stream.IntStream;
+
+import static com.jordanbunke.painterly.algo.Recoloring.*;
 
 public final class BristleTexture implements ITexture {
     private final Bristle[] bristles;
     private final GameImage texture;
+
+    private GameImage tinted;
 
     public BristleTexture(final int numBristles) {
         bristles = IntStream.range(0, numBristles)
@@ -19,10 +24,14 @@ public final class BristleTexture implements ITexture {
         texture = TextureGenerator.bristleTexture(bristles);
     }
 
+    public void tint(final Color tint) {
+        tinted = tintGreyscaleTexture(texture, tint, TextureGenerator.CH);
+    }
+
     @Override
     public GameImage realize(final double pressure) {
-        // TODO
-        return texture;
+        return pixelWiseTransformation(tinted,
+                c -> subtractOpacity(c, 1 - pressure));
     }
 
     @Override
@@ -36,6 +45,9 @@ public final class BristleTexture implements ITexture {
     }
 
     public static class Bristle {
+        public static final double FULL_PRESSURE_THRESHOLD = 0.5,
+                OFF_THRESHOLD = 0.1;
+
         public final double x, y, length;
 
         Bristle() {

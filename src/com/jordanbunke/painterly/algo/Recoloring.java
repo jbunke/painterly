@@ -66,6 +66,13 @@ public final class Recoloring {
         return new Color(r, g, b, a);
     }
 
+    public static Color subtractOpacity(final Color c, final double multiplier) {
+        final int r = c.getRed(), g = c.getGreen(), b = c.getBlue(),
+                a = Math.max(0, c.getAlpha() -
+                        (int) (multiplier * ColorProc.RGB_SCALE));
+        return new Color(r, g, b, a);
+    }
+
     public static Color greyscale(final Color in) {
         final int avg = (in.getRed() + in.getGreen() + in.getBlue()) / 3;
         return new Color(avg, avg, avg, in.getAlpha());
