@@ -5,16 +5,17 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.BrushStroke;
+import com.jordanbunke.painterly.core.paint.texture.ITexture;
 
 import java.awt.*;
 
 public interface IPainter {
 
-    GameImage brushTexture(final BrushStroke stroke, final Color tintColor);
+    ITexture brushTexture(final BrushStroke stroke, final Color tintColor);
 
     double breadthMultiplier(final double progress, final BrushStroke stroke);
 
-    GameImage textureAtPoint(final double progress, final GameImage texture);
+    GameImage realizeTexture(final double progress, final ITexture texture);
 
     /**
      * TODO - properly explain return type; boolean marks for whether angle is

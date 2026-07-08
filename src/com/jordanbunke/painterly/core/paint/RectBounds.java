@@ -16,6 +16,10 @@ public record RectBounds(int left, int right, int top, int bottom) {
         return Math.sqrt(Math.pow(width(), 2) + Math.pow(height(), 2));
     }
 
+    public int area() {
+        return width() * height();
+    }
+
     public Coord2D topLeft() {
         return new Coord2D(left, top);
     }

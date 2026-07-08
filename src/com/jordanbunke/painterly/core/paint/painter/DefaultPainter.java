@@ -9,6 +9,8 @@ import com.jordanbunke.painterly.algo.CircleMath;
 import com.jordanbunke.painterly.algo.Sobel;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.BrushStroke;
+import com.jordanbunke.painterly.core.paint.texture.ITexture;
+import com.jordanbunke.painterly.core.paint.texture.SimpleTexture;
 import com.jordanbunke.painterly.util.Constants;
 
 import java.awt.*;
@@ -38,10 +40,12 @@ public final class DefaultPainter extends PolyTexturePainter {
     }
 
     @Override
-    public GameImage brushTexture(
+    public ITexture brushTexture(
             final BrushStroke stroke, final Color tintColor
     ) {
-        return tintGreyscaleTexture(getRandomTexture(), tintColor, 128);
+        final GameImage image =
+                tintGreyscaleTexture(getRandomTexture(), tintColor, 128);
+        return new SimpleTexture(image, true);
     }
 
     @Override
@@ -54,12 +58,12 @@ public final class DefaultPainter extends PolyTexturePainter {
     }
 
     @Override
-    public GameImage textureAtPoint(
-            final double progress, final GameImage texture
+    public GameImage realizeTexture(
+            final double progress, final ITexture texture
     ) {
         // TODO - temp
         final double remaining = Math.pow(1.0 - progress, 0.5);
-        return pixelWiseTransformation(texture, c -> {
+        return pixelWiseTransformation(texture.realize(progress), c -> {
             final int r = c.getRed(), g = c.getGreen(), b = c.getBlue(),
                     a = (int) Math.round(remaining * c.getAlpha());
             return new Color(r, g, b, a);
@@ -71,8 +75,8 @@ public final class DefaultPainter extends PolyTexturePainter {
             final Project p, final Coord2D strokePos
     ) {
         final Coord2D pos = strokePos.scale(1 / p.scaleFactor);
-        final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
-                edgeDirection = Sobel.edgeDirection(pos.x, pos.y, p),
+        final double intensity = Sobel.edgeIntensity(pos, p),
+                edgeDirection = Sobel.edgeDirection(pos, p),
                 sampleProb = intensity * Constants.MAX_ANGLE_SAMPLE_PROB;
 
         if (RNG.prob(sampleProb)) {
@@ -114,7 +118,7 @@ public final class DefaultPainter extends PolyTexturePainter {
         // TODO - revise
 
         final Coord2D pos = strokePos.scale(1 / p.scaleFactor);
-        final double intensity = Sobel.edgeIntensity(pos.x, pos.y, p),
+        final double intensity = Sobel.edgeIntensity(pos, p),
                 diagonal = p.focusManager.getFocusArea().diagonal(),
                 similarity = p.progressManager.getGlobalSimilarity(),
                 simComp = 1 - Math.pow(similarity, 4d),

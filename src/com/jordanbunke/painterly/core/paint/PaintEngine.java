@@ -7,6 +7,7 @@ import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.painter.IPainter;
 import com.jordanbunke.painterly.core.paint.painter.PainterManager;
+import com.jordanbunke.painterly.core.paint.texture.ITexture;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -25,28 +26,32 @@ public final class PaintEngine {
     ) {
         final IPainter painter = PainterManager.get();
 
-        final GameImage texture = painter.brushTexture(stroke, color);
-        final int tw = texture.getWidth(), th = texture.getHeight(),
-                l = stroke.points.length;
+        final ITexture texture = painter.brushTexture(stroke, color);
+        final int l = stroke.points.length;
 
         for (int i = 0; i < l; i++) {
             final StrokePoint point = stroke.points[i];
             final double progress = i / (double) l,
                     bm = painter.breadthMultiplier(progress, stroke),
                     breadth = stroke.breadth * bm,
-                    scale = breadth / (double) th;
+                    scale = breadth / (double) texture.getHeight();
 
-            final GameImage textureAtPoint =
-                    painter.textureAtPoint(progress, texture);
+            final GameImage realTexture =
+                    painter.realizeTexture(progress, texture);
+            final int tw = realTexture.getWidth(),
+                    th = realTexture.getHeight();
 
             final AffineTransform tx = new AffineTransform();
 
             tx.translate(point.x, point.y);
-            tx.rotate(point.angle);
+
+            if (texture.rotates())
+                tx.rotate(point.angle);
+
             tx.scale(scale, scale);
             tx.translate(-tw / 2.0, -th / 2.0);
 
-            canvas.draw(textureAtPoint, tx);
+            canvas.draw(realTexture, tx);
         }
     }
 

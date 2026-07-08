@@ -1,6 +1,7 @@
 package com.jordanbunke.painterly.algo;
 
 import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.theme.Colors;
 
@@ -96,24 +97,24 @@ public final class Sobel {
     }
 
     public static double edgeIntensity(
-            final int x, final int y, final Project p
+            final Coord2D sourcePosition, final Project p
     ) {
-        return rgbToValue(getSobelPixel(x, y, p));
+        return rgbToValue(getSobelPixel(sourcePosition, p));
     }
 
     public static double edgeDirection(
-            final int x, final int y, final Project p
+            final Coord2D sourcePosition, final Project p
     ) {
-        final double hue = rgbToHue(getSobelPixel(x, y, p));
+        final double hue = rgbToHue(getSobelPixel(sourcePosition, p));
 
         // return angle perpendicular to Sobel direction indicated by hue
         return augmentAngle(fractionOfCircle(hue), fractionOfCircle(0.25));
     }
 
     private static Color getSobelPixel(
-            final int x, final int y, final Project p
+            final Coord2D sourcePosition, final Project p
     ) {
         final GameImage sobel = p.canvas.getSobel();
-        return sobel.getColorAt(x, y);
+        return sobel.getColorAt(sourcePosition.x, sourcePosition.y);
     }
 }

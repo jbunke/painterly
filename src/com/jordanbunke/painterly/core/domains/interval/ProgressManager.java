@@ -49,6 +49,10 @@ public final class ProgressManager {
         return globalSimilarity;
     }
 
+    public double getFocusSimilarity() {
+        return focusSimilarity;
+    }
+
     public boolean isDisplay() {
         return display;
     }

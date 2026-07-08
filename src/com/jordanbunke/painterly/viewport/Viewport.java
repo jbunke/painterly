@@ -172,7 +172,6 @@ public final class Viewport implements ProgramContext {
                 final Color successColor = stroke.wasAccepted()
                         ? Colors.success() : Colors.failure();
 
-                // TODO - temp
                 final Coord2D tl = stroke.affectedArea.topLeft(),
                         br = stroke.affectedArea.bottomRight(),
                         rtl = projectPosition(tl.x, tl.y,
