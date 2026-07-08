@@ -36,7 +36,9 @@ public final class RealPainter implements IPainter {
             SHORT_MCDA_LENGTH_THRESHOLD = 25.0,
             LONG_MCDA_LENGTH_THRESHOLD = 200.0,
             SHORT_MCDA_DELTA_ANGLE = CircleMath.fractionOfCircle(1 / 32.),
-            LONG_MCDA_DELTA_ANGLE = CircleMath.fractionOfCircle(0.25);
+            LONG_MCDA_DELTA_ANGLE = CircleMath.fractionOfCircle(0.25),
+            LINE_CONTINUATION_THRESHOLD = 0.5,
+            REVERSE_DELTA_ANGLE_PROB = 0.01;
 
     // TODO - temp
     private final GameImage example;
@@ -138,25 +140,50 @@ public final class RealPainter implements IPainter {
             final double initialAngle, final boolean angleFromEdge,
             final int progress, final int length
     ) {
+        // preprocessing
         final int remaining = length - progress;
         final double maxCumDeltaAngle = maxCumDeltaAngle(length),
                 drift = CircleMath.angleDifference(lastAngle, initialAngle),
                 allowance = maxCumDeltaAngle - Math.abs(drift),
                 perPoint = allowance / (double) remaining;
 
-        // TODO - Sobel path
+        // determine whether following Sobel edge is viable
+        final Coord2D strokePos = new Coord2D(
+                (int) Math.round(x), (int) Math.round(y));
 
+        if (angleFromEdge && strokePos.x >= 0 && strokePos.y >= 0 &&
+                strokePos.x < p.width && strokePos.y < p.height) {
+            final Coord2D sourcePos = strokePos.scale(1 / p.scaleFactor);
+
+            final double intensity = Sobel.edgeIntensity(sourcePos, p),
+                    edgeDirection = Sobel.edgeDirection(sourcePos, p),
+                    deviation = RNG.deviate(MAX_ANGLE_DEVIATION),
+                    candidate = CircleMath.augmentAngle(edgeDirection, deviation),
+                    diffMagnitude = Math.abs(
+                            CircleMath.angleDifference(candidate, lastAngle));
+
+            if (intensity >= LINE_CONTINUATION_THRESHOLD &&
+                    diffMagnitude < perPoint)
+                return candidate;
+        }
+
+        // standard path propagation
         double deltaAngle;
 
         if (progress == 0) {
+            // start of stroke
             final double randomMultiplier = RNG.factor(1.5),
                     maxDeltaAngle = perPoint * randomMultiplier;
 
             deltaAngle = RNG.deviate(maxDeltaAngle);
         } else {
+            // continues from previous point
             final double randomMultiplier = RNG.factor(1.1);
 
             deltaAngle = lastDeltaAngle * randomMultiplier;
+
+            if (RNG.prob(REVERSE_DELTA_ANGLE_PROB))
+                deltaAngle *= -1.0;
         }
 
         return CircleMath.augmentAngle(lastAngle, deltaAngle);
