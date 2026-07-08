@@ -4,6 +4,7 @@ import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.color_proc.ColorAlgo;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.algo.CircleMath;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.painter.IPainter;
 import com.jordanbunke.painterly.core.paint.painter.PainterManager;
@@ -62,18 +63,20 @@ public final class PaintEngine {
         final Pair<Boolean, Double> sobelResult =
                 painter.strokeAngle(p, strokePos);
         final double initialAngle = sobelResult.b();
-        final int length = painter.strokeLength(p, sobelResult.a());
-        final double breadth =
-                painter.strokeBreadth(p, strokePos, length, sobelResult.a());
+        final boolean angleFromEdge = sobelResult.a();
+        final int length = painter.strokeLength(p, angleFromEdge);
+        final double breadth = painter.strokeBreadth(
+                p, strokePos, length, angleFromEdge);
 
         return populateStrokePoints(p, strokePos,
-                length, breadth, initialAngle);
+                length, breadth, initialAngle, angleFromEdge);
     }
 
     private static BrushStroke populateStrokePoints(
             final Project p,
             final Coord2D strokePos, final int length,
-            final double breadth, final double initialAngle
+            final double breadth, final double initialAngle,
+            final boolean angleFromEdge
     ) {
         final StrokePoint initial = new StrokePoint(
                 strokePos.x, strokePos.y, initialAngle);
@@ -81,13 +84,17 @@ public final class PaintEngine {
                 new BrushStroke.Builder(initial, breadth);
 
         final IPainter painter = PainterManager.get();
-        double angle = initial.angle,
+        double angle = initial.angle, dxAngle = 0d,
                 x = initial.x, y = initial.y;
 
         for (int i = 0; i < length; i++) {
             x += Math.cos(angle);
             y += Math.sin(angle);
-            angle = painter.nextAngle(p, x, y, angle, initialAngle, i, length);
+
+            final double lastAngle = angle;
+            angle = painter.nextAngle(p, x, y, angle, dxAngle,
+                    initialAngle, angleFromEdge, i, length);
+            dxAngle = CircleMath.angleDifference(angle, lastAngle);
 
             final StrokePoint point = new StrokePoint(x, y, angle);
             strokeBuilder.addPoint(point);

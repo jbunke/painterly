@@ -32,7 +32,11 @@ public final class RealPainter implements IPainter {
             LONG_LTB_RATIO = 8.0,
             SHORT_LTB_RATIO = 4.0,
             LONG_LTB_LENGTH_THRESHOLD = 40.0,
-            SHORT_LTB_LENGTH_THRESHOLD = 20.0;
+            SHORT_LTB_LENGTH_THRESHOLD = 20.0,
+            SHORT_MCDA_LENGTH_THRESHOLD = 25.0,
+            LONG_MCDA_LENGTH_THRESHOLD = 200.0,
+            SHORT_MCDA_DELTA_ANGLE = CircleMath.fractionOfCircle(1 / 32.),
+            LONG_MCDA_DELTA_ANGLE = CircleMath.fractionOfCircle(0.25);
 
     // TODO - temp
     private final GameImage example;
@@ -128,6 +132,37 @@ public final class RealPainter implements IPainter {
     }
 
     @Override
+    public double nextAngle(
+            final Project p, final double x, final double y,
+            final double lastAngle, final double lastDeltaAngle,
+            final double initialAngle, final boolean angleFromEdge,
+            final int progress, final int length
+    ) {
+        final int remaining = length - progress;
+        final double maxCumDeltaAngle = maxCumDeltaAngle(length),
+                drift = CircleMath.angleDifference(lastAngle, initialAngle),
+                allowance = maxCumDeltaAngle - Math.abs(drift),
+                perPoint = allowance / (double) remaining;
+
+        // TODO - Sobel path
+
+        double deltaAngle;
+
+        if (progress == 0) {
+            final double randomMultiplier = RNG.factor(1.5),
+                    maxDeltaAngle = perPoint * randomMultiplier;
+
+            deltaAngle = RNG.deviate(maxDeltaAngle);
+        } else {
+            final double randomMultiplier = RNG.factor(1.1);
+
+            deltaAngle = lastDeltaAngle * randomMultiplier;
+        }
+
+        return CircleMath.augmentAngle(lastAngle, deltaAngle);
+    }
+
+    @Override
     public Color color(final Project p, final BrushStroke stroke) {
         final GameImage sourceImage = p.getSourceImage();
 
@@ -148,30 +183,17 @@ public final class RealPainter implements IPainter {
                 sourcePosArray[i].x, sourcePosArray[i].y);
     }
 
-    @Override
-    public double nextAngle(
-            final Project p, final double x, final double y,
-            final double lastAngle, final double initialAngle,
-            final int progress, final int length
-    ) {
-        // TODO
-        return lastAngle;
-
-//        final Coord2D pos = new Coord2D(
-//                (int) Math.round(x), (int) Math.round(y));
-//
-//        if (pos.x < 0 || pos.y < 0 || pos.x >= p.width || pos.y >= p.height)
-//            return CircleMath.randomAngle();
-//
-//        return strokeAngle(p, pos).b();
-    }
+    // HELPER
 
     private static double idealLTBRatio(final int length) {
-        final double tRange = LONG_LTB_LENGTH_THRESHOLD - SHORT_LTB_LENGTH_THRESHOLD,
-                t = (length - SHORT_LTB_LENGTH_THRESHOLD) / tRange,
-                vRange = LONG_LTB_RATIO - SHORT_LTB_RATIO,
-                v = SHORT_LTB_RATIO + (t * vRange);
+        return MathPlus.lerp(length,
+                SHORT_LTB_LENGTH_THRESHOLD, LONG_LTB_LENGTH_THRESHOLD,
+                SHORT_LTB_RATIO, LONG_LTB_RATIO, true);
+    }
 
-        return MathPlus.bounded(SHORT_LTB_RATIO, v, LONG_LTB_RATIO);
+    private static double maxCumDeltaAngle(final int length) {
+        return MathPlus.lerp(length,
+                SHORT_MCDA_LENGTH_THRESHOLD, LONG_MCDA_LENGTH_THRESHOLD,
+                SHORT_MCDA_DELTA_ANGLE, LONG_MCDA_DELTA_ANGLE, true);
     }
 }

@@ -155,7 +155,8 @@ public final class DefaultPainter extends PolyTexturePainter {
     @Override
     public double nextAngle(
             final Project p, final double x, final double y,
-            final double lastAngle, final double initialAngle,
+            final double lastAngle, final double lastDeltaAngle,
+            final double initialAngle, final boolean angleFromEdge,
             final int progress, final int length
     ) {
         // TODO - temp implementation

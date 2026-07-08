@@ -30,11 +30,12 @@ public interface IPainter {
             final int length, final boolean angleFromEdge
     );
 
-    Color color(final Project p, final BrushStroke stroke);
-
     double nextAngle(
             final Project p, final double x, final double y,
-            final double lastAngle, final double initialAngle,
+            final double lastAngle, final double lastDeltaAngle,
+            final double initialAngle, final boolean angleFromEdge,
             final int progress, final int length
     );
+
+    Color color(final Project p, final BrushStroke stroke);
 }
