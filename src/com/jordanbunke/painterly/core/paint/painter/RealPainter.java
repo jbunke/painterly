@@ -9,6 +9,7 @@ import com.jordanbunke.painterly.algo.CircleMath;
 import com.jordanbunke.painterly.algo.Sobel;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.BrushStroke;
+import com.jordanbunke.painterly.core.paint.texture.BristleTexture;
 import com.jordanbunke.painterly.core.paint.texture.ITexture;
 import com.jordanbunke.painterly.core.paint.texture.SimpleTexture;
 
@@ -48,7 +49,7 @@ public final class RealPainter implements IPainter {
             INCREASE_PRESSURE_PROB = 0.3;
 
     // TODO - temp
-    private final GameImage example;
+    private final BristleTexture brush;
 
     private boolean taperOff;
     private double taperOnset, taperFinalRatio;
@@ -60,7 +61,7 @@ public final class RealPainter implements IPainter {
 
     private RealPainter() {
         // TODO
-        example = TextureGenerator.flatTexture();
+        brush = new BristleTexture(2000);
         pressureFunction = p -> p;
     }
 
@@ -79,8 +80,9 @@ public final class RealPainter implements IPainter {
         updatePressureFunction(stroke);
 
         // TODO - produce texture
-        final GameImage image =
-                tintGreyscaleTexture(example, tintColor, 128);
+        final GameImage image = tintGreyscaleTexture(
+                brush.realize(0d),
+                tintColor, 128);
         return new SimpleTexture(image, true);
     }
 

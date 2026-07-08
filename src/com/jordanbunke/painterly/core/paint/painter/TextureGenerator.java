@@ -1,7 +1,9 @@
 package com.jordanbunke.painterly.core.paint.painter;
 
+import com.jordanbunke.color_proc.ColorProc;
 import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.RNG;
+import com.jordanbunke.painterly.core.paint.texture.BristleTexture.Bristle;
 
 import java.awt.*;
 
@@ -10,6 +12,24 @@ public final class TextureGenerator {
             STANDARD_TEXTURE_H = 100;
     private static final Color GREY = new Color(0x808080);
     private static final int CH = 0x80;
+
+    public static GameImage bristleTexture(
+            final Bristle... bristles
+    ) {
+        final int w = STANDARD_TEXTURE_W, h = STANDARD_TEXTURE_H;
+        final GameImage texture = new GameImage(w, h);
+
+        for (Bristle b : bristles) {
+            final int x = (int) (b.x * w),
+                    y = (int) (b.y * h),
+                    alpha = (int) Math.round(b.length * ColorProc.RGB_SCALE);
+            final Color c = new Color(CH, CH, CH, alpha);
+
+            texture.setRGB(x, y, c.getRGB());
+        }
+
+        return texture.submit();
+    }
 
     public static GameImage flatTexture() {
         final int w = STANDARD_TEXTURE_W, h = STANDARD_TEXTURE_H;
