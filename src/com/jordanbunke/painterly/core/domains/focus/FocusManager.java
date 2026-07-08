@@ -12,6 +12,8 @@ import com.jordanbunke.painterly.util.Constants;
 import com.jordanbunke.painterly.util.debug.LogManager;
 import com.jordanbunke.painterly.util.debug.LogMessage;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -194,6 +196,11 @@ public final class FocusManager {
 
                 setX(worstX);
                 setY(worstY);
+
+                StringVariableMap.post(WORST_PERC,
+                        BigDecimal.valueOf(leastSimilar * 100)
+                                .setScale(2, RoundingMode.HALF_UP).toString());
+                LogManager.log(new LogMessage(FOCUS_BOX_REASONING, RC_LOG_WORST));
             }
             case PRIORITIZE_WORST -> {
                 final int divisions = divsX * divsY;

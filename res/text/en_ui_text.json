@@ -55,6 +55,7 @@
     "log_interval_ratio" : "Completed $interval_completed/$interval_total strokes in interval ($interval_perc%)",
     "log_prioritize_worst" : "Chose focus box with similarity rank $pw_rank/$pw_divisions",
     "log_saved" : "Saved \"$project_name\"",
+    "log_worst" : "Least similar focus box: $worst_perc%",
     "nav_edit" : "Edit",
     "nav_focus_area" : "Focus area",
     "nav_main_menu" : "Return to main menu",

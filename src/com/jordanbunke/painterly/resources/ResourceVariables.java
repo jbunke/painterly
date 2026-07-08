@@ -102,6 +102,8 @@ public enum ResourceVariables {
     RV_STROKES_COMPLETED(p -> ResourceValue.ofString(
             String.valueOf(p.strokeManager.getStrokesCompleted())),
             RC_UNKNOWABLE.asValue()),
+    RV_WORST_PERC(() -> ResourceValue.ofString(
+            StringVariableMap.retrieve(WORST_PERC))),
     ;
 
     final Supplier<ResourceValue> valueGetter;

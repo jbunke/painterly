@@ -110,6 +110,7 @@ public enum ResourceCode {
     RC_LOG_INTERVAL_RATIO,
     RC_LOG_PRIORITIZE_WORST,
     RC_LOG_SAVED,
+    RC_LOG_WORST,
 
     // Navigation
     RC_NAV_EDIT,
