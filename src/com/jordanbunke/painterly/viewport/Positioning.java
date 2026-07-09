@@ -17,26 +17,31 @@ public final class Positioning {
             SCROLL_ZOOM_RATE = 1.1, CLICK_ZOOM_RATE = 1.3;
     public static final Coord2D INVALID = new Coord2D(-1, -1);
 
+    private final Project project;
+
     private double fitToScreenRatio, anchorRatioX, anchorRatioY;
 
-    public Positioning() {
+    public Positioning(final Project project) {
+        this.project = project;
+
         fitToScreenRatio = DEF_FTSR;
         anchorRatioX = MIDDLE;
         anchorRatioY = MIDDLE;
     }
 
-    public void draw(final GameImage viewportCanvas, final Project p) {
-        draw(viewportCanvas, p.width, p.height,
+    public void draw(final GameImage viewportCanvas) {
+        draw(viewportCanvas, project.width, project.height,
                 (x, y, w, h) -> {
-            viewportCanvas.draw(p.canvas.getImageForViewport(), x, y, w, h);
+            viewportCanvas.draw(project.canvas.getImageForViewport(), x, y, w, h);
 
             // Focus area and focus box overlays
-            p.focusManager.drawOverlay(viewportCanvas, x, y, w, h);
+            project.focusManager.drawOverlay(viewportCanvas, x, y, w, h);
 
             // Tool overlay
-            ToolManager.getCurrentTool().drawOverlay(viewportCanvas, p, x, y, w, h);
+            ToolManager.getCurrentTool().drawOverlay(
+                    viewportCanvas, project, x, y, w, h);
 
-            // TODO - overlays
+            // TODO - future, additional overlays here
         });
     }
 
@@ -69,23 +74,23 @@ public final class Positioning {
     }
 
     public void clickZoom(
-            final boolean in, final Project p, final Coord2D mousePosInViewport
+            final boolean in, final Coord2D mousePosInViewport
     ) {
-        zoom(in, CLICK_ZOOM_RATE, p, true, mousePosInViewport);
+        zoom(in, CLICK_ZOOM_RATE, true, mousePosInViewport);
     }
 
     public void scrollZoom(
-            final boolean in, final Project p,
-            final boolean adjustAnchor, final Coord2D mousePosInViewport
+            final boolean in, final boolean adjustAnchor,
+            final Coord2D mousePosInViewport
     ) {
-        zoom(in, SCROLL_ZOOM_RATE, p, adjustAnchor, mousePosInViewport);
+        zoom(in, SCROLL_ZOOM_RATE, adjustAnchor, mousePosInViewport);
     }
 
     public void zoom(
-            final boolean in, final double zoomRate, final Project p,
+            final boolean in, final double zoomRate,
             final boolean adjustAnchor, final Coord2D mousePosInViewport
     ) {
-        final Coord2D targetPixel = determineTargetPixel(p, mousePosInViewport);
+        final Coord2D targetPixel = determineTargetPixel(mousePosInViewport);
         final double oldRatio = fitToScreenRatio;
 
         if (in)
@@ -93,17 +98,16 @@ public final class Positioning {
         else
             setFitToScreenRatio(fitToScreenRatio / zoomRate);
 
-        if (adjustAnchor && isTargetPixelValid(targetPixel, p))
-            adjustAnchorAfterZoom(oldRatio, targetPixel, p);
+        if (adjustAnchor && isTargetPixelValid(targetPixel))
+            adjustAnchorAfterZoom(oldRatio, targetPixel);
     }
 
     private void adjustAnchorAfterZoom(
-            final double oldRatio, final Coord2D targetPixel,
-            final Project p
+            final double oldRatio, final Coord2D targetPixel
     ) {
         final Coord2D oldAnchorPixel = new Coord2D(
-                (int)(anchorRatioX * p.width),
-                (int)(anchorRatioY * p.height));
+                (int)(anchorRatioX * project.width),
+                (int)(anchorRatioY * project.height));
         final double trueZoomRate = fitToScreenRatio / oldRatio;
         final int oldDX = oldAnchorPixel.x - targetPixel.x,
                 oldDY = oldAnchorPixel.y - targetPixel.y,
@@ -111,8 +115,8 @@ public final class Positioning {
                 dy = (int)(oldDY / trueZoomRate);
         final Coord2D anchorPixel = targetPixel.displace(dx, dy);
 
-        setAnchor(anchorPixel.x / (double) p.width,
-                anchorPixel.y / (double) p.height);
+        setAnchor(anchorPixel.x / (double) project.width,
+                anchorPixel.y / (double) project.height);
     }
 
     private void setAnchor(final double anchorRatioX, final double anchorRatioY) {
@@ -130,14 +134,15 @@ public final class Positioning {
         setAnchor(MIDDLE, MIDDLE);
     }
 
-    public void fitToFocusArea(final Project p) {
-        if (p.focusManager.isWholeCanvas()) {
+    // TODO - fix
+    public void fitToFocusArea() {
+        if (project.focusManager.isWholeCanvas()) {
             reset();
             return;
         }
 
-        final RectBounds focusArea = p.focusManager.getFocusArea();
-        final int pw = p.width, ph = p.height,
+        final RectBounds focusArea = project.focusManager.getFocusArea();
+        final int pw = project.width, ph = project.height,
                 fx = focusArea.left(), fy = focusArea.top(),
                 fw = focusArea.width(), fh = focusArea.height(),
                 mx = fx + (fw / 2), my = fy + (fh / 2);
@@ -160,14 +165,15 @@ public final class Positioning {
     }
 
     public void pan(
-            final Project p, final int mouseDX, final int mouseDY,
+            final int mouseDX, final int mouseDY,
             final double initAnchorRatioX, final double initAnchorRatioY
     ) {
-        final double renderScale = determineRenderScale(p.width, p.height,
+        final double renderScale = determineRenderScale(
+                project.width, project.height,
                 Viewport.get().getWidth(), Viewport.get().getHeight());
 
-        final int renderWidth = (int)(p.width * renderScale),
-                renderHeight = (int)(p.height * renderScale);
+        final int renderWidth = (int)(project.width * renderScale),
+                renderHeight = (int)(project.height * renderScale);
 
         final double anchorDX = -mouseDX / (double) renderWidth,
                 anchorDY = -mouseDY / (double) renderHeight;
@@ -175,12 +181,10 @@ public final class Positioning {
         setAnchor(initAnchorRatioX + anchorDX, initAnchorRatioY + anchorDY);
     }
 
-    public Coord2D determineScreenPixel(
-            final Project p, final Coord2D targetPixel
-    ) {
+    public Coord2D determineScreenPixel(final Coord2D targetPixel) {
         final Viewport v = Viewport.get();
         final int tx = targetPixel.x, ty = targetPixel.y,
-                pw = p.width, ph = p.height,
+                pw = project.width, ph = project.height,
                 vx = v.getX(), vy = v.getY(),
                 vw = v.getWidth(), vh = v.getHeight();
 
@@ -197,11 +201,9 @@ public final class Positioning {
         return new Coord2D(x, y);
     }
 
-    public Coord2D determineTargetPixel(
-            final Project p, final Coord2D mousePosInViewport
-    ) {
+    public Coord2D determineTargetPixel(final Coord2D mousePosInViewport) {
         final int mx = mousePosInViewport.x, my = mousePosInViewport.y,
-                pw = p.width, ph = p.height,
+                pw = project.width, ph = project.height,
                 vw = Viewport.get().getWidth(),
                 vh = Viewport.get().getHeight();
 
@@ -218,22 +220,16 @@ public final class Positioning {
         return new Coord2D(x, y);
     }
 
-    public static boolean isTargetPixelValid(
-            final Coord2D targetPixel, final Project p
-    ) {
-        final int x = targetPixel.x, y = targetPixel.y,
-                pw = p.width, ph = p.height;
+    public boolean isTargetPixelValid(final Coord2D targetPixel) {
+        final int x = targetPixel.x, y = targetPixel.y;
 
-        return x >= 0 && y >= 0 && x < pw && y < ph;
+        return x >= 0 && y >= 0 && x < project.width && y < project.height;
     }
 
-    public static Coord2D boundTargetPixel(
-            final Coord2D targetPixel, final Project p
-    ) {
-        final int x = targetPixel.x, y = targetPixel.y,
-                pw = p.width, ph = p.height;
+    public Coord2D boundTargetPixel(final Coord2D targetPixel) {
+        final int x = targetPixel.x, y = targetPixel.y;
 
-        return new Coord2D(MathPlus.bounded(0, x, pw - 1),
-                MathPlus.bounded(0, y, ph - 1));
+        return new Coord2D(MathPlus.bounded(0, x, project.width - 1),
+                MathPlus.bounded(0, y, project.height - 1));
     }
 }

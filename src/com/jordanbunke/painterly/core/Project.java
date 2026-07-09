@@ -9,6 +9,7 @@ import com.jordanbunke.painterly.core.domains.save.SaveManager;
 import com.jordanbunke.painterly.core.paint.Canvas;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.util.Constants;
+import com.jordanbunke.painterly.viewport.Positioning;
 
 import java.nio.file.Path;
 
@@ -30,6 +31,7 @@ public final class Project {
     public final FocusManager focusManager;
     public final DebugData debugData;
     public final Canvas canvas;
+    public final Positioning positioning;
 
     private boolean painting;
 
@@ -56,6 +58,7 @@ public final class Project {
         progressManager = new ProgressManager(this);
         saveManager = new SaveManager(this,
                 autosave, autosaveFrequency);
+        positioning = new Positioning(this);
 
         painting = false;
     }

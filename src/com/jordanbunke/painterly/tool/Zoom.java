@@ -4,7 +4,6 @@ import com.jordanbunke.delta_time.events.GameMouseEvent;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.util.Cursor;
-import com.jordanbunke.painterly.viewport.Positioning;
 import com.jordanbunke.painterly.viewport.Viewport;
 
 public final class Zoom extends Tool {
@@ -36,9 +35,9 @@ public final class Zoom extends Tool {
                 mouseEvent.mousePosition.displace(-v.getX(), -v.getY()),
                 targetPixel = getTargetPixel(mouseEvent.mousePosition, p);
 
-        if (Positioning.isTargetPixelValid(targetPixel, p)) {
+        if (p.positioning.isTargetPixelValid(targetPixel)) {
             final boolean in = mouseEvent.button != GameMouseEvent.Button.RIGHT;
-            v.getPositioning().clickZoom(in, p, mousePosInViewport);
+            p.positioning.clickZoom(in, mousePosInViewport);
         }
     }
 }

@@ -61,11 +61,10 @@ public abstract class Tool {
         final Coord2D mousePosInViewport =
                 mousePos.displace(-v.getX(), -v.getY());
 
-        return v.getPositioning().determineTargetPixel(p, mousePosInViewport);
+        return p.positioning.determineTargetPixel(mousePosInViewport);
     }
 
     Coord2D getScreenPixel(final Coord2D projectPixel, final Project p) {
-        return Viewport.get().getPositioning()
-                .determineScreenPixel(p, projectPixel);
+        return p.positioning.determineScreenPixel(projectPixel);
     }
 }

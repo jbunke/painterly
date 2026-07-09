@@ -12,7 +12,6 @@ import com.jordanbunke.painterly.dialog.visual.DialogManager;
 import com.jordanbunke.painterly.events.KeyboardShortcut;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
-import com.jordanbunke.painterly.viewport.Viewport;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -65,11 +64,10 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setBehaviour(p -> p.canvas.toggleShowSource())),
     RESET_POSITIONING(new Builder(RC_RESET_POS)
             .setShortcut(new KeyboardShortcut(true, false, ENTER))
-            .setBehaviour(p -> Viewport.get().getPositioning().reset())),
+            .setBehaviour(p -> p.positioning.reset())),
     FIT_TO_FOCUS_AREA(new Builder(RC_FIT_TO_FOCUS_AREA)
             .setShortcut(new KeyboardShortcut(true, true, ENTER))
-            .setBehaviour(p ->
-                    Viewport.get().getPositioning().fitToFocusArea(p))
+            .setBehaviour(p -> p.positioning.fitToFocusArea())
             .setPrecondition(p -> !p.focusManager.isWholeCanvas())),
     RESET_FOCUS_AREA(new Builder(RC_RESET_FOCUS_AREA)
             .inheritTooltipCode()

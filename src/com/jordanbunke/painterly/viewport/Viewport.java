@@ -31,18 +31,12 @@ public final class Viewport implements ProgramContext {
     // viewport screen coordinates and dimensions
     private int x, y, width, height;
 
-    private Project lastProject;
-    private Positioning positioning;
-
     static {
         INSTANCE = new Viewport();
     }
 
     private Viewport() {
         setDimensions();
-
-        lastProject = null;
-        positioning = new Positioning();
     }
 
     public static Viewport get() {
@@ -117,24 +111,14 @@ public final class Viewport implements ProgramContext {
                 else if (KeyboardShortcut.areModKeysPressed(false, true, eventLogger))
                     p.focusManager.augmentDivsY(-mse.clicksScrolled);
                 else
-                    positioning.scrollZoom(mse.clicksScrolled < 0 /* TODO - account for inverse scroll zoom setting */,
-                            p, mouseInBounds, mousePos.displace(-x, -y));
+                    p.positioning.scrollZoom(mse.clicksScrolled < 0 /* TODO - account for inverse scroll zoom setting */,
+                            mouseInBounds, mousePos.displace(-x, -y));
             }
         }
     }
 
     @Override
-    public void update(final double deltaTime) {
-        final Project p = ProjectManager.get().getProject();
-        if (p == null)
-            return;
-
-        if (!p.equals(lastProject)) {
-            lastProject = p;
-            positioning = new Positioning();
-        }
-        // TODO
-    }
+    public void update(final double deltaTime) {}
 
     @Override
     public void render(final GameImage canvas) {
@@ -145,7 +129,7 @@ public final class Viewport implements ProgramContext {
         canvas.draw(draw(p), x, y);
 
         if (LogManager.isChannelActive(LogChannel.RECENT_STROKES))
-            canvas.draw(debugDraw(p), x, y);
+            canvas.draw(recentStrokesVisualization(p), x, y);
     }
 
     private GameImage draw(final Project p) {
@@ -153,7 +137,7 @@ public final class Viewport implements ProgramContext {
 
         viewport.fill(ThemeManager.get().viewportBackgroundColor());
 
-        positioning.draw(viewport, p);
+        p.positioning.draw(viewport);
 
         return viewport.submit();
     }
@@ -161,10 +145,10 @@ public final class Viewport implements ProgramContext {
     @Override
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
 
-    private GameImage debugDraw(final Project p) {
+    private GameImage recentStrokesVisualization(final Project p) {
         final GameImage debugOverlay = new GameImage(width, height);
 
-        positioning.draw(debugOverlay, p.width, p.height,
+        p.positioning.draw(debugOverlay, p.width, p.height,
                 (x, y, w, h) -> {
             final List<BrushStroke> recent = p.debugData.getRecentStrokes();
 
@@ -197,10 +181,6 @@ public final class Viewport implements ProgramContext {
         });
 
         return debugOverlay.submit();
-    }
-
-    public Positioning getPositioning() {
-        return positioning;
     }
 
     public int getX() {

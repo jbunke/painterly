@@ -41,7 +41,7 @@ public final class DrawFocusArea extends Tool {
         final Coord2D targetPixel = getTargetPixel(mousePos, p);
 
         selecting = true;
-        pivot = Positioning.boundTargetPixel(targetPixel, p);
+        pivot = p.positioning.boundTargetPixel(targetPixel);
         complement = pivot;
         updateTLBR();
     }
@@ -53,7 +53,7 @@ public final class DrawFocusArea extends Tool {
         if (selecting) {
             final Coord2D targetPixel = getTargetPixel(mousePos, p);
 
-            complement = Positioning.boundTargetPixel(targetPixel, p);
+            complement = p.positioning.boundTargetPixel(targetPixel);
             updateTLBR();
         }
     }

@@ -54,25 +54,20 @@ public final class Layout {
             MENU_BAR_HEIGHT = 32,
             MENU_BAR_PADDING_X = 10, // TODO - test
             MENU_BAR_SEPARATOR_HEIGHT = 1,
-            CONTEXT_BAR_HEIGHT = 32, // TODO - potentially expand for icons
+            CONTEXT_BAR_HEIGHT = 32,
             CONTEXT_BAR_PADDING_X = 8,
             CONTEXT_BAR_GAP_X = 10, // TODO - test
             CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH = 100,
             CONTEXT_BAR_NUM_SECTION_LARGE_WIDTH = 128,
             KEY_SHORTCUT_INTERVAL_X = 4,
             KEY_SHORTCUT_TEXT_MARGIN_X = 6,
-            KEY_SHORTCUT_SHADOW_MARGIN_X = 10,
-            KEY_SHORTCUT_CORNER_MARGIN_X = 6,
             KEY_SHORTCUT_DROP_SHADOW = 4,
-            KEY_SHORTCUT_DROP_SHADOW_EXTRA = 8,
-            KEY_SHORTCUT_MAX_CLEARED = 4,
             STANDARD_FOLLOW_X = 10, // TODO - test
             TEXTBOX_DEF_WIDTH = 200,
             TEXTBOX_SEG_INC = 1, // TODO - test; copied from TDSM
             TEXT_BUTTON_AFTER_LABEL_OFFSET_Y = -5,
             TEXT_BUTTON_DEF_HEIGHT = 32, // TODO - better encapsulation
             TEXT_BUTTON_PADDING_X = 20,
-            TEXT_BUTTON_INTERVAL_L_Y = 32,
             TEXT_BUTTON_INTERVAL_S_Y = 16,
             TEXT_BUTTON_TEXT_OFFSET_X = 6,
             TEXT_BUTTON_TEXT_OFFSET_Y = 5,
@@ -80,9 +75,6 @@ public final class Layout {
             TOOLTIP_PADDING_X = 16,
             TOOLTIP_PADDING_Y = 16,
             TOOLTIP_INITIAL_OFFSET_Y = 2;
-
-    public static final double
-            FIT_TO_SCREEN_RATIO = 0.8;
 
     // constant processing functions
 
