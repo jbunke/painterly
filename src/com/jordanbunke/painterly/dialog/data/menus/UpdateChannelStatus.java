@@ -34,10 +34,6 @@ public final class UpdateChannelStatus extends DialogVariableSet {
         return INSTANCE;
     }
 
-    public List<DialogVariable<Boolean>> getVariables() {
-        return variables;
-    }
-
     @Override
     public DialogVariable<?>[] getAllVariables() {
         return variables.toArray(DialogVariable[]::new);
