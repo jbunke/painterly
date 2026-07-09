@@ -89,7 +89,8 @@ public final class DrawFocusArea extends Tool {
             final int x, final int y, final int w, final int h
     ) {
         if (selecting) {
-            final RectBounds bounds = new RectBounds(tl.x, br.x, tl.y, br.y);
+            final RectBounds bounds = new RectBounds(
+                    tl.x, br.x + 1, tl.y, br.y + 1);
             drawAreaOverlay(viewportCanvas, bounds, p,
                     ColorProc.RGB_SCALE, x, y, w, h);
         } else {
