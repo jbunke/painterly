@@ -58,35 +58,43 @@ public final class FocusManager {
         this.focusBoxMode = focusBoxMode;
     }
 
-    public void focusAreaAsNewFocusBox(final int x, final int y, final int divsX, final int divsY) {
+    public void focusAreaAsNewFocusBox(
+            final int divsLeft, final int divsRight,
+            final int divsAbove, final int divsBelow
+    ) {
         if (wholeCanvas)
             return;
 
-        final int fw = focusArea.width(), fh = focusArea.height(),
-                left = focusArea.left() - (x * fw),
-                top = focusArea.top() - (y * fh),
+        final int divsX = divsLeft + divsRight + 1,
+                divsY = divsAbove + divsBelow + 1,
+                fw = focusArea.width(), fh = focusArea.height(),
+                left = focusArea.left() - (divsLeft * fw),
+                top = focusArea.top() - (divsAbove * fh),
                 right = left + (divsX * fw),
                 bottom = top + (divsY * fh);
+        final RectBounds newFocusArea =
+                new RectBounds(left, right, top, bottom);
 
-        setFocusArea(new RectBounds(left, right, top, bottom), true);
+        setFocusArea(newFocusArea, true);
         setDivsX(divsX);
         setDivsY(divsY);
-        setX(x);
-        setY(y);
+        setX(divsLeft);
+        setY(divsAbove);
     }
 
     public void focusAreaAsNewFocusBoxMaximal() {
         final int fw = focusArea.width(), fh = focusArea.height(),
-                left = focusArea.left(), top = focusArea.top(),
-                newLeft = left % fw, newTop = top % fh,
-                x = left / fw, y = top / fh,
-                divsX = (project.width - newLeft) / fw,
-                divsY = (project.height - newTop) / fh;
+                left = focusArea.left(), top = focusArea.top();
 
-        if (divsX == 1 && divsY == 1)
+        final int remRight = project.width - focusArea.right(),
+                remBelow = project.height - focusArea.bottom(),
+                divsLeft = left / fw, divsRight = remRight / fw,
+                divsAbove = top / fh, divsBelow = remBelow / fh;
+
+        if (divsLeft + divsRight + divsAbove + divsBelow == 0)
             return;
 
-        focusAreaAsNewFocusBox(x, y, divsX, divsY);
+        focusAreaAsNewFocusBox(divsLeft, divsRight, divsAbove, divsBelow);
     }
 
     public void focusBoxAsNewFocusArea() {
