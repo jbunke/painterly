@@ -8,6 +8,7 @@ import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
+import com.jordanbunke.painterly.dialog.data.VariableUIAssembler;
 import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
@@ -38,18 +39,26 @@ public final class NewProject extends DialogVariableSet {
     }
 
     private NewProject() {
-        name = new DialogVariable<>(() -> "", Validator::validName);
+        name = new DialogVariable<>(() -> "", Validator::validName,
+                VariableUIAssembler.assembleProjectNameTextbox());
         folder = new DialogVariable<>(() -> null, false,
                 path -> Validator.validFolder(path,
-                        RC_DIALOG_FB_NPD_VALIDATED_FOLDER));
-        sourceImage = new DialogVariable<>(() -> null, this::validSourceImage);
-        scaleFactor = new DialogVariable<>(() -> 1d, this::validScaleFactor);
+                        RC_DIALOG_FB_NPD_VALIDATED_FOLDER),
+                VariableUIAssembler.assembleChooseFolderButton(
+                        this::chooseFolder));
+        sourceImage = new DialogVariable<>(() -> null, this::validSourceImage,
+                VariableUIAssembler.assembleUploadSourceImageButton(
+                        this::uploadSourceImage));
+        scaleFactor = new DialogVariable<>(() -> 1d, this::validScaleFactor,
+                VariableUIAssembler.assembleScaleFactorTextbox());
         autosave = new DialogVariable<>(
                 () -> Settings.get(SET_ID_AUTOSAVE_ON_BY_DEFAULT, Boolean.class),
-                Validator::always);
+                Validator::always,
+                VariableUIAssembler.assembleCheckbox(RC_DIALOG_TX_AUTOSAVE));
         autosaveFrequency = new DialogVariable<>(
                 () -> Constants.DEF_AUTOSAVE_FREQUENCY,
-                Validator::validAutosaveFrequency);
+                Validator::validAutosaveFrequency,
+                VariableUIAssembler.assembleAutosaveFrequencyTextbox());
     }
 
     public static NewProject get() {
@@ -57,7 +66,7 @@ public final class NewProject extends DialogVariableSet {
     }
 
     @Override
-    DialogVariable<?>[] getAllVariables() {
+    public DialogVariable<?>[] getAllVariables() {
         return new DialogVariable[] {
                 name, folder, sourceImage, scaleFactor,
                 autosave, autosaveFrequency
@@ -82,7 +91,7 @@ public final class NewProject extends DialogVariableSet {
 
     // logic
 
-    public void chooseFolder() {
+    private void chooseFolder() {
         FileIO.setDialogToFoldersOnly();
         final Optional<File> opened = FileIO.openFileFromSystem();
 
@@ -92,7 +101,7 @@ public final class NewProject extends DialogVariableSet {
         folder.set(opened.get().toPath());
     }
 
-    public void uploadSourceImage() {
+    private void uploadSourceImage() {
         FileIO.setDialogToFilesOnly();
 
         final String fileTypeDescription =

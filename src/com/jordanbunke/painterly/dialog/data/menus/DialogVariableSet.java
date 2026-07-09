@@ -27,7 +27,7 @@ public abstract class DialogVariableSet {
                 .forEach(DialogVariable::reset);
     }
 
-    abstract DialogVariable<?>[] getAllVariables();
+    public abstract DialogVariable<?>[] getAllVariables();
 
     protected void executionApparatus(final Runnable whenReady) {
         whenReady.run();

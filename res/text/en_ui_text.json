@@ -42,6 +42,7 @@
     "dialog_ui_choose_folder" : "Choose",
     "dialog_ui_close" : "Close",
     "dialog_ui_default_ok" : "Confirm",
+    "dialog_ui_upload" : "Upload",
 
     "display_focus" : "Focus area similarity",
     "display_global" : "Entire canvas similarity",
@@ -95,7 +96,6 @@
     "save" : "Save project",
     "save_as" : "Save project as...",
     "start" : "Start painting",
-    "upload" : "Upload",
     "tick_mode_attempted" : "Stroke attempts",
     "tick_mode_completed" : "Completed strokes",
     "toggle_fullscreen" : "$fullscreen_action",

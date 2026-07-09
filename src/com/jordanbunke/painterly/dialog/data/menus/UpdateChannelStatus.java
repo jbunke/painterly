@@ -2,6 +2,7 @@ package com.jordanbunke.painterly.dialog.data.menus;
 
 import com.jordanbunke.painterly.dialog.data.DialogVariable;
 import com.jordanbunke.painterly.dialog.data.Validator;
+import com.jordanbunke.painterly.dialog.data.VariableUIAssembler;
 import com.jordanbunke.painterly.util.EnumUtils;
 import com.jordanbunke.painterly.util.debug.LogChannel;
 import com.jordanbunke.painterly.util.debug.LogManager;
@@ -26,24 +27,11 @@ public final class UpdateChannelStatus extends DialogVariableSet {
         channelMap = new HashMap<>();
         variables = EnumUtils.stream(LogChannel.class)
                 .filter(c -> c.channelCode != RC_NA)
-                .map(c -> {
-                    final DialogVariable<Boolean> variable =
-                            new DialogVariable<>(
-                                    () -> LogManager.isChannelActive(c),
-                                    Validator::always);
-                    channelMap.put(variable, c);
-                    return variable;
-                }).toList();
+                .map(this::toVariable).toList();
     }
 
     public static UpdateChannelStatus get() {
         return INSTANCE;
-    }
-
-    public LogChannel logChannelForVariable(
-            final DialogVariable<Boolean> variable
-    ) {
-        return channelMap.get(variable);
     }
 
     public List<DialogVariable<Boolean>> getVariables() {
@@ -51,7 +39,7 @@ public final class UpdateChannelStatus extends DialogVariableSet {
     }
 
     @Override
-    DialogVariable<?>[] getAllVariables() {
+    public DialogVariable<?>[] getAllVariables() {
         return variables.toArray(DialogVariable[]::new);
     }
 
@@ -61,5 +49,14 @@ public final class UpdateChannelStatus extends DialogVariableSet {
             if (channelMap.containsKey(variable))
                 LogManager.setChannelStatus(
                         channelMap.get(variable), variable.get());
+    }
+
+    private DialogVariable<Boolean> toVariable(final LogChannel c) {
+        final DialogVariable<Boolean> variable = new DialogVariable<>(
+                () -> LogManager.isChannelActive(c),
+                Validator::always,
+                VariableUIAssembler.assembleCheckbox(c.channelCode));
+        channelMap.put(variable, c);
+        return variable;
     }
 }
