@@ -65,6 +65,8 @@
     "fb_worst" : "Worst",
 
     "fit_to_focus_area" : "Fit to focus area",
+    "focus_area_as_focus_box" : "Focus area as new focus box...",
+    "focus_area_as_focus_box_maximal" : "Focus area as new focus box (maximal)",
     "focus_box_as_focus_area" : "Focus box as new focus area",
     "load_init_project" : "Initializing project",
     "load_load_project" : "Loading project",

@@ -57,6 +57,8 @@ public final class MenuBar extends MenuElement {
                         .addSeparator()
                         .addProjectAction(CLEAR_FOCUS_BOXES)
                         .addProjectAction(FOCUS_BOX_AS_FOCUS_AREA)
+                        .addProjectAction(FOCUS_AREA_AS_FOCUS_BOX)
+                        .addProjectAction(FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL)
                         .addProjectAction(RESET_FOCUS_AREA)
                         .addProjectAction(DELETE_ACTIVE_BOUNDS)
                         .addSeparator()

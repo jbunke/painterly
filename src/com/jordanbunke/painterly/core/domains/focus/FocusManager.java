@@ -58,6 +58,37 @@ public final class FocusManager {
         this.focusBoxMode = focusBoxMode;
     }
 
+    public void focusAreaAsNewFocusBox(final int x, final int y, final int divsX, final int divsY) {
+        if (wholeCanvas)
+            return;
+
+        final int fw = focusArea.width(), fh = focusArea.height(),
+                left = focusArea.left() - (x * fw),
+                top = focusArea.top() - (y * fh),
+                right = left + (divsX * fw),
+                bottom = top + (divsY * fh);
+
+        setFocusArea(new RectBounds(left, right, top, bottom), true);
+        setDivsX(divsX);
+        setDivsY(divsY);
+        setX(x);
+        setY(y);
+    }
+
+    public void focusAreaAsNewFocusBoxMaximal() {
+        final int fw = focusArea.width(), fh = focusArea.height(),
+                left = focusArea.left(), top = focusArea.top(),
+                newLeft = left % fw, newTop = top % fh,
+                x = left / fw, y = top / fh,
+                divsX = (project.width - newLeft) / fw,
+                divsY = (project.height - newTop) / fh;
+
+        if (divsX == 1 && divsY == 1)
+            return;
+
+        focusAreaAsNewFocusBox(x, y, divsX, divsY);
+    }
+
     public void focusBoxAsNewFocusArea() {
         if (!entireArea)
             setFocusArea(currentBoxBounds(), true);

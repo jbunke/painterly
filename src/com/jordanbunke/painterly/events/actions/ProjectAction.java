@@ -48,8 +48,7 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
                 DialogManager.set(DialogAssembly::editProjectSettings);
             })),
     DUPLICATE_PROJECT(new Builder(RC_DUPLICATE_PROJECT)
-            .inheritTooltipCode()
-            // TODO - .inheritIconCode()
+            .inheritTooltipCode().inheritIconCode()
             .setShortcut(new KeyboardShortcut(true, false, D))
             .setBehaviour(p -> {
                 DuplicateProject.get().softReset();
@@ -80,6 +79,17 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setShortcut(KeyboardShortcut.single(Q))
             .setBehaviour(p -> p.focusManager.focusBoxAsNewFocusArea())
             .setPrecondition(p -> !p.focusManager.isEntireArea())),
+    FOCUS_AREA_AS_FOCUS_BOX(new Builder(RC_FOCUS_AREA_AS_FOCUS_BOX)
+            .inheritTooltipCode().inheritIconCode()
+            .setShortcut(new KeyboardShortcut(true, false, Q))
+            .setBehaviour(p -> {
+                // TODO - dialog reset and set menu
+            }).setPrecondition(p -> !p.focusManager.isWholeCanvas())),
+    FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL(new Builder(RC_FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL)
+            .inheritTooltipCode().inheritIconCode()
+            .setShortcut(new KeyboardShortcut(false, true, Q))
+            .setBehaviour(p -> p.focusManager.focusAreaAsNewFocusBoxMaximal())
+            .setPrecondition(p -> !p.focusManager.isWholeCanvas())),
     CLEAR_FOCUS_BOXES(new Builder(RC_CLEAR_FOCUS_BOXES)
             .inheritTooltipCode()
             .inheritIconCode()

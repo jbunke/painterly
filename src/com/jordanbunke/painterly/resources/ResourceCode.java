@@ -115,6 +115,8 @@ public enum ResourceCode {
     RC_FB_WORST,
 
     RC_FIT_TO_FOCUS_AREA,
+    RC_FOCUS_AREA_AS_FOCUS_BOX,
+    RC_FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL,
     RC_FOCUS_BOX_AS_FOCUS_AREA,
 
     // Loading messages
