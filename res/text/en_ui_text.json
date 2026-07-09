@@ -81,7 +81,7 @@
     "nav_main_menu" : "Return to main menu",
     "nav_program" : "$program_name",
     "nav_project" : "Project",
-    "nav_quit_program" : "Quit $program_name",
+    "nav_quit_program" : "Quit $program_name...",
     "nav_view" : "View",
 
     "new_project" : "New project...",
