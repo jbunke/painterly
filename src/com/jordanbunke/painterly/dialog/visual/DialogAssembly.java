@@ -24,6 +24,8 @@ public final class DialogAssembly {
         final PopUpDialog.Builder db = PopUpDialog.init(RC_CHANNEL_UPDATE_STATUS)
                 .setSizeFromContents();
 
+        assembleDialogForVariableSet(db, ucs);
+
         return buildDialogForVariableSet(db, ucs);
     }
 
@@ -46,6 +48,8 @@ public final class DialogAssembly {
         final PopUpDialog.Builder db = PopUpDialog.init(titleCode)
                 .setHeightFromContents();
 
+        assembleDialogForVariableSet(db, varSet);
+
         return buildDialogForVariableSet(db, varSet);
     }
 
@@ -53,6 +57,8 @@ public final class DialogAssembly {
         final NewProject np = NewProject.get();
         final PopUpDialog.Builder db = PopUpDialog.init(RC_NEW_PROJECT)
                 .setHeightFromContents();
+
+        assembleDialogForVariableSet(db, np);
 
         return buildDialogForVariableSet(db, np);
     }
@@ -118,14 +124,18 @@ public final class DialogAssembly {
 
     // HELPER FUNCTIONS
 
-    private static PopUpDialog buildDialogForVariableSet(
+    private static void assembleDialogForVariableSet(
             final PopUpDialog.Builder db, final DialogVariableSet vars
     ) {
         final DialogVariable<?>[] variables = vars.getAllVariables();
 
         IntStream.range(0, variables.length)
                 .forEach(i -> db.addElements(variables[i].assemble(i, db)));
+    }
 
+    private static PopUpDialog buildDialogForVariableSet(
+            final PopUpDialog.Builder db, final DialogVariableSet vars
+    ) {
         return db.setPrecondition(vars::validate)
                 .setOnOK(vars::ok).build();
     }
