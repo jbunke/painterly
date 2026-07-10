@@ -3,10 +3,7 @@ package com.jordanbunke.painterly;
 import com.jordanbunke.painterly.settings.RuntimeSettings;
 
 public final class DevBuild {
-    private static final String
-            FLAG_OVERWRITE = "-o",
-            FLAG_FPS = "-fps",
-            FLAG_CAN_DEBUG = "-d";
+    private static final String FLAG_OVERWRITE = "-o";
 
     public static void main(String[] args) {
         processArgs(args);

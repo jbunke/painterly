@@ -1,11 +1,7 @@
 package com.jordanbunke.painterly.io;
 
 import com.jordanbunke.delta_time.image.GameImage;
-import com.jordanbunke.delta_time.io.FileIO;
-import com.jordanbunke.delta_time.io.GameImageIO;
-import com.jordanbunke.delta_time.io.ZipEntryData;
-import com.jordanbunke.delta_time.io.ZipWriter;
-import com.jordanbunke.delta_time.scripting.util.PathHelper;
+import com.jordanbunke.delta_time.io.*;
 import com.jordanbunke.delta_time.utility.Version;
 import com.jordanbunke.json.JSONBuilder;
 import com.jordanbunke.json.JSONPair;
@@ -185,7 +181,7 @@ public final class SaveLoader {
                     case VERSION -> version = Version.parse(v);
                     case NAME -> name = v;
                     case FOLDER -> folder =
-                            Path.of(PathHelper.formatPathString(v));
+                            Path.of(PathUtils.formatPathString(v));
                     case WIDTH ->
                             width = castJSONInt(pair.value(), width);
                     case HEIGHT ->

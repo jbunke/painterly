@@ -56,11 +56,11 @@ public final class ProgramInfo {
                         " version to " + formatVersion());
             }
 
-            final Path versionFile = RES_ROOT.resolve(Constants.VERSION_FILE);
+            final Path versionFile = RES_ROOT.resolve(Constants.VERSION_FILE),
+                    releaseFile = RES_ROOT.resolve(Constants.RELEASE_FILE);
             FileIO.writeFile(versionFile, VERSION.toString());
-
-            // TODO - write to "release" file whether build is demo or not
-            //        -> read by build script
+            FileIO.writeFile(releaseFile, IS_DEMO
+                    ? Constants.IS_DEMO_CODE : Constants.IS_RELEASE_CODE);
         }
     }
 

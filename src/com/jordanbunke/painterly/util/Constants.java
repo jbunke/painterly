@@ -7,11 +7,13 @@ public final class Constants {
             NAME_CODE = "name", VERSION_CODE = "version",
             IS_DEVBUILD_CODE = "devbuild",
             IS_DEMO_CODE = "demo",
+            IS_RELEASE_CODE = "release",
             SPEC_FILENAME = "project.json",
             SOURCE_FILENAME = "source.png",
             PAINTING_FILENAME = "painting.png";
 
     public static final Path PROGRAM_FILE = Path.of("program.json"),
+            RELEASE_FILE = Path.of("release"),
             VERSION_FILE = Path.of("version"),
             INTERNAL_SETTINGS_FILEPATH = Path.of("data", ".settings.json");
 

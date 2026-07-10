@@ -13,7 +13,6 @@
     <orderEntry type="library" name="clink" level="project" />
     <orderEntry type="library" name="delta-time-core" level="project" />
     <orderEntry type="library" name="json" level="project" />
-    <orderEntry type="library" name="delta-time-script" level="project" />
     <orderEntry type="library" name="delta-time-fonts" level="project" />
     <orderEntry type="library" name="delta-time-menu-extension" level="project" />
     <orderEntry type="library" name="color-proc" level="project" />
