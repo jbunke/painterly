@@ -1,6 +1,7 @@
 package com.jordanbunke.painterly.core.domains.interval;
 
 import com.jordanbunke.delta_time.utility.math.MathPlus;
+import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.resources.StringVariableMap;
 import com.jordanbunke.painterly.settings.Settings;
@@ -49,7 +50,8 @@ public final class StrokeManager {
             strokesCompleted++;
             completedInInterval++;
 
-            project.saveManager.checkAutosave(strokesCompleted);
+            if (ProgramInfo.isFullRelease())
+                project.saveManager.checkAutosave(strokesCompleted);
         }
 
         // expressed as equality with constant for sake of readability

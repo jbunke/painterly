@@ -120,12 +120,10 @@ public final class DialogAssembly {
             /* TODO - add ResourceCode for overriding OK text */
     ) {
         final PopUpDialog.Builder db = PopUpDialog.init(titleCode)
-                .setHeightFromContents()
-                .setWidthAsScreenPercentage(0.4);
+                .setSizeFromContents();
 
         final SimpleLabel messageLabel = SimpleLabel
                 .init(messageCode, new Coord2D())
-                .setAnchor(MenuElement.Anchor.CENTRAL_TOP)
                 .build();
         final DialogElement message = leadLabelForDialog(db, messageLabel,
                 deb -> deb.centerInColumnX(db));

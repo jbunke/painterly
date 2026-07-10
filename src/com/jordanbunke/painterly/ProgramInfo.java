@@ -13,9 +13,11 @@ import java.nio.file.Path;
 public final class ProgramInfo {
     public static String PROGRAM_NAME = "Painterly";
     private static Version VERSION = new Version(1, 0, 0);
-    private static boolean IS_DEVBUILD = false;
+    private static boolean IS_DEVBUILD = false,
+            IS_DEMO = false;
 
     static void readProgramFile() {
+        // read
         final String programFile = ResourceReader.read(Constants.PROGRAM_FILE);
 
         final JSONPair[] pairs = JSONReader.readObject(programFile);
@@ -28,9 +30,12 @@ public final class ProgramInfo {
                         VERSION = Version.parse(String.valueOf(pair.value()));
                 case Constants.IS_DEVBUILD_CODE ->
                         IS_DEVBUILD = Boolean.parseBoolean(String.valueOf(pair.value()));
+                case Constants.IS_DEMO_CODE ->
+                        IS_DEMO = Boolean.parseBoolean(String.valueOf(pair.value()));
             }
         }
 
+        // write
         if (RuntimeSettings.isOverwrite()) {
             final Path RES_ROOT = Path.of("res");
 
@@ -44,6 +49,7 @@ public final class ProgramInfo {
                 updated.add(new JSONPair(Constants.NAME_CODE, PROGRAM_NAME));
                 updated.add(new JSONPair(Constants.VERSION_CODE, String.valueOf(VERSION)));
                 updated.add(new JSONPair(Constants.IS_DEVBUILD_CODE, IS_DEVBUILD));
+                updated.add(new JSONPair(Constants.IS_DEMO_CODE, IS_DEMO));
 
                 FileIO.writeFile(toSave, updated.write());
                 DeltaTimeGlobal.print("Incremented " + PROGRAM_NAME +
@@ -52,14 +58,22 @@ public final class ProgramInfo {
 
             final Path versionFile = RES_ROOT.resolve(Constants.VERSION_FILE);
             FileIO.writeFile(versionFile, VERSION.toString());
+
+            // TODO - write to "release" file whether build is demo or not
+            //        -> read by build script
         }
     }
 
     public static String formatVersion() {
-        return "v" + VERSION + (IS_DEVBUILD ? " (devbuild)" : "");
+        return "v" + VERSION + (IS_DEVBUILD ? " (devbuild)" : "") +
+                (IS_DEMO ? " (demo)" : "");
     }
 
     public static Version getVersion() {
         return VERSION;
+    }
+
+    public static boolean isFullRelease() {
+        return !IS_DEMO;
     }
 }

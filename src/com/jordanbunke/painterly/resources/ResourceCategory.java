@@ -4,11 +4,11 @@ public enum ResourceCategory {
     TOOLTIP, UI_TEXT, VALUE;
     // TODO - add categories
 
-    private static final String[] SAME_PLURAL_ENDINGS;
+    private static final String[] NO_PLURAL_IF_ENDS_IN;
 
     static {
-        SAME_PLURAL_ENDINGS = new String[] {
-                "text" // TODO
+        NO_PLURAL_IF_ENDS_IN = new String[] {
+                "text"
         };
     }
 
@@ -20,13 +20,13 @@ public enum ResourceCategory {
         };
     }
 
-    public String suffix() {
-        final String suffix = "_" + name().toLowerCase();
+    public String filename() {
+        final String filename = name().toLowerCase();
 
-        for (String ending : SAME_PLURAL_ENDINGS)
-            if (suffix.endsWith(ending))
-                return suffix;
+        for (String ending : NO_PLURAL_IF_ENDS_IN)
+            if (filename.endsWith(ending))
+                return filename;
 
-        return suffix + "s";
+        return filename + "s";
     }
 }

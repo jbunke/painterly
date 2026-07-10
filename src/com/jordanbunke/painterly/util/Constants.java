@@ -6,6 +6,7 @@ public final class Constants {
     public static final String
             NAME_CODE = "name", VERSION_CODE = "version",
             IS_DEVBUILD_CODE = "devbuild",
+            IS_DEMO_CODE = "demo",
             SPEC_FILENAME = "project.json",
             SOURCE_FILENAME = "source.png",
             PAINTING_FILENAME = "painting.png";

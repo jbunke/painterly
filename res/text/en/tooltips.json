@@ -1,5 +1,6 @@
 {
     "about" : "Help, Info & Additional Resources\n---\nRead the change log, roadmap, and license",
+    "action_not_available_in_demo" : "This action cannot be performed in the demo.\nYou must buy the full version of $program_name to do this.",
 
     "cb_current_tool" : "The currently selected tool",
     "cb_divs_x" : "Focus box divisions along X-axis",

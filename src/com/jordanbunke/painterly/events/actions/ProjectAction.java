@@ -1,5 +1,6 @@
 package com.jordanbunke.painterly.events.actions;
 
+import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.ProjectManager;
 import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
@@ -23,23 +24,28 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
     EXPORT(new Builder(RC_EXPORT)
-            .inheritTooltipCode()
+            .setTooltipCode(ProgramInfo.isFullRelease()
+                    ? RC_EXPORT : RC_ACTION_NOT_AVAILABLE_IN_DEMO)
             // TODO - .inheritIconCode()
             .setShortcut(new KeyboardShortcut(true, false, E))
-            .setBehaviour(p -> p.saveManager.export())),
+            .setBehaviour(p -> p.saveManager.export())
+            .setPrecondition(p -> ProgramInfo.isFullRelease())),
     SAVE(new Builder(RC_SAVE)
-            .inheritTooltipCode()
+            .setTooltipCode(ProgramInfo.isFullRelease()
+                    ? RC_SAVE : RC_ACTION_NOT_AVAILABLE_IN_DEMO)
             .inheritIconCode()
             .setShortcut(new KeyboardShortcut(true, false, S))
-            .setBehaviour(p -> p.saveManager.save())),
+            .setBehaviour(p -> p.saveManager.save())
+            .setPrecondition(p -> ProgramInfo.isFullRelease())),
     SAVE_AS(new Builder(RC_SAVE_AS)
-            .inheritTooltipCode()
+            .setTooltipCode(ProgramInfo.isFullRelease()
+                    ? RC_SAVE_AS : RC_ACTION_NOT_AVAILABLE_IN_DEMO)
             .inheritIconCode()
             .setShortcut(new KeyboardShortcut(true, true, S))
             .setBehaviour(p -> {
                 SaveAs.get().softReset();
                 DialogManager.set(DialogAssembly::saveAs);
-            })),
+            }).setPrecondition(p -> ProgramInfo.isFullRelease())),
     EDIT_PROJECT_SETTINGS(new Builder(RC_EDIT_PROJECT_SETTINGS)
             .inheritTooltipCode()
             // TODO - .inheritIconCode()

@@ -3,11 +3,12 @@ package com.jordanbunke.painterly.resources;
 import com.jordanbunke.painterly.util.EnumUtils;
 
 public enum ResourceCode {
-    RC_NA, // special resource code indicating N/A
+    /** Special resource code indicating N/A or blank */
+    RC_NA,
     RC_UNKNOWABLE,
     RC_UNKNOWN,
 
-    // Icons
+    // Icons only
     RC_CHECKED_FALSE,
     RC_CHECKED_TRUE,
     RC_FEEDBACK_INVALID,
@@ -15,13 +16,15 @@ public enum ResourceCode {
     RC_DECREMENT,
     RC_INCREMENT,
 
-    // Misc. images
+    // Misc. images only
     RC_CONTROL_POINT,
     RC_HIGHLIGHT,
     RC_ICON,
 
-    // UI text
+    // START OF STANDARD RESOURCE CODES
+
     RC_ABOUT, // also: tooltip
+    RC_ACTION_NOT_AVAILABLE_IN_DEMO,
 
     // Are you sure
     RC_AYS_CLOSE_PROJECT_MESSAGE,

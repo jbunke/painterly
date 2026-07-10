@@ -101,7 +101,8 @@ public final class LanguageData {
     }
 
     private void read(final ResourceCategory category) {
-        final Path file = TEXT_FOLDER.resolve(language.code() + category.suffix() + ".json");
+        final Path file = TEXT_FOLDER.resolve(Path.of(language.code(),
+                category.filename() + ".json"));
         final Map<String, String> map = categoryMaps.get(category);
 
         try {
