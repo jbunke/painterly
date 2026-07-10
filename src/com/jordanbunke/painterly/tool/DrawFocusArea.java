@@ -6,10 +6,12 @@ import com.jordanbunke.delta_time.image.GameImage;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.core.Project;
 import com.jordanbunke.painterly.core.paint.RectBounds;
+import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.util.Cursor;
 import com.jordanbunke.painterly.viewport.Positioning;
 import com.jordanbunke.painterly.viewport.Viewport;
 
+import static com.jordanbunke.painterly.settings.Settings.SettingID.SET_ID_DRAW_DFA_RETICLE;
 import static com.jordanbunke.painterly.theme.Graphics.*;
 
 public final class DrawFocusArea extends Tool {
@@ -19,10 +21,11 @@ public final class DrawFocusArea extends Tool {
         INSTANCE = new DrawFocusArea();
     }
 
-    private boolean selecting;
+    private boolean drawReticle, selecting;
     private Coord2D mousePos, pivot, complement, tl, br;
 
     private DrawFocusArea() {
+        drawReticle = Settings.get(SET_ID_DRAW_DFA_RETICLE, Boolean.class);
         selecting = false;
         mousePos = Positioning.INVALID;
         pivot = Positioning.INVALID;
@@ -93,12 +96,16 @@ public final class DrawFocusArea extends Tool {
                     tl.x, br.x + 1, tl.y, br.y + 1);
             drawAreaOverlay(viewportCanvas, bounds, p,
                     ColorProc.RGB_SCALE, x, y, w, h);
-        } else {
+        } else if (drawReticle) {
             final Viewport v = Viewport.get();
             final Coord2D mousePosInViewport =
                     mousePos.displace(-v.getX(), -v.getY());
-            drawViewportReticle(viewportCanvas, mousePosInViewport);
+            drawDFAReticle(viewportCanvas, mousePosInViewport);
         }
+    }
+
+    public void updateDrawReticle() {
+        drawReticle = Settings.get(SET_ID_DRAW_DFA_RETICLE, Boolean.class);
     }
 
     private void updateTLBR() {

@@ -35,6 +35,7 @@ public final class Settings {
         SET_ID_AUTOSAVE_ON_BY_DEFAULT,
         SET_ID_LOG_CHANNEL_FOCUS_BOX_REASONING_OBD,
         SET_ID_LOG_CHANNEL_INTERVAL_STATS_OBD,
+        SET_ID_DRAW_DFA_RETICLE,
         ;
 
         private static final String prefix = "SET_ID_";
@@ -108,6 +109,9 @@ public final class Settings {
                 Boolean::parseBoolean, true));
         addSetting(new Setting<>(Boolean.class,
                 SET_ID_LOG_CHANNEL_INTERVAL_STATS_OBD,
+                Boolean::parseBoolean, true));
+        addSetting(new Setting<>(Boolean.class,
+                SET_ID_DRAW_DFA_RETICLE,
                 Boolean::parseBoolean, true));
     }
 

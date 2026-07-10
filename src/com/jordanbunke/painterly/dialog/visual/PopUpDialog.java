@@ -19,6 +19,7 @@ import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
 import com.jordanbunke.painterly.theme.Graphics;
 import com.jordanbunke.painterly.theme.ThemeManager;
+import com.jordanbunke.painterly.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -122,6 +123,8 @@ public final class PopUpDialog extends MenuElementContainer {
     public void debugRender(final GameImage canvas, final GameDebugger debugger) {}
 
     public static class Builder implements MenuElementBuilder<PopUpDialog> {
+        private static final String ELLIPSE = "...";
+
         private final String title;
         private final List<DialogElement> elements;
 
@@ -138,7 +141,10 @@ public final class PopUpDialog extends MenuElementContainer {
         private Runnable onOK;
 
         Builder(final ResourceCode titleCode) {
-            this.title = LanguageData.retrieveUIText(titleCode);
+            this.title = StringUtils.ifTransform(
+                    LanguageData.retrieveUIText(titleCode),
+                    s -> s.endsWith(ELLIPSE),
+                    s -> s.substring(0, s.length() - ELLIPSE.length()));
 
             elements = new LinkedList<>();
 

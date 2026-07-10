@@ -165,7 +165,7 @@ public final class Graphics {
 
     // ADDITIONAL UI
 
-    public static void drawViewportReticle(
+    public static void drawDFAReticle(
             final GameImage viewportCanvas, final Coord2D mousePosInViewport
     ) {
         final int w = viewportCanvas.getWidth(),
