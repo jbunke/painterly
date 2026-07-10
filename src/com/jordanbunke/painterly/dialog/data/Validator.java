@@ -4,11 +4,11 @@ import com.jordanbunke.delta_time.utility.math.Pair;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.util.Constants;
 
-import static com.jordanbunke.painterly.resources.ResourceCode.*;
-
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Set;
+
+import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 @FunctionalInterface
 public interface Validator<T> {

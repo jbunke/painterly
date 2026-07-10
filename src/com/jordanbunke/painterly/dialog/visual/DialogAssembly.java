@@ -19,6 +19,17 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 public final class DialogAssembly {
     // TODO
 
+    public static PopUpDialog focusAreaAsFocusBox() {
+        final FocusAreaAsFocusBox ff = FocusAreaAsFocusBox.get();
+        final PopUpDialog.Builder db = PopUpDialog
+                .init(RC_FOCUS_AREA_AS_FOCUS_BOX)
+                .setHeightFromContents();
+
+        assembleDialogForVariableSet(db, ff);
+
+        return buildDialogForVariableSet(db, ff);
+    }
+
     public static PopUpDialog updateChannelStatus() {
         final UpdateChannelStatus ucs = UpdateChannelStatus.get();
         final PopUpDialog.Builder db = PopUpDialog.init(RC_CHANNEL_UPDATE_STATUS)

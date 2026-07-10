@@ -65,6 +65,14 @@ public enum ResourceVariables {
             RC_UNKNOWABLE.asValue()),
     RV_INTERVAL_TOTAL(() -> ResourceValue.ofString(
             StringVariableMap.retrieve(INTERVAL_TOTAL))),
+    RV_MAX_DIVS_ABOVE(() -> ResourceValue.ofString(
+            FocusAreaAsFocusBox.get().raMaxDivsAbove())),
+    RV_MAX_DIVS_BELOW(() -> ResourceValue.ofString(
+            FocusAreaAsFocusBox.get().raMaxDivsBelow())),
+    RV_MAX_DIVS_LEFT(() -> ResourceValue.ofString(
+            FocusAreaAsFocusBox.get().raMaxDivsLeft())),
+    RV_MAX_DIVS_RIGHT(() -> ResourceValue.ofString(
+            FocusAreaAsFocusBox.get().raMaxDivsRight())),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_PROJECT_NAME(() -> ResourceValue.ofString(
             StringVariableMap.retrieve(PROJECT_NAME))),

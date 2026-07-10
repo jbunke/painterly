@@ -83,18 +83,31 @@ public final class FocusManager {
     }
 
     public void focusAreaAsNewFocusBoxMaximal() {
-        final int fw = focusArea.width(), fh = focusArea.height(),
-                left = focusArea.left(), top = focusArea.top();
-
-        final int remRight = project.width - focusArea.right(),
-                remBelow = project.height - focusArea.bottom(),
-                divsLeft = left / fw, divsRight = remRight / fw,
-                divsAbove = top / fh, divsBelow = remBelow / fh;
+        final int divsLeft = maxDivsToLeft(),
+                divsRight = maxDivsToRight(),
+                divsAbove = maxDivsAbove(),
+                divsBelow = maxDivsBelow();
 
         if (divsLeft + divsRight + divsAbove + divsBelow == 0)
             return;
 
         focusAreaAsNewFocusBox(divsLeft, divsRight, divsAbove, divsBelow);
+    }
+
+    public int maxDivsToLeft() {
+        return focusArea.left() / focusArea.width();
+    }
+
+    public int maxDivsToRight() {
+        return (project.width - focusArea.right()) / focusArea.width();
+    }
+
+    public int maxDivsAbove() {
+        return focusArea.top() / focusArea.height();
+    }
+
+    public int maxDivsBelow() {
+        return (project.height - focusArea.bottom()) / focusArea.height();
     }
 
     public void focusBoxAsNewFocusArea() {

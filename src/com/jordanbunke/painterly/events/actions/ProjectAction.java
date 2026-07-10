@@ -6,6 +6,7 @@ import com.jordanbunke.painterly.core.domains.focus.FocusBoxMode;
 import com.jordanbunke.painterly.core.domains.interval.StrokeManager;
 import com.jordanbunke.painterly.dialog.data.menus.DuplicateProject;
 import com.jordanbunke.painterly.dialog.data.menus.EditProjectSettings;
+import com.jordanbunke.painterly.dialog.data.menus.FocusAreaAsFocusBox;
 import com.jordanbunke.painterly.dialog.data.menus.SaveAs;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
 import com.jordanbunke.painterly.dialog.visual.DialogManager;
@@ -83,7 +84,8 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .inheritTooltipCode().inheritIconCode()
             .setShortcut(new KeyboardShortcut(true, false, Q))
             .setBehaviour(p -> {
-                // TODO - dialog reset and set menu
+                FocusAreaAsFocusBox.get().softReset();
+                DialogManager.set(DialogAssembly::focusAreaAsFocusBox);
             }).setPrecondition(p -> !p.focusManager.isWholeCanvas())),
     FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL(new Builder(RC_FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL)
             .inheritTooltipCode().inheritIconCode()
