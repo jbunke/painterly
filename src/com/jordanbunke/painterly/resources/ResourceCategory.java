@@ -1,32 +1,47 @@
 package com.jordanbunke.painterly.resources;
 
+import java.util.Arrays;
+
 public enum ResourceCategory {
-    TOOLTIP, UI_TEXT, VALUE;
+    TOOLTIP, UI_TEXT, VALUE,
+    CHANGELOG(FileType.TXT), ROADMAP(FileType.TXT);
     // TODO - add categories
 
-    private static final String[] NO_PLURAL_IF_ENDS_IN;
+    private final FileType fileType;
 
-    static {
-        NO_PLURAL_IF_ENDS_IN = new String[] {
-                "text"
-        };
+    ResourceCategory(final FileType fileType) {
+        this.fileType = fileType;
+    }
+
+    ResourceCategory() {
+        this(FileType.JSON);
     }
 
     public String formattedName() {
-        return switch (this) {
-            case UI_TEXT -> "UI text";
-            // TODO - additional non-trivial (language-dependent) resource categories
-            default -> name().toLowerCase();
-        };
+        return this == UI_TEXT ? "UI text" : name().toLowerCase();
     }
 
     public String filename() {
         final String filename = name().toLowerCase();
 
-        for (String ending : NO_PLURAL_IF_ENDS_IN)
-            if (filename.endsWith(ending))
-                return filename;
+        return switch (this) {
+            case TOOLTIP, VALUE -> filename + "s";
+            default -> filename;
+        } + fileType;
+    }
 
-        return filename + "s";
+    public static ResourceCategory[] jsonCategories() {
+        return Arrays.stream(values())
+                .filter(c -> c.fileType == FileType.JSON)
+                .toArray(ResourceCategory[]::new);
+    }
+
+    enum FileType {
+        JSON, TXT;
+
+        @Override
+        public String toString() {
+            return "." + name().toLowerCase();
+        }
     }
 }

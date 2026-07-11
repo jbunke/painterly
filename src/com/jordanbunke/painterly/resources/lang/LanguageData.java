@@ -34,19 +34,27 @@ public final class LanguageData {
             languageDataMap.put(l, new LanguageData(l));
     }
 
+    public static String readChangelog() {
+        return readFile(getCurrentLanguage(), ResourceCategory.CHANGELOG);
+    }
+
+    public static String readRoadmap() {
+        return readFile(getCurrentLanguage(), ResourceCategory.ROADMAP);
+    }
+
     public static String retrieveTooltip(final ResourceCode resourceCode) {
-        return retrieve(resourceCode, ResourceCategory.TOOLTIP, true);
+        return retrieveFromJSON(resourceCode, ResourceCategory.TOOLTIP, true);
     }
 
     public static String retrieveUIText(final ResourceCode resourceCode) {
-        return retrieve(resourceCode, ResourceCategory.UI_TEXT, true);
+        return retrieveFromJSON(resourceCode, ResourceCategory.UI_TEXT, true);
     }
 
     public static String retrieveValue(final ResourceCode resourceCode) {
-        return retrieve(resourceCode, ResourceCategory.VALUE, false);
+        return retrieveFromJSON(resourceCode, ResourceCategory.VALUE, false);
     }
 
-    public static String retrieve(
+    private static String retrieveFromJSON(
             final ResourceCode resourceCode,
             final ResourceCategory resourceCategory,
             final boolean requiresParsing
@@ -94,30 +102,41 @@ public final class LanguageData {
 
         categoryMaps = new HashMap<>();
 
-        for (ResourceCategory category : ResourceCategory.values()) {
+        for (ResourceCategory category : ResourceCategory.jsonCategories()) {
             categoryMaps.put(category, new HashMap<>());
-            read(category);
+            readJSONCategory(category);
         }
     }
 
-    private void read(final ResourceCategory category) {
-        final Path file = TEXT_FOLDER.resolve(Path.of(language.code(),
-                category.filename() + ".json"));
+    private void readJSONCategory(final ResourceCategory category) {
+        final String content = readFile(language, category);
         final Map<String, String> map = categoryMaps.get(category);
+        final JSONPair[] pairs = JSONReader.readObject(content);
 
-        try {
-            final String content = ResourceReader.read(file);
-            final JSONPair[] pairs = JSONReader.readObject(content);
+        if (pairs == null)
+            return;
 
-            for (JSONPair pair : pairs)
-                map.put(pair.key(), pair.value().toString());
-        } catch (Exception e) {
-            GameError.send("Unable to read the " + language.formattedName() +
-                    " " + category.formattedName() + " file");
-        }
+        for (JSONPair pair : pairs)
+            map.put(pair.key(), pair.value().toString());
     }
 
     private Map<String, String> mapFromCategory(final ResourceCategory category) {
         return categoryMaps.get(category);
+    }
+
+    private static String readFile(
+            final Language language, final ResourceCategory category
+    ) {
+        final Path file = TEXT_FOLDER.resolve(
+                Path.of(language.code(), category.filename()));
+
+        try {
+            return ResourceReader.read(file);
+        } catch (NullPointerException npe) {
+            GameError.send("Unable to read the " + language.formattedName() +
+                    " " + category.formattedName() + " file");
+        }
+
+        return "";
     }
 }
