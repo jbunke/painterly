@@ -38,6 +38,10 @@ public final class LanguageData {
         return readFile(getCurrentLanguage(), ResourceCategory.CHANGELOG);
     }
 
+    public static String readLicense() {
+        return readFile(getCurrentLanguage(), ResourceCategory.LICENSE);
+    }
+
     public static String readRoadmap() {
         return readFile(getCurrentLanguage(), ResourceCategory.ROADMAP);
     }

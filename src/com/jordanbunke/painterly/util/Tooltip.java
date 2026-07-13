@@ -34,7 +34,9 @@ public final class Tooltip {
     public static Tooltip get() {
         return INSTANCE;
     }
-
+    
+    /* TODO - rename class to TooltipManager and change return type
+        to custom Tooltip type that supports rich text formatting */
     public static String resolve(final ResourceCode code) {
         return code == RC_NA ? NONE
                 : LanguageData.retrieveTooltip(code);

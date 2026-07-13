@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 public enum ResourceCategory {
     TOOLTIP, UI_TEXT, VALUE,
-    CHANGELOG(FileType.TXT), ROADMAP(FileType.TXT);
+    CHANGELOG(FileType.MARKDOWN),
+    ROADMAP(FileType.MARKDOWN),
+    LICENSE(FileType.MARKDOWN);
     // TODO - add categories
 
     private final FileType fileType;
@@ -22,11 +24,12 @@ public enum ResourceCategory {
     }
 
     public String filename() {
-        final String filename = name().toLowerCase();
+        final String filename = name();
 
         return switch (this) {
-            case TOOLTIP, VALUE -> filename + "s";
-            default -> filename;
+            case LICENSE -> filename;
+            case TOOLTIP, VALUE -> filename.toLowerCase() + "s";
+            default -> filename.toLowerCase();
         } + fileType;
     }
 
@@ -37,10 +40,13 @@ public enum ResourceCategory {
     }
 
     enum FileType {
-        JSON, TXT;
+        JSON, MARKDOWN;
 
         @Override
         public String toString() {
+            if (this == MARKDOWN)
+                return ".md";
+
             return "." + name().toLowerCase();
         }
     }
