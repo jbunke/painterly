@@ -95,8 +95,10 @@ public enum ResourceVariables {
     RV_PV_FOLDER(() ->
             ResourceValue.ofString(ProjectVariables.raFolder())),
     RV_SIM_ACTION_STATUS(p -> (p.isPainting()
-            ? RC_SIM_PAUSE : RC_SIM_RESUME).asValue(),
-            RC_SIM_RESUME.asValue()),
+            ? RC_SIM_PAUSE :
+            (p.strokeManager.getStrokesAttempted() == 0
+                    ? RC_SIM_START : RC_SIM_RESUME)).asValue(),
+            RC_SIM_START.asValue()),
     RV_SIM_SCOPE(p -> (p.progressManager.isDisplay() == ProgressManager.FOCUS
             ? RC_SCOPE_FOCUS_AREA : RC_SCOPE_GLOBAL).asValue(),
             RC_UNKNOWABLE.asValue()),

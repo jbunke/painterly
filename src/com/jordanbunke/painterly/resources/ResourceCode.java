@@ -21,6 +21,9 @@ public enum ResourceCode {
     RC_HIGHLIGHT,
     RC_ICON,
 
+    // GIFs
+    RC_MENU_BG,
+
     // START OF STANDARD RESOURCE CODES
 
     RC_ABOUT, // also: tooltip
@@ -192,7 +195,8 @@ public enum ResourceCode {
     RC_SCOPE_FOCUS_AREA,
     RC_SCOPE_GLOBAL,
     RC_SIM_PAUSE,
-    RC_SIM_RESUME
+    RC_SIM_RESUME,
+    RC_SIM_START
     ;
 
     private final static String prefix = "RC_";

@@ -16,9 +16,18 @@ public final class ImageScaling {
             final double scaleW, final double scaleH
     ) {
         final int srcW = source.getWidth(),
-                srcH = source.getHeight();
-        final int newW = (int)(srcW * scaleW),
+                srcH = source.getHeight(),
+                newW = (int)(srcW * scaleW),
                 newH = (int)(srcH * scaleH);
+
+        return bicubic(source, newW, newH);
+    }
+
+    public static GameImage bicubic(
+            final GameImage source, final int newW, final int newH
+    ) {
+        final int srcW = source.getWidth(),
+                srcH = source.getHeight();
 
         final GameImage dst = new GameImage(newW, newH);
 

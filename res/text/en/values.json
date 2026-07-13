@@ -11,6 +11,7 @@
     "scope_global" : "entire canvas",
     "sim_pause" : "Pause painting",
     "sim_resume" : "Resume painting",
+    "sim_start" : "Start painting",
     "unknowable" : "---",
     "unknown" : "???"
 }

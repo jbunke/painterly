@@ -104,8 +104,9 @@ public final class DrawFocusArea extends Tool {
         }
     }
 
-    public void updateDrawReticle() {
-        drawReticle = Settings.get(SET_ID_DRAW_DFA_RETICLE, Boolean.class);
+    public void updateDrawReticle(final boolean drawReticle) {
+        this.drawReticle = drawReticle;
+        Settings.set(SET_ID_DRAW_DFA_RETICLE, drawReticle);
     }
 
     private void updateTLBR() {

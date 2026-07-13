@@ -31,11 +31,13 @@ public final class Graphics {
 
     public static final GameImage ICON;
     private static final GameImage CONTROL_POINT, HIGHLIGHT;
+    public static final GameImage[] MENU_ANIMATION;
 
     static {
         ICON = readMiscImage(RC_ICON);
         CONTROL_POINT = readMiscImage(RC_CONTROL_POINT);
         HIGHLIGHT = readMiscImage(RC_HIGHLIGHT);
+        MENU_ANIMATION = readGIF(RC_MENU_BG);
     }
 
     // IO
@@ -54,6 +56,11 @@ public final class Graphics {
     public static GameImage readMiscImage(final ResourceCode code) {
         final Path iconFile = MISC_IMG_FOLDER.resolve(code.id() + ".png");
         return ResourceLoader.loadImageResource(iconFile);
+    }
+
+    public static GameImage[] readGIF(final ResourceCode code) {
+        final Path gifFile = MISC_IMG_FOLDER.resolve(code.id() + ".gif");
+        return ResourceLoader.loadGIFResourceFrames(gifFile);
     }
 
     // UI ELEMENTS

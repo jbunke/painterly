@@ -11,10 +11,12 @@ import com.jordanbunke.painterly.flow.ProgramState;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 import com.jordanbunke.painterly.menu.elements.label.LoadingLabel;
 import com.jordanbunke.painterly.menu.elements.label.SimpleLabel;
+import com.jordanbunke.painterly.menu.elements.misc.AnimatedMenuElement;
 import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.Graphics;
 import com.jordanbunke.painterly.theme.ThemeManager;
 
 import java.util.function.BiConsumer;
@@ -42,6 +44,16 @@ public final class MenuAssembly {
                 w = sb.width.get(), h = sb.height.get();
 
         addScreenMenuBackground(mb);
+
+        // animated background
+        final AnimatedMenuElement bg = new AnimatedMenuElement
+                .Builder(sb.at(0.5, 0.5), Graphics.MENU_ANIMATION)
+                .fillScreenBox(sb)
+                .setRepeats(false)
+                .setTicksPerFrame(5)
+                .setAnchor(CENTRAL)
+                .build();
+        mb.add(bg);
 
         final int MARGIN = 20;
 
