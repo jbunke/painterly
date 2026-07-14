@@ -1,4 +1,4 @@
-![Painterly](assets/branding/alt_static_lockup.png)
+![Painterly](assets/branding/static_lockup.png)
 
 <div align="center">
     <h3>
@@ -17,7 +17,7 @@
 
 ## Overview
 
-*Painterly* is a Windows desktop program that turns images into digital paintings. It works via a [greedy algorithm](https://en.wikipedia.org/wiki/Greedy_algorithm), which attempts to make random brush strokes on the canvas, and only accepts them if they make the painting resemble the image it is painting more than it did before.
+*Painterly* is a desktop application that turns images into digital paintings. It works via a [greedy algorithm](https://en.wikipedia.org/wiki/Greedy_algorithm), which attempts to make random brush strokes on the canvas, and only accepts them if they make the painting resemble the image it is painting more than it did before.
 
 Upload your family photos, vacation shots, or anything you're curious to see painted and watch the magic unfold.
 
@@ -28,7 +28,7 @@ Upload your family photos, vacation shots, or anything you're curious to see pai
 </div>
 <br>
 
-> **Note:** *Painterly* is not generative AI. It paints brush stroke by brush stroke. It takes minutes to hours to produce a high quality painting depending on (1) the size and complexity of the source image and (2) the level of detail you desire.
+> **Note:** *Painterly* is not generative AI; brush strokes are painted individually. It can take from several minutes to hours to produce a high quality painting depending on (1) the size and complexity of the source image and (2) the level of detail you desire.
 
 ## Getting Started
 
