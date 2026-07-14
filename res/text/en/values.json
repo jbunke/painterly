@@ -1,0 +1,17 @@
+{
+    "measuring_accepted" : "completed strokes",
+    "measuring_attempted" : "stroke attempts",
+    "exit_fullscreen" : "Windowed",
+    "fullscreen" : "Fullscreen",
+    "off" : "off",
+    "on" : "on",
+    "disabled" : "disabled",
+    "enabled" : "enabled",
+    "scope_focus_area" : "focus area",
+    "scope_global" : "entire canvas",
+    "sim_pause" : "Pause painting",
+    "sim_resume" : "Resume painting",
+    "sim_start" : "Start painting",
+    "unknowable" : "---",
+    "unknown" : "???"
+}

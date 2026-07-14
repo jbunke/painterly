@@ -1,125 +1,288 @@
 package com.jordanbunke.painterly.settings;
 
-import com.jordanbunke.clink.Clink;
+import com.jordanbunke.delta_time.error.GameError;
+import com.jordanbunke.delta_time.io.FileIO;
+import com.jordanbunke.delta_time.utility.Version;
+import com.jordanbunke.json.JSONBuilder;
+import com.jordanbunke.json.JSONPair;
+import com.jordanbunke.json.JSONReader;
+import com.jordanbunke.painterly.ProgramInfo;
+import com.jordanbunke.painterly.resources.lang.Language;
+import com.jordanbunke.painterly.theme.ThemeEnum;
+import com.jordanbunke.painterly.util.Constants;
+import com.jordanbunke.painterly.util.EnumUtils;
+import com.jordanbunke.painterly.util.OSUtils;
 
-public class Settings {
-    // DEFAULTS
-    private static final double MIN_PROB = 0.0, MAX_PROB = 1.0;
-    public static final double DEFAULT_SAMPLE_PROB = 0.5;
-    public static final int DEFAULT_STATS_TICK = 250, DEFAULT_SAVE_TICK = 1000;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-    // IMMUTABLE
-    private final int scaleUp;
-    private final String projectName;
+import static com.jordanbunke.painterly.settings.Settings.SettingID.*;
 
-    // MUTABLE
-    private boolean active;
-    private double sampleProb;
-    private int statsTick, saveTick;
-    private Palette palette;
+public final class Settings {
+    private static final Path SETTINGS_FILE;
 
-    // FOCUS BOX
-    private final FocusBox focusBox;
+    public enum SettingID {
+        SET_ID_VERSION,
+        SET_ID_FULLSCREEN,
+        SET_ID_LANGUAGE,
+        SET_ID_THEME,
+        SET_ID_DEFAULT_INTERVAL_TARGET,
+        SET_ID_AUTOSAVE_ON_BY_DEFAULT,
+        SET_ID_LOG_CHANNEL_FOCUS_BOX_REASONING_OBD,
+        SET_ID_LOG_CHANNEL_INTERVAL_STATS_OBD,
+        SET_ID_DRAW_DFA_RETICLE,
+        ;
 
-    public Settings(final String projectName, final int scaleUp) {
-        this.projectName = projectName;
-        this.scaleUp = scaleUp;
+        private static final String prefix = "SET_ID_";
 
-        active = true;
+        Setting<?> setting;
 
-        setStatsTick(DEFAULT_STATS_TICK);
-        setSaveTick(DEFAULT_SAVE_TICK);
+        static SettingID fromString(final String key) {
+            return EnumUtils.stream(SettingID.class)
+                    .filter(s -> s.code().equals(key))
+                    .findAny().orElse(null);
+        }
 
-        setSampleProb(DEFAULT_SAMPLE_PROB);
+        public String code() {
+            if (this == SET_ID_VERSION)
+                return "last-opened-version";
 
-        palette = Palette.ALL;
-        focusBox = new FocusBox();
+            return EnumUtils.formattedNameNoPrefix(this, prefix);
+        }
     }
 
-    private static double normalizeProbability(final double p) {
-        return Math.min(Math.max(MIN_PROB, p), MAX_PROB);
+    static {
+        SETTINGS_FILE = determineSettingsFile();
+
+        initialize();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(Settings::write));
     }
 
-    // SETTERS
+    private static Path determineSettingsFile() {
+        final Path internal = Constants.INTERNAL_SETTINGS_FILEPATH;
+        final String name = ProgramInfo.PROGRAM_NAME,
+                unixFriendlyName = name.toLowerCase().replace(" ", "-");
 
-    public void setSampleProb(final double sampleProb) {
-        this.sampleProb = normalizeProbability(sampleProb);
-    }
+        if (OSUtils.isWindows()) {
+            final String appData = System.getenv("APPDATA");
+            return Path.of(appData, name).resolve(internal);
+        }
 
-    public void setStatsTick(final int statsTick) {
-        this.statsTick = statsTick;
-    }
+        if (OSUtils.isMacOS()) {
+            return Path.of(System.getProperty("user.home"),
+                            "Library", "Application Support", unixFriendlyName)
+                    .resolve(internal);
+        }
 
-    public void setSaveTick(final int saveTick) {
-        this.saveTick = saveTick;
-    }
-
-    public void setPalette(final int paletteIndex) {
-        final Palette[] palettes = Palette.values();
-
-        if (paletteIndex >= 0 && paletteIndex < palettes.length)
-            this.palette = Palette.values()[paletteIndex];
+        // Assume Linux/Unix
+        final String xdgConfig = System.getenv("XDG_CONFIG_HOME");
+        if (xdgConfig != null && !xdgConfig.isBlank())
+            return Path.of(xdgConfig, unixFriendlyName).resolve(internal);
         else
-            Clink.writeError("Index " +
-                    Clink.highlight(String.valueOf(paletteIndex), Clink.Mode.ERROR) +
-                    " is out of bounds for palette assignment (0 to " +
-                    (palettes.length - 1) + ")");
+            return Path.of(System.getProperty("user.home"),
+                    ".config", unixFriendlyName).resolve(internal);
     }
 
-    public void activate() {
-        if (active)
+    private static void initialize() {
+        addSetting(new Setting<>(Version.class, SET_ID_VERSION,
+                Version::parse, new Version(1, 0, 0)));
+        addSetting(new Setting<>(Boolean.class, SET_ID_FULLSCREEN,
+                Boolean::parseBoolean, false));
+        addSetting(new Setting<>(Language.class, SET_ID_LANGUAGE,
+                Language::fromCode, Objects::nonNull,
+                Language::code, Language.ENGLISH));
+        addSetting(new Setting<>(ThemeEnum.class, SET_ID_THEME,
+                ThemeEnum::fromID, Objects::nonNull,
+                ThemeEnum::id, ThemeEnum.DEFAULT));
+        addSetting(new Setting<>(Integer.class, SET_ID_DEFAULT_INTERVAL_TARGET,
+                Integer::parseInt, 50));
+        addSetting(new Setting<>(Boolean.class, SET_ID_AUTOSAVE_ON_BY_DEFAULT,
+                Boolean::parseBoolean, true));
+        addSetting(new Setting<>(Boolean.class,
+                SET_ID_LOG_CHANNEL_FOCUS_BOX_REASONING_OBD,
+                Boolean::parseBoolean, true));
+        addSetting(new Setting<>(Boolean.class,
+                SET_ID_LOG_CHANNEL_INTERVAL_STATS_OBD,
+                Boolean::parseBoolean, true));
+        addSetting(new Setting<>(Boolean.class,
+                SET_ID_DRAW_DFA_RETICLE,
+                Boolean::parseBoolean, true));
+    }
+
+    private static <T> void addSetting(final Setting<T> setting) {
+        setting.id.setting = setting;
+    }
+
+    public static void read() {
+        final String file = FileIO.readFile(SETTINGS_FILE);
+
+        if (file == null)
             return;
 
-        active = true;
-        Clink.writeUpdate("Activated painter");
-    }
+        final JSONPair[] pairs = JSONReader.readObject(file);
 
-    public void deactivate() {
-        if (!active)
+        if (pairs == null)
             return;
 
-        active = false;
-        Clink.writeUpdate("Deactivated painter");
+        for (JSONPair pair : pairs) {
+            final String key = pair.key();
+            final SettingID id = SettingID.fromString(key);
+
+            if (id != null) {
+                final String valueString = String.valueOf(pair.value());
+                id.setting.read(valueString);
+            }
+        }
     }
 
-    public void toggleActive() {
-        if (active)
-            deactivate();
-        else
-            activate();
+    public static void write() {
+        final Path settingsFolder = SETTINGS_FILE.getParent();
+
+        if (!settingsFolder.toFile().exists())
+            FileIO.safeMakeDirectory(settingsFolder);
+        else if (!settingsFolder.toFile().isDirectory()) {
+            try {
+                Files.delete(settingsFolder);
+                FileIO.safeMakeDirectory(settingsFolder);
+            } catch (IOException ioe) {
+                GameError.send("Couldn't delete file at " + settingsFolder +
+                        " needed to clear space for the settings folder. " +
+                        "Could not write " + ProgramInfo.PROGRAM_NAME +
+                        " settings.");
+                return;
+            }
+        }
+
+        final JSONBuilder jb = new JSONBuilder();
+
+        EnumUtils.stream(SettingID.class)
+                .sorted(Comparator.comparing(SettingID::code))
+                .filter(id -> id.setting.value != null)
+                .map(id -> {
+                    final Setting<?> setting = id.setting;
+                    final String key = id.code();
+                    final Object value = setting.value;
+
+                    if (validJSONDataType(value))
+                        return new JSONPair(key, value);
+
+                    return new JSONPair(key, setting.writer.apply(value));
+                }).forEach(jb::add);
+
+        FileIO.writeFile(SETTINGS_FILE, jb.write());
     }
 
-    // GETTERS
-
-    public boolean isActive() {
-        return active;
+    private static boolean validJSONDataType(final Object value) {
+        return value == null || value instanceof Double ||
+                value instanceof Integer || value instanceof Boolean;
     }
 
-    public int getStatsTick() {
-        return statsTick;
+    public static void reset(final SettingID id) {
+        if (id != null)
+            id.setting.reset();
     }
 
-    public int getSaveTick() {
-        return saveTick;
+    public static void set(final SettingID id, final Object value) {
+        if (id != null)
+            id.setting.set(value);
     }
 
-    public double getSampleProb() {
-        return sampleProb;
+    public static <T> T get(final SettingID id, final Class<T> type) {
+        return retrieveValue(id, type, Setting::get);
     }
 
-    public Palette getPalette() {
-        return palette;
+    public static <T> T getDefaultValue(final SettingID id, final Class<T> type) {
+        return retrieveValue(id, type, Setting::getDefaultValue);
     }
 
-    public FocusBox getFocusBox() {
-        return focusBox;
+    @SuppressWarnings("unchecked")
+    private static <T> T retrieveValue(
+            final SettingID id,
+            final Class<T> type,
+            final Function<Setting<T>, T> getter
+    ) {
+        final Setting<?> setting = id.setting;
+
+        if (type.isAssignableFrom(setting.type))
+            return type.cast(getter.apply((Setting<T>) setting));
+
+        return null;
     }
 
-    public int getScaleUp() {
-        return scaleUp;
-    }
+    private static class Setting<T> {
+        private final Class<T> type;
+        private final SettingID id;
+        private final Function<String, T> parser;
+        private final Predicate<T> validator;
+        private final Function<Object, String> writer;
+        private final T defaultValue;
+        private T value;
 
-    public String getProjectName() {
-        return projectName;
+        Setting(
+                final Class<T> type, final SettingID id,
+                final Function<String, T> parser,
+                final Predicate<T> validator,
+                final Function<T, String> writer,
+                final T defaultValue
+        ) {
+            this.type = type;
+            this.id = id;
+            this.parser = parser;
+            this.validator = validator;
+            this.writer = o -> {
+                if (this.type.isInstance(o)) {
+                    final T cast = this.type.cast(o);
+                    return writer.apply(cast);
+                }
+
+                return String.valueOf(o);
+            };
+            this.defaultValue = defaultValue;
+
+            value = defaultValue;
+        }
+
+        Setting(
+                final Class<T> type, final SettingID id,
+                final Function<String, T> parser, final T defaultValue
+        ) {
+            this(type, id, parser, Objects::nonNull, String::valueOf, defaultValue);
+        }
+
+        private void read(final String valueString) {
+            set(parser.apply(valueString));
+        }
+
+        private void set(final Object value) {
+            if (type.isInstance(value)) {
+                final T cast = type.cast(value);
+
+                if (validator.test(cast))
+                    this.value = cast;
+            }
+        }
+
+        private void reset() {
+            value = defaultValue;
+        }
+
+        private T get() {
+            return value;
+        }
+
+        private T getDefaultValue() {
+            return defaultValue;
+        }
+
+        @Override
+        public String toString() {
+            return type.getSimpleName() + " " + id + " = " + writer.apply(value);
+        }
     }
 }

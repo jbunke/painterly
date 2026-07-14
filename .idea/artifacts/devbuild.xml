@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="devbuild">
+    <output-path>$PROJECT_DIR$/out/artifacts/build_dev</output-path>
+    <root id="archive" name="painterly.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/res/META-INF/dev/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="painterly" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../delta-time/out/artifacts/dt_modules/delta-time-fonts.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../delta-time/out/artifacts/dt_modules/delta-time-menu-extension.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../json/out/artifacts/json/json.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../clink/out/artifacts/clink/clink.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../delta-time/out/artifacts/dt_modules/delta-time-core.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../color-processing/out/artifacts/builds/color-proc.jar" path-in-jar="/" />
+      <element id="module-test-output" name="painterly" />
+    </root>
+  </artifact>
+</component>

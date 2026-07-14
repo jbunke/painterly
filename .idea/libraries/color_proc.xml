@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="color-proc">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../color-processing/out/artifacts/builds/color-proc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../color-processing/src" />
+    </SOURCES>
+  </library>
+</component>

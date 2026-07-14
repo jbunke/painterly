@@ -1,0 +1,79 @@
+package com.jordanbunke.painterly.util;
+
+import com.jordanbunke.delta_time.image.GameImage;
+import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.resources.ResourceCode;
+import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.ThemeManager;
+
+import static com.jordanbunke.painterly.resources.ResourceCode.RC_NA;
+
+public final class Tooltip {
+    private static final Tooltip INSTANCE;
+    private static final GameImage BLANK = GameImage.dummy();
+
+    public static final String NONE = "";
+
+    private String tooltip, lastCheck;
+    private Coord2D mousePos;
+    private int ticks;
+    private GameImage image;
+
+    static {
+        INSTANCE = new Tooltip();
+    }
+
+    private Tooltip() {
+        tooltip = NONE;
+        lastCheck = tooltip;
+        ticks = 0;
+        mousePos = new Coord2D();
+        image = BLANK;
+    }
+
+    public static Tooltip get() {
+        return INSTANCE;
+    }
+    
+    /* TODO - rename class to TooltipManager and change return type
+        to custom Tooltip type that supports rich text formatting */
+    public static String resolve(final ResourceCode code) {
+        return code == RC_NA ? NONE
+                : LanguageData.retrieveTooltip(code);
+    }
+
+    public void pingCode(final ResourceCode code, final Coord2D mousePos) {
+        ping(resolve(code), mousePos);
+    }
+
+    public void ping(final String tooltip, final Coord2D mousePos) {
+        this.mousePos = mousePos;
+        this.tooltip = tooltip;
+    }
+
+    public boolean isBlankForFrame() {
+        return tooltip.equals(NONE);
+    }
+
+    public void check() {
+        if (tooltip.equals(NONE) || !tooltip.equals(lastCheck)) {
+            ticks = 0;
+            image = BLANK;
+        } else {
+            ticks++;
+
+            if (ticks == Constants.TOOLTIP_TICKS)
+                image = ThemeManager.get().drawTooltip(tooltip);
+        }
+
+        lastCheck = tooltip;
+    }
+
+    public void render(final GameImage canvas) {
+        if (ticks >= Constants.TOOLTIP_TICKS) {
+            final Coord2D renderPos =
+                    Layout.tooltipRenderPos(image, mousePos);
+            canvas.draw(image, renderPos.x, renderPos.y);
+        }
+    }
+}

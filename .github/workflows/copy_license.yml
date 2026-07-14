@@ -1,0 +1,40 @@
+name: Copy LICENSE file to root
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+
+jobs:
+  copy-license:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check if LICENSE file needs to be updated
+        id: check_license
+        run: |
+          if [ ! -f LICENSE.md ] || ! cmp -s res/text/en/LICENSE.md LICENSE.md; then
+            echo "needs_update=true" >> $GITHUB_ENV
+          else
+            echo "needs_update=false" >> $GITHUB_ENV
+          fi
+
+      - name: Copy LICENSE file
+        if: env.needs_update == 'true'
+        run: |
+          cp res/text/en/LICENSE.md LICENSE.md
+
+      - name: Commit and push changes
+        if: env.needs_update == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add LICENSE.md
+          git commit -m 'Copy LICENSE file to root'
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
