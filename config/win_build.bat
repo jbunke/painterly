@@ -41,6 +41,8 @@ set /p RELEASE_MODE=<"%RELEASE_FILE%"
 set "FILENAME_BASE=%ID%-%VERSION%"
 if "%RELEASE_MODE%"=="demo" set "FILENAME_BASE=%FILENAME_BASE%-demo"
 
+set "ICON_PATH=.\icons\win-icon.ico"
+
 jpackage ^
     --type exe ^
     --input "%ARTIFACT_DIR%" ^
@@ -49,6 +51,7 @@ jpackage ^
     --app-version "%VERSION%" ^
     --main-jar "%ID%.jar" ^
     --runtime-image "%OUTPUT_DIR%\runtime" ^
+    --icon "%ICON_PATH%" ^
     --vendor "%DEV%" ^
     --win-dir-chooser ^
     --win-shortcut ^
@@ -67,6 +70,7 @@ jpackage ^
     --app-version "%VERSION%" ^
     --main-jar "%ID%.jar" ^
     --runtime-image "%OUTPUT_DIR%\runtime" ^
+    --icon "%ICON_PATH%" ^
     --vendor "%DEV%" ^
     --description "%NAME%"
 
