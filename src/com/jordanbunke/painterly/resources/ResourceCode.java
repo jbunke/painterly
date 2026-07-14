@@ -38,6 +38,9 @@ public enum ResourceCode {
     RC_AYS_QUIT_MESSAGE,
     RC_AYS_QUIT_TITLE,
 
+    RC_BUY_ITCH,
+    RC_BUY_INCENTIVE_TOOLTIP,
+
     // Context bar
     RC_CB_CURRENT_TOOL,
     RC_CB_DIVS_X,
@@ -145,6 +148,10 @@ public enum ResourceCode {
     RC_FOCUS_AREA_AS_FOCUS_BOX,
     RC_FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL,
     RC_FOCUS_BOX_AS_FOCUS_AREA,
+
+    RC_GITHUB_REPO,
+    RC_FEATURE_REQUEST,
+    RC_BUG_REPORT,
 
     // Loading messages
     RC_LOAD_INIT_PROJECT,

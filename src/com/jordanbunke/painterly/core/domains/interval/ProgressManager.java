@@ -34,7 +34,7 @@ public final class ProgressManager {
         final double similarity = display == FOCUS
                 ? focusSimilarity : globalSimilarity;
         return BigDecimal.valueOf(similarity * 100)
-                .setScale(2 /* TODO - setting */, RoundingMode.HALF_UP) + "%";
+                .setScale(2, RoundingMode.HALF_UP) + "%";
     }
 
     public void setDisplayToFocus() {

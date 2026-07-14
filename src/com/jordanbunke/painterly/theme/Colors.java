@@ -19,11 +19,29 @@ public final class Colors {
             LIGHTER_GREY = new Color(0xc0c0c0),
             LIGHT_GREY = new Color(0xa0a0a0),
             GREY = new Color(0x808080),
-            DARK_GREY = new Color(0x404040);
+            DARK_GREY = new Color(0x404040),
+            SC_TOOLTIP_BG = new Color(0x9292ac),
+            SC_VIEWPORT_BG = new Color(0x38383f),
+            SC_MENU_BG = new Color(0x7c7c8a),
+            SC_ACCENT = new Color(0x6060c8),
+            SC_DARK = new Color(0x1e1e22),
+            SC_MID_DARK = new Color(0x2b2b30),
+            SC_MID = new Color(0x1e1e22),
+            SC_MID_LIGHT = new Color(0x1e1e22),
+            SC_LIGHT = new Color(0x1e1e22);
 
     public enum SystemColor {
-        DARK(BLACK),
-        MID_DARK(DARK_GREY),
+        /**
+         * Should contrast with secondary text and dark
+         * */
+        TOOLTIP_BG(SC_TOOLTIP_BG),
+        MENU_BG(SC_MENU_BG),
+        VIEWPORT_BG(SC_VIEWPORT_BG),
+
+        ACCENT(SC_ACCENT),
+
+        DARK(SC_DARK),
+        MID_DARK(SC_MID_DARK),
         MID(GREY),
         MID_LIGHT(LIGHT_GREY),
         LIGHT_TEXT(WHITE),

@@ -35,7 +35,8 @@ public interface VariableUIAssembler<T> {
 
     static VariableUIAssembler<String> assembleProjectNameTextbox() {
         return assembleTextbox(RC_DIALOG_TX_PROJECT_NAME,
-                s -> s, b -> b);
+                s -> s, b -> b
+                        .setWidthRelative(2.0));
     }
 
     static VariableUIAssembler<Double> assembleScaleFactorTextbox() {

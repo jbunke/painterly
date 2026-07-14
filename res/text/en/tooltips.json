@@ -1,6 +1,7 @@
 {
     "about" : "Help, Info & Additional Resources\n---\nRead the change log, roadmap, and license",
     "action_not_available_in_demo" : "This action cannot be performed in the demo.\nYou must buy the full version of $program_name to do this.",
+    "buy_incentive_tooltip" : "Buy the full version of $program_name to be\nable to save and export your work",
 
     "cb_current_tool" : "The currently selected tool",
     "cb_divs_x" : "Focus box divisions along X-axis",
@@ -56,6 +57,7 @@
     "focus_area_as_focus_box" : "Converts the focus area to a focus box\nhoused within a new, larger focus area",
     "focus_area_as_focus_box_maximal" : "The newly created focus area covers\nthe maximal canvas area within which\nthe specified focus box can exist",
     "focus_box_as_focus_area" : "The focus area will be propagated to\nthe bounds of the current focus box",
+    "github_repo" : "The $program_name GitHub repository is the best\nresource to learn more about the program",
     "new_project" : "Create a new $program_name project from a source image",
     "open_project" : "Open a $program_name project",
     "program_settings" : "Program config settings like\nlanguage and visual theming",

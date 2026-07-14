@@ -21,10 +21,10 @@ public final class Constants {
 
     public static final int
             LOADING_LABEL_TICKS = 20,
-            TEXTBOX_DEF_MAX_LENGTH = 20,
+            TEXTBOX_DEF_MAX_LENGTH = 40,
             TOOLTIP_TICKS = 24,
             MAX_RECENT_STROKES_DEBUG = 10,
-            MAX_BOX_DIVS = 40 /* TODO - test */,
+            MAX_BOX_DIVS = 40,
             MIN_INTERVAL_TARGET = 1,
             MAX_INTERVAL_TARGET = 250,
             DEBUG_MESSAGE_FRAMES = (int)(5 * FPS),

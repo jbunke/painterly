@@ -6,6 +6,7 @@ import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
+import com.jordanbunke.painterly.ProgramInfo;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
 
 import java.util.LinkedList;
@@ -37,13 +38,25 @@ public final class MenuBar extends MenuElement {
     private static MenuBar build() {
         final Builder b = new Builder();
 
-        b.addSubMenu(
+        final SubMenuData.Builder programSubBuilder =
                 SubMenuData.init(RC_NAV_PROGRAM)
                         .addGlobalAction(EDIT_PROGRAM_SETTINGS)
-                        .addSeparator()
-                        // .addGlobalAction(MAIN_MENU)
-                        .addGlobalAction(QUIT_PROGRAM)
-                        .build())
+                        .addSeparator();
+
+        // if this is the demo, adds buy link
+        if (!ProgramInfo.isFullRelease())
+            programSubBuilder // TODO - buy Steam
+                    .addGlobalAction(BUY_ITCH)
+                    .addSeparator();
+
+        programSubBuilder.addGlobalAction(GITHUB_REPO)
+                .addGlobalAction(BUG_REPORT)
+                .addGlobalAction(FEATURE_REQUEST)
+                .addSeparator()
+                // .addGlobalAction(MAIN_MENU)
+                .addGlobalAction(QUIT_PROGRAM);
+
+        b.addSubMenu(programSubBuilder.build())
                 .addSubMenu(SubMenuData.init(RC_NAV_PROJECT)
                         .addGlobalAction(NEW_PROJECT)
                         .addGlobalAction(OPEN_PROJECT)
@@ -77,10 +90,6 @@ public final class MenuBar extends MenuElement {
                         .addGlobalAction(TOGGLE_LOG_GLOBAL_OFF)
                         .addGlobalAction(TOGGLE_RECENT_STROKES_VIS)
                         .addGlobalAction(TOGGLE_FPS_INDICATOR)
-                        // TODO
-//                        .addSeparator()
-//                        .addGlobalAction(TOGGLE_FPS_INDICATOR)
-//                        .addGlobalAction(TOGGLE_RECENT_STROKE_VISUALIZATION)
                         .build());
 
         return b.build();

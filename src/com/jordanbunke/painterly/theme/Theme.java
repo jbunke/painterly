@@ -578,8 +578,7 @@ public abstract class Theme {
     }
     
     Color getProjectButtonSelectedAccentColor() {
-        // TODO
-        return systemColor(LIGHT_BG);
+        return systemColor(ACCENT);
     }
 
     Color getDialogTopBarColor() {
@@ -606,13 +605,11 @@ public abstract class Theme {
     }
 
     public Color dialogBoxTitleTextColor() {
-        // TODO
         return systemColor(LIGHT_TEXT);
     }
 
     public Color viewportBackgroundColor() {
-        // TODO
-        return systemColor(MID);
+        return systemColor(VIEWPORT_BG);
     }
 
     Color tooltipTextColor() {
@@ -621,12 +618,10 @@ public abstract class Theme {
     }
 
     Color tooltipBackgroundColor() {
-        // TODO
-        return systemColor(MID_LIGHT);
+        return systemColor(TOOLTIP_BG);
     }
 
     Color tooltipBorderColor() {
-        // TODO
         return systemColor(DARK);
     }
 
@@ -684,8 +679,7 @@ public abstract class Theme {
     }
 
     Color menuBackgroundColor() {
-        // TODO
-        return systemColor(MID);
+        return systemColor(MENU_BG);
     }
 
     Color menuBackgroundContrastColor() {
@@ -709,7 +703,6 @@ public abstract class Theme {
     }
 
     Color stubTextColor() {
-        // TODO
         return systemColor(MID_LIGHT);
     }
 

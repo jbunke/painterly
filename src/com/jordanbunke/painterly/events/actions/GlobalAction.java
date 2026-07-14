@@ -14,6 +14,7 @@ import com.jordanbunke.painterly.menu.MenuAssembly;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.ISubMenuEntry;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.tool.ToolManager;
+import com.jordanbunke.painterly.util.InternetUtils;
 import com.jordanbunke.painterly.util.Layout;
 import com.jordanbunke.painterly.util.debug.LogChannel;
 import com.jordanbunke.painterly.util.debug.LogManager;
@@ -29,13 +30,30 @@ import static com.jordanbunke.painterly.tool.ToolManager.ToolEnum.*;
 public enum GlobalAction
         implements IAction<Runnable>, ISubMenuEntry {
     EDIT_PROGRAM_SETTINGS(new Builder(RC_EDIT_PROGRAM_SETTINGS)
+            .setShortcut(new KeyboardShortcut(true, false, COMMA))
             .setBehaviour(() -> {
                 EditProgramSettings.get().softReset();
                 DialogManager.set(DialogAssembly::editProgramSettings);
             })),
     MAIN_MENU(new Builder(RC_NAV_MAIN_MENU)
             .setBehaviour(() -> ProgramState.setMenu(MenuAssembly::mainMenu))),
+    BUY_ITCH(new Builder(RC_BUY_ITCH)
+            .setTooltipCode(RC_BUY_INCENTIVE_TOOLTIP)
+            .setBehaviour(() -> InternetUtils.visitSite(
+                    "https://flinkerflitzer.itch.io/painterly"))),
+    // TODO - buy Steam
+    GITHUB_REPO(new Builder(RC_GITHUB_REPO)
+            .inheritTooltipCode()
+            .setBehaviour(() -> InternetUtils.visitSite(
+                    "https://github.com/jbunke/painterly"))),
+    BUG_REPORT(new Builder(RC_BUG_REPORT)
+            .setBehaviour(() -> InternetUtils.visitSite(
+                    "https://github.com/jbunke/painterly/issues/new?template=bug_report.md"))),
+    FEATURE_REQUEST(new Builder(RC_FEATURE_REQUEST)
+            .setBehaviour(() -> InternetUtils.visitSite(
+                    "https://github.com/jbunke/painterly/issues/new?template=feature_request.md"))),
     QUIT_PROGRAM(new Builder(RC_NAV_QUIT_PROGRAM)
+            .setShortcut(new KeyboardShortcut(true, false, Q))
             .setBehaviour(() -> DialogManager.set(DialogAssembly::aysQuit))),
     DIALOG_CLOSE(new Builder(RC_NA)
             .setShortcut(KeyboardShortcut.single(ESCAPE))

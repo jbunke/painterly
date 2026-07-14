@@ -8,6 +8,9 @@
     "ays_quit_message" : "Are you sure you want to quit $program_name?\nAll unsaved changes will be lost.",
     "ays_quit_title" : "Quit $program_name?",
 
+    "bug_report" : "Report a bug",
+    "buy_itch" : "Buy $program_name on Itch.io",
+
     "cb_current_tool" : "$current_tool",
     "cb_divs_x" : "$divs_x",
     "cb_divs_y" : "$divs_y",
@@ -73,10 +76,12 @@
     "fb_random" : "Random",
     "fb_worst" : "Worst",
 
+    "feature_request" : "Request a feature",
     "fit_to_focus_area" : "Fit to focus area",
     "focus_area_as_focus_box" : "Focus area as new focus box...",
     "focus_area_as_focus_box_maximal" : "Focus area as new focus box (maximal)",
     "focus_box_as_focus_area" : "Focus box as new focus area",
+    "github_repo" : "$program_name GitHub repository",
     "load_init_project" : "Initializing project",
     "load_load_project" : "Loading project",
     "load_update_stats" : "Updating project stats",
