@@ -1,10 +1,10 @@
-# ![Painterly logo](assets/branding/alt_static_lockup.png)
+![Painterly](assets/branding/alt_static_lockup.png)
 
 <div align="center">
-    <h2>
+    <h3>
         <a href="https://flinkerflitzer.itch.io/painterly" target="_blank">Buy on Itch.io</a> | 
         <a href="https://github.com/jbunke/painterly/releases/latest">Demo</a>
-    </h2>
+    </h3>
     <h3>
         <a href="./docs/README.md">Documentation</a> | 
         <a href="./res/text/en/changelog.md">Changelog</a> | 
