@@ -65,7 +65,8 @@ public interface Validator<T> {
         return validBoundedInt(autosaveFrequency,
                 Constants.MIN_AUTOSAVE_FREQUENCY,
                 Constants.MAX_AUTOSAVE_FREQUENCY,
-                RC_NA /* TODO */, RC_NA /* TODO */);
+                RC_DIALOG_FB_AUTOSAVE_FREQUENCY_TOO_LOW,
+                RC_DIALOG_FB_AUTOSAVE_FREQUENCY_TOO_HIGH);
     }
 
     static Pair<Boolean, ResourceCode> validIntervalTarget(
@@ -74,7 +75,8 @@ public interface Validator<T> {
         return validBoundedInt(intervalTarget,
                 Constants.MIN_INTERVAL_TARGET,
                 Constants.MAX_INTERVAL_TARGET,
-                RC_NA /* TODO */, RC_NA /* TODO */);
+                RC_DIALOG_FB_INTERVAL_TARGET_TOO_LOW,
+                RC_DIALOG_FB_INTERVAL_TARGET_TOO_HIGH);
     }
 
     private static Pair<Boolean, ResourceCode> validBoundedInt(

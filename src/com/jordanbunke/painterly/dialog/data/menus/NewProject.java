@@ -126,6 +126,13 @@ public final class NewProject extends DialogVariableSet {
         if (sourceImage == null)
             return new Pair<>(false, RC_DIALOG_FB_VARIABLE_CANNOT_BE_NULL);
 
+        final int w = sourceImage.getWidth(), h = sourceImage.getHeight();
+        final double wToHRatio = w / (double) h;
+
+        if (wToHRatio > Constants.MAX_W_TO_H_RATIO ||
+                wToHRatio < 1 / Constants.MAX_W_TO_H_RATIO)
+            return new Pair<>(false, RC_DIALOG_FB_NPD_SOURCE_TOO_ELONGATED);
+
         return new Pair<>(true, RC_DIALOG_FB_NPD_VALIDATED_SRC_IMAGE);
     }
 
@@ -134,8 +141,8 @@ public final class NewProject extends DialogVariableSet {
     ) {
         if (scaleFactor == null)
             return new Pair<>(false, RC_DIALOG_FB_CANNOT_READ_DOUBLE);
-        else if (scaleFactor < 1d)
-            return new Pair<>(false, RC_DIALOG_FB_MUST_BE_GR_EQ_1);
+        else if (scaleFactor <= 0d)
+            return new Pair<>(false, RC_DIALOG_FB_MUST_BE_GR_0);
         else if (!sourceImage.passing())
             return new Pair<>(false,
                     RC_DIALOG_FB_CANNOT_VALIDATE_SCALE_FACTOR_WITHOUT_IMAGE);
@@ -146,7 +153,9 @@ public final class NewProject extends DialogVariableSet {
             final long pixels = (long) w * h;
 
             if (pixels > Constants.MAX_CANVAS_PIXELS)
-                return new Pair<>(false, RC_NA /* TODO */);
+                return new Pair<>(false, RC_DIALOG_FB_TOO_MANY_PIXELS);
+            else if (pixels <= 0)
+                return new Pair<>(false, RC_DIALOG_FB_NO_PIXELS);
 
             return new Pair<>(true, RC_DIALOG_FB_NPD_VALIDATED_SCALE_FACTOR);
         }

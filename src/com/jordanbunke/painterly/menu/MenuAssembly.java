@@ -16,7 +16,9 @@ import com.jordanbunke.painterly.menu.elements.text_button.ButtonType;
 import com.jordanbunke.painterly.menu.elements.text_button.SimpleTextButton;
 import com.jordanbunke.painterly.resources.ResourceCode;
 import com.jordanbunke.painterly.resources.lang.LanguageData;
+import com.jordanbunke.painterly.theme.Graphics;
 import com.jordanbunke.painterly.theme.ThemeManager;
+import com.jordanbunke.painterly.util.Constants;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -30,10 +32,6 @@ import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.util.Layout.ScreenBox.*;
 
 public final class MenuAssembly {
-    public static Menu stub() {
-        return new Menu();
-    }
-
     public static Menu mainMenu() {
         final MenuBuilder mb = new MenuBuilder();
         final ScreenBox sb = SCREEN;
@@ -44,29 +42,36 @@ public final class MenuAssembly {
 
         addScreenMenuBackground(mb);
 
-        // animated background
-        mb.add(AnimatedMenuElement.getMainMenuBg());
+        final int MARGIN = 20, buttonWidth = sb.ofWidth(0.2);
 
-        final int MARGIN = 20;
+        // animated wordmark
+        final AnimatedMenuElement wordmark = new AnimatedMenuElement.Builder(
+                new Coord2D(MARGIN, MARGIN), Graphics.WORDMARK_ANIM)
+                .setRepeats(true)
+                .setAnchor(LEFT_TOP)
+                .setTicksPerFrame((int) (Constants.FPS / 4))
+                .setWidth(buttonWidth)
+                .build();
+        mb.add(wordmark);
+
+        final int initialY = wordmark.below().y + MARGIN;
 
         // navigation
         addMenuElements(mb, (i, builder) ->
                 // common
                 builder.setAlignment(CENTER).setAnchor(LEFT_CENTRAL)
                         .setButtonType(ButtonType.STANDARD)
-                        .setWidth(sb.ofWidth(0.2))
+                        .setWidth(buttonWidth)
                         .setPosition(new Coord2D(sb.offsetX(MARGIN),
-                                sb.atY(0.5) +
+                                initialY +
                                         (i * (builder.getHeight() + TEXT_BUTTON_INTERVAL_S_Y)))),
                 // elements
                 SimpleTextButton.init(RC_START, new Coord2D(), ProgramState::setWorkspace),
-                SimpleTextButton.init(RC_ABOUT, new Coord2D(), /* TODO */ () -> {})
-                        .setTooltipCode(RC_ABOUT),
-                SimpleTextButton.init(RC_PROGRAM_SETTINGS, new Coord2D(), /* TODO */ () -> {})
-                        .setTooltipCode(RC_PROGRAM_SETTINGS),
+//                SimpleTextButton.init(RC_ABOUT, new Coord2D(), /* TODO */ () -> {})
+//                        .setTooltipCode(RC_ABOUT),
+//                SimpleTextButton.init(RC_PROGRAM_SETTINGS, new Coord2D(), /* TODO */ () -> {})
+//                        .setTooltipCode(RC_PROGRAM_SETTINGS),
                 SimpleTextButton.init(RC_QUIT, new Coord2D(), Painterly::quitProgram));
-
-        // TODO - logo
 
         // version and credits
         final SimpleLabel programLabel = SimpleLabel.initLiteral(

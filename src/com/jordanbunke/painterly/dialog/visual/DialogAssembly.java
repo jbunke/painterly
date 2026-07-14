@@ -17,8 +17,6 @@ import static com.jordanbunke.painterly.util.Layout.*;
 import static com.jordanbunke.painterly.resources.ResourceCode.*;
 
 public final class DialogAssembly {
-    // TODO
-
     public static PopUpDialog editProgramSettings() {
         final EditProgramSettings eps = EditProgramSettings.get();
         final PopUpDialog.Builder db = PopUpDialog

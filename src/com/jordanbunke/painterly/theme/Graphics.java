@@ -31,13 +31,13 @@ public final class Graphics {
 
     public static final GameImage ICON;
     private static final GameImage CONTROL_POINT, HIGHLIGHT;
-    public static final GameImage[] MENU_ANIMATION;
+    public static final GameImage[] WORDMARK_ANIM;
 
     static {
         ICON = readMiscImage(RC_ICON);
         CONTROL_POINT = readMiscImage(RC_CONTROL_POINT);
         HIGHLIGHT = readMiscImage(RC_HIGHLIGHT);
-        MENU_ANIMATION = readGIF(RC_MENU_BG);
+        WORDMARK_ANIM = readGIF(RC_WORDMARK_ANIM);
     }
 
     // IO
@@ -181,7 +181,6 @@ public final class Graphics {
                 y = mousePosInViewport.y;
 
         if (x >= 0 && x < w && y >= 0 && y < h) {
-            // TODO - consider different color
             final Color color = Colors.focusArea(ColorProc.RGB_SCALE);
             viewportCanvas.drawLine(color, 2f, x, 0, x, h);
             viewportCanvas.drawLine(color, 2f, 0, y, w, y);

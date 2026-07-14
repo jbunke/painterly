@@ -18,7 +18,6 @@ import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBarSection;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
-import com.jordanbunke.painterly.menu.elements.misc.AnimatedMenuElement;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.viewport.Viewport;
 
@@ -38,32 +37,32 @@ public final class Layout {
             MENU_BAR_PROJECT_BAR_GAP_WIDTH = 80,
             MIN_PROJECT_BUTTONS_TO_RENDER = 5,
             DIALOG_MARGIN = 10,
-            DIALOG_CONTENT_MIN_HEIGHT = 30, // TODO - test
+            DIALOG_CONTENT_MIN_HEIGHT = 30,
             DIALOG_CONTENT_TOP_OFFSET_Y = 50,
             DIALOG_CONTENT_BOTTOM_BUFFER_HEIGHT = 4,
-            DIALOG_MIN_SCREEN_HEIGHT_DIFF = 200, // TODO - test
-            DIALOG_RESOLUTION_BUTTON_WIDTH = 120, // TODO - test
-            DIALOG_ROW_INCREMENT = 45, // TODO - test
-            ICON_DIM = 24, // TODO - test
+            DIALOG_MIN_SCREEN_HEIGHT_DIFF = 200,
+            DIALOG_RESOLUTION_BUTTON_WIDTH = 120,
+            DIALOG_ROW_INCREMENT = 45,
+            ICON_DIM = 24,
             SLIDER_HEIGHT = ICON_DIM,
             SLIDER_DEF_WIDTH = 150,
             SLIDER_BALL_DIM = SLIDER_HEIGHT, // Odd number desirable for rendering
             SLIDER_SHELL_HEIGHT = SLIDER_HEIGHT - 8,
             TOOLTIP_OFFSET_LEFT = -12,
             TOOLTIP_OFFSET_RIGHT = 8,
-            MENU_BAR_DIVIDER_WIDTH = 50, // TODO - test
+            MENU_BAR_DIVIDER_WIDTH = 50,
             MENU_BAR_HEIGHT = 32,
-            MENU_BAR_PADDING_X = 10, // TODO - test
+            MENU_BAR_PADDING_X = 10,
             MENU_BAR_SEPARATOR_HEIGHT = 1,
             CONTEXT_BAR_HEIGHT = 32,
             CONTEXT_BAR_PADDING_X = 8,
-            CONTEXT_BAR_GAP_X = 10, // TODO - test
+            CONTEXT_BAR_GAP_X = 10,
             CONTEXT_BAR_NUM_SECTION_SMALL_WIDTH = 100,
             CONTEXT_BAR_NUM_SECTION_LARGE_WIDTH = 128,
             KEY_SHORTCUT_INTERVAL_X = 4,
             KEY_SHORTCUT_TEXT_MARGIN_X = 6,
             KEY_SHORTCUT_DROP_SHADOW = 4,
-            STANDARD_FOLLOW_X = 10, // TODO - test
+            STANDARD_FOLLOW_X = 10,
             TEXTBOX_DEF_WIDTH = 200,
             TEXTBOX_SEG_INC = 1, // TODO - test; copied from TDSM
             TEXT_BUTTON_AFTER_LABEL_OFFSET_Y = -5,
@@ -173,7 +172,6 @@ public final class Layout {
         ProgramState.regen();
         Workspace.get().regen();
         Viewport.get().regen();
-        AnimatedMenuElement.regenMainMenuBg();
         EnumUtils.stream(ScreenBox.class).forEach(ScreenBox::regenBackground);
     }
 

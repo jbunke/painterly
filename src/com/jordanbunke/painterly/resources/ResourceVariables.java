@@ -30,7 +30,8 @@ public enum ResourceVariables {
     RV_CHANNEL_STATUS_RS(() -> (LogManager.isChannelActive(RECENT_STROKES)
             ? RC_OFF : RC_ON).asValue()),
     RV_CURRENT_TOOL(() -> ResourceValue.ofString(
-            LanguageData.retrieveUIText(ToolManager.getCurrentAction().getCode()))),
+            LanguageData.retrieveUIText(
+                    ToolManager.getCurrentAction().getCode()))),
     RV_DIVS_X(p -> ResourceValue.ofString(
             String.valueOf(p.focusManager.getDivsX())),
             RC_UNKNOWABLE.asValue()),
@@ -65,6 +66,10 @@ public enum ResourceVariables {
             RC_UNKNOWABLE.asValue()),
     RV_INTERVAL_TOTAL(() -> ResourceValue.ofString(
             StringVariableMap.retrieve(INTERVAL_TOTAL))),
+    RV_MAX_AUTOSAVE_FREQUENCY(() -> ResourceValue.ofString(
+            String.valueOf(Constants.MAX_AUTOSAVE_FREQUENCY))),
+    RV_MAX_CANVAS_PIXELS(() -> ResourceValue.ofString(
+            String.valueOf(Constants.MAX_CANVAS_PIXELS))),
     RV_MAX_DIVS_ABOVE(() -> ResourceValue.ofString(
             FocusAreaAsFocusBox.get().raMaxDivsAbove())),
     RV_MAX_DIVS_BELOW(() -> ResourceValue.ofString(
@@ -73,6 +78,14 @@ public enum ResourceVariables {
             FocusAreaAsFocusBox.get().raMaxDivsLeft())),
     RV_MAX_DIVS_RIGHT(() -> ResourceValue.ofString(
             FocusAreaAsFocusBox.get().raMaxDivsRight())),
+    RV_MAX_INTERVAL_TARGET(() -> ResourceValue.ofString(
+            String.valueOf(Constants.MAX_INTERVAL_TARGET))),
+    RV_MAX_W_TO_H(() -> ResourceValue.ofString(
+            String.valueOf(Constants.MAX_W_TO_H_RATIO))),
+    RV_MIN_AUTOSAVE_FREQUENCY(() -> ResourceValue.ofString(
+            String.valueOf(Constants.MIN_AUTOSAVE_FREQUENCY))),
+    RV_MIN_INTERVAL_TARGET(() -> ResourceValue.ofString(
+            String.valueOf(Constants.MIN_INTERVAL_TARGET))),
     RV_PROGRAM_NAME(() -> ResourceValue.ofString(ProgramInfo.PROGRAM_NAME)),
     RV_PROJECT_NAME(() -> ResourceValue.ofString(
             StringVariableMap.retrieve(PROJECT_NAME))),

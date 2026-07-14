@@ -34,9 +34,10 @@ public final class Constants {
             MAX_PROJECTS_ALLOWED = 10;
 
     public static final double
-            PRIORITIZE_WORST_EXPONENT = 3d;
+            PRIORITIZE_WORST_EXPONENT = 3d,
+            MAX_W_TO_H_RATIO = 3d;
 
-    public static final long MAX_CANVAS_PIXELS = 6000L * 6000L;
+    public static final long MAX_CANVAS_PIXELS = 3500L * 3500L;
 
     public static final String PNG = "png", JPEG = "jpg";
 
