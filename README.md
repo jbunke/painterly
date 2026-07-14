@@ -1,7 +1,5 @@
 # ![Painterly logo](assets/branding/animated_logo.gif)
 
----
-
 ### [Buy on Itch.io](https://flinkerflitzer.itch.io/painterly) | [Demo](https://github.com/jbunke/painterly/releases/latest) | [Documentation](./docs/README.md) | [Changelog](./res/text/en/changelog.md) | [Roadmap](./res/text/en/roadmap.md) | [License](./LICENSE.md)
 
 <!-- TODO - video embed here -->

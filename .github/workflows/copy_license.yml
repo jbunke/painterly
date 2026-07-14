@@ -6,6 +6,9 @@ on:
       - master
       - dev
 
+permissions:
+  contents: write
+
 jobs:
   copy-license:
     runs-on: ubuntu-latest
