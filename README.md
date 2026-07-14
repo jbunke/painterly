@@ -1,6 +1,17 @@
-# ![Painterly logo](assets/branding/animated_logo.gif)
+# ![Painterly logo](assets/branding/alt_static_lockup.png)
 
-### [Buy on Itch.io](https://flinkerflitzer.itch.io/painterly) | [Demo](https://github.com/jbunke/painterly/releases/latest) | [Documentation](./docs/README.md) | [Changelog](./res/text/en/changelog.md) | [Roadmap](./res/text/en/roadmap.md) | [License](./LICENSE.md)
+<div align="center">
+    <h2>
+        <a href="https://flinkerflitzer.itch.io/painterly" target="_blank">Buy on Itch.io</a> | 
+        <a href="https://github.com/jbunke/painterly/releases/latest">Demo</a>
+    </h2>
+    <h3>
+        <a href="./docs/README.md">Documentation</a> | 
+        <a href="./res/text/en/changelog.md">Changelog</a> | 
+        <a href="./res/text/en/roadmap.md">Roadmap</a> | 
+        <a href="./LICENSE.md">License</a>
+    </h3>
+</div>
 
 <!-- TODO - video embed here -->
 
@@ -10,10 +21,12 @@
 
 Upload your family photos, vacation shots, or anything you're curious to see painted and watch the magic unfold.
 
+<br>
 <div align="center">
 <img src="./assets/marketing/ba_windmill.gif" alt="Windmill before and after" height="300">
 <div><em>51,750 brush strokes</em></div>
 </div>
+<br>
 
 > **Note:** *Painterly* is not generative AI. It paints brush stroke by brush stroke. It takes minutes to hours to produce a high quality painting depending on (1) the size and complexity of the source image and (2) the level of detail you desire.
 
