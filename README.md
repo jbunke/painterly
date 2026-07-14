@@ -24,6 +24,7 @@ Upload your family photos, vacation shots, or anything you're curious to see pai
 <br>
 <div align="center">
 <img src="./assets/marketing/ba_windmill.gif" alt="Windmill before and after" height="300">
+<img src="./assets/marketing/itch_screenshot_1_ba.png" alt="Windmill before and after" height="300">
 <div><em>51,750 brush strokes</em></div>
 </div>
 <br>
