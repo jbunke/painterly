@@ -55,6 +55,14 @@ public interface VariableUIAssembler<T> {
                                 Constants.MAX_AUTOSAVE_FREQUENCY).length()));
     }
 
+    static VariableUIAssembler<Integer> assembleDefIntervalTargetTextbox() {
+        return assembleTextbox(RC_DIALOG_TX_DEF_INTERVAL_TARGET,
+                Validator::nullableParseInt, b -> b
+                        .setWidthRelative(0.4)
+                        .setMaxLength(String.valueOf(
+                                Constants.MAX_INTERVAL_TARGET).length()));
+    }
+
     static <T> VariableUIAssembler<T> assembleChooseFolderButton(
             final Runnable chooseFolderFunction
     ) {

@@ -62,12 +62,32 @@ public interface Validator<T> {
     static Pair<Boolean, ResourceCode> validAutosaveFrequency(
             final Integer autosaveFrequency
     ) {
-        if (autosaveFrequency == null)
+        return validBoundedInt(autosaveFrequency,
+                Constants.MIN_AUTOSAVE_FREQUENCY,
+                Constants.MAX_AUTOSAVE_FREQUENCY,
+                RC_NA /* TODO */, RC_NA /* TODO */);
+    }
+
+    static Pair<Boolean, ResourceCode> validIntervalTarget(
+            final Integer intervalTarget
+    ) {
+        return validBoundedInt(intervalTarget,
+                Constants.MIN_INTERVAL_TARGET,
+                Constants.MAX_INTERVAL_TARGET,
+                RC_NA /* TODO */, RC_NA /* TODO */);
+    }
+
+    private static Pair<Boolean, ResourceCode> validBoundedInt(
+            final Integer value,
+            final int lowerBound, final int upperBound,
+            final ResourceCode fbTooLow, final ResourceCode fbTooHigh
+    ) {
+        if (value == null)
             return new Pair<>(false, RC_DIALOG_FB_CANNOT_READ_INT);
-        else if (autosaveFrequency < Constants.MIN_AUTOSAVE_FREQUENCY)
-            return new Pair<>(false, RC_NA /* TODO */);
-        else if (autosaveFrequency > Constants.MAX_AUTOSAVE_FREQUENCY)
-            return new Pair<>(false, RC_NA /* TODO */);
+        else if (value < lowerBound)
+            return new Pair<>(false, fbTooLow);
+        else if (value > upperBound)
+            return new Pair<>(false, fbTooHigh);
 
         return new Pair<>(true, RC_NA);
     }

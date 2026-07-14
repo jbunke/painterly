@@ -19,6 +19,17 @@ import static com.jordanbunke.painterly.resources.ResourceCode.*;
 public final class DialogAssembly {
     // TODO
 
+    public static PopUpDialog editProgramSettings() {
+        final EditProgramSettings eps = EditProgramSettings.get();
+        final PopUpDialog.Builder db = PopUpDialog
+                .init(RC_EDIT_PROGRAM_SETTINGS)
+                .setSizeFromContents();
+
+        assembleDialogForVariableSet(db, eps);
+
+        return buildDialogForVariableSet(db, eps);
+    }
+
     public static PopUpDialog focusAreaAsFocusBox() {
         final FocusAreaAsFocusBox ff = FocusAreaAsFocusBox.get();
         final PopUpDialog.Builder db = PopUpDialog

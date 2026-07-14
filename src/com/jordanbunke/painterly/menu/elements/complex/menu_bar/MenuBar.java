@@ -39,6 +39,8 @@ public final class MenuBar extends MenuElement {
 
         b.addSubMenu(
                 SubMenuData.init(RC_NAV_PROGRAM)
+                        .addGlobalAction(EDIT_PROGRAM_SETTINGS)
+                        .addSeparator()
                         .addGlobalAction(MAIN_MENU)
                         .addGlobalAction(QUIT_PROGRAM)
                         .build())

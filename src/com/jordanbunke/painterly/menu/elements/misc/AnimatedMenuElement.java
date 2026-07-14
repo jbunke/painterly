@@ -8,16 +8,41 @@ import com.jordanbunke.delta_time.menu.menu_elements.MenuElement;
 import com.jordanbunke.delta_time.utility.math.Bounds2D;
 import com.jordanbunke.delta_time.utility.math.Coord2D;
 import com.jordanbunke.painterly.menu.elements.MenuElementBuilder;
+import com.jordanbunke.painterly.theme.Graphics;
 import com.jordanbunke.painterly.util.Layout;
 
 import java.util.Arrays;
 
+import static com.jordanbunke.delta_time.menu.menu_elements.MenuElement.Anchor.CENTRAL;
+
 public final class AnimatedMenuElement extends MenuElement {
+    private static AnimatedMenuElement MAIN_MENU_BG;
+
     final GameImage[] frames;
     final boolean repeats;
     final int ticksPerFrame;
 
     int tickCount, index;
+
+    static {
+        regenMainMenuBg();
+    }
+
+    public static AnimatedMenuElement getMainMenuBg() {
+        return MAIN_MENU_BG;
+    }
+
+    public static void regenMainMenuBg() {
+        final Layout.ScreenBox sb = Layout.ScreenBox.SCREEN;
+
+        MAIN_MENU_BG = new AnimatedMenuElement
+                .Builder(sb.at(0.5, 0.5), Graphics.MENU_ANIMATION)
+                .fillScreenBox(sb, true)
+                .setRepeats(false)
+                .setTicksPerFrame(5)
+                .setAnchor(CENTRAL)
+                .build();
+    }
 
     private AnimatedMenuElement(
             final Coord2D position, final Bounds2D dimensions,
@@ -88,10 +113,16 @@ public final class AnimatedMenuElement extends MenuElement {
             ticksPerFrame = 1;
         }
 
-        public Builder fillScreenBox(final Layout.ScreenBox sb) {
+        public Builder fillScreenBox(
+                final Layout.ScreenBox sb, final boolean ignoreIfSmaller
+        ) {
             final int sbw = sb.width.get(), sbh = sb.height.get();
             final double scaleW = sbw / (double) fw, scaleH = sbh / (double) fh,
                     scaleFactor = Math.max(scaleW, scaleH);
+
+            if (ignoreIfSmaller && scaleFactor <= 1.0)
+                return this;
+
             final int w = (int) Math.ceil(scaleFactor * fw),
                     h = (int) Math.ceil(scaleFactor * fh);
             return setDimensions(new Bounds2D(w, h));

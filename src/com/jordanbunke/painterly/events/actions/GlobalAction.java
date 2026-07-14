@@ -2,6 +2,7 @@ package com.jordanbunke.painterly.events.actions;
 
 import com.jordanbunke.delta_time.io.InputEventLogger;
 import com.jordanbunke.painterly.core.ProjectManager;
+import com.jordanbunke.painterly.dialog.data.menus.EditProgramSettings;
 import com.jordanbunke.painterly.dialog.data.menus.NewProject;
 import com.jordanbunke.painterly.dialog.data.menus.UpdateChannelStatus;
 import com.jordanbunke.painterly.dialog.visual.DialogAssembly;
@@ -27,6 +28,11 @@ import static com.jordanbunke.painterly.tool.ToolManager.ToolEnum.*;
 
 public enum GlobalAction
         implements IAction<Runnable>, ISubMenuEntry {
+    EDIT_PROGRAM_SETTINGS(new Builder(RC_EDIT_PROGRAM_SETTINGS)
+            .setBehaviour(() -> {
+                EditProgramSettings.get().softReset();
+                DialogManager.set(DialogAssembly::editProgramSettings);
+            })),
     MAIN_MENU(new Builder(RC_NAV_MAIN_MENU)
             .setBehaviour(() -> ProgramState.setMenu(MenuAssembly::mainMenu))),
     QUIT_PROGRAM(new Builder(RC_NAV_QUIT_PROGRAM)

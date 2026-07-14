@@ -18,6 +18,7 @@ import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBar;
 import com.jordanbunke.painterly.menu.elements.complex.context_bar.ContextBarSection;
 import com.jordanbunke.painterly.menu.elements.complex.menu_bar.MenuBar;
 import com.jordanbunke.painterly.menu.elements.complex.project_bar.ProjectBar;
+import com.jordanbunke.painterly.menu.elements.misc.AnimatedMenuElement;
 import com.jordanbunke.painterly.settings.Settings;
 import com.jordanbunke.painterly.viewport.Viewport;
 
@@ -172,6 +173,7 @@ public final class Layout {
         ProgramState.regen();
         Workspace.get().regen();
         Viewport.get().regen();
+        AnimatedMenuElement.regenMainMenuBg();
         EnumUtils.stream(ScreenBox.class).forEach(ScreenBox::regenBackground);
     }
 
