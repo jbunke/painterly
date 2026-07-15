@@ -83,19 +83,19 @@ public enum ProjectAction implements IAction<Project>, ISubMenuEntry {
             .setPrecondition(p -> !p.focusManager.isWholeCanvas())),
     FOCUS_BOX_AS_FOCUS_AREA(new Builder(RC_FOCUS_BOX_AS_FOCUS_AREA)
             .inheritTooltipCode().inheritIconCode()
-            .setShortcut(KeyboardShortcut.single(Q))
+            .setShortcut(KeyboardShortcut.single(R))
             .setBehaviour(p -> p.focusManager.focusBoxAsNewFocusArea())
             .setPrecondition(p -> !p.focusManager.isEntireArea())),
     FOCUS_AREA_AS_FOCUS_BOX(new Builder(RC_FOCUS_AREA_AS_FOCUS_BOX)
             .inheritTooltipCode().inheritIconCode()
-            .setShortcut(new KeyboardShortcut(true, false, Q))
+            .setShortcut(new KeyboardShortcut(true, false, R))
             .setBehaviour(p -> {
                 FocusAreaAsFocusBox.get().softReset();
                 DialogManager.set(DialogAssembly::focusAreaAsFocusBox);
             }).setPrecondition(p -> !p.focusManager.isWholeCanvas())),
     FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL(new Builder(RC_FOCUS_AREA_AS_FOCUS_BOX_MAXIMAL)
             .inheritTooltipCode().inheritIconCode()
-            .setShortcut(new KeyboardShortcut(false, true, Q))
+            .setShortcut(new KeyboardShortcut(false, true, R))
             .setBehaviour(p -> p.focusManager.focusAreaAsNewFocusBoxMaximal())
             .setPrecondition(p -> !p.focusManager.isWholeCanvas())),
     CLEAR_FOCUS_BOXES(new Builder(RC_CLEAR_FOCUS_BOXES)

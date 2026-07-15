@@ -1,6 +1,6 @@
 {
 	"name": "Painterly",
-	"version": "0.1.0",
-	"devbuild": false,
+	"version": "0.1.1.1",
+	"devbuild": true,
 	"demo": false
 }

@@ -19,6 +19,10 @@
 
 *Painterly* is a desktop application that turns images into digital paintings. It works via a [greedy algorithm](https://en.wikipedia.org/wiki/Greedy_algorithm), which attempts to make random brush strokes on the canvas, and only accepts them if they make the painting resemble the image it is painting more than it did before.
 
+<div align="center">
+    <iframe width="480" height="270" src="https://www.youtube.com/embed/9iWu4ArbD5Q?si=Hy4K8TS6A5bMin6F" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
 Upload your family photos, vacation shots, or anything you're curious to see painted and watch the magic unfold.
 
 <br>
