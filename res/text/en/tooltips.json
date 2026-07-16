@@ -16,7 +16,7 @@
     "channel_update_status" : "Switch message log channels on or off\nto only see the messages you want",
     "clear_focus_boxes" : "Clears focus box divisions from the focus area",
     "close_project" : "Close project",
-    "delete_active_bounds" : "Wipes all brush strokes from\nthe active sampling bounds:\nbe that the focus box, focus area,\nor the entire canvas",
+    "delete_active_bounds" : "Wipes all brushstrokes from\nthe active sampling bounds:\nbe that the focus box, focus area,\nor the entire canvas",
 
     "dialog_fb_autosave_frequency_too_high" : "Maximum autosave frequency: $max_autosave_frequency",
     "dialog_fb_autosave_frequency_too_low" : "Minimum autosave frequency: $min_autosave_frequency",
@@ -70,7 +70,7 @@
     "tick_mode_completed" : "Only completed strokes count towards interval progress",
     "toggle_tick_mode" : "Determines whether only completed strokes or all\nstroke attempts count towards interval progress\n(currently measuring $accepted_or_attempted)",
 
-    "tool_draw_focus_area" : "Use the mouse to draw a rectangle\nto define the bounds within which\nbrush strokes will be attempted",
+    "tool_draw_focus_area" : "Use the mouse to draw a rectangle\nto define the bounds within which\nbrushstrokes will be attempted",
     "tool_focus_box_select" : "Hover over the focus area and click to\nselect the focus box at the mouse position",
     "tool_hand" : "Click and drag to reposition the canvas",
     "tool_move_focus_area" : "Click and drag on the focus area\nor the nodes around its border to\nmove or resize the focus area",
