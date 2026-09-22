@@ -17,7 +17,7 @@
 
 ## Overview
 
-*Painterly* is a desktop application that turns images into digital paintings. It works via a [greedy algorithm](https://en.wikipedia.org/wiki/Greedy_algorithm), which attempts to make random brush strokes on the canvas, and only accepts them if they make the painting resemble the image it is painting more than it did before.
+*Painterly* is a desktop application that turns images into digital paintings. It works via a [greedy algorithm](https://en.wikipedia.org/wiki/Greedy_algorithm), which attempts to make random brushstrokes on the canvas, and only accepts them if they make the painting resemble the image it is painting more than it did before.
 
 Upload your family photos, vacation shots, or anything you're curious to see painted and watch the magic unfold.
 
@@ -25,11 +25,11 @@ Upload your family photos, vacation shots, or anything you're curious to see pai
 <div align="center">
 <img src="./assets/marketing/ba_windmill.gif" alt="Windmill before and after" height="300">
 <img src="./assets/marketing/itch_screenshot_1_ba.png" alt="Windmill before and after" height="300">
-<div><em>51,750 brush strokes</em></div>
+<div><em>51,750 brushstrokes</em></div>
 </div>
 <br>
 
-> **Note:** *Painterly* is not generative AI; brush strokes are painted individually. It can take from several minutes to hours to produce a high quality painting depending on (1) the size and complexity of the source image and (2) the level of detail you desire.
+> **Note:** *Painterly* is not generative AI; brushstrokes are painted individually. It can take from several minutes to hours to produce a high quality painting depending on (1) the size and complexity of the source image and (2) the level of detail you desire.
 
 ## Getting Started
 

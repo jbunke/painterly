@@ -6,7 +6,7 @@ The roadmap outlines the features that are planned for *Painterly* in time for i
 
 ### More "painters"
 
-A "painter" is the decision maker in *Painterly*. The program defines a very broad mandate for painters, with decisions including brush stroke color, breadth, length, shape, and texture at their discretion.
+A "painter" is the decision maker in *Painterly*. The program defines a very broad mandate for painters, with decisions including brushstroke color, breadth, length, shape, and texture at their discretion.
 
 In addition to the default painter released in [v0.1.0](./changelog.md#v010), *Painterly* will soon support multiple painters, each of which will have a visually distinct painting style.
 
